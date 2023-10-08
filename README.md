@@ -1,3 +1,17 @@
+| Metric               | Badge                                                                                                      | URL                                                    |
+|----------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|
+| Quality Gate Status  | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=alert_status)                     | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Duplicated Lines (%) | ![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=duplicated_lines_density)             | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Reliability Rating   | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=reliability_rating)                 | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Technical Debt       | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=sqale_index)                           | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Lines of Code        | ![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=ncloc)                                 | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Code Smells          | ![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=code_smells)                             | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Maintainability Rating | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=sqale_rating)                   | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Security Rating      | ![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=security_rating)                       | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Bugs                 | ![Bugs](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=bugs)                                     | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+| Vulnerabilities      | ![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=vulnerabilities)                     | [Link](https://sonarcloud.io/summary/new_code?id=starcidapride_StarSwap)                     |
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

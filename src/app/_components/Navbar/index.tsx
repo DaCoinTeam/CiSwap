@@ -1,10 +1,15 @@
 "use client"
 import React from "react"
-import {Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, NavbarMenu, NavbarMenuItem, NavbarMenuToggle} from "@nextui-org/react"
+import {Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem, Link, NavbarMenu, NavbarMenuItem, NavbarMenuToggle} from "@nextui-org/react"
 import { Logo } from "./Logo"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
+import ConnectWalletButton from "./ConnectWalletButton"
+import ConnectedWalletSelect from "./ConnectedWalletSelect"
 
-export const Navbar = () => {
+const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const account = useSelector((state: RootState) => state.blockchain.account)
 
     const menuItems = [
         {
@@ -22,7 +27,7 @@ export const Navbar = () => {
     const _color = (index: number) => index === menuItems.length - 1 ? "danger" : "foreground"
 
     return (
-        <NextUINavbar onMenuOpenChange={setIsMenuOpen}>
+        <NextUINavbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen}>
             <NavbarContent>
                 <NavbarMenuToggle
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -52,14 +57,11 @@ export const Navbar = () => {
                 </NavbarItem>
             </NavbarContent>
             <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
-                    <Link href="#">Login</Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-                    </Button>
-                </NavbarItem>
+                {
+                    account == ""
+                        ? <ConnectWalletButton />
+                        : <ConnectedWalletSelect /> 
+                }
             </NavbarContent>
             <NavbarMenu>
                 {menuItems.map((item) => (
@@ -80,3 +82,5 @@ export const Navbar = () => {
         </NextUINavbar>
     )
 }
+
+export default Navbar

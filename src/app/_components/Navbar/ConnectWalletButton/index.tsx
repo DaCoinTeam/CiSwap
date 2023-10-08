@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux"
 import Web3 from "web3"
 import { setWeb3, AppDispatch } from "@redux"
 
-export const ConnectMetamaskButton = () => {
+const ConnectWalletButton = () => {
     const dispatch : AppDispatch = useDispatch()
     
     const connectWallet = async (): Promise<void> => {
@@ -34,3 +34,5 @@ export const ConnectMetamaskButton = () => {
         Connect Wallet
     </Button>)
 }
+
+export default ConnectWalletButton

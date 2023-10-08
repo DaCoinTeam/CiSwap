@@ -20,10 +20,9 @@
     ],
     "paths": {
       "@app/*": ["./src/app/*"],
-      "@shared/*": ["./src/app/*"],
       "@redux": ["./src/redux"],
       "@blockchain/*": ["./src/blockchain/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@utils": ["./src/utils"],
       "@definitions/*": ["./src/definitions/*"]
     }
   },

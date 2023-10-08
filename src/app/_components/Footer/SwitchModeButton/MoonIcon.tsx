@@ -1,5 +1,5 @@
 import React from "react"
-export const MoonIcon = () => (
+const MoonIcon = () => (
     <svg
         aria-hidden="true"
         focusable="false"
@@ -14,3 +14,4 @@ export const MoonIcon = () => (
         />
     </svg>
 )
+export default MoonIcon

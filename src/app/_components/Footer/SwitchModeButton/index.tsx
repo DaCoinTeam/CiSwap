@@ -1,11 +1,11 @@
 import React from "react"
 import { Switch } from "@nextui-org/react"
-import { MoonIcon } from "./MoonIcon"
-import { SunIcon } from "./SunIcon"
+import MoonIcon from "./MoonIcon"
+import SunIcon from "./SunIcon"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setDarkMode } from "@redux"
 
-export const SwitchModeButton = () => {
+const SwitchModeButton = () => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )
@@ -23,3 +23,5 @@ export const SwitchModeButton = () => {
         />
     )
 }
+
+export default SwitchModeButton

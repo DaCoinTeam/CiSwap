@@ -1,26 +1,43 @@
 "use client"
-import "./globals.css"
-import { Inter } from "next/font/google"
-import React from "react"
+import { Mooli } from "next/font/google"
+import React, { ReactNode, useEffect } from "react"
 import { Navbar, Footer } from "./_components"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
-import { NextUIProvider } from "@nextui-org/react"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState, setAccount } from "@redux"
+import { NextUIProvider, Spacer } from "@nextui-org/react"
 
-const inter = Inter({ subsets: ["latin"] })
+export const mooli = Mooli({ weight: "400", subsets: ["latin"] })
 
-const WrappedRootLayout = ({ children }: { children: React.ReactNode }) => {
+const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )
+    const web3 = useSelector((state: RootState) => state.blockchain.web3)
+    const dispatch: AppDispatch = useDispatch()
+
+    useEffect(() => {
+        if (web3 == null) {
+            dispatch(setAccount(""))
+            return
+        }
+        const handleEffect = async () => {
+            const accounts = await web3.eth.getAccounts()
+            const account = accounts[0]
+            dispatch(setAccount(account))
+        }
+        handleEffect()
+    }, [web3])
+
     return (
-        <html lang="en" className= {darkMode ? "dark" : "light"}>
-            <body className= {inter.className}>
+        <html lang="en" className={darkMode ? "dark" : "light"}>
+            <body className={mooli.className}>
                 <NextUIProvider>
                     <Navbar />
+                    <Spacer y={12}/>
                     {children}
+                    <Spacer y={12}/>
+                    <Footer />
                 </NextUIProvider>
-                <Footer />
             </body>
         </html>
     )

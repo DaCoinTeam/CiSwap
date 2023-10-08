@@ -2,7 +2,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import React from "react"
-import NextUIProviders from "./_components/NextUIProviders"
+import { NextUIProviders, Navbar } from "./_components"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -19,6 +19,7 @@ const RootLayout = ({
     <html lang="en">
         <body className={inter.className}>
             <NextUIProviders> 
+                <Navbar />
                 {children}
             </NextUIProviders>
         </body>

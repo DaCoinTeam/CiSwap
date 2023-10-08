@@ -21,10 +21,10 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@shared/*": ["./src/app/*"],
-      "@redux/*": ["./src/redux/*"],
+      "@redux": ["./src/redux"],
       "@blockchain/*": ["./src/blockchain/*"],
       "@utils/*": ["./src/utils/*"],
-      "@interfaces/*": ["./src/interfaces/*"]
+      "@definitions/*": ["./src/definitions/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/N"],

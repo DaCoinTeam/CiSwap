@@ -15,8 +15,8 @@ import { AppButton } from "@app/_shared"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 
-interface SwapSectionProps{
-    className?: string
+interface SwapSectionProps {
+  className?: string;
 }
 
 const SwapSection = (props: SwapSectionProps) => {
@@ -26,7 +26,10 @@ const SwapSection = (props: SwapSectionProps) => {
     return (
         <FormikProviders>
             <Card className={`${props.className}`}>
-                <CardHeader className="p-5">Swap</CardHeader>
+                <CardHeader className="p-5">
+                    {" "}
+                    <span className="text-xl font-bold">Swap</span>
+                </CardHeader>
                 <Divider />
                 <CardBody className="grid justify-items-center">
                     <TokenInput />
@@ -39,7 +42,12 @@ const SwapSection = (props: SwapSectionProps) => {
                     <Spacer y={6} />
                     <TokenInput />
                     <Spacer y={12} />
-                    <AppButton className="w-full" size="lg" content="Swap" darkMode={darkMode} />
+                    <AppButton
+                        className="w-full"
+                        size="lg"
+                        content="Swap"
+                        darkMode={darkMode}
+                    />
                 </CardBody>
             </Card>
         </FormikProviders>

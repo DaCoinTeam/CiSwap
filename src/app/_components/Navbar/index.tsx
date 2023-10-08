@@ -7,17 +7,19 @@ export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
 
     const menuItems = [
-        "Profile",
-        "Dashboard",
-        "Activity",
-        "Analytics",
-        "System",
-        "Deployments",
-        "My Settings",
-        "Team Settings",
-        "Help & Feedback",
-        "Log Out",
+        {
+            key: 0,
+            value: "Profile"
+        },
+        {
+            key: 0,
+            value: "Log Out"
+        },
+
+
     ]
+
+    const _color = (index: number) => index === menuItems.length - 1 ? "danger" : "foreground"
 
     return (
         <NextUINavbar onMenuOpenChange={setIsMenuOpen}>
@@ -60,17 +62,17 @@ export const Navbar = () => {
                 </NavbarItem>
             </NavbarContent>
             <NavbarMenu>
-                {menuItems.map((item, index) => (
-                    <NavbarMenuItem key={`${item}-${index}`}>
+                {menuItems.map((item) => (
+                    <NavbarMenuItem key={item.key}>
                         <Link
                             color={
-                                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
+                                item.key === 2 ? "primary" : _color(item.key)
                             }
                             className="w-full"
                             href="#"
                             size="lg"
                         >
-                            {item}
+                            {item.value}
                         </Link>
                     </NavbarMenuItem>
                 ))}

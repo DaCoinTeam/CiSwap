@@ -19,7 +19,7 @@ export const SwitchModeButton = () => {
             onValueChange={_setDarkMode}
             isSelected={darkMode}
             color="default"
-            thumbIcon={({ isSelected }) => (isSelected ? <MoonIcon /> : <SunIcon />)}
+            thumbIcon={darkMode ? <MoonIcon /> : <SunIcon />}
         />
     )
 }

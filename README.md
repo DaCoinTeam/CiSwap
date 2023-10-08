@@ -1,15 +1,17 @@
 | Metric               | Badge                                                                                                      |
 |----------------------|------------------------------------------------------------------------------------------------------------|
-| Quality Gate Status  | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=alert_status)                     |
-| Duplicated Lines (%) | ![Duplicated Lines](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=duplicated_lines_density)             |
-| Reliability Rating   | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=reliability_rating)                 |
-| Technical Debt       | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=sqale_index)                           |
-| Lines of Code        | ![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=ncloc)                                 |
-| Code Smells          | ![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=code_smells)                             |
-| Maintainability Rating | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=sqale_rating)                   |
-| Security Rating      | ![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=security_rating)                       |
-| Bugs                 | ![Bugs](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=bugs)                                     |
-| Vulnerabilities      | ![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=starcidapride_StarSwap&metric=vulnerabilities)                     |
+| Quality Gate Status  | ![![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                     |
+| Duplicated Lines (%) | [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)           |
+| Reliability Rating   | [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)              |
+| Technical Debt       | [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                       |
+| Lines of Code        | [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                               |
+| Code Smells          | [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                            |
+| Maintainability Rating | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                 |
+| Security Rating      | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                      |
+| Bugs                 | [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=bugs)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                                 |
+| Vulnerabilities      | [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=DaCoinTeam_StarSwap&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=DaCoinTeam_StarSwap)                  |
+
+[Sonarclond](https://sonarcloud.io/summary/overall?id=DaCoinTeam_StarSwap)
 
 ## Getting Started
 

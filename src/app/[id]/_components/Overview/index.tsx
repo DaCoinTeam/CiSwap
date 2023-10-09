@@ -2,7 +2,6 @@
 
 import React from "react"
 import { Card, CardBody, Spacer } from "@nextui-org/react"
-import DataWidgetDisplay from "@app/_shared/displays/DataWidgetDisplay"
 import TokenLocked from "./TokenLocked"
 import { ViewOnExplorer } from "@app/_shared"
 

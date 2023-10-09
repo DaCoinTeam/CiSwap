@@ -1,12 +1,11 @@
 import React from "react"
-import {Tab, Tabs } from "@nextui-org/react"
+import { Tab, Tabs } from "@nextui-org/react"
 import { ChartTimePeriod } from "@definitions"
 
 interface PeriodTabsProps {
   className?: string;
   darkMode?: boolean;
   size?: "sm" | "md" | "lg";
-
 }
 
 const _periods = [
@@ -30,6 +29,9 @@ const _periods = [
 
 const PeriodTabs = (props: PeriodTabsProps) => {
     const _size = props.size ?? "md"
+    const _selected = props.darkMode
+        ? "group-data-[selected=true]:text-black"
+        : "group-data-[selected=true]:text-white"
     return (
         <Tabs
             className={`${props.className}`}
@@ -37,7 +39,7 @@ const PeriodTabs = (props: PeriodTabsProps) => {
             aria-label="Tabs variants"
             classNames={{
                 cursor: "!bg-teal-500",
-                tabContent: `font-bold group-data-[selected=true]:text-${props.darkMode?"black":"white"}`,
+                tabContent: `font-bold ${_selected}`,
             }}
         >
             {_periods.map((_period) => (

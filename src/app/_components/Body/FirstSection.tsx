@@ -10,8 +10,8 @@ const FirstSection = () => {
     )
     const _swap = () => {}
     return (
-        <section>
-            <div className="m-auto max-w-[1024px] min-h-[600px] grid content-center">
+        <>
+            <div className="min-h-[600px] grid content-center">
                 <div className="w-fit h-fit">
                     <div className="text-teal-500 text-8xl font-black">StarSwap</div>
                     <Spacer y={2}/>
@@ -26,7 +26,7 @@ const FirstSection = () => {
                     />
                 </div>
             </div>
-        </section>
+        </>
     )
 }
 export default FirstSection

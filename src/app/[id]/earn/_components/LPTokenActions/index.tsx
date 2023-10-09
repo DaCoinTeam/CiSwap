@@ -6,9 +6,9 @@ import { RootState } from "@redux"
 import DataWidgetDisplay from "@app/_shared/displays/DataWidgetDisplay"
 
 interface LPTokenActionsProps {
-    className?: string;
-  }
-  
+  className?: string;
+}
+
 const LPTokenActions = (props: LPTokenActionsProps) => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
@@ -17,13 +17,16 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
         <Card className={`${props.className}`}>
             <CardHeader className="p-5">
                 <div>
-                    <DataWidgetDisplay title="Your Balance" value={500} prefix="USDT" size="xl"/>
+                    <DataWidgetDisplay
+                        title="Your Balance"
+                        value={500}
+                        prefix="USDT"
+                        size="lg"
+                    />
                 </div>
             </CardHeader>
             <Divider />
-            <CardBody>
-               
-            </CardBody>
+            <CardBody></CardBody>
         </Card>
     )
 }

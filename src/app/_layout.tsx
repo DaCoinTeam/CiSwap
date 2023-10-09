@@ -34,7 +34,11 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
                 <NextUIProvider>
                     <Navbar />
                     <Spacer y={12}/>
-                    {children}
+                    <main>
+                        <div className="max-w-[1024px] m-auto p-6">
+                            {children}     
+                        </div>
+                    </main>
                     <Spacer y={12}/>
                     <Footer />
                 </NextUIProvider>

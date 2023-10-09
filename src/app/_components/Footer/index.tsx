@@ -5,7 +5,7 @@ import SwitchModeButton from "./SwitchModeButton"
 const Footer = () => {
     return (
         <footer>
-            <div className="max-w-[1024px] m-auto">
+            <div className="max-w-[1024px] m-auto px-6">
                 <Divider />
                 <div className="flex justify-between my-6">
                     <SwitchModeButton />

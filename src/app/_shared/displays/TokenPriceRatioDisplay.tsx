@@ -17,7 +17,7 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
         <>
             {!props.finishLoad ? (
                 <div className="gap-2 font-bold">
-                    <span className="text-5xl">
+                    <span className="text-4xl">
                         {" "}
                         {props.token0Price}{" "}
                     </span>

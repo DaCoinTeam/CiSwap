@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import Web3 from "web3"
-import { ChainName } from "@definitions/enums"
+import { ChainName } from "@definitions"
 
 export interface BlockchainSlice {
   web3: Web3 | null;

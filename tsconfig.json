@@ -23,7 +23,7 @@
       "@redux": ["./src/redux"],
       "@blockchain/*": ["./src/blockchain/*"],
       "@utils": ["./src/utils"],
-      "@definitions/*": ["./src/definitions/*"]
+      "@definitions": ["./src/definitions"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/N"],

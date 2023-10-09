@@ -11,7 +11,7 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const menuItems = [
+    const _menuItems = [
         {
             key: 0,
             value: "Profile"
@@ -24,7 +24,7 @@ const Navbar = () => {
 
     ]
 
-    const _color = (index: number) => index === menuItems.length - 1 ? "danger" : "foreground"
+    const _color = (index: number) => index === _menuItems.length - 1 ? "danger" : "foreground"
 
     return (
         <NextUINavbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen}>
@@ -64,17 +64,17 @@ const Navbar = () => {
                 }
             </NavbarContent>
             <NavbarMenu>
-                {menuItems.map((item) => (
-                    <NavbarMenuItem key={item.key}>
+                {_menuItems.map((_item) => (
+                    <NavbarMenuItem key={_item.key}>
                         <Link
                             color={
-                                item.key === 2 ? "primary" : _color(item.key)
+                                _item.key === 2 ? "primary" : _color(_item.key)
                             }
                             className="w-full"
                             href="#"
                             size="lg"
                         >
-                            {item.value}
+                            {_item.value}
                         </Link>
                     </NavbarMenuItem>
                 ))}

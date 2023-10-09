@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { BaselineData, IChartApi, ISeriesApi, Time } from "lightweight-charts"
-import { createBaselineChartAndSeries, applyOptionsBaselineChart } from "@utils"
+import { createBaselineChartAndSeries, updateBaselineChartWithOptions } from "@utils"
 
 const Chart = () => {
     const darkMode = useSelector(
@@ -49,7 +49,7 @@ const Chart = () => {
         const container = chartContainerRef.current
         if (container == null) return
 
-        applyOptionsBaselineChart(chart, container, darkMode)
+        updateBaselineChartWithOptions(chart, container, darkMode)
     }, [darkMode])
 
     return <div ref={chartContainerRef} />

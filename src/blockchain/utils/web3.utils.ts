@@ -1,4 +1,4 @@
-import { ChainName, chainInfos } from "./configuration.utils"
+import { ChainName, chainInfos } from "../config"
 import Web3, { HttpProvider, WebSocketProvider } from "web3"
 
 export const getHttpWeb3 = (

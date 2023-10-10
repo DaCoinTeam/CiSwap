@@ -1,6 +1,6 @@
 import React from "react"
 import { Tab, Tabs } from "@nextui-org/react"
-import { ChartTimePeriod } from "@definitions"
+import { ChartTimePeriod } from "@utils"
 
 interface PeriodTabsProps {
   className?: string;

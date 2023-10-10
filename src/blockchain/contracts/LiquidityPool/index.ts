@@ -7,20 +7,20 @@ const getLiquidityPoolContract = (web3: Web3, poolAddress: Address) =>
 
 class LiquidityPoolContract {
     private chainName: ChainName
-    private sender: Address
     private poolAddress: Address
+    private sender?: Address
     private web3?: Web3
 
     constructor(
         chainName: ChainName,
-        sender: Address,
         poolAddress: Address,
+        sender?: Address,
         web3?: Web3
     ) {
-        this.chainName = chainName
-        this.sender = sender
-        this.poolAddress = poolAddress
-        this.web3 = web3
+        (this.chainName = chainName),
+        (this.sender = sender),
+        (this.poolAddress = poolAddress),
+        (this.web3 = web3)
     }
 
     async token0() {

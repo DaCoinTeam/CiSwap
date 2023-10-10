@@ -27,8 +27,7 @@ const SwapSection = (props: SwapSectionProps) => {
         <FormikProviders>
             <Card className={`${props.className}`}>
                 <CardHeader className="p-5">
-                    {" "}
-                    <span className="text-xl font-bold">Swap</span>
+                    <span className="font-bold text-lg">Swap</span>
                 </CardHeader>
                 <Divider />
                 <CardBody className="grid justify-items-center">

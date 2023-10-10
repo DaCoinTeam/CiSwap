@@ -1,4 +1,10 @@
-import { ChainName, GAS_LIMIT, GAS_PRICE, chainInfos } from "@blockchain"
+import {
+    ChainName,
+    GAS_LIMIT,
+    GAS_PRICE,
+    chainInfos,
+    getHttpWeb3,
+} from "@blockchain"
 import Web3, { Address } from "web3"
 import abi from "./abi"
 
@@ -9,15 +15,15 @@ const getFactoryContract = (web3: Web3) => {
 
 class FactoryCountract {
     private chainName: ChainName
-    private sender: Address
     private factoryAddress: Address
+    private sender?: Address
     private web3?: Web3
 
-    constructor(chainName: ChainName, sender: Address, web3?: Web3){
-        this.chainName = chainName,
-        this.sender = sender,
-        this.factoryAddress = chainInfos[this.chainName].factoryAddress,
-        this.web3 = web3
+    constructor(chainName: ChainName, sender?: Address, web3?: Web3) {
+        (this.chainName = chainName),
+        (this.factoryAddress = chainInfos[this.chainName].factoryAddress),
+        (this.sender = sender),
+        (this.web3 = web3)
     }
 
     async createPool(
@@ -31,7 +37,7 @@ class FactoryCountract {
     ) {
         try {
             if (!this.web3) return
-            
+
             const contract = getFactoryContract(this.web3)
             const data = contract.methods
                 .createPool(
@@ -50,8 +56,19 @@ class FactoryCountract {
                 to: this.factoryAddress,
                 data,
                 gasLimit: GAS_LIMIT,
-                gasPrice: GAS_PRICE
+                gasPrice: GAS_PRICE,
             })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async getPairs(_token0: Address, _token1: Address) {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getFactoryContract(web3)
+            return contract.methods.getPair(_token0, _token1).call()
         } catch (ex) {
             console.log(ex)
             return null

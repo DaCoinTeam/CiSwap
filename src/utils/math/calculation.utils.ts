@@ -18,7 +18,7 @@ export const calculateRedenomination = (
     }
 }
 
-export const calculateDivBigIntBigInt = (
+export const calculateDivBigInt = (
     _a: bigint,
     _b: bigint,
     round: number

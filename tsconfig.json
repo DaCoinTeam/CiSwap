@@ -21,7 +21,7 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@redux": ["./src/redux"],
-      "@blockchain/*": ["./src/blockchain/*"],
+      "@blockchain": ["./src/blockchain"],
       "@utils": ["./src/utils"],
       "@definitions": ["./src/definitions"]
     }

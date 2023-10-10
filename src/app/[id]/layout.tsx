@@ -6,7 +6,6 @@ const RootLayout = ({
 }: {
   children: ReactNode
 }) => {
-
     return (
         <>
             {children}

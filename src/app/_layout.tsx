@@ -33,13 +33,11 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
             <body className={mooli.className}>
                 <NextUIProvider>
                     <Navbar />
-                    <Spacer y={12}/>
+                    <Spacer y={12} />
                     <main>
-                        <div className="max-w-[1024px] m-auto p-6">
-                            {children}     
-                        </div>
+                        <div className="max-w-[1024px] m-auto p-6">{children}</div>
                     </main>
-                    <Spacer y={12}/>
+                    <Spacer y={12} />
                     <Footer />
                 </NextUIProvider>
             </body>

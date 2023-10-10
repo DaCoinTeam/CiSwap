@@ -1,5 +1,6 @@
 import Web3, { Address } from "web3"
 
+const KLAYTN_MAINNET_CHAIN_ID = 123
 const KLAYTN_MAINNET_HTTP_RPC_URL = "..."
 const KLAYTN_MAINNET_WEBSOCKET_RPC_URL = "..."
 const KLAYTN_MAINNET_CONTRACT_FACTORY = "..."
@@ -10,6 +11,8 @@ const KLAYTN_MAINNET_EXCHANGE_TOKEN =
 const KLAYTN_MAINNET_USDT = "..."
 const KLAYTN_MAINNET_EXPLORER = ""
 
+
+const KLAYTN_TESTNET_CHAIN_ID = 1001
 const KLAYTN_TESTNET_HTTP_RPC_URL = "https://api.baobab.klaytn.net:8651"
 const KLAYTN_TESTNET_WEBSOCKET_RPC_URL = "wss://public-en-baobab.klaytn.net/ws"
 const KLAYTN_TESTNET_CONTRACT_FACTORY =
@@ -32,6 +35,7 @@ export enum ChainName {
 }
 
 export type ChainInfo = {
+  chainId: number;
   httpRpcUrl: string;
   websocketRpcUrl: string;
   factoryAddress: Address;
@@ -42,6 +46,7 @@ export type ChainInfo = {
 
 export const chainInfos: Record<number, ChainInfo> = {
     [ChainName.KlaytnMainnet]: {
+        chainId: KLAYTN_MAINNET_CHAIN_ID,
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
         factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
@@ -50,6 +55,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         explorerUrl: KLAYTN_MAINNET_EXPLORER,
     },
     [ChainName.KalytnTestnet]: {
+        chainId: KLAYTN_TESTNET_CHAIN_ID,
         httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
         factoryAddress: KLAYTN_TESTNET_CONTRACT_FACTORY,

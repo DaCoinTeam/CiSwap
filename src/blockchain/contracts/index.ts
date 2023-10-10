@@ -1,5 +1,5 @@
-import ERC20Contract from "./erc20"
-import FactoryContract from "./factory"
+import ERC20Contract from "./erc20f"
+import FactoryContract from "./factoryf"
 import LiquidityPoolContract from "./liquidity-pool"
 
 export { ERC20Contract, FactoryContract, LiquidityPoolContract}

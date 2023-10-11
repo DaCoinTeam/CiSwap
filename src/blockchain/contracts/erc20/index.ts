@@ -28,9 +28,9 @@ class ERC20Countract {
         }
     }
 
-    async symbol() {
+    async symbol(controller?: AbortController) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainName, controller)
             const contract = getERC20Contract(web3, this.ERC20Address)
             return await contract.methods.symbol().call()
         } catch (ex) {
@@ -44,6 +44,17 @@ class ERC20Countract {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getERC20Contract(web3, this.ERC20Address)
             return Number(await contract.methods.decimals().call())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async balanceOf(_owner: string) {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getERC20Contract(web3, this.ERC20Address)
+            return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
         } catch (ex) {
             console.log(ex)
             return null

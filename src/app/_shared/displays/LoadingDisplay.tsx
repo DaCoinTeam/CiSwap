@@ -14,17 +14,17 @@ const LoadingDisplay = (props : LoadingDisplayProps) => {
             {
                 !props.finishLoad
                     ? 
-                    <div className={`flex gap-2 items-center ${props.className}`}>
+                    <div className={`flex gap-2 items-center pt-1 px-1 ${props.className}`}>
                         <Spinner 
                             color="default"
                             classNames = {
                                 {
-                                    circle1 : "w-5 h-5",
-                                    circle2: "w-5 h-5",
-                                    wrapper: "w-5 h-5"
+                                    circle1 : "w-4 h-4",
+                                    circle2: "w-4 h-4",
+                                    wrapper: "w-4 h-4"
                                 }
                             }/>
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs text-gray-500">
                             {props.message}
                         </span>
                     </div>

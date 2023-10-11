@@ -30,8 +30,8 @@ class FactoryCountract {
     async createPool(
         _token0: Address,
         _token1: Address,
-        _token0DepositAmount: bigint,
-        _token1DepositAmount: bigint,
+        _token0AddedAmount: bigint,
+        _token1AddedAmount: bigint,
         _token0BasePrice: bigint,
         _token0MaxPrice: bigint,
         _protocolFee: number
@@ -44,8 +44,8 @@ class FactoryCountract {
                 .createPool(
                     _token0,
                     _token1,
-                    _token0DepositAmount,
-                    _token1DepositAmount,
+                    _token0AddedAmount,
+                    _token1AddedAmount,
                     _token0BasePrice,
                     _token0MaxPrice,
                     _protocolFee

@@ -7,6 +7,7 @@ interface AppButtonProps {
     darkMode? : boolean,
     size?: "sm" | "md" | "lg",
     onPress?: () => void,
+    type?: "submit"
     content: string
 
 }
@@ -16,6 +17,7 @@ const AppButton = (props: AppButtonProps) => {
     return (
         <Button
             size={_size}
+            type={props.type}
             className={`bg-teal-500 font-bold ${
                 props.darkMode ? "text-black" : "text-white"
             } ${props.className}`}

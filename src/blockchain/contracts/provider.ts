@@ -3,12 +3,12 @@ import { ChainName, chainInfos } from "../config"
 
 export const getHttpWeb3 = (
     chainName: ChainName, 
-    abortController?: AbortController
+    controller?: AbortController
 ) : Web3 => {
-    const providerOptions = abortController
+    const providerOptions = controller
         ? {
             providerOptions: {
-                signal: abortController.signal
+                signal: controller.signal
             }
         } : undefined
     

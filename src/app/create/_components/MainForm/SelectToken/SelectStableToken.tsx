@@ -12,7 +12,7 @@ import { ERC20Contract, chainInfos } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { Address } from "web3"
-import { getSvgResponse } from "@utils"
+import { fetchAndCreateSvgBlobUrl } from "@utils"
 
 interface SelectStableTokenProps {
   className?: string;
@@ -46,10 +46,11 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
               const symbol = await contract.symbol()
               if (symbol == null) return
 
-              const tokenImage = await getSvgResponse(
+              const tokenImage = await fetchAndCreateSvgBlobUrl(
                   `api/static/images/token?tokenAddress=${token}&chainId=${chainId}`
               )
-            
+
+              if (tokenImage == null) return
               _presentableTokens.push({
                   tokenAddress: token,
                   tokenSymbol: symbol,
@@ -62,7 +63,8 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
       handleEffect()
   }, [])
 
-  console.log(presentableTokens)
+
+  
   return (
       <div>
           <TitleDisplay title="Stable Tokens" />

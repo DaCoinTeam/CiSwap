@@ -1,4 +1,5 @@
 import axios from "axios"
+import { NextResponse } from "next/server"
 
 export enum ResponseStatus {
   OK = 200,
@@ -12,13 +13,13 @@ export const headers = {
 }
 
 export const createEmptyResponse = (status: ResponseStatus) => {
-    return new Response("", {
+    return new NextResponse("", {
         status,
     })
 }
 
 export const createSVGResponse = (data: string) => {
-    return new Response(data, {
+    return new NextResponse(data, {
         status: ResponseStatus.OK,
         headers: {
             "Content-Type": "image/svg+xml",

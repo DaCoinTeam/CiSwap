@@ -1,6 +1,7 @@
-import { ChainName, getHttpWeb3 } from "@blockchain"
+import { ChainName } from "../../config"
 import Web3, { Address } from "web3"
 import abi from "./abi"
+import { getHttpWeb3 } from "../provider"
 
 const getLiquidityPoolContract = (web3: Web3, poolAddress: Address) =>
     new web3.eth.Contract(abi, poolAddress, web3)

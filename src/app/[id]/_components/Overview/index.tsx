@@ -13,7 +13,7 @@ const Overview = (props: OverviewProps) => {
     return (
         <Card className = {`${props.clasName}`}>
             <CardBody>
-                <ViewOnExplorer hexString="123"/>
+                <ViewOnExplorer hexString="12233"/>
 
                 <Spacer y={6}/>
                 <TokenLocked token0Symbol={""} token1Symbol={""} token0Locked={0} token1Locked={0} />

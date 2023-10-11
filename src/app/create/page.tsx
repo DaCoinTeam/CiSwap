@@ -1,5 +1,5 @@
 import React from "react"
-import MainForm from "./_components/MainForm"
+import { MainForm } from "./_components"
 
 const Page = () => {
     return (

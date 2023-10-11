@@ -45,7 +45,7 @@ export type ChainInfo = {
 };
 
 export const chainInfos: Record<number, ChainInfo> = {
-    [ChainName.KlaytnMainnet]: {
+    [ChainName.KlaytnMainnet] : {
         chainId: KLAYTN_MAINNET_CHAIN_ID,
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
@@ -67,3 +67,4 @@ export const chainInfos: Record<number, ChainInfo> = {
 
 export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
 export const GAS_LIMIT = 3000000
+

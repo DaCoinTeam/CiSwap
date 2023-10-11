@@ -3,7 +3,7 @@ import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react"
 import React from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import DataWidgetDisplay from "@app/_shared/displays/DataWidgetDisplay"
+import { DataWidgetDisplay } from "@app/_shared"
 
 interface LPTokenActionsProps {
   className?: string;

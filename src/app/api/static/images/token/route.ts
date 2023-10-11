@@ -2,7 +2,7 @@ import {
     ResponseStatus,
     createEmptyResponse,
     createSVGResponse,
-} from "@app/api/_utils"
+} from "../../../../../utils/api"
 import { getTokenDoc } from "@firebase"
 import { NextResponse, type NextRequest } from "next/server"
 import axios from "axios"

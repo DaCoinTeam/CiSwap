@@ -1,4 +1,5 @@
-import { ChainName, getHttpWeb3 } from "@blockchain"
+import { ChainName } from "../../config"
+import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
 

@@ -4,7 +4,7 @@ import { Spacer } from "@nextui-org/react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { AppButton } from "@app/_shared"
-import { FactoryContract } from "../../../blockchain/contracts"
+import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@blockchain"
 import { useRouter } from "next/navigation"
 const FirstSection = () => {

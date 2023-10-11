@@ -12,7 +12,7 @@ import { ERC20Contract, chainInfos } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { Address } from "web3"
-import { getSvgResponse } from "@app/api/_utils"
+import { getSvgResponse } from "@utils"
 
 interface SelectStableTokenProps {
   className?: string;

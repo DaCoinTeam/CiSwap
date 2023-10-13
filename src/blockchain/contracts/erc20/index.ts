@@ -1,4 +1,4 @@
-import { ChainName } from "../../config"
+import { ChainName, GAS_LIMIT, GAS_PRICE } from "../../config"
 import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
@@ -10,11 +10,13 @@ class ERC20Countract {
     private chainName: ChainName
     private ERC20Address: Address
     private web3?: Web3
+    private sender?: Address
 
-    constructor(chainName: ChainName, ERC20Address: Address, web3?: Web3) {
-        (this.chainName = chainName),
-        (this.ERC20Address = ERC20Address),
-        (this.web3 = web3)
+    constructor(chainName: ChainName, ERC20Address: Address, web3?: Web3, sender?: string) {
+        this.chainName = chainName
+        this.ERC20Address = ERC20Address
+        this.web3 = web3
+        this.sender = sender
     }
 
     async name() {
@@ -50,12 +52,42 @@ class ERC20Countract {
         }
     }
 
-    async balanceOf(_owner: string) {
+    async balanceOf(_owner: Address) {
         try {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getERC20Contract(web3, this.ERC20Address)
             return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
         } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async allowance(_owner: Address, spender: Address){
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getERC20Contract(web3, this.ERC20Address)
+            return Number(await contract.methods.allowance(_owner, spender).call())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async approve(_spender: string, _value: number){
+        try{
+            if (!this.web3) return 
+            const contract = getERC20Contract(this.web3, this.ERC20Address)
+            const data = contract.methods.approve(_spender, _value).encodeABI()
+            
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: this.ERC20Address,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch(ex){
             console.log(ex)
             return null
         }

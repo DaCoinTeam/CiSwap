@@ -33,20 +33,20 @@ const MainForm = () => {
                     {(
                         <Form>
                             <div className="grid sm:grid-cols-2 grid-cols-1 gap-12">
-                                <div>
-                                    <FinishSelectPairContext.Provider value={{ finishSelectPair, setFinishSelectPair}}>
+                                <FinishSelectPairContext.Provider value={{ finishSelectPair, setFinishSelectPair}}>
+                                    <div>
                                         <SelectTokenPair/>
                                         <Spacer y={12}/>
                                         <PickProtocolFee />
                                         <Spacer y={12}/>
                                         <AddTokens />
-                                    </FinishSelectPairContext.Provider>
-                                </div>
-                                <div className="justify-between flex flex-col">
-                                    <ChooseTokenPrices />
-                                    <Spacer y={12}/>
-                                    <AppButton darkMode={darkMode} size="lg" type="submit" content="Create" />
-                                </div>
+                                    </div>
+                                    <div className="justify-between flex flex-col">
+                                        <ChooseTokenPrices />
+                                        <Spacer y={12}/>
+                                        <AppButton darkMode={darkMode} type="submit" content="Create" />
+                                    </div>
+                                </FinishSelectPairContext.Provider>
                             </div>
                         </Form>
                     )}

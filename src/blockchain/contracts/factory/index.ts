@@ -17,14 +17,14 @@ const getFactoryContract = (web3: Web3) => {
 class FactoryCountract {
     private chainName: ChainName
     private factoryAddress: Address
-    private sender?: Address
     private web3?: Web3
+    private sender?: Address
 
     constructor(chainName: ChainName, sender?: Address, web3?: Web3) {
-        (this.chainName = chainName),
-        (this.factoryAddress = chainInfos[this.chainName].factoryAddress),
-        (this.sender = sender),
-        (this.web3 = web3)
+        this.chainName = chainName
+        this.factoryAddress = chainInfos[this.chainName].factoryAddress
+        this.web3 = web3
+        this.sender = sender
     }
 
     async createPool(
@@ -52,7 +52,7 @@ class FactoryCountract {
                 )
                 .encodeABI()
 
-            this.web3.eth.sendTransaction({
+            return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: this.factoryAddress,
                 data,

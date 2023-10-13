@@ -10,7 +10,8 @@ interface NumberInputProps {
     value: string,
     errorMessage? : string,
     textPosition?: "center" | "left" | "right",
-    isDisabled?: boolean
+    isDisabled?: boolean,
+    hideErrorMessage?: boolean
 }
 
 const NumberInput = (props: NumberInputProps) => {
@@ -48,7 +49,7 @@ const NumberInput = (props: NumberInputProps) => {
             value={props.value} 
             onValueChange={_handleChange}
             isInvalid={props.errorMessage ? true : false}
-            errorMessage={props.errorMessage}
+            errorMessage={!props.hideErrorMessage ? props.errorMessage : ""}
         />
     )
 }

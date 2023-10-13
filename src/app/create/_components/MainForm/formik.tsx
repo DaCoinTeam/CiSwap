@@ -1,4 +1,4 @@
-import { Formik, FormikProps } from "formik"
+import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext } from "react"
 import { Address } from "web3"
 import * as Yup from "yup"
@@ -51,7 +51,9 @@ const _renderBody = (
     chidren: ReactNode
 ) => (
     <FormikPropsContext.Provider value={props}>
-        {chidren}
+        <Form onSubmit={props?.handleSubmit}>
+            {chidren}
+        </Form>
     </FormikPropsContext.Provider>
 )
 
@@ -63,8 +65,8 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
         <Formik
             initialValues={initialValues}
             validationSchema={Yup.object({
-                token0: Yup.string().required("This field is required"),
-                token1: Yup.string().required("This field is required"),
+                token0: Yup.string().required(),
+                token1: Yup.string().required(),
                 isToken0Sell: Yup.boolean(),
                 token0AddedAmount: Yup.number()
                     .max(
@@ -79,10 +81,11 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                 token0BasePrice: Yup.number()
                     .max(
                         Yup.ref("token0MaxPrice"),
-                        "Min price must be less than or equal to max price"
+                        "Base price must be less than or equal to max price"
                     )
             })}
             onSubmit={async (values) => {
+                console.log("called")
                 const token0Contract = new ERC20Contract(chainName, values.token0Address)
                 const token1Contract = new ERC20Contract(chainName, values.token1Address)
                 
@@ -119,7 +122,6 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                 
                 const _token0Decimals = values._isToken0Sell ? values._token0Decimals : values._token1Decimals
                 const _token1Decimals = values._isToken0Sell ? values._token1Decimals : values._token0Decimals
-
                 
                 const _token0AddedAmount = values._isToken0Sell ? token0AddedAmountParsed : token1AddedAmountParsed
                 const _token1AddedAmount = values._isToken0Sell ? token1AddedAmountParsed : token0AddedAmountParsed

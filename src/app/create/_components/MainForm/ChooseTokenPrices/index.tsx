@@ -115,6 +115,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     errorMessage={formik.errors.token0BasePrice}
                                     onValueChange={_handleChange}
                                     value={_finishSelectPair ? formik.values.token0BasePrice: ""}
+                                    hideErrorMessage
                                 />
                                 
                                 <Button

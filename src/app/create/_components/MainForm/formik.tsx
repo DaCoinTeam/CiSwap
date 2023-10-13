@@ -5,7 +5,7 @@ import * as Yup from "yup"
 import { ERC20Contract, FactoryContract, chainInfos } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { calculateIRedenomination, parseNumber } from "@utils"
+import { calculateExponent, calculateIRedenomination, parseNumber } from "@utils"
 
 interface FormikValues {
   token0Address: Address;
@@ -59,14 +59,16 @@ const _renderBody = (
 
 const FormikProviders = ({ children }: { children: ReactNode }) => {
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+    const web3 = useSelector((state: RootState) => state.blockchain.web3)
+
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={Yup.object({
-                token0: Yup.string().required(),
-                token1: Yup.string().required(),
+                token0Address: Yup.string().required(),
+                token1Address: Yup.string().required(),
                 isToken0Sell: Yup.boolean(),
                 token0AddedAmount: Yup.number()
                     .max(
@@ -84,59 +86,70 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         "Base price must be less than or equal to max price"
                     )
             })}
-            onSubmit={async (values) => {
-                console.log("called")
-                const token0Contract = new ERC20Contract(chainName, values.token0Address)
-                const token1Contract = new ERC20Contract(chainName, values.token1Address)
+            onSubmit={
+                async (values) => {
+                    if (web3 == null) return
+
+                    const token0Contract = new ERC20Contract(chainName, values.token0Address, web3, account)
+                    const token1Contract = new ERC20Contract(chainName, values.token1Address, web3, account)
                 
-                const factoryAddress = chainInfos[chainName].factoryAddress
-                const factoryContract = new FactoryContract(chainName, account)
+                    const factoryAddress = chainInfos[chainName].factoryAddress
+                    const factoryContract = new FactoryContract(chainName, web3, account)
                 
-                const token0AddedAmountParsed = parseNumber(values.token0AddedAmount)
-                const token1AddedAmountParsed = parseNumber(values.token1AddedAmount)
+                    const token0AddedAmountParsed = calculateIRedenomination(
+                        parseNumber(values.token0AddedAmount), values._token0Decimals 
+                    )
 
-                const token0BasePriceParsed = parseNumber(values.token0BasePrice)
-                const token0MaxPriceParsed = parseNumber(values.token0MaxPrice)
+                    const token1AddedAmountParsed = calculateIRedenomination(
+                        parseNumber(values.token1AddedAmount), values._token1Decimals 
+                    )
 
-                const token0Allowance = await token0Contract.allowance(account, factoryAddress)
-                if (token0Allowance == null) return
+                    const token0BasePriceParsed = calculateIRedenomination(
+                        parseNumber(values.token0BasePrice), values._token0Decimals 
+                    )
+                    const token0MaxPriceParsed = calculateIRedenomination(
+                        parseNumber(values.token0MaxPrice), values._token0Decimals 
+                    )
 
-                if (token0Allowance < token0AddedAmountParsed){
-                    const token0ApproveReceipt = await token0Contract.approve(
-                        factoryAddress,
-                        token0AddedAmountParsed - token0Allowance
-                    ) 
-                    if (!token0ApproveReceipt) return
-                }
+                    const token0Allowance = await token0Contract.allowance(account, factoryAddress)
+                    if (token0Allowance == null) return
 
-                if (token0Allowance < token0AddedAmountParsed){
-                    const token1ApproveReceipt = await token1Contract.approve(
-                        factoryAddress,
-                        token0AddedAmountParsed - token0Allowance
-                    ) 
-                    if (!token1ApproveReceipt) return
-                }
+                    if (token0Allowance < token0AddedAmountParsed){
+                        const token0ApproveReceipt = await token0Contract.approve(
+                            factoryAddress,
+                            token0AddedAmountParsed - token0Allowance
+                        ) 
+                        if (!token0ApproveReceipt) return
+                    }
 
-                const _token0Address = values._isToken0Sell ? values.token0Address : values.token1Address
-                const _token1Address = values._isToken0Sell ? values.token1Address : values.token0Address
-                
-                const _token0Decimals = values._isToken0Sell ? values._token0Decimals : values._token1Decimals
-                const _token1Decimals = values._isToken0Sell ? values._token1Decimals : values._token0Decimals
-                
-                const _token0AddedAmount = values._isToken0Sell ? token0AddedAmountParsed : token1AddedAmountParsed
-                const _token1AddedAmount = values._isToken0Sell ? token1AddedAmountParsed : token0AddedAmountParsed
+                    const token1Allowance = await token1Contract.allowance(account, factoryAddress)
+                    if (token1Allowance == null) return
 
-                const createPoolReceipt = await factoryContract.createPool(
-                    _token0Address,
-                    _token1Address,
-                    calculateIRedenomination(_token0AddedAmount, _token0Decimals),
-                    calculateIRedenomination(_token1AddedAmount, _token1Decimals),
-                    calculateIRedenomination(token0BasePriceParsed, _token0Decimals), 
-                    calculateIRedenomination(token0MaxPriceParsed, _token0Decimals),
-                    values.protocolFee
-                )
-                console.log(createPoolReceipt)
-            }}
+                    if (token1Allowance < token1AddedAmountParsed){
+                        const token1ApproveReceipt = await token1Contract.approve(
+                            factoryAddress,
+                            token1AddedAmountParsed - token1Allowance
+                        ) 
+                        if (!token1ApproveReceipt) return
+                    }
+
+                    const _token0Address = values._isToken0Sell ? values.token0Address : values.token1Address
+                    const _token1Address = values._isToken0Sell ? values.token1Address : values.token0Address
+
+                    const _token0AddedAmount = values._isToken0Sell ? token0AddedAmountParsed : token1AddedAmountParsed
+                    const _token1AddedAmount = values._isToken0Sell ? token1AddedAmountParsed : token0AddedAmountParsed
+    
+                    const createPoolReceipt = await factoryContract.createPool(
+                        _token0Address,
+                        _token1Address,
+                        _token0AddedAmount,
+                        _token1AddedAmount,
+                        token0BasePriceParsed,
+                        token0MaxPriceParsed,
+                        values.protocolFee * calculateExponent(5)
+                    )
+                    console.log(createPoolReceipt)
+                }}
         >
             {(props) => _renderBody(props, children)}
         </Formik>

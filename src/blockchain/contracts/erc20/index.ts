@@ -67,16 +67,16 @@ class ERC20Countract {
         try {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getERC20Contract(web3, this.ERC20Address)
-            return Number(await contract.methods.allowance(_owner, spender).call())
+            return BigInt((await contract.methods.allowance(_owner, spender).call()).toString())
         } catch (ex) {
             console.log(ex)
             return null
         }
     }
 
-    async approve(_spender: string, _value: number){
+    async approve(_spender: string, _value: bigint){
         try{
-            if (!this.web3) return 
+            if (!this.web3) return null
             const contract = getERC20Contract(this.web3, this.ERC20Address)
             const data = contract.methods.approve(_spender, _value).encodeABI()
             

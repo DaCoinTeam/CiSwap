@@ -20,11 +20,11 @@ class FactoryCountract {
     private web3?: Web3
     private sender?: Address
 
-    constructor(chainName: ChainName, sender?: Address, web3?: Web3) {
+    constructor(chainName: ChainName, web3?: Web3, sender?: Address) {
         this.chainName = chainName
         this.factoryAddress = chainInfos[this.chainName].factoryAddress
-        this.web3 = web3
         this.sender = sender
+        this.web3 = web3
     }
 
     async createPool(

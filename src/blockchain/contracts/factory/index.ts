@@ -75,6 +75,17 @@ class FactoryCountract {
             return null
         }
     }
+
+    async getAll(){
+        try{
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getFactoryContract(web3)
+            return contract.methods.getAll().call()
+        } catch(ex){
+            console.log(ex)
+            return null
+        }
+    }
 }
 
 export default FactoryCountract

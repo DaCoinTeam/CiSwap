@@ -46,6 +46,17 @@ class LiquidityPoolContract {
         }
     }
 
+    async protocolFee() {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return Number(await contract.methods.protocolFee().call())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async token1AmountOut(_token0AmountIn: bigint, controller?: AbortController) {
         try {
             const web3 = getHttpWeb3(this.chainName, controller)

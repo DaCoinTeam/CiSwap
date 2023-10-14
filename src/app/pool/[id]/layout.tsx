@@ -7,14 +7,10 @@ import { useParams } from "next/navigation"
 import { calculateExponent, calculateRedenomination } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 
-export const TokenStateContext = createContext<TokenState|null>(null)
+export const TokenStateContext = createContext<TokenState | null>(null)
 export const PoolAddressContext = createContext("")
 
-const RootLayout = ({
-    children,
-}: {
-  children: ReactNode
-}) => {
+const RootLayout = ({ children }: { children: ReactNode }) => {
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
@@ -29,9 +25,26 @@ const RootLayout = ({
 
     const params = useParams()
     const poolAddress = params.id as string
-    
 
     useEffect(() => {
+        if (!account) {
+            tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: "" })
+            tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: "" })
+            tokenDispatch({ type: "SET_TOKEN0_SYMBOL", payload: "" })
+            tokenDispatch({ type: "SET_TOKEN1_SYMBOL", payload: "" })
+            tokenDispatch({ type: "SET_LP_TOKEN_SYMBOL", payload: "" })
+            tokenDispatch({ type: "SET_TOKEN0_DECIMALS", payload: 0 })
+            tokenDispatch({ type: "SET_TOKEN1_DECIMALS", payload: 0 })
+            tokenDispatch({ type: "SET_TOKEN0_PRICE", payload: 0 })
+            tokenDispatch({ type: "SET_TOKEN0_BASE_PRICE", payload: 0 })
+            tokenDispatch({ type: "SET_TOKEN0_MAX_PRICE", payload: 0 })
+            tokenDispatch({
+                type: "SET_FINISH_LOAD_WITHOUT_CONNECTED",
+                payload: false,
+            })
+            return
+        }
+
         const poolContract = new LiquidityPoolContract(chainName, poolAddress)
         const handleEffect = async () => {
             const token0Address = await poolContract.token0()
@@ -69,10 +82,13 @@ const RootLayout = ({
 
             const LPTokenDecimals = await poolContract.decimals()
             if (LPTokenDecimals == null) return
-            tokenDispatch({ type: "SET_LP_TOKEN_DECIMALS", payload: LPTokenDecimals })
+            tokenDispatch({
+                type: "SET_LP_TOKEN_DECIMALS",
+                payload: LPTokenDecimals,
+            })
 
             const token0Price = await poolContract.token1AmountOut(
-                BigInt(calculateExponent(token0Decimals)),
+                BigInt(calculateExponent(token0Decimals))
             )
             if (token0Price == null) return
             tokenDispatch({
@@ -94,18 +110,48 @@ const RootLayout = ({
                 payload: calculateRedenomination(token0MaxPrice, token1Decimals, 3),
             })
 
-            tokenDispatch({ type: "SET_FINISH_LOAD_WITHOUT_CONNECTED", payload: true })
+            tokenDispatch({
+                type: "SET_FINISH_LOAD_WITHOUT_CONNECTED",
+                payload: true,
+            })
         }
         handleEffect()
-    }, [])
+    }, [account])
 
     useEffect(() => {
-        if (!account || !tokenState.finishLoadWithoutConnected) return
+        if (!account || !tokenState.finishLoadWithoutConnected) {
+            tokenDispatch({
+                type: "SET_TOKEN0_BALANCE",
+                payload: 0,
+            })
+
+            tokenDispatch({
+                type: "SET_TOKEN1_BALANCE",
+                payload: 0,
+            })
+
+            tokenDispatch({
+                type: "SET_LP_TOKEN_BALANCE",
+                payload: 0,
+            })
+
+            tokenDispatch({
+                type: "SET_FINISH_LOAD_WITH_CONNECTED",
+                payload: false,
+            })
+            return
+        }
 
         const handleEffect = async () => {
             const poolContract = new LiquidityPoolContract(chainName, poolAddress)
-            const token0Contract = new ERC20Contract(chainName, tokenState.token0Address)
-            const token1Contract = new ERC20Contract(chainName, tokenState.token1Address)
+            const token0Contract = new ERC20Contract(
+                chainName,
+                tokenState.token0Address
+            )
+            const token1Contract = new ERC20Contract(
+                chainName,
+                tokenState.token1Address
+            )
 
             const token0Balance = await token0Contract.balanceOf(account)
             console.log(token0Balance)
@@ -115,7 +161,7 @@ const RootLayout = ({
                 payload: calculateRedenomination(
                     token0Balance,
                     tokenState.token0Decimals,
-                    3,
+                    3
                 ),
             })
 
@@ -126,7 +172,7 @@ const RootLayout = ({
                 payload: calculateRedenomination(
                     token1Balance,
                     tokenState.token1Decimals,
-                    3,
+                    3
                 ),
             })
 
@@ -137,7 +183,7 @@ const RootLayout = ({
                 payload: calculateRedenomination(
                     LPTokenBalance,
                     tokenState.token0Decimals,
-                    3,
+                    3
                 ),
             })
 

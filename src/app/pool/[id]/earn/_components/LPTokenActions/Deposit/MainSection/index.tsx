@@ -33,6 +33,8 @@ const MainSection = () => {
         (state: RootState) => state.blockchain.account
     )
 
+    console.log(formik.values)
+
     const poolAddress = useContext(PoolAddressContext)
 
     const firstRender = useRef(true)
@@ -48,7 +50,7 @@ const MainSection = () => {
         const controller = new AbortController()
         const handleEffect = async () => {
             const token1DepositAmount = formik.values.token1DepositAmount
-            const contract = new LiquidityPoolContract(chainName, poolAddress, account, web3)
+            const contract = new LiquidityPoolContract(chainName, poolAddress, web3, account)
             const LPTokenAmountOut = await contract.token0AmountOut(
                 calculateIRedenomination(parseNumber(token1DepositAmount),
                     tokenState.LPTokenDecimals),
@@ -92,7 +94,7 @@ const MainSection = () => {
             <Spacer y={6}/>
             <DataWidgetDisplay
                 size="lg"
-                title="Estimated LP Token Received"
+                title="LP Token Received"
                 value={formik.values.LPTokenAmountOut}
                 prefix={tokenState.LPTokenSymbol}
             />

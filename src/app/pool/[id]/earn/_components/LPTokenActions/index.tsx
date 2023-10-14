@@ -1,5 +1,5 @@
 "use client"
-import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react"
+import { Card, CardBody } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"

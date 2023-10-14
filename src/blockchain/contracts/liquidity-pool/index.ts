@@ -15,13 +15,13 @@ class LiquidityPoolContract {
     constructor(
         chainName: ChainName,
         poolAddress: Address,
-        sender?: Address,
-        web3?: Web3
+        web3?: Web3,
+        sender?: Address
     ) {
         this.chainName = chainName
-        this.sender = sender
         this.poolAddress = poolAddress
         this.web3 = web3
+        this.sender = sender
     }
 
     async token0() {
@@ -183,6 +183,54 @@ class LiquidityPoolContract {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async deposit(
+        _token1AmountIn: bigint,
+        _minLPTokenAmountOut: bigint
+    ){
+        try {
+            if (this.web3 == null) return
+            const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
+            const data = contract.methods.deposit(
+                _token1AmountIn,
+                _minLPTokenAmountOut
+            ).encodeABI()
+            
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: this.poolAddress,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async withdraw(
+        _LPTokenAmountIn: bigint,
+    ){
+        try {
+            if (this.web3 == null) return
+            const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
+            const data = contract.methods.withdraw(
+                _LPTokenAmountIn
+            ).encodeABI()
+            
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: this.poolAddress,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
         } catch (ex) {
             console.log(ex)
             return null

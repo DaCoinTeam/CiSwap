@@ -4,13 +4,12 @@ import * as Yup from "yup"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { TokenState } from "../../../../_definitions"
 import {
     calculateIRedenomination,
     calculateMuvBigIntNumber,
     parseNumber,
 } from "@utils"
-import { PoolAddressContext, UpdateTokenStateContext } from "../../../../layout"
+import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../../layout"
 
 interface FormikValues {
   token1DepositAmount: string;
@@ -36,15 +35,15 @@ const _renderBody = (
     </FormikPropsContext.Provider>
 )
 
-interface FormikProvidersProps {
-  children: ReactNode;
-  tokenState: TokenState;
-}
 
-const FormikProviders = ({ children, tokenState }: FormikProvidersProps) => {
+
+const FormikProviders = ({ children }: { children: ReactNode}) => {
     const poolAddress = useContext(PoolAddressContext)
     if (poolAddress == null) return
     
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
     const updateTokenState = useContext(UpdateTokenStateContext)
     if (updateTokenState == null) return
 
@@ -66,7 +65,7 @@ const FormikProviders = ({ children, tokenState }: FormikProvidersProps) => {
             })}
             onSubmit={async (values) => {
                 console.log("called")
-                if (web3 == null) return
+                if (web3 == null || !account) return
 
                 const token1Contract = new ERC20Contract(
                     chainName,

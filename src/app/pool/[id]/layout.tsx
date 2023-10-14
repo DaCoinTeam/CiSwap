@@ -36,24 +36,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     const poolAddress = params.id as string
 
     const _handleWithoutConnected = async () => {
-        if (!account) {
-            tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: "" })
-            tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: "" })
-            tokenDispatch({ type: "SET_TOKEN0_SYMBOL", payload: "" })
-            tokenDispatch({ type: "SET_TOKEN1_SYMBOL", payload: "" })
-            tokenDispatch({ type: "SET_LP_TOKEN_SYMBOL", payload: "" })
-            tokenDispatch({ type: "SET_TOKEN0_DECIMALS", payload: 0 })
-            tokenDispatch({ type: "SET_TOKEN1_DECIMALS", payload: 0 })
-            tokenDispatch({ type: "SET_TOKEN0_PRICE", payload: 0 })
-            tokenDispatch({ type: "SET_TOKEN0_BASE_PRICE", payload: 0 })
-            tokenDispatch({ type: "SET_TOKEN0_MAX_PRICE", payload: 0 })
-            tokenDispatch({
-                type: "SET_FINISH_LOAD_WITHOUT_CONNECTED",
-                payload: false,
-            })
-            return
-        }
-
         const poolContract = new LiquidityPoolContract(chainName, poolAddress)
 
         const token0Address = await poolContract.token0()
@@ -127,7 +109,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         _handleWithoutConnected()
-    }, [account])
+    }, [])
 
     const _handleWithConnected = async () => {
         if (!account || !tokenState.finishLoadWithoutConnected) {

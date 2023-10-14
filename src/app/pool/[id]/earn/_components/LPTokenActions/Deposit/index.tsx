@@ -35,7 +35,7 @@ const Deposit = (props: DepositProps) => {
             />
             <Modal isOpen={isOpen} onClose={_close} size="sm"> 
                 <ModalContent>
-                    <FormikProviders tokenState={tokenState}>
+                    <FormikProviders>
                         <ModalHeader className="p-5">Deposit</ModalHeader>
                         <Divider />
                         <ModalBody className="p-5">

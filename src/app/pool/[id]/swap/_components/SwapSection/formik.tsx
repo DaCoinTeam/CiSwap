@@ -1,26 +1,59 @@
-import { Formik } from "formik"
-import React, { ReactNode } from "react"
+import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
+import { Form, Formik, FormikProps } from "formik"
+import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
+import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../layout"
+import { parseNumber } from "../../../../../../utils/validation"
+import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
 
 interface FormikValues {
-  token0Amount: number;
-  token1Amount: number;
-  _token0Balance: number;
-  _token1Balance: number;
+  token0Amount: string;
+  token1Amount: string;
   slippage: number;
   _isBuyAction: boolean;
 }
 
 const initialValues: FormikValues = {
-    token0Amount: 0,
-    token1Amount: 0,
-    _token0Balance: 0,
-    _token1Balance: 0,
+    token0Amount: "",
+    token1Amount: "",
     slippage: 0.01,
     _isBuyAction: false,
 }
 
-const FormikProviders = ({ children }: { children: ReactNode }) => {
+export const FormikPropsContext =
+  createContext<FormikProps<FormikValues> | null>(null)
+
+const _renderBody = (
+    props: FormikProps<FormikValues> | null,
+    chidren: ReactNode
+) => (
+    <FormikPropsContext.Provider value={props}>
+        <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
+    </FormikPropsContext.Provider>
+)
+
+const FormikProviders = ({ children }: { children: ReactNode}) => {
+    const poolAddress = useContext(PoolAddressContext)
+    if (poolAddress == null) return
+
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
+    const updateTokenState = useContext(UpdateTokenStateContext)
+    if (updateTokenState == null) return 
+    
+    const chainName = useSelector(
+        (state: RootState) => state.blockchain.chainName
+    )
+    const web3 = useSelector(
+        (state: RootState) => state.blockchain.web3
+    )
+    const account = useSelector(
+        (state: RootState) => state.blockchain.account
+    )
+
     return (
         <Formik
             initialValues={initialValues}
@@ -29,7 +62,7 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        Yup.ref("_token0Balance"),
+                        tokenState.token0Balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
@@ -37,17 +70,60 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        Yup.ref("_token1Balance"),
+                        tokenState.token1Balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
             })}
-            onSubmit={(values, actions) => {
-                console.log(values)
-                console.log(actions)
+            onSubmit={async (values) => {
+                if (web3 == null || !account) return 
+                
+                const tokenInAddress = !values._isBuyAction ? tokenState.token0Address : tokenState.token1Address
+                const tokenAmountIn = !values._isBuyAction ? values.token0Amount : values.token1Amount
+                const tokenInDecimals = !values._isBuyAction ? tokenState.token0Decimals : tokenState.token1Decimals
+
+                const tokenInContract = new ERC20Contract(chainName, tokenInAddress, web3, account)
+                
+                const tokenInAllowance = await tokenInContract.allowance(
+                    account,
+                    poolAddress
+                )
+                if (tokenInAllowance == null) return
+
+                const tokenAmountInParsed = calculateIRedenomination(
+                    parseNumber(tokenAmountIn),
+                    tokenInDecimals
+                )
+
+                if (tokenInAllowance < tokenAmountInParsed) {
+                    const tokenInApproveReceipt = await tokenInContract.approve(
+                        poolAddress,
+                        tokenAmountInParsed - tokenInAllowance
+                    )
+                    if (!tokenInApproveReceipt) return
+                }
+
+                const poolFactory = new LiquidityPoolContract(
+                    chainName,
+                    poolAddress,
+                    web3,
+                    account
+                )
+
+                const depositReceipt = await poolFactory.swap(
+                    tokenAmountInParsed,
+                    tokenAmountInParsed -
+            calculateMuvBigIntNumber(
+                tokenAmountInParsed,
+                1 - values.slippage,
+                5
+            ), values._isBuyAction
+                )
+                console.log(depositReceipt)
+                await updateTokenState._handleWithConnected()
             }}
         >
-            {children}
+            {(props) => _renderBody(props, children)}
         </Formik>
     )
 }

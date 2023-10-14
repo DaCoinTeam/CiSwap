@@ -189,6 +189,33 @@ class LiquidityPoolContract {
         }
     }
 
+    async swap(
+        _tokenAmountIn: bigint,
+        _minTokenAmountOut: bigint,
+        _isBuyAction: boolean
+    ){
+        try {
+            if (this.web3 == null) return
+            const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
+            const data = contract.methods.swap(
+                _tokenAmountIn,
+                _minTokenAmountOut,
+                _isBuyAction
+            ).encodeABI()
+            
+            return await this.web3.eth.sendTransaction({
+                from: this.sender,
+                to: this.poolAddress,
+                data,
+                gasLimit: GAS_LIMIT,
+                gasPrice: GAS_PRICE,
+            })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async deposit(
         _token1AmountIn: bigint,
         _minLPTokenAmountOut: bigint

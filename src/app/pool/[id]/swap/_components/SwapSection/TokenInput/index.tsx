@@ -7,7 +7,7 @@ const TokenInput = () => {
         <div className="w-full">
             <div className="flex items-center justify-between">
                 <TokenDisplay tokenSymbol="USDT"/>
-                <BalanceDisplay tokenBalance="12"/>
+                <BalanceDisplay tokenBalance={12}/>
             </div>
             <Textarea />
             <Spacer y={0.5}/>

@@ -1,6 +1,6 @@
 export type TokenState = {
-    token0: string
-    token1: string
+    token0Address: string
+    token1Address: string
     token0Balance: number
     token1Balance: number
     token0Price: number
@@ -22,7 +22,7 @@ export type TokenState = {
 }
 
 export interface SetTokenAction {
-    type: "SET_TOKEN0" | "SET_TOKEN1"
+    type: "SET_TOKEN0_ADDRESS" | "SET_TOKEN1_ADDRESS"
     payload: string
 }
 
@@ -55,8 +55,8 @@ export interface SetFinishLoad {
 export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad
 
 export const initialTokenState: TokenState = {
-    token0: "",
-    token1: "",
+    token0Address: "",
+    token1Address: "",
     token0Balance: 0,
     token1Balance: 0,
     token0BasePrice: 0,
@@ -82,15 +82,15 @@ export const tokenReducer = (
     action: TokenAction
 ) => {
     switch (action.type) {
-    case "SET_TOKEN0":
+    case "SET_TOKEN0_ADDRESS":
         return {
             ...state,
-            token0: action.payload
+            token0Address: action.payload
         }
-    case "SET_TOKEN1":
+    case "SET_TOKEN1_ADDRESS":
         return {
             ...state,
-            token1: action.payload
+            token1Address: action.payload
         }
     case "SET_TOKEN0_BALANCE":
         return {

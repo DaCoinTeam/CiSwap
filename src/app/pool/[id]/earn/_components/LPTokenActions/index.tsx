@@ -3,7 +3,9 @@ import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react"
 import React from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { DataWidgetDisplay } from "@app/_shared"
+import { AppButton, DataWidgetDisplay } from "@app/_shared"
+import Withdraw from "./Withdraw"
+import Deposit from "./Deposit"
 
 interface LPTokenActionsProps {
   className?: string;
@@ -15,18 +17,18 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
     )
     return (
         <Card className={`${props.className}`}>
-            <CardHeader className="p-5">
-                <div>
-                    <DataWidgetDisplay
-                        title="Your Balance"
-                        value={500}
-                        prefix="USDT"
-                        size="lg"
-                    />
+            <CardBody className="flex flex-cols justify-between">
+                <DataWidgetDisplay
+                    title="Your Balance"
+                    value={500}
+                    prefix="USDT"
+                    size="lg"
+                />
+                <div className="grid grid-cols-2 gap-4">
+                    <Withdraw />
+                    <Deposit />
                 </div>
-            </CardHeader>
-            <Divider />
-            <CardBody></CardBody>
+            </CardBody>
         </Card>
     )
 }

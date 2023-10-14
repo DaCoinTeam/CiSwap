@@ -13,12 +13,12 @@ const abi = [
             },
             {
                 "internalType": "uint256",
-                "name": "_token0DepositAmount",
+                "name": "_token0AddedAmount",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_token1DepositAmount",
+                "name": "_token1AddedAmount",
                 "type": "uint256"
             },
             {
@@ -335,6 +335,19 @@ const abi = [
     },
     {
         "inputs": [],
+        "name": "isProviderRegistered",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "name",
         "outputs": [
             {
@@ -383,6 +396,13 @@ const abi = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "registerProvider",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -442,6 +462,19 @@ const abi = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "token0AddedAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -476,19 +509,6 @@ const abi = [
     {
         "inputs": [],
         "name": "token0Constant",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "token0DepositAmount",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -539,6 +559,19 @@ const abi = [
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "token1AddedAmount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -560,19 +593,6 @@ const abi = [
     {
         "inputs": [],
         "name": "token1Constant",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "token1DepositAmount",
         "outputs": [
             {
                 "internalType": "uint256",

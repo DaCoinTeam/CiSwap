@@ -1,11 +1,14 @@
 "use client"
 import { RootState } from "@redux"
-import React, { ReactNode, useEffect, useReducer } from "react"
+import React, { ReactNode, createContext, useEffect, useReducer } from "react"
 import { useSelector } from "react-redux"
-import { initialTokenState, tokenReducer } from "./_definitions"
+import { TokenState, initialTokenState, tokenReducer } from "./_definitions"
 import { useParams } from "next/navigation"
 import { calculateExponent, calculateRedenomination } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
+
+export const TokenStateContext = createContext<TokenState|null>(null)
+export const PoolAddressContext = createContext("")
 
 const RootLayout = ({
     children,
@@ -26,6 +29,7 @@ const RootLayout = ({
 
     const params = useParams()
     const poolAddress = params.id as string
+    
 
     useEffect(() => {
         const poolContract = new LiquidityPoolContract(chainName, poolAddress)
@@ -143,9 +147,11 @@ const RootLayout = ({
     }, [account, tokenState.finishLoadWithoutConnected])
 
     return (
-        <>
-            {children}
-        </>
+        <TokenStateContext.Provider value={tokenState}>
+            <PoolAddressContext.Provider value={poolAddress}>
+                {children}
+            </PoolAddressContext.Provider>
+        </TokenStateContext.Provider>
     )
 }
 export default RootLayout

@@ -40,8 +40,9 @@ const NumberTextarea = (props: NumberTextareaProps) => {
         <Textarea 
             labelPlacement="outside"
             classNames={{
-                input: _textPositionClassName
+                input: _textPositionClassName,
             }}
+            maxLength={72}
             radius="sm"
             isDisabled = {props.isDisabled}
             placeholder="0.0"

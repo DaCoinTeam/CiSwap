@@ -179,7 +179,7 @@ const SelectToken = (props: SelectTokenProps) => {
                       </div>
                       <SelectStableToken onClick={_click} />
                   </ModalBody>
-                  <ModalFooter>
+                  <ModalFooter className="p-5">
                       {error == ErrorType.None ? (
                           <div className="mx-auto flex gap-4 items-center">
                               <Link

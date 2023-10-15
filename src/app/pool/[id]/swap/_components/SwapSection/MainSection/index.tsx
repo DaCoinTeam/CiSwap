@@ -35,7 +35,7 @@ const MainSection = () => {
     const [preventExecutionToken0, setPreventExecutionToken0] = useState(false)
 
     const firstToken0Render = useRef(true)
-    const [finishFetchToken1, setFinishFetchToken1] = useState(false)
+    const [finishFetchToken1, setFinishFetchToken1] = useState(true)
 
     useEffect(() => {
         if (firstToken0Render.current) {
@@ -87,7 +87,7 @@ const MainSection = () => {
     }, [formik.values.token0Amount])
 
     const firstToken1Render = useRef(true)
-    const [finishFetchToken0, setFinishFetchToken0] = useState(false)
+    const [finishFetchToken0, setFinishFetchToken0] = useState(true)
 
     useEffect(() => {
         if (firstToken1Render.current) {
@@ -152,8 +152,11 @@ const MainSection = () => {
     const [inverse, setInverse] = useState(false)
     const _inverse = () => {
         setInverse(!inverse)
+        formik.setFieldValue("_isBuyAction", inverse)
     }
 
+    console.log(formik.values)
+    
     const _token0Symbol = !inverse
         ? tokenState.token0Symbol
         : tokenState.token1Symbol

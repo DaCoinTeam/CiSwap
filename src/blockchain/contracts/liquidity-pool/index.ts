@@ -79,6 +79,17 @@ class LiquidityPoolContract {
         }
     }
 
+    async token0AmountOutWithLPTokensIn(_LPTokenAmountIn: bigint, controller?: AbortController) {
+        try {
+            const web3 = getHttpWeb3(this.chainName, controller)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return BigInt(await contract.methods.token0AmountOutWithLPTokensIn(_LPTokenAmountIn).call())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async token0Price() {
         try {
             const web3 = getHttpWeb3(this.chainName)

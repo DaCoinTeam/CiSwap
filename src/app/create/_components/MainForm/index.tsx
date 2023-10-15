@@ -41,7 +41,7 @@ const MainForm = () => {
                             <div className="justify-between flex flex-col">
                                 <ChooseTokenPrices />
                                 <Spacer y={12}/>
-                                <AppButton darkMode={darkMode} type="submit" content="Create" />
+                                <AppButton darkMode={darkMode} typeSubmit content="Create" />
                             </div>
                         </FinishSelectPairContext.Provider>
                     </div>

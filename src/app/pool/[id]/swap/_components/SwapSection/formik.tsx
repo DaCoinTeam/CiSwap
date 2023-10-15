@@ -5,7 +5,7 @@ import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../layout"
-import { parseNumber } from "../../../../../../utils/validation"
+import { parseNumber } from "@utils"
 import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
 
 interface FormikValues {

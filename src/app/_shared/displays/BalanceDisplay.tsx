@@ -2,24 +2,21 @@ import React from "react"
 import { Skeleton } from "@nextui-org/react"
 
 interface BalanceDisplayProps {
-    className?: string,
-    tokenBalance: number,
-    finishLoad?: boolean
+  className?: string;
+  tokenBalance: number;
+  finishLoad?: boolean;
 }
 
 const BalanceDisplay = (props: BalanceDisplayProps) => {
     return (
-        <>
-            {props.finishLoad 
-                ? (<div className={`text-xs ${props.className}`}>
-                    <span> Balance : </span>
-                    <span>
-                        {props.tokenBalance}
-                    </span>
-                </div>)
-                : <Skeleton className="h-4 w-12  rounded"/>
-            }
-        </>
+        <div className={`text-xs ${props.className} flex gap-1`}>
+            <span> Balance : </span>
+            {props.finishLoad ? (
+                <span>{props.tokenBalance}</span>
+            ) : (
+                <Skeleton className="h-4 w-4  rounded" />
+            )}{" "}
+        </div>
     )
 }
 

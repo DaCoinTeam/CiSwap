@@ -1,5 +1,12 @@
 "use client"
-import { Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react"
+import {
+    Divider,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+} from "@nextui-org/react"
 import React, { useContext, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
@@ -33,7 +40,7 @@ const Deposit = (props: DepositProps) => {
                 content="Deposit"
                 onPress={_open}
             />
-            <Modal isOpen={isOpen} onClose={_close} size="sm"> 
+            <Modal isOpen={isOpen} onClose={_close} size="sm">
                 <ModalContent>
                     <FormikProviders>
                         <ModalHeader className="p-5">Deposit</ModalHeader>
@@ -42,11 +49,16 @@ const Deposit = (props: DepositProps) => {
                             <MainSection />
                         </ModalBody>
                         <ModalFooter className="p-5">
-                            <AppButton type="submit" content="Deposit" darkMode={darkMode} className="w-full"/>
+                            <AppButton
+                                typeSubmit
+                                content="Deposit"
+                                darkMode={darkMode}
+                                className="w-full"
+                            />
                         </ModalFooter>
                     </FormikProviders>
                 </ModalContent>
-            </Modal> 
+            </Modal>
         </>
     )
 }

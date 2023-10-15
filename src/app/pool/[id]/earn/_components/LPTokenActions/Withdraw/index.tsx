@@ -11,6 +11,8 @@ import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { AppButton } from "@app/_shared"
+import MainSection from "./MainSection"
+import FormikProviders from "./formik"
 
 interface WithdrawProps {
   className?: string;
@@ -35,12 +37,23 @@ const Withdraw = (props: WithdrawProps) => {
                 bordered
                 onPress={_open}
             />
-            <Modal isOpen={isOpen} onClose={_close}>
+            <Modal isOpen={isOpen} onClose={_close} size="sm">
                 <ModalContent>
-                    <ModalHeader className="p-5">Select Token</ModalHeader>
-                    <Divider />
-                    <ModalBody className="p-5 gap-6"></ModalBody>
-                    <ModalFooter></ModalFooter>
+                    <FormikProviders>
+                        <ModalHeader className="p-5">Withdraw</ModalHeader>
+                        <Divider />      
+                        <ModalBody className="p-5 gap-6">
+                            <MainSection />
+                        </ModalBody>
+                        <ModalFooter className="p-5">
+                            <AppButton
+                                typeSubmit
+                                content="Withdraw"
+                                darkMode={darkMode}
+                                className="w-full"
+                            />
+                        </ModalFooter>
+                    </FormikProviders>
                 </ModalContent>
             </Modal>
         </>

@@ -49,17 +49,17 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const token1DepositAmount = formik.values.token1DepositAmount
+            const LPTokenAmountIn = formik.values.LPTokenAmountIn
             const contract = new LiquidityPoolContract(chainName, poolAddress, web3, account)
-            const LPTokenAmountOut = await contract.token0AmountOut(
-                calculateIRedenomination(parseNumber(token1DepositAmount),
+            const token0AmountOut = await contract.token0AmountOutWithLPTokensIn(
+                calculateIRedenomination(parseNumber(LPTokenAmountIn),
                     tokenState.LPTokenDecimals),
                 controller
             )
             setFinishFetch(true)
-            if (LPTokenAmountOut == null) return 
+            if (token0AmountOut == null) return 
 
-            formik.setFieldValue("LPTokenAmountOut", calculateRedenomination(LPTokenAmountOut, tokenState.LPTokenDecimals,3))
+            formik.setFieldValue("token0AmountOut", calculateRedenomination(token0AmountOut, tokenState.token0Decimals,3))
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -68,12 +68,12 @@ const MainSection = () => {
             controller.abort()
             clearTimeout(delayedEffectWithBounce)
         }
-    }, [formik.values.token1DepositAmount])
+    }, [formik.values.LPTokenAmountIn])
 
     const [finishFetch, setFinishFetch] = useState(true)
 
     const _handleChange = (value: string) => {
-        formik.setFieldValue("token1DepositAmount",value) 
+        formik.setFieldValue("LPTokenAmountIn",value) 
         setFinishFetch(false)
     }
     
@@ -82,21 +82,21 @@ const MainSection = () => {
             <div className="flex items-center justify-between">
                 <TokenDisplay
                     finishLoad={tokenState.finishLoadWithoutConnected}
-                    tokenSymbol={tokenState.token1Symbol}
+                    tokenSymbol={tokenState.LPTokenSymbol}
                 />
                 <BalanceDisplay
                     finishLoad={tokenState.finishLoadWithConnected}
-                    tokenBalance={tokenState.token1Balance}
+                    tokenBalance={tokenState.LPTokenBalance}
                 />
             </div>
-            <NumberTextarea textPosition="right" value={formik.values.token1DepositAmount} onValueChange={_handleChange} />
+            <NumberTextarea textPosition="right" value={formik.values.LPTokenAmountIn} onValueChange={_handleChange} />
             <Spacer y={0.5} />
             <Spacer y={6}/>
             <DataWidgetDisplay
                 size="lg"
-                title="LP Token Received"
-                value={formik.values.LPTokenAmountOut}
-                prefix={tokenState.LPTokenSymbol}
+                title={`${tokenState.token0Symbol  } Received`}
+                value={formik.values.token0AmountOut }
+                prefix={tokenState.token0Symbol }
             />
             <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
         </div>

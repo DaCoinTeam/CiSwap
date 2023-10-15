@@ -24,23 +24,26 @@ const SwapSection = (props: SwapSectionProps) => {
     )
 
     return (
-        <FormikProviders>
-            <Card className={`${props.className}`}>
-                <CardHeader className="p-5">
-                    <span className="font-bold text-lg">Swap</span>
-                </CardHeader>
-                <Divider />
-                <CardBody>
+       
+        <Card className={`${props.className}`}>
+            <CardHeader className="p-5">
+                <span className="font-bold text-lg">Swap</span>
+            </CardHeader>
+            <Divider />
+            <CardBody>
+                <FormikProviders>
                     <MainSection />
                     <Spacer y={12} />
                     <AppButton
                         className="w-full"
                         content="Swap"
                         darkMode={darkMode}
+                        typeSubmit
                     />
-                </CardBody>
-            </Card>
-        </FormikProviders>
+                </FormikProviders>
+            </CardBody>
+        </Card>
+
     )
 }
 

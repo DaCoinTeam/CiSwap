@@ -494,6 +494,25 @@ const abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_LPTokenAmountIn",
+                "type": "uint256"
+            }
+        ],
+        "name": "token0AmountOutWithLPTokensIn",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "token0BasePrice",
         "outputs": [

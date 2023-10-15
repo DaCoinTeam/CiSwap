@@ -1,3 +1,4 @@
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
 import React from "react"
@@ -23,13 +24,17 @@ const TokenPairDisplay = (props: TokenPriceRatioDisplayProps) => {
                             classNames={{
                                 base: "w-5 h-5",
                             }}
-                            src={props.token0ImageUrl ?? "/images/QuestionMarkCircle.svg"}
+                            showFallback
+                            src={props.token0ImageUrl}
+                            fallback={<QuestionMarkCircleIcon className="w-5 h-5"/>}
                         />
                         <Avatar
                             classNames={{
                                 base: "w-5 h-5",
                             }}
-                            src={props.token1ImageUrl ?? "/images/QuestionMarkCircle.svg"}
+                            showFallback
+                            src={props.token1ImageUrl}
+                            fallback={<QuestionMarkCircleIcon className="w-5 h-5"/>}
                         />
                     </AvatarGroup>
                     <span className="font-bold text-sm">

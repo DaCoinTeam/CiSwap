@@ -78,6 +78,20 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             payload: LPTokenDecimals,
         })
 
+        const token0Locked = await token0Contract.balanceOf(poolAddress)
+        if (token0Locked == null) return
+        tokenDispatch({
+            type: "SET_TOKEN0_LOCKED",
+            payload: calculateRedenomination(token0Locked, token0Decimals, 3),
+        })
+
+        const token1Locked = await token1Contract.balanceOf(poolAddress)
+        if (token1Locked == null) return
+        tokenDispatch({
+            type: "SET_TOKEN1_LOCKED",
+            payload: calculateRedenomination(token1Locked, token1Decimals, 3),
+        })
+
         const token0Price = await poolContract.token1AmountOut(
             BigInt(calculateExponent(token0Decimals))
         )

@@ -152,7 +152,7 @@ const MainSection = () => {
     const [inverse, setInverse] = useState(false)
     const _inverse = () => {
         setInverse(!inverse)
-        formik.setFieldValue("_isBuyAction", inverse)
+        formik.setFieldValue("_isBuyAction", !inverse)
     }
 
     console.log(formik.values)

@@ -131,7 +131,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {_renderDescription()}
                         </CardBody>
                     </Card>
-                    {_renderError(formik.errors.token0BasePrice ? true : false)}
+                    {_renderError(!!formik.errors.token0BasePrice)}
                 </div>
                 <div className="grow">
                     <Card>
@@ -169,7 +169,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {_renderDescription(true)}
                         </CardBody>
                     </Card>
-                    {_renderError(formik.errors.token0MaxPrice ? true : false, true)}
+                    {_renderError(!!formik.errors.token0MaxPrice, true)}
                 </div>
             </div>
         </div>

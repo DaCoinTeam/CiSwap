@@ -11,7 +11,6 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 
 interface SelectStableTokenProps {
   className?: string;
-  finishLoad?: boolean;
   onClick: (tokenAddress: string) => void;
 }
 
@@ -86,7 +85,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
       ))
 
   return (
-      <div>
+      <div className={`${props.className}`}>
           <TitleDisplay title="Stable Tokens" />
           <Spacer y={4} />
           <div className="flex gap-4">

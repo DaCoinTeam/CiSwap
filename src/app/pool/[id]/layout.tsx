@@ -1,6 +1,6 @@
 "use client"
 import { RootState } from "@redux"
-import React, { ReactNode, createContext, useEffect, useReducer } from "react"
+import React, { ReactNode, createContext, useEffect, useMemo, useReducer } from "react"
 import { useSelector } from "react-redux"
 import { TokenState, initialTokenState, tokenReducer } from "./_definitions"
 import { useParams } from "next/navigation"
@@ -201,14 +201,19 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
 
     const _handleAll = async () => {
         await _handleWithoutConnected()
-        await _handleWithConnected
+        await _handleWithConnected()
     }
+    
+    const contextValue = useMemo(() => {
+        return { _handleWithoutConnected, _handleWithConnected, _handleAll }
+    }, [_handleWithoutConnected, _handleWithConnected, _handleAll])
+
 
     return (
         <TokenStateContext.Provider value={tokenState}>
             <PoolAddressContext.Provider value={poolAddress}>
                 <UpdateTokenStateContext.Provider
-                    value={{ _handleWithoutConnected, _handleWithConnected, _handleAll }}
+                    value={contextValue}
                 >
                     {children}
                 </UpdateTokenStateContext.Provider>

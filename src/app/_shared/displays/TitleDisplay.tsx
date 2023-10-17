@@ -6,6 +6,6 @@ interface TitleDisplayProps {
 }
 
 
-const TitleDisplay = (props : TitleDisplayProps) => <div className="text-teal-500 text-sm font-bold"> {props.title} </div>
+const TitleDisplay = (props : TitleDisplayProps) => <div className={`text-teal-500 text-sm font-bold ${props.className}`}> {props.title} </div>
 
 export default TitleDisplay

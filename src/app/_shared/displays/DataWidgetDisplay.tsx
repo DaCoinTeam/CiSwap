@@ -29,14 +29,11 @@ const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
         break
     }
     return (
-        <div>
+        <div className={`${props.className}`}>
             <TitleDisplay title={props.title} />
             <Spacer y={_y} />
             <div className="font-bold">
-                <span className={_size}>
-                    {" "}
-                    {props.value}{" "}
-                </span>
+                <span className={_size}> {props.value} </span>
                 <span> {props.prefix} </span>
             </div>
         </div>

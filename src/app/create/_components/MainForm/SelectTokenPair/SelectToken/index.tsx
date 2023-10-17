@@ -64,8 +64,8 @@ const SelectToken = (props: SelectTokenProps) => {
     const [tokenSymbol, setTokenSymbol] = useState("")
 
   enum ErrorType {
-    Undefined,
-    None,
+    Undefined = "Undefined",
+    None = "None",
     Required = "Input is required",
     InvalidTokenAddress = "Input is not a valid token address",
     Duplicated = "Token address cannot be duplicated",
@@ -150,7 +150,7 @@ const SelectToken = (props: SelectTokenProps) => {
   const token1Address = formik.values.token1Address
   useEffect(() => {
       const value = account && token0Address && token1Address
-      setFinishSelectPair(value ? true : false)
+      setFinishSelectPair(!!value)
   }, [
       account,
       token0Address,
@@ -160,7 +160,7 @@ const SelectToken = (props: SelectTokenProps) => {
   return (
       <>
           <Button className={`${props.className}`} variant="flat" onPress={_open}>
-              {tokenSymbol ? tokenSymbol : "Select Token"}
+              {tokenSymbol || "Select Token"}
           </Button>
           <Modal isOpen={isOpen} onClose={_close}>
               <ModalContent>

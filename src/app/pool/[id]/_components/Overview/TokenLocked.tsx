@@ -7,9 +7,7 @@ import TokenLockedDetails from "./TokenLockedDetails"
 import { TokenStateContext } from "../../layout"
 
 interface TokenLockedProps {
-    clasName? : string,
-    token0ImageUrl?: string,
-    token1ImageUrl?: string,
+    clasName? : string
 }
 
 const TokenLocked = (props: TokenLockedProps) => {

@@ -12,8 +12,7 @@ import { FormikPropsContext } from "../formik"
 import { LiquidityPoolContract, TIME_OUT } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { calculateRedenomination, parseNumber } from "@utils"
-import { calculateIRedenomination } from "@utils"
+import { calculateRedenomination, parseNumber, calculateIRedenomination } from "@utils"
 
 const MainSection = () => {
     const tokenState = useContext(TokenStateContext)

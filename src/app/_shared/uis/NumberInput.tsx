@@ -42,13 +42,14 @@ const NumberInput = (props: NumberInputProps) => {
             classNames={{
                 input: _textPositionClassName
             }}
+            size={props.size}
             radius="sm"
             isDisabled = {props.isDisabled}
             placeholder="0.0"
             className={`${props.className}`} 
             value={props.value} 
             onValueChange={_handleChange}
-            isInvalid={props.errorMessage ? true : false}
+            isInvalid={!!props.errorMessage}
             errorMessage={!props.hideErrorMessage ? props.errorMessage : ""}
         />
     )

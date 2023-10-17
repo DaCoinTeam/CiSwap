@@ -8,25 +8,25 @@ import {
     ModalHeader,
 } from "@nextui-org/react"
 import React, { useContext, useState } from "react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import FormikProviders from "./formik"
 import { TokenStateContext } from "../../../../layout"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
 
 interface DepositProps {
   className?: string;
 }
 
 const Deposit = (props: DepositProps) => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-
     const tokenState = useContext(TokenStateContext)
     if (tokenState == null) return
 
+    const darkMode = useSelector(
+        (state: RootState) => state.configuration.darkMode
+    )
+    
     const [isOpen, setIsOpen] = useState(false)
 
     const _open = () => setIsOpen(true)

@@ -9,8 +9,6 @@ import {
     Spacer,
 } from "@nextui-org/react"
 import { AppButton } from "@app/_shared"
-import { RootState } from "@redux"
-import { useSelector } from "react-redux"
 import MainSection from "./MainSection"
 
 interface SwapSectionProps {
@@ -18,11 +16,6 @@ interface SwapSectionProps {
 }
 
 const SwapSection = (props: SwapSectionProps) => {
-
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-
     return (
        
         <Card className={`${props.className}`}>
@@ -37,7 +30,6 @@ const SwapSection = (props: SwapSectionProps) => {
                     <AppButton
                         className="w-full"
                         content="Swap"
-                        darkMode={darkMode}
                         typeSubmit
                     />
                 </FormikProviders>

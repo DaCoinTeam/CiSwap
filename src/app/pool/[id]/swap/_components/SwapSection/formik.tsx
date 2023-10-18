@@ -120,8 +120,9 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
             ), values._isBuyAction
                 )
                 console.log(depositReceipt)
-                await updateTokenState._handleWithConnected()
-            }}
+                await updateTokenState._handleAll()
+            }
+            }
         >
             {(props) => _renderBody(props, children)}
         </Formik>

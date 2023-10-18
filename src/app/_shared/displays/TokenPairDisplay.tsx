@@ -1,23 +1,22 @@
+import { TokenStateContext } from "@app/pool/[id]/layout"
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
-import React from "react"
+import React, { useContext } from "react"
 
-interface TokenPriceRatioDisplayProps {
+interface TokenPairDisplayProps {
   className?: string;
-  token0Symbol: string;
-  token1Symbol: string;
   token0ImageUrl?: string;
   token1ImageUrl?: string;
-  token0BasePrice?: number;
-  token0Price: number;
-  finishLoad?: boolean;
 }
 
-const TokenPairDisplay = (props: TokenPriceRatioDisplayProps) => {
+const TokenPairDisplay = (props: TokenPairDisplayProps) => {
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
     return (
-        <>
-            {!props.finishLoad ? (
+        <div className={`${props.className}`}>
+            {tokenState.finishLoadWithoutConnected ? (
                 <div className="flex gap-2 items-center">
                     <AvatarGroup>
                         <Avatar
@@ -39,15 +38,15 @@ const TokenPairDisplay = (props: TokenPriceRatioDisplayProps) => {
                     </AvatarGroup>
                     <span className="font-bold text-sm">
                         {" "}
-                        {props.token0Symbol}/{props.token1Symbol}{" "}
+                        {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
                     </span>
                     <Button isIconOnly variant="light" className="w-6 h-6 min-w-0 justify-none" endContent={<ArrowsRightLeftIcon height={16} width={16}/>}/>
 
                 </div>
             ) : (
-                <Skeleton className="h-5 w-12 rounded" />
+                <Skeleton className="h-6 w-24 rounded" />
             )}
-        </>
+        </div>
     )
 }
 

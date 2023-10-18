@@ -1,48 +1,106 @@
 "use client"
-import React, { useEffect, useRef } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { BaselineData, IChartApi, ISeriesApi, Time } from "lightweight-charts"
-import { createBaselineChartAndSeries, updateBaselineChartWithOptions } from "@utils"
+import {
+    calculateRedenomination,
+    createBaselineChartAndSeries,
+    updateBaselineChartWithOptions,
+} from "@utils"
+import { LiquidityPoolContract } from "@blockchain"
+import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
+import { PeriodContext } from "."
+
+interface PriceTick {
+  value: number;
+  time: number;
+}
 
 const Chart = () => {
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
+    const poolAddress = useContext(PoolAddressContext)
+
+    const periodContext = useContext(PeriodContext)
+    if (periodContext == null) return
+    const { period } = periodContext
+
+    if (tokenState == null) return
+
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )
 
-    const chartContainerRef = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>
-    const chartRef = useRef<IChartApi|null>(null)
-    const seriesRef = useRef<ISeriesApi<"Baseline">|null>(null)
+    const chainName = useSelector(
+        (state: RootState) => state.blockchain.chainName
+    )
+
+    const chartContainerRef =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>
+    const chartRef = useRef<IChartApi | null>(null)
+    const seriesRef = useRef<ISeriesApi<"Baseline"> | null>(null)
+
+    const [priceTicks, setPriceTicks] = useState<PriceTick[]>([])
 
     useEffect(() => {
+        if (!tokenState.finishLoadWithoutConnected) return
+
+        const handleEffect = async () => {
+            const contract = new LiquidityPoolContract(chainName, poolAddress)
+
+            const _baseTicks = await contract.getAllBaseTicks()
+            if (_baseTicks == null) return
+
+            const _priceTicks: PriceTick[] = _baseTicks.map((tick) => {
+                return {
+                    value: calculateRedenomination(
+                        tick.token0Price,
+                        tokenState.token0Decimals,
+                        3
+                    ),
+                    time: tick.timestamp * 1000,
+                }
+            })
+
+            setPriceTicks(_priceTicks)
+        }
+        handleEffect()
+    }, [tokenState.finishLoadWithoutConnected])
+    
+    useEffect(() => {
+        if (!tokenState.finishLoadWithoutConnected) return
+
         const container = chartContainerRef.current
 
         const clientWidth = container.clientWidth
-        const chartAndSeries = createBaselineChartAndSeries(container)
-        
+        const chartAndSeries = createBaselineChartAndSeries(
+            container,
+            tokenState.token0BasePrice
+        )
+
         const chart = chartAndSeries.chart
         chartRef.current = chart
         const series = chartAndSeries.series
         seriesRef.current = series
 
-        //testing only, remove later
-        const data = [{ value: 1, time: 1642425322 }, { value: 8, time: 1642511722 }, { value: 10, time: 1642598122 }, { value: 20, time: 1642684522 }, { value: 3, time: 1642770922 }, { value: 43, time: 1642857322 }, { value: 41, time: 1642943722 }, { value: 43, time: 1643030122 }, { value: 56, time: 1643116522 }, { value: 46, time: 1643202922 }]    
-        series.setData(data as BaselineData<Time>[])
-
         const handleResize = () => {
             chart.applyOptions({ width: clientWidth })
         }
-        
+
         window.addEventListener("resize", handleResize)
 
         return () => {
             window.removeEventListener("resize", handleResize)
             chart.remove()
         }
-    }, [])
+    }, [tokenState.finishLoadWithoutConnected])
 
     useEffect(() => {
+        if (!tokenState.finishLoadWithoutConnected) return
+
         const chart = chartRef.current
         if (chart == null) return
 
@@ -50,7 +108,17 @@ const Chart = () => {
         if (container == null) return
 
         updateBaselineChartWithOptions(chart, container, darkMode)
-    }, [darkMode])
+    }, [darkMode, tokenState.finishLoadWithoutConnected])
+
+    useEffect(() => {
+        if (!tokenState.finishLoadWithoutConnected) return
+
+        const series = seriesRef.current
+        if (series == null) return
+        
+        series.setData(priceTicks as BaselineData<Time>[])
+        
+    }, [priceTicks, period, tokenState.finishLoadWithoutConnected])
 
     return <div ref={chartContainerRef} />
 }

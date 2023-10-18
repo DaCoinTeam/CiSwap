@@ -4,6 +4,7 @@ import React from "react"
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button} from "@nextui-org/react"
 import { AppDispatch, RootState, setWeb3 } from "@redux"
 import { useDispatch, useSelector } from "react-redux"
+import { shortenAddress } from "@utils"
 
 const ConnectedWalletSelect = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -16,7 +17,7 @@ const ConnectedWalletSelect = () => {
             <Button 
                 variant="bordered" 
             >
-                {`${account.slice(0,4)}...${account.slice(-2)}`}
+                {shortenAddress(account)}
             </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">

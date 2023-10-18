@@ -1,9 +1,10 @@
 import React from "react"
 import { Button } from "@nextui-org/react"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
 
 interface AppButtonProps {
   className?: string;
-  darkMode?: boolean;
   size?: "sm" | "md" | "lg";
   onPress?: () => void;
   typeSubmit?: boolean;
@@ -12,10 +13,11 @@ interface AppButtonProps {
 }
 
 const AppButton = (props: AppButtonProps) => {
+    const darkMode = useSelector((state: RootState) => state.configuration.darkMode) 
     const _variant = props.bordered ? "bordered" : undefined
     const _color = props.bordered ? "border-teal-500" : "bg-teal-500"
     const _size = props.size ?? "md"
-    const _bgDarkMode = props.darkMode ? "text-black" : "text-white"
+    const _bgDarkMode = darkMode ? "text-black" : "text-white"
     const _borderDarkMode = "text-teal-500"
     const _submit = props.typeSubmit ? "submit" : undefined
     return (

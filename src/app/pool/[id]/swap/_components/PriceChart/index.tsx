@@ -1,41 +1,51 @@
 "use client"
-import React from "react"
+import React, { createContext, useContext, useState } from "react"
 
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
-import { PeriodTabs, TokenPairDisplay, TokenPriceRatioDisplay } from "@app/_shared"
-import { RootState } from "@redux"
-import { useSelector } from "react-redux"
+import {
+    PeriodTabs,
+    TokenPairDisplay,
+    TokenPriceRatioDisplay,
+} from "@app/_shared"
+import { TokenStateContext } from "@app/pool/[id]/layout"
+import { ChartTimePeriod } from "@utils"
 
 interface PriceChartProps {
   className?: string;
 }
 
+interface PeriodContext {
+  period: ChartTimePeriod;
+  setPeriod: React.Dispatch<React.SetStateAction<ChartTimePeriod>>;
+}
+
+export const PeriodContext = createContext<PeriodContext | null>(null)
+
 const PriceChart = (props: PriceChartProps) => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
+    const [period, setPeriod] = useState(ChartTimePeriod._24H)
+
+    console.log(period)
     return (
         <Card className={`${props.className}`}>
             <CardBody>
-                <div className="flex justify-between">
-                    <div>
-                        <TokenPairDisplay token0Price={12} token0Symbol="USDT" token1Symbol="GRR"/>
-                        <Spacer y={2}/>
-                
-                        <TokenPriceRatioDisplay
-                            token0Price={4}
-                            token0Symbol="STARCI"
-                            token1Symbol="USDT"
-                        />
+                <PeriodContext.Provider value={{ period, setPeriod }}>
+                    <div className="grid md:flex justify-between gap-4">
+                        <div>
+                            <TokenPairDisplay />
+                            <Spacer y={1} />
+                            <TokenPriceRatioDisplay />
+                        </div>
+                        <PeriodTabs tab = {period} setTab = {setPeriod}/>
                     </div>
-                    <PeriodTabs darkMode = {darkMode}/>
-                </div>
-                
 
-                <Spacer y={6}/>
-                <Chart />
+                    <Spacer y={6} />
+                    <Chart />
+                </PeriodContext.Provider>
             </CardBody>
         </Card>
     )

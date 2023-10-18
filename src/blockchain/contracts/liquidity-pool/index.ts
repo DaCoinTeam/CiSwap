@@ -61,7 +61,9 @@ class LiquidityPoolContract {
         try {
             const web3 = getHttpWeb3(this.chainName, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
-            return BigInt(await contract.methods.token1AmountOut(_token0AmountIn).call())
+            return BigInt(
+                await contract.methods.token1AmountOut(_token0AmountIn).call()
+            )
         } catch (ex) {
             console.log(ex)
             return null
@@ -72,18 +74,27 @@ class LiquidityPoolContract {
         try {
             const web3 = getHttpWeb3(this.chainName, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
-            return BigInt(await contract.methods.token0AmountOut(_token1AmountIn).call())
+            return BigInt(
+                await contract.methods.token0AmountOut(_token1AmountIn).call()
+            )
         } catch (ex) {
             console.log(ex)
             return null
         }
     }
 
-    async token0AmountOutWithLPTokensIn(_LPTokenAmountIn: bigint, controller?: AbortController) {
+    async token0AmountOutWithLPTokensIn(
+        _LPTokenAmountIn: bigint,
+        controller?: AbortController
+    ) {
         try {
             const web3 = getHttpWeb3(this.chainName, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
-            return BigInt(await contract.methods.token0AmountOutWithLPTokensIn(_LPTokenAmountIn).call())
+            return BigInt(
+                await contract.methods
+                    .token0AmountOutWithLPTokensIn(_LPTokenAmountIn)
+                    .call()
+            )
         } catch (ex) {
             console.log(ex)
             return null
@@ -112,7 +123,6 @@ class LiquidityPoolContract {
         }
     }
 
-
     async token0MaxPrice() {
         try {
             const web3 = getHttpWeb3(this.chainName)
@@ -124,13 +134,11 @@ class LiquidityPoolContract {
         }
     }
 
-
-
-    async isProviderRegistered() {
+    async isProviderRegistered(_address: Address) {
         try {
-            if (this.web3 == null) return
-            const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
-            return await contract.methods.isProviderRegistered().call()
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return await contract.methods.isProviderRegistered(_address).call()
         } catch (ex) {
             console.log(ex)
             return null
@@ -142,7 +150,7 @@ class LiquidityPoolContract {
             if (this.web3 == null) return
             const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
             const data = contract.methods.registerProvider().encodeABI()
-            
+
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: this.poolAddress,
@@ -189,11 +197,24 @@ class LiquidityPoolContract {
         }
     }
 
+    async providerRegisters() {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return await contract.methods.providerRegisters().call()
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async balanceOf(_owner: Address) {
         try {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
-            return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
+            return BigInt(
+                (await contract.methods.balanceOf(_owner).call()).toString()
+            )
         } catch (ex) {
             console.log(ex)
             return null
@@ -204,16 +225,14 @@ class LiquidityPoolContract {
         _tokenAmountIn: bigint,
         _minTokenAmountOut: bigint,
         _isBuyAction: boolean
-    ){
+    ) {
         try {
             if (this.web3 == null) return
             const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
-            const data = contract.methods.swap(
-                _tokenAmountIn,
-                _minTokenAmountOut,
-                _isBuyAction
-            ).encodeABI()
-            
+            const data = contract.methods
+                .swap(_tokenAmountIn, _minTokenAmountOut, _isBuyAction)
+                .encodeABI()
+
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: this.poolAddress,
@@ -227,18 +246,14 @@ class LiquidityPoolContract {
         }
     }
 
-    async deposit(
-        _token1AmountIn: bigint,
-        _minLPTokenAmountOut: bigint
-    ){
+    async deposit(_token1AmountIn: bigint, _minLPTokenAmountOut: bigint) {
         try {
             if (this.web3 == null) return
             const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
-            const data = contract.methods.deposit(
-                _token1AmountIn,
-                _minLPTokenAmountOut
-            ).encodeABI()
-            
+            const data = contract.methods
+                .deposit(_token1AmountIn, _minLPTokenAmountOut)
+                .encodeABI()
+
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: this.poolAddress,
@@ -252,22 +267,53 @@ class LiquidityPoolContract {
         }
     }
 
-    async withdraw(
-        _LPTokenAmountIn: bigint,
-    ){
+    async withdraw(_LPTokenAmountIn: bigint) {
         try {
             if (this.web3 == null) return
             const contract = getLiquidityPoolContract(this.web3, this.poolAddress)
-            const data = contract.methods.withdraw(
-                _LPTokenAmountIn
-            ).encodeABI()
-            
+            const data = contract.methods.withdraw(_LPTokenAmountIn).encodeABI()
+
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
                 to: this.poolAddress,
                 data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
+            })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async getAllBaseTicks() : Promise<BaseTick[] | null> {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return (await contract.methods.getAllBaseTicks().call()).map(item => {
+                return {
+                    token0AmountLocked: BigInt(item.token0AmountLocked),
+                    token1AmountLocked: BigInt(item.token1AmountLocked),
+                    token0Price: BigInt(item.token0Price),
+                    timestamp: Number(item.timestamp)
+                }
+            })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async getAllLPTokenTicks() : Promise<LPTokenTick[] | null> {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return (await contract.methods.getAllLPTokenTicks().call()).map(item => {
+                return {
+                    totalSupply: BigInt(item.totalSupply),
+                    LPTokenAmountLocked: BigInt(item.LPTokenAmountLocked),
+                    timestamp: Number(item.timestamp)
+                }
             })
         } catch (ex) {
             console.log(ex)
@@ -277,3 +323,16 @@ class LiquidityPoolContract {
 }
 
 export default LiquidityPoolContract
+
+export interface BaseTick {
+  token0AmountLocked: bigint;
+  token1AmountLocked: bigint;
+  token0Price: bigint;
+  timestamp: number;
+}
+
+export interface LPTokenTick {
+  totalSupply: bigint;
+  LPTokenAmountLocked: bigint;
+  timestamp: number;
+}

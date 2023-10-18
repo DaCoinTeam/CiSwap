@@ -13,10 +13,6 @@ const FirstSection = () => {
         (state: RootState) => state.blockchain.chainName
     )
 
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-
     const _swap = async () => {
         const factoryContract = new FactoryContract(chainName)
 
@@ -38,7 +34,7 @@ const FirstSection = () => {
                 <Spacer y={2} />
                 <div>Swap, Earn and Exclusive Ownership with STARCI Token!</div>
                 <Spacer y={4} />
-                <AppButton onPress={_swap} content="Swap Now" darkMode={darkMode} />
+                <AppButton onPress={_swap} content="Swap Now" />
             </div>
         </div>
     )

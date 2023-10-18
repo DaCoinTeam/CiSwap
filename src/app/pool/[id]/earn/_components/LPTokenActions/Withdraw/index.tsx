@@ -8,8 +8,6 @@ import {
     ModalHeader,
 } from "@nextui-org/react"
 import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import FormikProviders from "./formik"
@@ -19,9 +17,6 @@ interface WithdrawProps {
 }
 
 const Withdraw = (props: WithdrawProps) => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -32,7 +27,6 @@ const Withdraw = (props: WithdrawProps) => {
         <>
             <AppButton
                 className={`${props.className}`}
-                darkMode={darkMode}
                 content="Withdraw"
                 bordered
                 onPress={_open}
@@ -49,7 +43,6 @@ const Withdraw = (props: WithdrawProps) => {
                             <AppButton
                                 typeSubmit
                                 content="Withdraw"
-                                darkMode={darkMode}
                                 className="w-full"
                             />
                         </ModalFooter>

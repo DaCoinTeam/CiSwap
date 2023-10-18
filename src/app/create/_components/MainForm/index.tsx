@@ -6,8 +6,6 @@ import { AppButton } from "@app/_shared"
 import SelectTokenPair from "./SelectTokenPair"
 import PickProtocolFee from "./PickProtocolFee"
 import AddTokens from "./AddTokens"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 import ChooseTokenPrices from "./ChooseTokenPrices"
 
 interface IFinishSelectPairContext {
@@ -19,9 +17,6 @@ export const FinishSelectPairContext =
   createContext<IFinishSelectPairContext | null>(null)
 
 const MainForm = () => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
     const [finishSelectPair, setFinishSelectPair] = useState(false)
 
     const contextValue = useMemo(() => {
@@ -48,7 +43,7 @@ const MainForm = () => {
                             <div className="justify-between flex flex-col">
                                 <ChooseTokenPrices />
                                 <Spacer y={12} />
-                                <AppButton darkMode={darkMode} typeSubmit content="Create" />
+                                <AppButton typeSubmit content="Create" />
                             </div>
                         </FinishSelectPairContext.Provider>
                     </div>

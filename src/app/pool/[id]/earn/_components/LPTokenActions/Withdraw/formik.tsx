@@ -1,10 +1,10 @@
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
-import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
+import { LiquidityPoolContract } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { calculateIRedenomination, parseNumber } from "@utils"
+import { calculateIRedenomination } from "@utils"
 import {
     PoolAddressContext,
     TokenStateContext,
@@ -62,32 +62,6 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
             onSubmit={async (values) => {
                 console.log("called")
                 if (web3 == null || !account) return
-
-                const LPTokenContract = new ERC20Contract(
-                    chainName,
-                    poolAddress,
-                    web3,
-                    account
-                )
-
-                const LPTokenAllowance = await LPTokenContract.allowance(
-                    account,
-                    poolAddress
-                )
-                if (LPTokenAllowance == null) return
-
-                const LPTokenAmountInParsed = calculateIRedenomination(
-                    parseNumber(values.LPTokenAmountIn),
-                    tokenState.token1Decimals
-                )
-
-                if (LPTokenAllowance < LPTokenAmountInParsed) {
-                    const LPTokenApproveReceipt = await LPTokenContract.approve(
-                        poolAddress,
-                        LPTokenAmountInParsed - LPTokenAllowance
-                    )
-                    if (!LPTokenApproveReceipt) return
-                }
 
                 const poolFactory = new LiquidityPoolContract(
                     chainName,

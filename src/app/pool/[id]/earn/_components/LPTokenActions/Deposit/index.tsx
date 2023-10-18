@@ -12,8 +12,6 @@ import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import FormikProviders from "./formik"
 import { TokenStateContext } from "../../../../layout"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 
 interface DepositProps {
   className?: string;
@@ -23,10 +21,6 @@ const Deposit = (props: DepositProps) => {
     const tokenState = useContext(TokenStateContext)
     if (tokenState == null) return
 
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-    
     const [isOpen, setIsOpen] = useState(false)
 
     const _open = () => setIsOpen(true)
@@ -36,7 +30,6 @@ const Deposit = (props: DepositProps) => {
         <>
             <AppButton
                 className={`${props.className}`}
-                darkMode={darkMode}
                 content="Deposit"
                 onPress={_open}
             />
@@ -52,7 +45,6 @@ const Deposit = (props: DepositProps) => {
                             <AppButton
                                 typeSubmit
                                 content="Deposit"
-                                darkMode={darkMode}
                                 className="w-full"
                             />
                         </ModalFooter>

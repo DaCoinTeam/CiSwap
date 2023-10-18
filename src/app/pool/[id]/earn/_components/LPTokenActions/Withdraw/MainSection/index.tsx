@@ -89,7 +89,6 @@ const MainSection = () => {
                 />
             </div>
             <NumberTextarea textPosition="right" value={formik.values.LPTokenAmountIn} onValueChange={_handleChange} />
-            <Spacer y={0.5} />
             <Spacer y={6}/>
             <DataWidgetDisplay
                 size="lg"

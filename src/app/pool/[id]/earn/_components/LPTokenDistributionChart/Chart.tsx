@@ -1,88 +1,99 @@
 "use client"
 
-import React from "react"
+import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
+import React, { useContext, useEffect, useState } from "react"
 import {
     AreaChart,
     Area,
     XAxis,
     YAxis,
     Tooltip,
-    ResponsiveContainer, 
-    Legend
+    ResponsiveContainer,
+    Legend,
 } from "recharts"
+import { LiquidityPoolContract } from "@blockchain"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
+import { calculateRedenomination } from "@utils"
 
-interface ChartProps{
-    className? : string
+interface ChartProps {
+  className?: string;
+}
+
+interface RenderLPTokenTick {
+  name: string;
+  totalSupply: number;
+  LPTokenAmountLocked: number;
 }
 
 const Chart = (props: ChartProps) => {
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
 
+    const poolAddress = useContext(PoolAddressContext)
+    
+    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+
+    const [LPTokenTicks, setLPTokenTicks] = useState<RenderLPTokenTick[]>([])
+
+    useEffect(() => {
+        if (!tokenState.finishLoadWithoutConnected) return
+        
+        const handleEffect = async () => {
+            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const _LPTokenTicks = await contract.getAllLPTokenTicks()
+            if (_LPTokenTicks == null) return
+            const _renderLPTokenTicks : RenderLPTokenTick[] = _LPTokenTicks.map(
+                tick => {
+                    return {
+                        name: new Date(tick.timestamp * 1000).toString(),
+                        totalSupply: calculateRedenomination(tick.totalSupply, tokenState.LPTokenDecimals, 3),
+                        LPTokenAmountLocked: calculateRedenomination(tick.LPTokenAmountLocked, tokenState.LPTokenDecimals, 3),
+                    }
+                }
+            )
+
+            console.log(_LPTokenTicks)
+            setLPTokenTicks(_renderLPTokenTicks)
+        }
+        
+        handleEffect()
+    }, [tokenState.finishLoadWithoutConnected])
+    
     return (
         <ResponsiveContainer className={`${props.className}`}>
             <AreaChart
-                data={data}
+                data={LPTokenTicks}
                 margin={{
                     top: 10,
                     right: 30,
                     left: 0,
                     bottom: 0,
                 }}
-            >
+            >   
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Legend />
                 <Tooltip />
-                <Area type="monotone" name = "LP Token Supply" dataKey="uv" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                <Area type="monotone" name = "LP Token Locked" dataKey="pv" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                <Area
+                    type="monotone"
+                    name="LP Token Supply"
+                    dataKey="totalSupply"
+                    stroke="#ec4899"
+                    fill="#fbcfe8"
+                    fillOpacity={1}
+                />
+                <Area
+                    type="monotone"
+                    name="LP Token Locked"
+                    dataKey="LPTokenAmountLocked"
+                    stroke="#0ea5e9"
+                    fill="#bae6fd"
+                    fillOpacity={1}
+                />
             </AreaChart>
         </ResponsiveContainer>
     )
 }
 
 export default Chart
-
-//temp data, testing only
-const data = [
-    {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
-    },
-    {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
-    },
-    {
-        name: "Page C",
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
-    },
-    {
-        name: "Page D",
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
-    },
-    {
-        name: "Page E",
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
-    },
-    {
-        name: "Page F",
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
-    },
-    {
-        name: "Page G",
-        uv: 3490,
-        pv: 4300,
-        amt: 2100,
-    },
-]

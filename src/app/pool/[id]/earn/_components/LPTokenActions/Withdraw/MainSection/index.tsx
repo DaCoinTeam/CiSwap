@@ -91,7 +91,6 @@ const MainSection = () => {
             <NumberTextarea textPosition="right" value={formik.values.LPTokenAmountIn} onValueChange={_handleChange} />
             <Spacer y={6}/>
             <DataWidgetDisplay
-                size="lg"
                 title={`${tokenState.token0Symbol  } Received`}
                 value={formik.values.token0AmountOut }
                 prefix={tokenState.token0Symbol }

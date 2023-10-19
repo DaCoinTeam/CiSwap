@@ -69,7 +69,7 @@ const Chart = () => {
         }
         handleEffect()
     }, [tokenState.finishLoadWithoutConnected])
-    
+
     useEffect(() => {
         if (!tokenState.finishLoadWithoutConnected) return
 
@@ -115,8 +115,13 @@ const Chart = () => {
 
         const series = seriesRef.current
         if (series == null) return
-        
+
         series.setData(priceTicks as BaselineData<Time>[])
+        
+        series.update({
+            time: Date.now(),
+            value: tokenState.token0Price,
+        } as BaselineData<Time>)
         
     }, [priceTicks, period, tokenState.finishLoadWithoutConnected])
 

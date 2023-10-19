@@ -93,10 +93,10 @@ const MainSection = () => {
             <Spacer y={0.5} />
             <Spacer y={6}/>
             <DataWidgetDisplay
-                size="lg"
                 title="LP Token Received"
                 value={formik.values.LPTokenAmountOut}
                 prefix={tokenState.LPTokenSymbol}
+                finishLoad={true}
             />
             <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
         </div>

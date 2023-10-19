@@ -1,24 +1,31 @@
 "use client"
 import { Card, CardBody, Spacer } from "@nextui-org/react"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Chart from "./Chart"
-import { PeriodTabs } from "@app/_shared"
-import { ChartTimePeriod } from "@utils"
+import { DataWidgetDisplay, PeriodTabs } from "@app/_shared"
+import { ChartTimePeriod, calculateRound } from "@utils"
+import { TokenStateContext } from "@app/pool/[id]/layout"
 
 interface LPTokenDistributionChartProps {
     className?: string;
   }
   
 const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
-    
+    const tokenState = useContext(TokenStateContext)
+    if (tokenState == null) return
+
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
     
     return (
         <Card className={`${props.className}`}>
             <CardBody>
                 <div className="flex justify-between">
-                    <div>
-                    </div>
+                    <DataWidgetDisplay 
+                        title="Total LP Token Distributed" 
+                        value={calculateRound(tokenState.LPTokenTotalSupply - tokenState.LPTokenAmountLocked, 3)}
+                        prefix={tokenState.LPTokenSymbol}
+                        finishLoad={tokenState.finishLoadWithoutConnected}
+                    />
                     <PeriodTabs tab = {period} setTab = {setPeriod}/>
                 </div>
                 <Spacer y={4}/>

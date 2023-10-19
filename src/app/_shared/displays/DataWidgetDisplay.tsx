@@ -1,4 +1,4 @@
-import { Spacer } from "@nextui-org/react"
+import { Skeleton, Spacer } from "@nextui-org/react"
 import React from "react"
 import TitleDisplay from "./TitleDisplay"
 
@@ -8,34 +8,47 @@ interface DataWidgetDisplayProps {
   value: number;
   prefix?: string;
   size?: "sm" | "md" | "lg";
+  finishLoad?: boolean
 }
 
 const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
-    let _y: 1 | 2 | 3 | undefined
+    let _y: 0.5 | 1 | 1.5 | undefined
+    let _skeletonHeight : "h-8" | "h-9" | "h-10" | undefined
+
     let _size: "text-2xl" | "text-3xl" | "text-4xl"
     switch (props.size) {
     case undefined:
     case "md":
-        _y = 2
+        _y = 1
         _size = "text-3xl"
+        _skeletonHeight = "h-9"
         break
     case "sm":
-        _y = 1
+        _y = 0.5
         _size = "text-2xl"
+        _skeletonHeight = "h-8"
         break
     case "lg":
-        _y = 3
+        _y = 1.5
         _size = "text-4xl"
+        _skeletonHeight = "h-10"
         break
     }
+
     return (
         <div className={`${props.className}`}>
             <TitleDisplay title={props.title} />
             <Spacer y={_y} />
-            <div className="font-bold">
-                <span className={_size}> {props.value} </span>
-                <span> {props.prefix} </span>
-            </div>
+            {props.finishLoad 
+                ?
+                <>
+                    <div className="font-bold">
+                        <span className={_size}> {props.value} </span>
+                        <span> {props.prefix} </span>
+                    </div>
+                </>
+                : <Skeleton className={`${_skeletonHeight} w-40 rounded`}/>
+            }
         </div>
     )
 }

@@ -18,6 +18,8 @@ export type TokenState = {
     LPTokenBalance: number
     LPTokenSymbol: string
     LPTokenDecimals: number
+    LPTokenTotalSupply: number
+    LPTokenAmountLocked: number
 
     finishLoadWithoutConnected: boolean
     finishLoadWithConnected: boolean
@@ -38,6 +40,11 @@ export interface SetTokenSymbolAction {
     payload: string
 }
 
+export interface SetLPTokenTotalSupplyAction {
+    type: "SET_LP_TOKEN_TOTAL_SUPPLY" | "SET_LP_TOKEN_AMOUNT_LOCKED"
+    payload: number
+}
+
 export interface SetTokenDecimalsAction {
     type: "SET_TOKEN0_DECIMALS" | "SET_TOKEN1_DECIMALS" | "SET_LP_TOKEN_DECIMALS"
     payload: number
@@ -54,7 +61,7 @@ export interface SetFinishLoad {
 }
 
 
-export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad
+export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction
 
 export const initialTokenState: TokenState = {
     token0Address: "",
@@ -73,9 +80,12 @@ export const initialTokenState: TokenState = {
     token0Constant: BigInt(0),
     token1Constant: BigInt(0),
 
+
     LPTokenBalance: 0,
     LPTokenDecimals: 0,
     LPTokenSymbol: "",
+    LPTokenTotalSupply: 0,
+    LPTokenAmountLocked: 0,
 
     finishLoadWithoutConnected: false,
     finishLoadWithConnected: false
@@ -175,6 +185,16 @@ export const tokenReducer = (
         return {
             ...state,
             LPTokenDecimals: action.payload
+        }
+    case "SET_LP_TOKEN_TOTAL_SUPPLY":
+        return {
+            ...state,
+            LPTokenTotalSupply: action.payload
+        }
+    case "SET_LP_TOKEN_AMOUNT_LOCKED":
+        return {
+            ...state,
+            LPTokenAmountLocked: action.payload
         }
     case "SET_FINISH_LOAD_WITHOUT_CONNECTED":
         return {

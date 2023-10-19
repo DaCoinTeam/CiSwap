@@ -70,7 +70,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
                     title="Your Balance"
                     value={tokenState.LPTokenBalance}
                     prefix={tokenState.LPTokenSymbol}
-                    size="lg"
+                    finishLoad={tokenState.finishLoadWithConnected}
                 />
                 {_renderOptions()}
             </CardBody>

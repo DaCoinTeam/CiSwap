@@ -56,7 +56,7 @@ export const createBaselineChartAndSeries = (
         bottomFillColor1: "rgba(239, 68, 68, 0.05)",
         bottomFillColor2: "rgba(239, 68, 68, 0.28)",
     })
-
+    
     chart.timeScale().fitContent()
 
     return {

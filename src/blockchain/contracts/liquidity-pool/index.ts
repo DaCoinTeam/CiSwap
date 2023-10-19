@@ -105,7 +105,7 @@ class LiquidityPoolContract {
         try {
             const web3 = getHttpWeb3(this.chainName)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
-            return await contract.methods.token0Price().call()
+            return BigInt(await contract.methods.token0Price().call())
         } catch (ex) {
             console.log(ex)
             return null
@@ -214,6 +214,19 @@ class LiquidityPoolContract {
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 (await contract.methods.balanceOf(_owner).call()).toString()
+            )
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
+    async totalSupply() {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return BigInt(
+                (await contract.methods.totalSupply().call()).toString()
             )
         } catch (ex) {
             console.log(ex)

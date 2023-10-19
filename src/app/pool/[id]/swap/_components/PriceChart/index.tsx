@@ -29,7 +29,6 @@ const PriceChart = (props: PriceChartProps) => {
 
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
 
-    console.log(period)
     return (
         <Card className={`${props.className}`}>
             <CardBody>

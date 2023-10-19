@@ -4,7 +4,7 @@ import React, { ReactNode, createContext, useEffect, useMemo, useReducer } from 
 import { useSelector } from "react-redux"
 import { TokenState, initialTokenState, tokenReducer } from "./_definitions"
 import { useParams } from "next/navigation"
-import { calculateExponent, calculateRedenomination } from "@utils"
+import { calculateRedenomination } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 
 export const TokenStateContext = createContext<TokenState | null>(null)
@@ -85,6 +85,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             payload: calculateRedenomination(token0Locked, token0Decimals, 3),
         })
 
+
         const token1Locked = await token1Contract.balanceOf(poolAddress)
         if (token1Locked == null) return
         tokenDispatch({
@@ -92,9 +93,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             payload: calculateRedenomination(token1Locked, token1Decimals, 3),
         })
 
-        const token0Price = await poolContract.token1AmountOut(
-            BigInt(calculateExponent(token0Decimals))
-        )
+        const token0Price = await poolContract.token0Price()
         if (token0Price == null) return
         tokenDispatch({
             type: "SET_TOKEN0_PRICE",
@@ -113,6 +112,20 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         tokenDispatch({
             type: "SET_TOKEN0_MAX_PRICE",
             payload: calculateRedenomination(token0MaxPrice, token1Decimals, 3),
+        })
+
+        const LPTokenTotalSupply = await poolContract.totalSupply()
+        if (LPTokenTotalSupply == null) return
+        tokenDispatch({
+            type: "SET_LP_TOKEN_TOTAL_SUPPLY",
+            payload: calculateRedenomination(LPTokenTotalSupply, token1Decimals, 3),
+        })
+
+        const LPTokenAmountLocked = await poolContract.balanceOf(poolAddress)
+        if (LPTokenAmountLocked == null) return
+        tokenDispatch({
+            type: "SET_LP_TOKEN_AMOUNT_LOCKED",
+            payload: calculateRedenomination(LPTokenAmountLocked, token1Decimals, 3),
         })
 
         tokenDispatch({

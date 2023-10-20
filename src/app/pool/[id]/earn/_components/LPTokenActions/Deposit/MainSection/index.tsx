@@ -90,7 +90,6 @@ const MainSection = () => {
                 />
             </div>
             <NumberTextarea textPosition="right" value={formik.values.token1DepositAmount} onValueChange={_handleChange} />
-            <Spacer y={0.5} />
             <Spacer y={6}/>
             <DataWidgetDisplay
                 title="LP Token Received"

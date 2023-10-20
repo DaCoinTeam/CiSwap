@@ -48,6 +48,7 @@ const PeriodTabs = (props: PeriodTabsProps) => {
         <Tabs
             className={`${props.className}`}
             size={_size}
+            radius="sm"
             aria-label="Tabs variants"
             classNames={{
                 cursor: "!bg-teal-500",

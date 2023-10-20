@@ -94,6 +94,7 @@ const MainSection = () => {
                 title={`${tokenState.token0Symbol  } Received`}
                 value={formik.values.token0AmountOut }
                 prefix={tokenState.token0Symbol }
+                finishLoad={true}
             />
             <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
         </div>

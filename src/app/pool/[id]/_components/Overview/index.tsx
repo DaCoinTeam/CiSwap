@@ -3,7 +3,7 @@
 import React, { useContext } from "react"
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 import TokenLocked from "./TokenLocked"
-import { ViewOnExplorer } from "@app/_shared"
+import { DataWidgetDisplay, ViewOnExplorer } from "@app/_shared"
 import { TokenStateContext } from "../../layout"
 
 interface OverviewProps {
@@ -15,11 +15,22 @@ const Overview = (props: OverviewProps) => {
     if (tokenState == null) return
     return (
         <Card className = {`${props.clasName}`}>
-            <CardBody>
+            <CardBody className="flex flex-col justify-between">
                 <ViewOnExplorer hexString="12233"/>
-
-                <Spacer y={6}/>
-                <TokenLocked />
+                <div>
+                    <DataWidgetDisplay
+                        title="Liquidity"
+                        value={123123}
+                        finishLoad={true} />
+                    <Spacer y={6}/>
+                    <DataWidgetDisplay
+                        title="Volume 24h"
+                        value={123123}
+                        finishLoad={true} 
+                    />
+                    <Spacer y={6}/>
+                    <TokenLocked />
+                </div>
             </CardBody>
         </Card>
     )

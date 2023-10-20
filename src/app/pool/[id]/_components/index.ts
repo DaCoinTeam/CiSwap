@@ -1,3 +1,4 @@
 import Overview from "./Overview"
+import TokenLockedChart from "./TokenLockedChart"
 
-export { Overview } 
+export { Overview, TokenLockedChart } 

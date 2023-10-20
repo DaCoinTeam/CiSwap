@@ -22,13 +22,13 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
         return _up ? 
             <div className="text-teal-500 flex gap-1 items-center">
                 <ArrowUpIcon className="h-4 w-4"/>
-                <span> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
+                <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
             </div>
            
             :  
             <div className="text-red-500 flex gap-1  items-center">
                 <ArrowDownIcon className="h-4 w-4"/>
-                <span> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
+                <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
             </div>
     }
     return (
@@ -36,11 +36,11 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
             {tokenState.finishLoadWithoutConnected ? (
                 <>
                     <div className="gap-2 font-bold">
-                        <span className="text-4xl">
+                        <span className="text-3xl">
                             {" "}
                             {tokenState.token0Price}{" "}
                         </span>
-                        <span className="text-xl">
+                        <span className="text-lg">
                             {" "}
                             {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "} 
                         </span>

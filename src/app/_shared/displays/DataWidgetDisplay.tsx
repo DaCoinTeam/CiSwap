@@ -12,24 +12,20 @@ interface DataWidgetDisplayProps {
 }
 
 const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
-    let _y: 0.5 | 1 | 1.5 | undefined
     let _skeletonHeight : "h-8" | "h-9" | "h-10" | undefined
 
     let _size: "text-2xl" | "text-3xl" | "text-4xl"
     switch (props.size) {
     case undefined:
     case "md":
-        _y = 1
         _size = "text-3xl"
         _skeletonHeight = "h-9"
         break
     case "sm":
-        _y = 0.5
         _size = "text-2xl"
         _skeletonHeight = "h-8"
         break
     case "lg":
-        _y = 1.5
         _size = "text-4xl"
         _skeletonHeight = "h-10"
         break
@@ -38,7 +34,7 @@ const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
     return (
         <div className={`${props.className}`}>
             <TitleDisplay title={props.title} />
-            <Spacer y={_y} />
+            <Spacer y={1} />
             {props.finishLoad 
                 ?
                 <>

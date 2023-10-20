@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useContext } from "react"
-import { Card, CardBody, Spacer } from "@nextui-org/react"
+import { Card, CardBody } from "@nextui-org/react"
 import TokenLocked from "./TokenLocked"
-import { DataWidgetDisplay, ViewOnExplorer } from "@app/_shared"
+import { DataWidgetDisplay } from "@app/_shared"
 import { TokenStateContext } from "../../layout"
 
 interface OverviewProps {
@@ -16,21 +16,23 @@ const Overview = (props: OverviewProps) => {
     return (
         <Card className = {`${props.clasName}`}>
             <CardBody className="flex flex-col justify-between">
-                <ViewOnExplorer hexString="12233"/>
                 <div>
-                    <DataWidgetDisplay
-                        title="Liquidity"
-                        value={123123}
-                        finishLoad={true} />
-                    <Spacer y={6}/>
-                    <DataWidgetDisplay
-                        title="Volume 24h"
-                        value={123123}
-                        finishLoad={true} 
-                    />
-                    <Spacer y={6}/>
-                    <TokenLocked />
+                    <div className="grid grid-cols-2 gap-4">
+                        <DataWidgetDisplay
+                            title="Liquidity"
+                            value={123123}
+                            size="sm"
+                            finishLoad={true} />
+                        <DataWidgetDisplay
+                            title="Volume 24h"
+                            value={123123}
+                            size="sm"
+                            finishLoad={true} 
+                        />
+                    </div>
                 </div>
+                <TokenLocked />
+
             </CardBody>
         </Card>
     )

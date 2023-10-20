@@ -23,7 +23,7 @@ const ViewOnExplorer = (props: ViewOnExplorerProps) => {
     const _content = props.showShorten ? shortenAddress(props.hexString) : "View on Explorer"
     return (
         <Link
-            href={`${explorerUrl}/${_middle}/${props.hexString}`}
+            href={`${explorerUrl}${_middle}/${props.hexString}`}
             className={`font-bold text-sm ${props.className}`}
             color="foreground"
             showAnchorIcon={!props.showShorten}

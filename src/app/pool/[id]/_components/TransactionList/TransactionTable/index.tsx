@@ -14,8 +14,7 @@ import { ViewOnExplorer } from "@app/_shared"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { Address, HexString } from "web3"
-import { LiquidityPoolContract, RenderTransaction, getHttpWeb3, parseTransaction } from "@blockchain"
+import { LiquidityPoolContract, RenderTransaction, parseTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
 
 interface TransactionTableProps {
@@ -90,7 +89,7 @@ const TransactionTable = (props: TransactionTableProps) => {
 
     return (
         <Table
-            className="min-h-[222px]"
+            className={`min-h-[222px] ${props.className}`}
             removeWrapper
             aria-label="Example table with client side pagination"
             bottomContent={
@@ -105,6 +104,11 @@ const TransactionTable = (props: TransactionTableProps) => {
                             page={page}
                             total={pages}
                             onChange={(page) => setPage(page)}
+                            classNames={
+                                {
+                                    cursor: "bg-teal-500"
+                                }
+                            }
                         />
                     </div>
                 ) : null

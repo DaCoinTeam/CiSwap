@@ -1,13 +1,10 @@
 import web3, {
     HexString,
-    Address,
-    Transaction,
-    TransactionReceipt,
+    Address
 } from "web3"
 import { calculateRedenomination } from "@utils"
 import { ChainName } from "./config"
-import { LiquidityPoolContract, getHttpWeb3 } from "./contracts"
-import { decode } from "punycode"
+import { getHttpWeb3 } from "./contracts"
 
 export enum TransactionMethod {
   None = "None",

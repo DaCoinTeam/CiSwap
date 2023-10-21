@@ -2,9 +2,9 @@
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 import React, { createContext, useContext, useState } from "react"
 import Token0Chart from "./Token0Chart"
-import { PeriodTabs } from "@app/_shared"
+import { PeriodTabs, ViewOnExplorer } from "@app/_shared"
 import { ChartTimePeriod } from "@utils"
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import ChartTabs, { ChartType } from "./ChartTypeSelect"
 
 interface TokenLockedChartProps {
@@ -22,6 +22,8 @@ const TokenLockedChart = (props: TokenLockedChartProps) => {
     const tokenState = useContext(TokenStateContext)
     if (tokenState == null) return
 
+    const poolAddress = useContext(PoolAddressContext)
+
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
 
     const [chartType, setChartType] = useState(ChartType.Liquidity)
@@ -29,12 +31,11 @@ const TokenLockedChart = (props: TokenLockedChartProps) => {
     return (
         <Card className={`${props.className}`}>
             <ChartTypeContext.Provider value={{ chartType, setChartType }}>
-                <CardBody>
+                <CardBody className="gap-4">
                     <div className="flex justify-between items-start">
                         <ChartTabs />
                         <PeriodTabs size="sm" tab={period} setTab={setPeriod} />
                     </div>
-                    <Spacer y={4} />
                     <Token0Chart className="w-full min-h-[300px]" />
                 </CardBody>
             </ChartTypeContext.Provider>

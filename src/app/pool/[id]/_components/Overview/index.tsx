@@ -7,14 +7,14 @@ import { DataWidgetDisplay } from "@app/_shared"
 import { TokenStateContext } from "../../layout"
 
 interface OverviewProps {
-    clasName? : string
+    className? : string
 }
 
 const Overview = (props: OverviewProps) => {
     const tokenState = useContext(TokenStateContext)
     if (tokenState == null) return
     return (
-        <Card className = {`${props.clasName}`}>
+        <Card className = {`${props.className}`}>
             <CardBody className="flex flex-col justify-between">
                 <div>
                     <div className="grid grid-cols-2 gap-4">
@@ -32,7 +32,6 @@ const Overview = (props: OverviewProps) => {
                     </div>
                 </div>
                 <TokenLocked />
-
             </CardBody>
         </Card>
     )

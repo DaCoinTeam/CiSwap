@@ -42,6 +42,7 @@ const ChartTypeSelect = (props: ChartTypeSelectProps) => {
 
     return (
         <Select
+            aria-label="Chart Type"
             className={`${_size} max-w-[200px]`}
             items={_types}
             size="sm"

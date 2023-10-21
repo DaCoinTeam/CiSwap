@@ -1,7 +1,8 @@
 import { ChainName, GAS_LIMIT, GAS_PRICE } from "../../config"
-import Web3, { Address } from "web3"
+import Web3, { Address, HexString } from "web3"
 import abi from "./abi"
 import { getHttpWeb3 } from "../provider"
+import { uniqueArray } from "@utils"
 
 const getLiquidityPoolContract = (web3: Web3, poolAddress: Address) =>
     new web3.eth.Contract(abi, poolAddress, web3)
@@ -22,6 +23,28 @@ class LiquidityPoolContract {
         this.poolAddress = poolAddress
         this.web3 = web3
         this.sender = sender
+    }
+
+    async getTransactionHashs() {
+        try {
+
+            const transactions : HexString[] = []
+            const web3 = getHttpWeb3(this.chainName)
+            const logs = await web3.eth.getPastLogs({
+                address: this.poolAddress,
+                fromBlock: 0,
+                toBlock: "latest"
+            })
+
+            for (const log of logs){
+                if (typeof log == "string") return 
+                transactions.push(log.transactionHash as HexString)
+            }
+            return uniqueArray(transactions)
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
     }
 
     async token0() {

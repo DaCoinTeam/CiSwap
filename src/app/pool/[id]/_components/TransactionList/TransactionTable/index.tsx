@@ -53,6 +53,8 @@ const TransactionTable = (props: TransactionTableProps) => {
 
             setNumPages(txHashs.length)
 
+            const promises: Promise<void>[] = []
+
             for (
                 let i = rowsPerPage * (page - 1);
                 i < Math.min(rowsPerPage * page, txHashs.length);
@@ -60,7 +62,7 @@ const TransactionTable = (props: TransactionTableProps) => {
             ) {
                 const txHash = txHashs[i]
 
-                const _tx = await parseTransaction(
+                const promise = parseTransaction(
                     txHash, 
                     chainName,  
                     tokenState.token0Symbol,
@@ -69,10 +71,16 @@ const TransactionTable = (props: TransactionTableProps) => {
                     tokenState.token0Decimals,
                     tokenState.token1Decimals,
                     tokenState.LPTokenDecimals
-                )
+                ).then(tx => {
+                    _transactions.push(tx)
+                    console.log(tx)
+                })
 
-                _transactions.push(_tx)
+                promises.push(promise)
             }
+
+            await Promise.all(promises)
+
             setTransactions(_transactions)
 
             setLoadingState("idle")
@@ -167,3 +175,4 @@ const TransactionTable = (props: TransactionTableProps) => {
 }
 
 export default TransactionTable
+

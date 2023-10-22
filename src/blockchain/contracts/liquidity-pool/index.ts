@@ -25,6 +25,24 @@ class LiquidityPoolContract {
         this.sender = sender
     }
 
+    async getAwardEvents(address: Address) {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+
+            return await contract.getPastEvents("Award", {
+                fromBlock: 0,
+                toBlock: "latest",
+                filter: {
+                    provider: address
+                }
+            })
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async getTransactionHashs() {
         try {
 
@@ -37,7 +55,7 @@ class LiquidityPoolContract {
             })
 
             for (const log of logs){
-                if (typeof log == "string") return 
+                if (typeof log == "string") return null
                 transactions.push(log.transactionHash as HexString)
             }
             return uniqueArray(transactions)

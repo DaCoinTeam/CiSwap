@@ -14,7 +14,7 @@ import { ViewOnExplorer } from "@app/_shared"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { LiquidityPoolContract, RenderTransaction, parseTransaction } from "@blockchain"
+import { LiquidityPoolContract, RenderTransaction, getTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
 
 interface TransactionTableProps {
@@ -53,8 +53,6 @@ const TransactionTable = (props: TransactionTableProps) => {
 
             setNumPages(txHashs.length)
 
-            const promises: Promise<void>[] = []
-
             for (
                 let i = rowsPerPage * (page - 1);
                 i < Math.min(rowsPerPage * page, txHashs.length);
@@ -62,7 +60,7 @@ const TransactionTable = (props: TransactionTableProps) => {
             ) {
                 const txHash = txHashs[i]
 
-                const promise = parseTransaction(
+                const _transaction = await getTransaction(
                     txHash, 
                     chainName,  
                     tokenState.token0Symbol,
@@ -71,15 +69,10 @@ const TransactionTable = (props: TransactionTableProps) => {
                     tokenState.token0Decimals,
                     tokenState.token1Decimals,
                     tokenState.LPTokenDecimals
-                ).then(tx => {
-                    _transactions.push(tx)
-                    console.log(tx)
-                })
+                )
 
-                promises.push(promise)
+                _transactions.push(_transaction)
             }
-
-            await Promise.all(promises)
 
             setTransactions(_transactions)
 
@@ -123,20 +116,23 @@ const TransactionTable = (props: TransactionTableProps) => {
             }
         >
             <TableHeader>
-                <TableColumn key="transactionHash" width={"20%"}>
+                <TableColumn key="transactionHash" width={"15%"}>
           Tx Hash
                 </TableColumn>
-                <TableColumn key="method" width={"20%"}>
+                <TableColumn key="method" width={"15%"}>
           Method
                 </TableColumn>
-                <TableColumn key="tokenIn" width={"20%"}>
+                <TableColumn key="tokenIn" width={"15%"}>
           Token In
                 </TableColumn>
-                <TableColumn key="tokenOut" width={"20%"}>
+                <TableColumn key="tokenOut" width={"15%"}>
           Token Out
                 </TableColumn>
-                <TableColumn key="account" width={"20%"}>
+                <TableColumn key="account" width={"15%"}>
           Account
+                </TableColumn>
+                <TableColumn key="time" width={"25%"}>
+          Time
                 </TableColumn>
             </TableHeader>
             <TableBody
@@ -166,6 +162,9 @@ const TransactionTable = (props: TransactionTableProps) => {
                                 isTransaction
                                 showShorten
                             />
+                        </TableCell>
+                        <TableCell key="time">
+                            {transaction.timestamp.toLocaleString()}
                         </TableCell>
                     </TableRow>
                 )}

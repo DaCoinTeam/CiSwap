@@ -1,5 +1,5 @@
 "use client"
-import { Card, CardBody } from "@nextui-org/react"
+import { Card, CardBody, Spacer } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { TokenStateContext } from "@app/pool/[id]/layout"
 import TransactionTable from "./TransactionTable"
@@ -13,11 +13,15 @@ const TransactionList = (props: TransactionListProps) => {
     if (tokenState == null) return
 
     return (
-        <Card className={`${props.className}`}>
-            <CardBody>
-                <TransactionTable/>
-            </CardBody>
-        </Card>
+        <>
+            <div className="text-xl font-bold text-teal-500"> Transactions </div>
+            <Spacer y={3}/>
+            <Card className={`${props.className}`}>
+                <CardBody>
+                    <TransactionTable/>
+                </CardBody>
+            </Card>
+        </>
     )
 }
 

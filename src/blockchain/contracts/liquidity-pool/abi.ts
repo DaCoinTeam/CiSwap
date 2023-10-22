@@ -190,6 +190,25 @@ const abi = [
             {
                 "indexed": false,
                 "internalType": "uint256",
+                "name": "amountLPTokenReward",
+                "type": "uint256"
+            }
+        ],
+        "name": "Award",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "provider",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
                 "name": "amount1In",
                 "type": "uint256"
             },

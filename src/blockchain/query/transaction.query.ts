@@ -3,8 +3,8 @@ import web3, {
     Address
 } from "web3"
 import { calculateRedenomination } from "@utils"
-import { ChainName } from "./config"
-import { getHttpWeb3 } from "./contracts"
+import { ChainName } from "../config"
+import { getHttpWeb3 } from "../contracts"
 
 export enum TransactionMethod {
   None = "None",
@@ -21,9 +21,10 @@ export interface RenderTransaction {
   tokenOut: string;
   method: TransactionMethod;
   account: Address;
+  timestamp: Date;
 }
 
-export const parseTransaction = async (
+export const getTransaction = async (
     transactionHash: HexString,
     chainName: ChainName,
 
@@ -42,6 +43,8 @@ export const parseTransaction = async (
     const receipt = await web3.eth.getTransactionReceipt(transactionHash)
 
     const logs = receipt.logs
+    const block = await web3.eth.getBlock(receipt.blockNumber)
+    const timestamp = new Date(Number(block.timestamp) * 1000)
 
     const account = transaction.from as Address
 
@@ -71,7 +74,7 @@ export const parseTransaction = async (
                 ["uint256", "uint256", "uint256", "uint256"],
                 data
             )
-
+            
             _isBuyAction = (params[0] as bigint) == BigInt(0)
 
             const _tokenInAmount = calculateRedenomination(
@@ -92,7 +95,46 @@ export const parseTransaction = async (
             break
         }
         break
+    case TransactionMethod.Deposit:
+        for (const log of logs) {
+            const topics = log.topics
+            if (topics == undefined) continue
+            const topic = topics[0].toString()
 
+            if (topic != DEPOSIT_METHOD_TOPIC) continue
+
+            const data = log.data?.toString() as string
+
+            const params = web3.eth.abi.decodeParameters(
+                ["uint256", "uint256"],
+                data
+            )
+
+            tokenIn = `${calculateRedenomination(params[0] as bigint, token1Decimals, 3)} ${token1Symbol}`
+            tokenOut = `${calculateRedenomination(params[1] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
+        }
+        break
+
+    case TransactionMethod.Withdraw:
+        for (const log of logs) {
+            const topics = log.topics
+            if (topics == undefined) continue
+            const topic = topics[0].toString()
+
+            if (topic != WITHDRAW_METHOD_TOPIC) continue
+
+            const data = log.data?.toString() as string
+
+            const params = web3.eth.abi.decodeParameters(
+                ["uint256", "uint256"],
+                data
+            )
+
+            tokenIn = `${calculateRedenomination(params[0] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
+            tokenOut = `${calculateRedenomination(params[1] as bigint, token0Decimals, 3)} ${token0Symbol}`
+        }
+        break
+    
     case TransactionMethod.Deploy:
     case TransactionMethod.RegisterProvider:
     default:
@@ -107,6 +149,7 @@ export const parseTransaction = async (
         tokenIn,
         tokenOut,
         account,
+        timestamp
     }
 }
 
@@ -172,4 +215,16 @@ export const SWAP_METHOD_TOPIC = getMethodTopic("Swap", [
     "uint256",
     "uint256",
     "address",
+])
+
+export const DEPOSIT_METHOD_TOPIC = getMethodTopic("Deposit", [
+    "address",
+    "uint256",
+    "uint256"
+])
+
+export const WITHDRAW_METHOD_TOPIC = getMethodTopic("Withdraw", [
+    "address",
+    "uint256",
+    "uint256"
 ])

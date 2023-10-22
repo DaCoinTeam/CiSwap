@@ -5,24 +5,24 @@ import {
     CardBody,
     Spacer
 } from "@nextui-org/react"
-import ProviderTable from "./ProviderTable"
+import LPRewardTable from "./LPRewardTable"
 
-interface ProviderListProps {
+interface LPRewardLogsProps {
   className?: string;
 }
 
-const ProviderList = (props: ProviderListProps) => {
+const LPRewardLogs = (props: LPRewardLogsProps) => {
     return (
         <div className={`${props.className}`}>
-            <div className="text-xl font-bold text-teal-500"> Providers </div>
+            <div className="text-xl font-bold text-teal-500"> Award Logs </div>
             <Spacer y={3}/>
-            <Card className="justify-self-stretch">
+            <Card>
                 <CardBody className="flex flex-cols justify-between">
-                    <ProviderTable/>
+                    <LPRewardTable />
                 </CardBody>
             </Card>
         </div>
     )
 }
 
-export default ProviderList
+export default LPRewardLogs

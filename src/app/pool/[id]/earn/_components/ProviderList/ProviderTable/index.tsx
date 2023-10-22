@@ -82,9 +82,9 @@ const ProviderTable = (props: ProviderTableProps) => {
                 aria-label="Example table with client side pagination"
             >
                 <TableHeader>
-                    <TableColumn key="address" width={"40%"}>Address</TableColumn>
+                    <TableColumn key="address" width={"40%"}>ADDRESS</TableColumn>
                     <TableColumn key="balance" width={"60%"}>
-                            Balance
+                            BALACE
                     </TableColumn>
                 </TableHeader>
                 <TableBody items={items} emptyContent={"No rows to display."}>

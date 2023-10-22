@@ -82,13 +82,13 @@ const LPRewardTable = (props: LPRewardTableProps) => {
             >
                 <TableHeader>
                     <TableColumn key="transactionHash" width={"20%"}>
-            Tx Hash
+            TX HASH
                     </TableColumn>
                     <TableColumn key="LPTokenAward" width={"40%"}>
-            LP Token Award
+            LP TOKEN AWARD
                     </TableColumn>
                     <TableColumn key="time" width={"40%"}>
-            Time
+            TIME
                     </TableColumn>
                 </TableHeader>
                 <TableBody items={items} emptyContent={"No rows to display."}>

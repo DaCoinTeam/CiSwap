@@ -117,22 +117,22 @@ const TransactionTable = (props: TransactionTableProps) => {
         >
             <TableHeader>
                 <TableColumn key="transactionHash" width={"15%"}>
-          Tx Hash
+          TX HASH
                 </TableColumn>
                 <TableColumn key="method" width={"15%"}>
-          Method
+          METHOD
                 </TableColumn>
                 <TableColumn key="tokenIn" width={"15%"}>
-          Token In
+          TOKEN IN
                 </TableColumn>
                 <TableColumn key="tokenOut" width={"15%"}>
-          Token Out
+          TOKEN OUT
                 </TableColumn>
                 <TableColumn key="account" width={"15%"}>
-          Account
+          ACCOUNT
                 </TableColumn>
                 <TableColumn key="time" width={"25%"}>
-          Time
+          TIME
                 </TableColumn>
             </TableHeader>
             <TableBody

@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
     Pagination,
+    Spacer,
     Table,
     TableBody,
     TableCell,
@@ -9,11 +10,12 @@ import {
     TableHeader,
     TableRow,
 } from "@nextui-org/react"
-import { AwardLog, LiquidityPoolContract, getAwardLog } from "@blockchain"
+import { RewardLog, LiquidityPoolContract, getRewardLog } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { ViewOnExplorer } from "@app/_shared"
+import { calculateTimeAgo } from "@utils"
 
 interface LPRewardTableProps {
   className?: string;
@@ -31,7 +33,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const [awardLogs, setAwardLogs] = useState<AwardLog[]>([])
+    const [awardLogs, setAwardLogs] = useState<RewardLog[]>([])
 
     useEffect(() => {
         if (!tokenState.finishLoadWithConnected) return
@@ -41,11 +43,11 @@ const LPRewardTable = (props: LPRewardTableProps) => {
             const events = await contract.getAwardEvents(account)
             if (events == null) return
 
-            const _logs: AwardLog[] = []
+            const _logs: RewardLog[] = []
             for (const event of events) {
                 if (typeof event == "string") return
 
-                const _log: AwardLog = await getAwardLog(
+                const _log = await getRewardLog(
                     event,
                     chainName,
                     tokenState.LPTokenDecimals,
@@ -81,13 +83,13 @@ const LPRewardTable = (props: LPRewardTableProps) => {
                 aria-label="Example table with client side pagination"
             >
                 <TableHeader>
-                    <TableColumn key="transactionHash" width={"20%"}>
+                    <TableColumn key="transactionHash">
             TX HASH
                     </TableColumn>
-                    <TableColumn key="LPTokenAward" width={"40%"}>
-            LP TOKEN AWARD
+                    <TableColumn key="LPTokenReward">
+            LP TOKEN REWARD
                     </TableColumn>
-                    <TableColumn key="time" width={"40%"}>
+                    <TableColumn key="time">
             TIME
                     </TableColumn>
                 </TableHeader>
@@ -101,21 +103,20 @@ const LPRewardTable = (props: LPRewardTableProps) => {
                                     isTransaction
                                 />
                             </TableCell>
-                            <TableCell key="LPTokenAward">
-                                {" "}
+                            <TableCell key="LPTokenReward">
                                 <span className="text-teal-500 gap-1 flex items-center">
                                     {item.LPTokenAward}
                                 </span>
                             </TableCell>
                             <TableCell key="time">
                                 {" "}
-                                {item.timestamp.toLocaleString()}{" "}
+                                {calculateTimeAgo(item.timestamp)}{" "}
                             </TableCell>
                         </TableRow>
                     )}
                 </TableBody>
             </Table>
-
+            <Spacer y={4}/>
             <div className="flex w-full justify-center">
                 <Pagination
                     isCompact

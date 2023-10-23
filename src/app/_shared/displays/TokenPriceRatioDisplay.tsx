@@ -8,11 +8,15 @@ interface TokenPriceRatioDisplayProps {
   className?: string;
   token0ImageUrl?: string;
   token1ImageUrl?: string;
+  style? : "style1" | "style2"
 }
 
 const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
     const tokenState = useContext(TokenStateContext)
     if (tokenState == null) return 
+
+    let _style = props.style
+    if (_style == undefined) _style = "style1"
 
     const _renderTrend = () => {
         const _percentage = tokenState.token0Price / tokenState.token0BasePrice - 1
@@ -31,32 +35,54 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
                 <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
             </div>
     }
-    return (
-        <div className={`${props.className}}`}>
-            {tokenState.finishLoadWithoutConnected ? (
-                <>
-                    <div className="gap-2 font-bold">
-                        <span className="text-3xl">
-                            {" "}
-                            {tokenState.token0Price}{" "}
-                        </span>
-                        <span className="text-lg">
-                            {" "}
-                            {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "} 
-                        </span>
+
+    const _renderComponent = () => {
+        switch(_style){
+        case "style1": 
+            return <div className={`${props.className}}`}>
+                {tokenState.finishLoadWithoutConnected ? (
+                    <>
+                        <div className="gap-2 font-bold">
+                            <span className="text-3xl">
+                                {" "}
+                                {tokenState.token0Price}{" "}
+                            </span>
+                            <div className="flex gap-3"></div>
+                            <span className="text-lg">
+                                {" "}
+                                {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
+                            </span>
+                            {_renderTrend()} 
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <Skeleton className="h-10 w-48 rounded" />
+                        <Spacer y={1}/>
+                        <Skeleton className="h-6 w-20 rounded" />
+                    </>
+                )}
+            </div>
+        case "style2":
+            return <div className={`${props.className}`}>
+                { tokenState.finishLoadWithoutConnected ? (
+                    <div>
+                        <span>1 {tokenState.token0Symbol} = {tokenState.token0Price} {tokenState.token1Symbol} </span>
+                        <Spacer y={1}/>
+                        {_renderTrend()}
                     </div>
-                    <Spacer y={1}/>
-                    {_renderTrend()}
-                </>
-            ) : (
-                <>
-                    <Skeleton className="h-10 w-48 rounded" />
-                    <Spacer y={1}/>
-                    <Skeleton className="h-6 w-20 rounded" />
-                </>
-            )}
-        </div>
-    )
+                ) : (
+                    <>
+                        <Skeleton className="h-10 w-48 rounded" />
+                        <Spacer y={1}/>
+                        <Skeleton className="h-6 w-20 rounded" />
+                    </>
+                )}
+            </div>
+        }
+    }
+
+    return _renderComponent()
 }
 
 export default TokenPriceRatioDisplay

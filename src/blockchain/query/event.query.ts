@@ -4,13 +4,13 @@ import { ChainName } from "../config"
 import { getHttpWeb3 } from "../contracts"
 import { calculateRedenomination } from "@utils"
 
-export interface AwardLog {
+export interface RewardLog {
   transactionHash: HexString;
   LPTokenAward: string;
   timestamp: Date;
 }
 
-export const getAwardLog = async (
+export const getRewardLog = async (
     event: EventLog,
     chainName: ChainName,
     LPTokenDecimals: number,

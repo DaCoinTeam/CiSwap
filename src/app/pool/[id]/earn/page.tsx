@@ -13,9 +13,9 @@ const Page = () => {
 
             <Spacer y={12}/>
 
-            <div className="grid grid-cols-3 gap-12 items-stretch">
+            <div className="grid grid-cols-3 gap-12">
                 <LPRewardLogs className="col-span-2"/>
-                <ProviderList className="col-span-1 min-h-[1000px]" />
+                <ProviderList className="col-span-1" />
             </div>
         </>
     )

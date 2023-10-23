@@ -16,6 +16,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { LiquidityPoolContract, RenderTransaction, getTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
+import { calculateTimeAgo } from "@utils"
 
 interface TransactionTableProps {
   className?: string;
@@ -116,22 +117,22 @@ const TransactionTable = (props: TransactionTableProps) => {
             }
         >
             <TableHeader>
-                <TableColumn key="transactionHash" width={"15%"}>
+                <TableColumn key="transactionHash">
           TX HASH
                 </TableColumn>
-                <TableColumn key="method" width={"15%"}>
+                <TableColumn key="method">
           METHOD
                 </TableColumn>
-                <TableColumn key="tokenIn" width={"15%"}>
+                <TableColumn key="tokenIn">
           TOKEN IN
                 </TableColumn>
-                <TableColumn key="tokenOut" width={"15%"}>
+                <TableColumn key="tokenOut">
           TOKEN OUT
                 </TableColumn>
-                <TableColumn key="account" width={"15%"}>
+                <TableColumn key="account">
           ACCOUNT
                 </TableColumn>
-                <TableColumn key="time" width={"25%"}>
+                <TableColumn key="time">
           TIME
                 </TableColumn>
             </TableHeader>
@@ -164,7 +165,7 @@ const TransactionTable = (props: TransactionTableProps) => {
                             />
                         </TableCell>
                         <TableCell key="time">
-                            {transaction.timestamp.toLocaleString()}
+                            {calculateTimeAgo(transaction.timestamp)}
                         </TableCell>
                     </TableRow>
                 )}

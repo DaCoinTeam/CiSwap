@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
     Pagination,
+    Spacer,
     Table,
     TableBody,
     TableCell,
@@ -82,8 +83,8 @@ const ProviderTable = (props: ProviderTableProps) => {
                 aria-label="Example table with client side pagination"
             >
                 <TableHeader>
-                    <TableColumn key="address" width={"40%"}>ADDRESS</TableColumn>
-                    <TableColumn key="balance" width={"60%"}>
+                    <TableColumn key="address">ADDRESS</TableColumn>
+                    <TableColumn key="balance">
                             BALACE
                     </TableColumn>
                 </TableHeader>
@@ -98,6 +99,7 @@ const ProviderTable = (props: ProviderTableProps) => {
                     )}
                 </TableBody>
             </Table>
+            <Spacer y={4}/>
             <div className="flex w-full justify-center">
                 <Pagination
                     isCompact

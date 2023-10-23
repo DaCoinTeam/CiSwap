@@ -2,8 +2,7 @@
 import React from "react"
 import {
     Card,
-    CardBody,
-    Spacer
+    CardBody
 } from "@nextui-org/react"
 import LPRewardTable from "./LPRewardTable"
 
@@ -13,12 +12,11 @@ interface LPRewardLogsProps {
 
 const LPRewardLogs = (props: LPRewardLogsProps) => {
     return (
-        <div className={`${props.className}`}>
-            <div className="text-xl font-bold text-teal-500"> Award Logs </div>
-            <Spacer y={3}/>
-            <Card>
+        <div className={`flex gap-3 flex-col ${props.className}`}>
+            <div className="text-xl font-bold text-teal-500"> Rewards Logs </div>
+            <Card className="grow">
                 <CardBody className="flex flex-cols justify-between">
-                    <LPRewardTable />
+                    <LPRewardTable/>
                 </CardBody>
             </Card>
         </div>

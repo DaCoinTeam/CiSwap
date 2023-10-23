@@ -2,8 +2,7 @@
 import React from "react"
 import {
     Card,
-    CardBody,
-    Spacer
+    CardBody
 } from "@nextui-org/react"
 import ProviderTable from "./ProviderTable"
 
@@ -13,10 +12,9 @@ interface ProviderListProps {
 
 const ProviderList = (props: ProviderListProps) => {
     return (
-        <div className={`${props.className}`}>
+        <div className={`flex gap-3 flex-col ${props.className}`}>
             <div className="text-xl font-bold text-teal-500"> Providers </div>
-            <Spacer y={3}/>
-            <Card className="justify-self-stretch">
+            <Card className="grow">
                 <CardBody className="flex flex-cols justify-between">
                     <ProviderTable/>
                 </CardBody>

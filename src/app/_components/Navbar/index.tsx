@@ -57,7 +57,7 @@ const Navbar = () => {
                 </NavbarItem>
                 <NavbarItem>
                     <Link color="foreground"  className="cursor-pointer"  onPress ={_pushCreatePool}>
-            Create Pool
+            Create
                     </Link>
                 </NavbarItem>
             </NavbarContent>

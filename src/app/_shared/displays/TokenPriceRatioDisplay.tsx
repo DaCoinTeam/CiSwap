@@ -24,16 +24,15 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
         const _up = _percentage >= 0 ? true : false
         
         return _up ? 
-            <div className="text-teal-500 flex gap-1 items-center">
+            <span className="text-teal-500 flex gap-1 items-center">
                 <ArrowUpIcon className="h-4 w-4"/>
-                <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
-            </div>
-           
+                <span> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
+            </span>   
             :  
-            <div className="text-red-500 flex   items-center flex">
+            <span className="text-red-500 flex items-center flex">
                 <ArrowDownIcon className="h-4 w-4"/>
-                <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
-            </div>
+                <span> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
+            </span>
     }
 
     const _renderComponent = () => {
@@ -42,18 +41,22 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
             return <div className={`${props.className}`}>
                 {tokenState.finishLoadWithoutConnected ? (
                     <>
-                        <div className="gap-1">
-                            <span className="text-3xl font-bold">
-                                {" "}
-                                {tokenState.token0Price}{" "}
-                            </span>
-                            <div className="flex gap-2"> 
-                                <span className="text-lg">
+                        <div className="gap-2 flex items-end">
+                            <div className="gap-1 flex items-end">
+                                <span className="text-3xl font-bold">
+                                    {" "}
+                                    {tokenState.token0Price}{" "}
+                                </span>
+                                <span>
                                     {" "}
                                     {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
-                                </span>
+                                </span> 
+                            </div>   
+                            <div>
                                 {_renderTrend()}
                             </div>
+     
+        
                         </div>
                     </>
                 ) : (

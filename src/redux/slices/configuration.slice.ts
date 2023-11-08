@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { toast } from "react-toastify"
 
 export interface ConfigurationSlice {
-    darkMode: boolean
+    darkMode: boolean,
+    notify: () => void
 }
 
 const initialState: ConfigurationSlice = {
-    darkMode: false
+    darkMode: false,
+    notify : () => toast("Wow so easy !")
 }
 
 export const configurationSlice = createSlice({

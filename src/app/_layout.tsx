@@ -7,6 +7,8 @@ import { AppDispatch, RootState, setAccount, setDefaultPool } from "@redux"
 import { NextUIProvider, Spacer } from "@nextui-org/react"
 import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
+import { ToastContainer } from "react-toastify"
+import "./css/ReactToastify.css"
 
 export const mooli = Mooli({ weight: "400", subsets: ["latin"] })
 
@@ -55,6 +57,15 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
                     </main>
                     <Spacer y={12} />
                     <Footer />
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                    />
                 </NextUIProvider>
             </body>
         </html>

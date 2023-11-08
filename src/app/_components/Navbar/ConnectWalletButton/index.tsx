@@ -18,8 +18,7 @@ const ConnectWalletButton = () => {
                     name: "CiSwap",
                     url: "https://ciswap-dacointeam.vercel.app/"
                 },
-                extensionOnly: true,
-                injectProvider: 
+                extensionOnly: true
             }
             const MMSDK = new MetaMaskSDK(options)
             await MMSDK.init()

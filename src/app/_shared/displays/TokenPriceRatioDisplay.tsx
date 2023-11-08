@@ -1,6 +1,6 @@
 import { TokenStateContext } from "@app/pool/[id]/layout"
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline"
-import { Skeleton, Spacer } from "@nextui-org/react"
+import { Skeleton } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { calculateRound } from "../../../utils/math"
 
@@ -30,7 +30,7 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
             </div>
            
             :  
-            <div className="text-red-500 flex gap-1  items-center">
+            <div className="text-red-500 flex   items-center flex">
                 <ArrowDownIcon className="h-4 w-4"/>
                 <span className="text-sm"> {calculateRound(Math.abs(_percentage) * 100, 3)} {" "} % </span>
             </div>
@@ -39,43 +39,39 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
     const _renderComponent = () => {
         switch(_style){
         case "style1": 
-            return <div className={`${props.className}}`}>
+            return <div className={`${props.className}`}>
                 {tokenState.finishLoadWithoutConnected ? (
                     <>
-                        <div className="gap-2 font-bold">
-                            <span className="text-3xl">
+                        <div className="gap-1">
+                            <span className="text-3xl font-bold">
                                 {" "}
                                 {tokenState.token0Price}{" "}
                             </span>
-                            <div className="flex gap-3"></div>
-                            <span className="text-lg">
-                                {" "}
-                                {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
-                            </span>
-                            {_renderTrend()} 
+                            <div className="flex gap-2"> 
+                                <span className="text-lg">
+                                    {" "}
+                                    {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
+                                </span>
+                                {_renderTrend()}
+                            </div>
                         </div>
                     </>
                 ) : (
                     <>
-                        <Skeleton className="h-10 w-48 rounded" />
-                        <Spacer y={1}/>
-                        <Skeleton className="h-6 w-20 rounded" />
+                        <Skeleton className="h-16 w-48 rounded" />
                     </>
                 )}
             </div>
         case "style2":
             return <div className={`${props.className}`}>
                 { tokenState.finishLoadWithoutConnected ? (
-                    <div>
+                    <div className="flex gap-2">
                         <span>1 {tokenState.token0Symbol} = {tokenState.token0Price} {tokenState.token1Symbol} </span>
-                        <Spacer y={1}/>
                         {_renderTrend()}
                     </div>
                 ) : (
                     <>
-                        <Skeleton className="h-10 w-48 rounded" />
-                        <Spacer y={1}/>
-                        <Skeleton className="h-6 w-20 rounded" />
+                        <Skeleton className="h-6 w-60 rounded" />
                     </>
                 )}
             </div>

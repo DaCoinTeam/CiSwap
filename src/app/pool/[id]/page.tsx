@@ -21,22 +21,22 @@ const Page = () => {
     }
     return (
         <>
-            <div className="flex justify-between">
+            <div className="sm:flex justify-between">
                 <div>
                     <TokenPairDisplay size="lg"/>
                     <Spacer y={1}/>
                     <TokenPriceRatioDisplay style="style2"/>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-4 sm:mt-0">
                     <AppButton bordered content="Earn" onPress={_forwardEarn}/>
                     <AppButton content="Swap" onPress={_forwardSwap}/>
                 </div>
             </div>
-            <Spacer y={6} />
-            <div className="grid grid-cols-3 gap-12">
+            <Spacer y={12} />
+            <div className="sm:grid grid-cols-3 gap-12">
                 <Overview className="col-span-1" />
-                <TokenLockedChart className="col-span-2" />
+                <TokenLockedChart className="col-span-2 mt-12 sm:mt-0" />
             </div>
             <Spacer y={12} />
             <TransactionList />

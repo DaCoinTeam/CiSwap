@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "@nextui-org/react"
-import { chainInfos } from "@blockchain"
+import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { shortenAddress } from "@utils"

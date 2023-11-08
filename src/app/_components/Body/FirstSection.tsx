@@ -4,7 +4,8 @@ import { Spacer } from "@nextui-org/react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { AppButton } from "@app/_shared"
-import { FactoryContract, chainInfos } from "@blockchain"
+import { FactoryContract } from "@blockchain"
+import { chainInfos } from "@config"
 import { useRouter } from "next/navigation"
 const FirstSection = () => {
     const router = useRouter()

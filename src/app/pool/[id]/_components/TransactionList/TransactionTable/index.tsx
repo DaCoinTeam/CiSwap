@@ -8,13 +8,14 @@ import {
     TableRow,
     Table,
     Spinner,
+    Chip,
 } from "@nextui-org/react"
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { ViewOnExplorer } from "@app/_shared"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { LiquidityPoolContract, RenderTransaction, getTransaction } from "@blockchain"
+import { LiquidityPoolContract, RenderTransaction, TransactionMethod, getTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
 import { calculateTimeAgo } from "@utils"
 
@@ -54,6 +55,7 @@ const TransactionTable = (props: TransactionTableProps) => {
 
             setNumPages(txHashs.length)
 
+            const promises: Promise<number>[] = []
             for (
                 let i = rowsPerPage * (page - 1);
                 i < Math.min(rowsPerPage * page, txHashs.length);
@@ -61,7 +63,7 @@ const TransactionTable = (props: TransactionTableProps) => {
             ) {
                 const txHash = txHashs[i]
 
-                const _transaction = await getTransaction(
+                const transactionPromise = getTransaction(
                     txHash, 
                     chainName,  
                     tokenState.token0Symbol,
@@ -70,10 +72,12 @@ const TransactionTable = (props: TransactionTableProps) => {
                     tokenState.token0Decimals,
                     tokenState.token1Decimals,
                     tokenState.LPTokenDecimals
-                )
+                ).then(_transaction => _transactions.push(_transaction))
 
-                _transactions.push(_transaction)
+                promises.push(transactionPromise)
             }
+            await Promise.all(promises)
+            _transactions.sort((prev, next) => next.timestamp.getTime() - prev.timestamp.getTime())
 
             setTransactions(_transactions)
 
@@ -153,7 +157,7 @@ const TransactionTable = (props: TransactionTableProps) => {
                                 showShorten
                             />
                         </TableCell>
-                        <TableCell key="method"> {transaction.method} </TableCell>
+                        <TableCell key="method"> {renderMethod(transaction.method)} </TableCell>
                         <TableCell key="tokenIn"> {transaction.tokenIn} </TableCell>
                         <TableCell key="tokenOut"> {transaction.tokenOut}</TableCell>
                         <TableCell key="account">
@@ -175,4 +179,26 @@ const TransactionTable = (props: TransactionTableProps) => {
 }
 
 export default TransactionTable
+
+export const renderMethod = (method: TransactionMethod) => {
+    let color: "warning" | "success" | "secondary" | "primary" | "default"
+    switch (method) {
+    case TransactionMethod.RegisterProvider:
+        color = "warning"
+        break
+    case TransactionMethod.Swap:
+        color = "success"
+        break
+    case TransactionMethod.Deposit:
+        color = "secondary"
+        break
+    case TransactionMethod.Withdraw:
+        color = "primary"
+        break
+    default:
+        color = "default"
+        break
+    }
+    return <Chip color={color} variant="flat">{method}</Chip>
+}
 

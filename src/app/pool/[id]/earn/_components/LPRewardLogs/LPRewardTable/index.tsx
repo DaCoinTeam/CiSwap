@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
     Pagination,
     Spacer,
+    Spinner,
     Table,
     TableBody,
     TableCell,
@@ -16,6 +17,7 @@ import { useSelector } from "react-redux"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { ViewOnExplorer } from "@app/_shared"
 import { calculateTimeAgo } from "@utils"
+import { LoadingState } from "@react-types/shared/src/collections"
 
 interface LPRewardTableProps {
   className?: string;
@@ -44,19 +46,24 @@ const LPRewardTable = (props: LPRewardTableProps) => {
             if (events == null) return
 
             const _logs: RewardLog[] = []
+            const promises : Promise<number>[] = []
             for (const event of events) {
                 if (typeof event == "string") return
 
-                const _log = await getRewardLog(
+                const logPromise = getRewardLog(
                     event,
                     chainName,
                     tokenState.LPTokenDecimals,
                     tokenState.LPTokenSymbol
-                )
-                _logs.push(_log)
+                ).then(_log => _logs.push(_log))
+                
+                promises.push(logPromise)
             }
 
+            await Promise.all(promises)
             setAwardLogs(_logs)
+
+            setLoadingState("idle")
         }
         handleEffect()
     }, [tokenState.finishLoadWithConnected])
@@ -75,10 +82,12 @@ const LPRewardTable = (props: LPRewardTableProps) => {
         return awardLogs.slice(start, end)
     }, [page, awardLogs])
 
+    const [loadingState, setLoadingState] = useState<LoadingState>("loading")
+
     return (
         <>
             <Table
-                className={`${props.className}`}
+                className={`${props.className} min-h-[222px]`}
                 removeWrapper
                 aria-label="Example table with client side pagination"
             >
@@ -93,7 +102,13 @@ const LPRewardTable = (props: LPRewardTableProps) => {
             TIME
                     </TableColumn>
                 </TableHeader>
-                <TableBody items={items} emptyContent={"No rows to display."}>
+                <TableBody items={items} 
+                    emptyContent={
+                        loadingState == "idle" ? "No rows to display." : undefined
+                    } 
+                    loadingContent={<Spinner color="default" />}
+                    loadingState={loadingState}
+                >
                     {(item) => (
                         <TableRow key={item.transactionHash}>
                             <TableCell key="transactionHash">
@@ -116,21 +131,28 @@ const LPRewardTable = (props: LPRewardTableProps) => {
                     )}
                 </TableBody>
             </Table>
-            <Spacer y={4}/>
-            <div className="flex w-full justify-center">
-                <Pagination
-                    isCompact
-                    showControls
-                    showShadow
-                    classNames={{
-                        cursor: "bg-teal-500",
-                    }}
-                    color="secondary"
-                    page={page}
-                    total={pages}
-                    onChange={(page) => setPage(page)}
-                />
-            </div>
+            {items.length ? 
+                (
+                    <>
+                        <Spacer y={4}/>
+                        <div className="flex w-full justify-center">
+                            <Pagination
+                                isCompact
+                                showControls
+                                showShadow
+                                classNames={
+                                    {
+                                        cursor: "bg-teal-500"
+                                    }
+                                }
+                                color="secondary"
+                                page={page}
+                                total={pages}
+                                onChange={(page) => setPage(page)}
+                            />
+                        </div>
+                    </>
+                ) : null}
         </>
     )
 }

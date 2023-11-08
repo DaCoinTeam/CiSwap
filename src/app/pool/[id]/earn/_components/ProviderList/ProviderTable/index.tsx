@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react"
 import {
     Pagination,
     Spacer,
+    Spinner,
     Table,
     TableBody,
     TableCell,
@@ -17,6 +18,7 @@ import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { Address } from "web3"
 import { calculateRedenomination } from "@utils"
 import { ViewOnExplorer } from "@app/_shared"
+import { LoadingState } from "@react-types/shared/src/collections"
 
 interface ProviderTableProps {
   className?: string;
@@ -43,20 +45,30 @@ const ProviderTable = (props: ProviderTableProps) => {
             if (addresses == null) return
 
             const _providers: Provider[] = []
+            
+            const promises : Promise<void>[] = []
+
             for (const address of addresses) {
-                const balance = await contract.balanceOf(address)
-                if (balance == null) return
-                const _provider = {
-                    address,
-                    balance: calculateRedenomination(
-                        balance,
-                        tokenState.LPTokenDecimals,
-                        3
-                    ),
-                }
-                _providers.push(_provider)
+                const providerPromise = contract.balanceOf(address).then(balance => {
+                    if (balance == null) return
+                    const _provider = {
+                        address,
+                        balance: calculateRedenomination(
+                            balance,
+                            tokenState.LPTokenDecimals,
+                            3
+                        ),
+                    }
+                    _providers.push(_provider)
+                })
+                promises.push(providerPromise)
             }
+
+            await Promise.all(promises)
+            
             setProviders(_providers)
+
+            setLoadingState("idle")
         }
         handleEffect()
     }, [tokenState.finishLoadWithoutConnected])
@@ -75,10 +87,12 @@ const ProviderTable = (props: ProviderTableProps) => {
         return providers.slice(start, end)
     }, [page, providers])
 
+    const [loadingState, setLoadingState] = useState<LoadingState>("loading")
+
     return (
         <>
             <Table 
-                className={`${props.className}`}
+                className={`${props.className} min-h-[222px]`}
                 removeWrapper
                 aria-label="Example table with client side pagination"
             >
@@ -88,7 +102,11 @@ const ProviderTable = (props: ProviderTableProps) => {
                             BALACE
                     </TableColumn>
                 </TableHeader>
-                <TableBody items={items} emptyContent={"No rows to display."}>
+                <TableBody items={items}  emptyContent={
+                    loadingState == "idle" ? "No rows to display." : undefined
+                } 
+                loadingContent={<Spinner color="default" />}
+                loadingState={loadingState}>
                     {(item) => (
                         <TableRow key={item.address}>
                             <TableCell key="address">
@@ -99,23 +117,28 @@ const ProviderTable = (props: ProviderTableProps) => {
                     )}
                 </TableBody>
             </Table>
-            <Spacer y={4}/>
-            <div className="flex w-full justify-center">
-                <Pagination
-                    isCompact
-                    showControls
-                    showShadow
-                    classNames={
-                        {
-                            cursor: "bg-teal-500"
-                        }
-                    }
-                    color="secondary"
-                    page={page}
-                    total={pages}
-                    onChange={(page) => setPage(page)}
-                />
-            </div>
+            {items.length ? 
+                (
+                    <>
+                        <Spacer y={4}/>
+                        <div className="flex w-full justify-center">
+                            <Pagination
+                                isCompact
+                                showControls
+                                showShadow
+                                classNames={
+                                    {
+                                        cursor: "bg-teal-500"
+                                    }
+                                }
+                                color="secondary"
+                                page={page}
+                                total={pages}
+                                onChange={(page) => setPage(page)}
+                            />
+                        </div>
+                    </>
+                ) : null}
         </>
     )
 }

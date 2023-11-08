@@ -8,7 +8,7 @@ interface TokenPairDisplayProps {
   className?: string;
   token0ImageUrl?: string;
   token1ImageUrl?: string;
-  size?: "md" | "lg";
+  size?: "sm" | "lg";
   showInverse?: boolean;
 }
 
@@ -17,19 +17,22 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
     if (tokenState == null) return
 
     let _size = props.size
-    if (_size == undefined) _size = "md"
+    if (_size == undefined) _size = "sm"
 
     let _tokenImageClassName: string = ""
     let _textClassName: string = ""
+    let _skeletonSize: string = ""
 
     switch (_size) {
-    case "md":
+    case "sm":
         _tokenImageClassName = "w-5 h-5"
         _textClassName = "text-sm"
+        _skeletonSize = "h-5 w-20"
         break
     case "lg":
         _tokenImageClassName = "w-9 h-9"
         _textClassName = "text-3xl"
+        _skeletonSize = "h-9 w-48"
         break
     }
 
@@ -72,7 +75,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                     {_showInverse()}
                 </div>
             ) : (
-                <Skeleton className="h-6 w-24 rounded" />
+                <Skeleton className={`${_skeletonSize} rounded`}/>
             )}
         </div>
     )

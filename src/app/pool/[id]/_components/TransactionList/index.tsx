@@ -18,7 +18,7 @@ const TransactionList = (props: TransactionListProps) => {
             <Spacer y={3}/>
             <Card className={`${props.className}`}>
                 <CardBody>
-                    <TransactionTable/>
+                    <TransactionTable />
                 </CardBody>
             </Card>
         </>

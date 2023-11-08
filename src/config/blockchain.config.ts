@@ -25,8 +25,6 @@ const KLAYTN_TESTNET_USDT =
   "0xEdEb5f63537EbAe7E6dD79D95Cd2EF20C75Cd732"
 const KLAYTN_TESTNET_EXPLORER = "https://baobab.klaytnscope.com/"
 
-export const TIME_OUT = 1000
-
 export enum ChainName {
   KlaytnMainnet,
   KalytnTestnet,

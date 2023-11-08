@@ -1,5 +1,5 @@
 import Web3, { HttpProvider, WebSocketProvider } from "web3"
-import { ChainName, chainInfos } from "../config"
+import { ChainName, chainInfos } from "@config"
 
 export const getHttpWeb3 = (
     chainName: ChainName, 

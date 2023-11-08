@@ -2,8 +2,9 @@ import {
     GAS_LIMIT,
     GAS_PRICE,
     chainInfos,
-} from "../../config"
-import { ChainName } from "../../config"
+    ChainName
+} from "@config"
+
 import { getHttpWeb3 } from "../provider"
 
 import Web3, { Address } from "web3"

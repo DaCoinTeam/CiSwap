@@ -3,7 +3,7 @@ import web3, {
     Address
 } from "web3"
 import { calculateRedenomination } from "@utils"
-import { ChainName } from "../config"
+import { ChainName } from "@config"
 import { getHttpWeb3 } from "../contracts"
 
 export enum TransactionMethod {

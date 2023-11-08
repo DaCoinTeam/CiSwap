@@ -1,6 +1,6 @@
 import { HexString } from "web3"
 import { EventLog } from "web3-eth-contract"
-import { ChainName } from "../config"
+import { ChainName } from "@config"
 import { getHttpWeb3 } from "../contracts"
 import { calculateRedenomination } from "@utils"
 

@@ -24,7 +24,8 @@
       "@blockchain": ["./src/blockchain"],
       "@utils": ["./src/utils"],
       "@definitions": ["./src/definitions"],
-      "@firebase": ["./src/firebase"]
+      "@firebase": ["./src/firebase"],
+      "@config": ["./src/config"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/N"],

@@ -1,4 +1,4 @@
-import { ChainName, GAS_LIMIT, GAS_PRICE } from "../../config"
+import { ChainName, GAS_LIMIT, GAS_PRICE } from "@config"
 import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"

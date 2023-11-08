@@ -15,21 +15,6 @@ const Navbar = () => {
 
     const router = useRouter()
 
-
-    const _menuItems = [
-        {
-            key: 0,
-            value: "Profile"
-        },
-        {
-            key: 0,
-            value: "Log Out"
-        },
-
-
-    ]
-
-    const _color = (index: number) => index === _menuItems.length - 1 ? "danger" : "foreground"
     const _pushCreatePool = () => router.push("/create")
     const _pushInfo = ()  => router.push("/info")  
     const _pushHome = ()  => router.push("/")  
@@ -84,20 +69,31 @@ const Navbar = () => {
                 }
             </NavbarContent>
             <NavbarMenu>
-                {_menuItems.map((_item) => (
-                    <NavbarMenuItem key={_item.key}>
-                        <Link
-                            color={
-                                _item.key === 2 ? "primary" : _color(_item.key)
-                            }
-                            className="w-full"
-                            href="#"
-                            size="lg"
-                        >
-                            {_item.value}
-                        </Link>
-                    </NavbarMenuItem>
-                ))}
+                <NavbarMenuItem>
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushHome}>
+            Home
+                    </Link>
+                </NavbarMenuItem>
+                <NavbarMenuItem>
+                    <Link className="text-teal-500 cursor-pointer" onPress={_pushSwap}>
+            Swap
+                    </Link>
+                </NavbarMenuItem>
+                <NavbarMenuItem>
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushEarn}>
+            Earn
+                    </Link>
+                </NavbarMenuItem>
+                <NavbarMenuItem>
+                    <Link color="foreground" className="cursor-pointer"  onPress={_pushInfo}>
+            Info
+                    </Link>
+                </NavbarMenuItem>
+                <NavbarMenuItem>
+                    <Link color="foreground"  className="cursor-pointer"  onPress ={_pushCreatePool}>
+            Create Pool
+                    </Link>
+                </NavbarMenuItem>
             </NavbarMenu>
         </NextUINavbar>
     )

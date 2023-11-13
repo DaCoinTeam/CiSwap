@@ -5,7 +5,7 @@ import {
     NumberTextarea,
     TokenDisplay,
 } from "@app/_shared"
-import { Button, Spacer } from "@nextui-org/react"
+import { Button } from "@nextui-org/react"
 import { PoolAddressContext, TokenStateContext } from "../../../../layout"
 import { FormikPropsContext } from "../formik"
 import { LiquidityPoolContract } from "@blockchain"
@@ -189,7 +189,7 @@ const MainSection = () => {
     const _finishFetchToken1 = !inverse ? finishFetchToken1 : finishFetchToken0
 
     return (
-        <div className="grid justify-items-center">
+        <div className="grid gap-6 justify-items-center">
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
@@ -212,14 +212,12 @@ const MainSection = () => {
                 />
             </div>
 
-            <Spacer y={6} />
             <Button
                 isIconOnly
                 endContent={<ArrowsUpDownIcon height={24} width={24} />}
                 radius="full"
                 onPress={_inverse}
             />
-            <Spacer y={6} />
 
             <div className="w-full">
                 <div className="justify-between flex">

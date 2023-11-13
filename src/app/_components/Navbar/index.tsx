@@ -15,11 +15,13 @@ const Navbar = () => {
 
     const router = useRouter()
 
-    const _pushCreatePool = () => router.push("/create")
-    const _pushInfo = ()  => router.push("/info")  
     const _pushHome = ()  => router.push("/")  
+    const _pushInfo = ()  => router.push("/info")  
     const _pushSwap = ()  => router.push(`/pool/${defaultPool}/swap`)  
     const _pushEarn = ()  => router.push(`/pool/${defaultPool}/earn`)  
+    const _pushBuy = ()  => router.push("/buy")  
+    const _pushCreatePool = () => router.push("/create")
+   
 
     return (
         <NextUINavbar shouldHideOnScroll isBordered onMenuOpenChange={setIsMenuOpen}>
@@ -28,7 +30,7 @@ const Navbar = () => {
                     aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                     className="sm:hidden"
                 />
-                <NavbarBrand>
+                <NavbarBrand className="cursor-pointer" onClick={_pushHome}>
                     <Logo />
                     <p className="font-bold text-inherit">CiSwap</p>
                 </NavbarBrand>
@@ -36,8 +38,8 @@ const Navbar = () => {
 
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarItem>
-                    <Link color="foreground" className="cursor-pointer" onPress={_pushHome}>
-            Home
+                    <Link color="foreground" className="cursor-pointer"  onPress={_pushInfo}>
+            Info
                     </Link>
                 </NavbarItem>
                 <NavbarItem isActive>
@@ -51,8 +53,8 @@ const Navbar = () => {
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link color="foreground" className="cursor-pointer"  onPress={_pushInfo}>
-            Info
+                    <Link color="foreground" className="cursor-pointer" onPress={_pushBuy}>
+            Buy
                     </Link>
                 </NavbarItem>
                 <NavbarItem>

@@ -6,5 +6,16 @@ import TokenPairDisplay from "./TokenPairDisplay"
 import TitleDisplay from "./TitleDisplay"
 import DataWidgetDisplay from "./DataWidgetDisplay"
 import ErrorDisplay from "./ErrorDisplay"
+import TokenTooltipDisplay from "./TokenTooltipDisplay"
 
-export { BalanceDisplay, LoadingDisplay, TokenDisplay, TokenPriceRatioDisplay, TokenPairDisplay, TitleDisplay, DataWidgetDisplay, ErrorDisplay}
+export {
+    BalanceDisplay,
+    TokenTooltipDisplay,
+    LoadingDisplay,
+    TokenDisplay,
+    TokenPriceRatioDisplay,
+    TokenPairDisplay,
+    TitleDisplay,
+    DataWidgetDisplay,
+    ErrorDisplay
+}

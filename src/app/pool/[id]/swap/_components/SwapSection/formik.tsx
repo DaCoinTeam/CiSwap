@@ -2,8 +2,8 @@ import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
 import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../layout"
 import { parseNumber } from "@utils"
 import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
@@ -35,6 +35,7 @@ const _renderBody = (
 )
 
 const FormikProviders = ({ children }: { children: ReactNode}) => {
+
     const poolAddress = useContext(PoolAddressContext)
     if (poolAddress == null) return
 
@@ -44,6 +45,9 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
     const updateTokenState = useContext(UpdateTokenStateContext)
     if (updateTokenState == null) return 
     
+    const dispatch : AppDispatch = useDispatch()
+    const notify = useSelector((state: RootState) => state.configuration.notify)
+
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
@@ -83,11 +87,12 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                 const tokenInDecimals = !values._isBuyAction ? tokenState.token0Decimals : tokenState.token1Decimals
 
                 const tokenInContract = new ERC20Contract(chainName, tokenInAddress, web3, account)
-                
+
                 const tokenInAllowance = await tokenInContract.allowance(
                     account,
                     poolAddress
                 )
+
                 if (tokenInAllowance == null) return
 
                 const tokenAmountInParsed = calculateIRedenomination(
@@ -95,13 +100,22 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                     tokenInDecimals
                 )
 
-                if (tokenInAllowance < tokenAmountInParsed) {
+                if (tokenInAllowance < tokenAmountInParsed) {     
+                    dispatch(setOpenWaitSignModalShow(true))
+                    dispatch(setOpenWaitSignModalTitle("Approve"))
+
                     const tokenInApproveReceipt = await tokenInContract.approve(
                         poolAddress,
                         tokenAmountInParsed - tokenInAllowance
                     )
-                    if (!tokenInApproveReceipt) return
+                    if (!tokenInApproveReceipt) {
+                        dispatch(setOpenWaitSignModalShow(false))
+                        return
+                    }
+                    notify(tokenInApproveReceipt.transactionHash.toString())
                 }
+
+                
 
                 const poolFactory = new LiquidityPoolContract(
                     chainName,
@@ -109,6 +123,8 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                     web3,
                     account
                 )
+
+                dispatch(setOpenWaitSignModalTitle("Swap"))
 
                 const depositReceipt = await poolFactory.swap(
                     tokenAmountInParsed,
@@ -119,7 +135,14 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                 5
             ), values._isBuyAction
                 )
-                console.log(depositReceipt)
+
+                if (!depositReceipt){
+                    dispatch(setOpenWaitSignModalShow(false))
+                    return
+                }
+
+                dispatch(setOpenWaitSignModalShow(false))
+                notify(depositReceipt.transactionHash.toString())
                 await updateTokenState._handleAll()
             }
             }

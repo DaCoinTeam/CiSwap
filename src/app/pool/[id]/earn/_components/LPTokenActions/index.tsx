@@ -3,7 +3,7 @@ import { Card, CardBody } from "@nextui-org/react"
 import React, { useContext, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { AppButton, DataWidgetDisplay } from "@app/_shared"
+import { AppButton, TokenTooltipDisplay } from "@app/_shared"
 import Withdraw from "./Withdraw"
 import Deposit from "./Deposit"
 import { PoolAddressContext, TokenStateContext } from "../../../layout"
@@ -66,12 +66,13 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
     return (
         <Card className={`${props.className}`}>
             <CardBody className="flex flex-cols justify-between">
-                <DataWidgetDisplay
-                    title="Your Balance"
+                <TokenTooltipDisplay 
+                    tooltipContent="Your LP Token balance"
                     value={tokenState.LPTokenBalance}
                     prefix={tokenState.LPTokenSymbol}
                     finishLoad={tokenState.finishLoadWithConnected}
                 />
+               
                 {_renderOptions()}
             </CardBody>
         </Card>

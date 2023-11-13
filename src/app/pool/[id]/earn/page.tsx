@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import { LPTokenActions, LPTokenDistributionChart, ProviderList, LPRewardLogs } from "./_components"
+import { LPTokenActions, LPTokenDistributionChart, ProviderList, LPRewards } from "./_components"
 import { Spacer } from "@nextui-org/react"
 
 const Page = () => {
@@ -14,7 +14,7 @@ const Page = () => {
             <Spacer y={12}/>
 
             <div className="grid grid-cols-3 gap-12">
-                <LPRewardLogs className="col-span-2"/>
+                <LPRewards className="col-span-2"/>
                 <ProviderList className="col-span-1" />
             </div>
         </>

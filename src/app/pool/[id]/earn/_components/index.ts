@@ -1,6 +1,6 @@
 import LPTokenDistributionChart from "./LPTokenDistributionChart"
 import LPTokenActions from "./LPTokenActions"
 import ProviderList from "./ProviderList"
-import LPRewardLogs from "./LPRewardLogs"
+import LPRewards from "./LPRewards"
 
-export { LPTokenDistributionChart, LPTokenActions, ProviderList, LPRewardLogs }
+export { LPTokenDistributionChart, LPTokenActions, ProviderList, LPRewards }

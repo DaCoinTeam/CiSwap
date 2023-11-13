@@ -11,6 +11,7 @@ interface NumberTextareaProps {
     errorMessage? : string,
     textPosition?: "center" | "left" | "right",
     isDisabled?: boolean,
+    readOnly?: boolean,
     hideErrorMessage?: boolean
 }
 
@@ -39,6 +40,7 @@ const NumberTextarea = (props: NumberTextareaProps) => {
     return (
         <Textarea 
             labelPlacement="outside"
+            readOnly={props.readOnly}
             classNames={{
                 input: _textPositionClassName,
             }}

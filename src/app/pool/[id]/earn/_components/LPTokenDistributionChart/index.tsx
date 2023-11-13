@@ -2,7 +2,7 @@
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 import React, { useContext, useState } from "react"
 import Chart from "./Chart"
-import { DataWidgetDisplay, PeriodTabs } from "@app/_shared"
+import { PeriodTabs, TokenTooltipDisplay } from "@app/_shared"
 import { ChartTimePeriod, calculateRound } from "@utils"
 import { TokenStateContext } from "@app/pool/[id]/layout"
 
@@ -20,8 +20,8 @@ const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
         <Card className={`${props.className}`}>
             <CardBody>
                 <div className="flex justify-between">
-                    <DataWidgetDisplay 
-                        title="Total LP Token Distributed" 
+                    <TokenTooltipDisplay
+                        tooltipContent="Total LP Token Distributed" 
                         value={calculateRound(tokenState.LPTokenTotalSupply - tokenState.LPTokenAmountLocked, 3)}
                         prefix={tokenState.LPTokenSymbol}
                         finishLoad={tokenState.finishLoadWithoutConnected}

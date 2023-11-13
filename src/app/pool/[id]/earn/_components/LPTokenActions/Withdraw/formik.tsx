@@ -2,8 +2,8 @@ import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { LiquidityPoolContract } from "@blockchain"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
 import { calculateIRedenomination } from "@utils"
 import {
     PoolAddressContext,
@@ -46,6 +46,10 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
+
+    const dispatch : AppDispatch = useDispatch()
+    const notify = useSelector((state: RootState) => state.configuration.notify)
+
     const web3 = useSelector((state: RootState) => state.blockchain.web3)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -70,13 +74,23 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     account
                 )
 
+                dispatch(setOpenWaitSignModalShow(true))
+                dispatch(setOpenWaitSignModalTitle("Withdraw"))
+                
                 const withdrawReceipt = await poolFactory.withdraw(
                     calculateIRedenomination(
                         values.token0AmountOut,
                         tokenState.token0Decimals
                     )
                 )
-                console.log(withdrawReceipt)
+                
+                if (!withdrawReceipt){
+                    dispatch(setOpenWaitSignModalShow(false))
+                    return
+                }
+
+                dispatch(setOpenWaitSignModalShow(false))
+                notify(withdrawReceipt.transactionHash.toString())
                 await updateTokenState._handleWithConnected()
             }}
         >

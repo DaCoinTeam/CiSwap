@@ -1,14 +1,14 @@
 "use client"
 import { Mooli } from "next/font/google"
 import React, { ReactNode, useEffect } from "react"
-import { Navbar, Footer } from "./_components"
+import { Navbar, Footer, WaitSignModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setAccount, setDefaultPool } from "@redux"
 import { NextUIProvider, Spacer } from "@nextui-org/react"
 import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { ToastContainer } from "react-toastify"
-import "./css/ReactToastify.css"
+import "./_css/ReactToastify.css"
 
 export const mooli = Mooli({ weight: "400", subsets: ["latin"] })
 
@@ -57,6 +57,7 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
                     </main>
                     <Spacer y={12} />
                     <Footer />
+                    <WaitSignModal />
                     <ToastContainer
                         position="top-right"
                         autoClose={false}

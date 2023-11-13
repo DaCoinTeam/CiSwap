@@ -5,6 +5,7 @@ import {
     CardBody
 } from "@nextui-org/react"
 import ProviderTable from "./ProviderTable"
+import { TitleDisplay } from "@app/_shared"
 
 interface ProviderListProps {
   className?: string;
@@ -13,10 +14,12 @@ interface ProviderListProps {
 const ProviderList = (props: ProviderListProps) => {
     return (
         <div className={`flex gap-3 flex-col ${props.className}`}>
-            <div className="text-xl font-bold text-teal-500"> Providers </div>
             <Card className="grow">
-                <CardBody className="flex flex-cols justify-between">
-                    <ProviderTable/>
+                <CardBody>
+                    <div className="flex flex-col gap-4">
+                        <TitleDisplay title="Providers" size="lg" />
+                        <ProviderTable/>
+                    </div>    
                 </CardBody>
             </Card>
         </div>

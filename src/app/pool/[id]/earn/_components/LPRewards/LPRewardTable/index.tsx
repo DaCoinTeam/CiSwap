@@ -16,8 +16,11 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import { ViewOnExplorer } from "@app/_shared"
-import { calculateTimeAgo } from "@utils"
 import { LoadingState } from "@react-types/shared/src/collections"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.extend(relativeTime)
 
 interface LPRewardTableProps {
   className?: string;
@@ -61,7 +64,8 @@ const LPRewardTable = (props: LPRewardTableProps) => {
             }
 
             await Promise.all(promises)
-            setAwardLogs(_logs)
+            const _sortedLogs = _logs.sort((prev, next) => next.timestamp.getTime() - prev.timestamp.getTime())
+            setAwardLogs(_sortedLogs)
 
             setLoadingState("idle")
         }
@@ -125,7 +129,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
                             </TableCell>
                             <TableCell key="time">
                                 {" "}
-                                {calculateTimeAgo(item.timestamp)}{" "}
+                                {dayjs(item.timestamp).fromNow()}{" "}
                             </TableCell>
                         </TableRow>
                     )}

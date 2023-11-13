@@ -17,7 +17,10 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { LiquidityPoolContract, RenderTransaction, TransactionMethod, getTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
-import { calculateTimeAgo } from "@utils"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.extend(relativeTime)
 
 interface TransactionTableProps {
   className?: string;
@@ -169,7 +172,7 @@ const TransactionTable = (props: TransactionTableProps) => {
                             />
                         </TableCell>
                         <TableCell key="time">
-                            {calculateTimeAgo(transaction.timestamp)}
+                            {dayjs(transaction.timestamp).fromNow()}
                         </TableCell>
                     </TableRow>
                 )}

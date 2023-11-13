@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import {
     BalanceDisplay,
-    DataWidgetDisplay,
     LoadingDisplay,
     NumberTextarea,
     TokenDisplay,
 } from "@app/_shared"
-import { Spacer } from "@nextui-org/react"
 import { PoolAddressContext, TokenStateContext } from "../../../../../layout"
 import { FormikPropsContext } from "../formik"
-import { LiquidityPoolContract, TIME_OUT } from "@blockchain"
+import { LiquidityPoolContract } from "@blockchain"
+import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { calculateRedenomination, parseNumber } from "@utils"
 import { calculateIRedenomination } from "@utils"
+import { ArrowDownIcon } from "@heroicons/react/24/outline"
 
 const MainSection = () => {
     const tokenState = useContext(TokenStateContext)
@@ -78,26 +78,30 @@ const MainSection = () => {
     }
     
     return (
-        <div className="w-full">
-            <div className="flex items-center justify-between">
+        <div className="w-full grid gap-6 justify-items-center">
+            <div  className="w-full">
+                <div className="flex items-center justify-between">
+                    <TokenDisplay
+                        finishLoad={tokenState.finishLoadWithoutConnected}
+                        tokenSymbol={tokenState.token1Symbol}
+                    />
+                    <BalanceDisplay
+                        finishLoad={tokenState.finishLoadWithConnected}
+                        tokenBalance={tokenState.token1Balance}
+                    />
+                </div>
+                <NumberTextarea textPosition="right" value={formik.values.token1DepositAmount} onValueChange={_handleChange} />
+            </div>
+            <ArrowDownIcon height={24} width={24} />
+     
+            <div  className="w-full">
                 <TokenDisplay
                     finishLoad={tokenState.finishLoadWithoutConnected}
-                    tokenSymbol={tokenState.token1Symbol}
+                    tokenSymbol={tokenState.LPTokenSymbol}
                 />
-                <BalanceDisplay
-                    finishLoad={tokenState.finishLoadWithConnected}
-                    tokenBalance={tokenState.token1Balance}
-                />
+                <NumberTextarea readOnly textPosition="right" value={formik.values.LPTokenAmountOut.toString()} onValueChange={_handleChange} />
+                <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
             </div>
-            <NumberTextarea textPosition="right" value={formik.values.token1DepositAmount} onValueChange={_handleChange} />
-            <Spacer y={6}/>
-            <DataWidgetDisplay
-                title="LP Token Received"
-                value={formik.values.LPTokenAmountOut}
-                prefix={tokenState.LPTokenSymbol}
-                finishLoad={true}
-            />
-            <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
         </div>
     )
 }

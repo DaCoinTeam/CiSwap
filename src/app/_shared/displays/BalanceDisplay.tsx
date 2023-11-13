@@ -9,12 +9,12 @@ interface BalanceDisplayProps {
 
 const BalanceDisplay = (props: BalanceDisplayProps) => {
     return (
-        <div className={`text-xs ${props.className} flex gap-1`}>
+        <div className={`${props.className} text-xs  flex gap-1`}>
             <span> Balance : </span>
             {props.finishLoad ? (
                 <span>{props.tokenBalance}</span>
             ) : (
-                <Skeleton className="h-4 w-4  rounded" />
+                <Skeleton className="h-4 w-4 rounded" />
             )}{" "}
         </div>
     )

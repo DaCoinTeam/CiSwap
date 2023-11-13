@@ -10,6 +10,7 @@ interface ViewOnExplorerProps {
   hexString: string;
   isTransaction?: boolean;
   showShorten?: boolean;
+  notExternal?: boolean
 }
 
 const ViewOnExplorer = (props: ViewOnExplorerProps) => {
@@ -18,11 +19,13 @@ const ViewOnExplorer = (props: ViewOnExplorerProps) => {
     )
     const explorerUrl = chainInfos[chainName].explorerUrl
     
+    const _external = !props.notExternal
     const _middle = props.isTransaction ? "tx" : "address"
     
     const _content = props.showShorten ? shortenAddress(props.hexString) : "View on Explorer"
     return (
         <Link
+            isExternal = {_external}
             href={`${explorerUrl}${_middle}/${props.hexString}`}
             className={`font-bold text-sm ${props.className}`}
             color="foreground"

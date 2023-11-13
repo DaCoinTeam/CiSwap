@@ -2,8 +2,8 @@ import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
 import {
     calculateIRedenomination,
     calculateMuvBigIntNumber,
@@ -50,6 +50,10 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
+    
+    const dispatch : AppDispatch = useDispatch()
+    const notify = useSelector((state: RootState) => state.configuration.notify)
+
     const web3 = useSelector((state: RootState) => state.blockchain.web3)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -86,11 +90,17 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                 )
 
                 if (token1Allowance < token1DepositAmountParsed) {
+                    dispatch(setOpenWaitSignModalShow(true))
+                    dispatch(setOpenWaitSignModalTitle("Approve"))
                     const token1ApproveReceipt = await token1Contract.approve(
                         poolAddress,
                         token1DepositAmountParsed - token1Allowance
                     )
-                    if (!token1ApproveReceipt) return
+                    if (!token1ApproveReceipt) {
+                        dispatch(setOpenWaitSignModalShow(false))
+                        return
+                    }
+                    notify(token1ApproveReceipt.transactionHash.toString())
                 }
 
                 const poolFactory = new LiquidityPoolContract(
@@ -100,6 +110,7 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                     account
                 )
 
+                dispatch(setOpenWaitSignModalTitle("Deposit"))
                 const depositReceipt = await poolFactory.deposit(
                     token1DepositAmountParsed,
                     token1DepositAmountParsed -
@@ -109,7 +120,14 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
                 5
             )
                 )
-                console.log(depositReceipt)
+
+                if (!depositReceipt) {
+                    dispatch(setOpenWaitSignModalShow(false))
+                    return
+                }
+
+                dispatch(setOpenWaitSignModalShow(false))
+                notify(depositReceipt.transactionHash.toString())
                 await updateTokenState._handleWithConnected()
             }}
         >

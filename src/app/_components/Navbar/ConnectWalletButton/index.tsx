@@ -3,14 +3,13 @@
 import React from "react"
 import { MetamaskIcon } from "./MetamaskIcon"
 import { Button } from "@nextui-org/button"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import Web3 from "web3"
-import { setWeb3, AppDispatch, RootState } from "@redux"
+import { setWeb3, AppDispatch, } from "@redux"
 import MetaMaskSDK, { MetaMaskSDKOptions } from "@metamask/sdk"
 
 const ConnectWalletButton = () => {
     const dispatch : AppDispatch = useDispatch()
-    const notify = useSelector((state: RootState) => state.configuration.notify)
     
     const connectWallet = async (): Promise<void> => {
         try {

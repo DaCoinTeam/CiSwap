@@ -1,3 +1,4 @@
+"use client"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
 import React from "react"
 import { useSelector } from "react-redux"

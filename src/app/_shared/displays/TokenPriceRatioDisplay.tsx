@@ -61,7 +61,7 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
                     </>
                 ) : (
                     <>
-                        <Skeleton className="h-16 w-48 rounded" />
+                        <Skeleton className="h-9 w-48 rounded" />
                     </>
                 )}
             </div>

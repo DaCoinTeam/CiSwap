@@ -55,8 +55,6 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
                             <div>
                                 {_renderTrend()}
                             </div>
-     
-        
                         </div>
                     </>
                 ) : (

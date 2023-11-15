@@ -15,11 +15,15 @@ export type TokenState = {
     token0Constant: bigint
     token1Constant: bigint
 
+    token0ImageUrl: string
+    token1ImageUrl: string
+
     LPTokenBalance: number
     LPTokenSymbol: string
     LPTokenDecimals: number
     LPTokenTotalSupply: number
     LPTokenAmountLocked: number
+    LPImageUrl: string
 
     finishLoadWithoutConnected: boolean
     finishLoadWithConnected: boolean
@@ -39,6 +43,12 @@ export interface SetTokenSymbolAction {
     type: "SET_TOKEN0_SYMBOL" | "SET_TOKEN1_SYMBOL" | "SET_LP_TOKEN_SYMBOL"
     payload: string
 }
+
+export interface SetTokenImageUrlAction {
+    type: "SET_TOKEN0_IMAGE_URL" | "SET_TOKEN1_IMAGE_URL" | "SET_TOKEN_LP_IMAGE_URL"
+    payload: string
+}
+
 
 export interface SetLPTokenTotalSupplyAction {
     type: "SET_LP_TOKEN_TOTAL_SUPPLY" | "SET_LP_TOKEN_AMOUNT_LOCKED"
@@ -61,7 +71,7 @@ export interface SetFinishLoad {
 }
 
 
-export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction
+export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction | SetTokenImageUrlAction
 
 export const initialTokenState: TokenState = {
     token0Address: "",
@@ -79,13 +89,15 @@ export const initialTokenState: TokenState = {
     token1Decimals: 0,
     token0Constant: BigInt(0),
     token1Constant: BigInt(0),
-
+    token0ImageUrl: "",
+    token1ImageUrl: "",
 
     LPTokenBalance: 0,
     LPTokenDecimals: 0,
     LPTokenSymbol: "",
     LPTokenTotalSupply: 0,
     LPTokenAmountLocked: 0,
+    LPImageUrl: "",
 
     finishLoadWithoutConnected: false,
     finishLoadWithConnected: false
@@ -170,6 +182,16 @@ export const tokenReducer = (
         return {
             ...state,
             token1Constant: action.payload
+        }
+    case "SET_TOKEN0_IMAGE_URL":
+        return {
+            ...state,
+            token0ImageUrl: action.payload
+        }
+    case "SET_TOKEN1_IMAGE_URL":
+        return {
+            ...state,
+            token1ImageUrl: action.payload
         }
     case "SET_LP_TOKEN_SYMBOL":
         return {

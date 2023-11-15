@@ -6,6 +6,15 @@ const nextConfig = {
     },
     typescript: {
         ignoreBuildErrors: true
+    },
+    rewrites : async () => {
+        return [
+            {
+                source: "/api/:path*",
+                // eslint-disable-next-line no-undef
+                destination: `${process.env.REACT_APP_SERVER_PORT}/api/:path*`
+            }
+        ]
     }
 }
 

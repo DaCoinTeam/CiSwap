@@ -23,7 +23,7 @@ const Page = () => {
         <>
             <div className="sm:flex justify-between">
                 <div>
-                    <TokenPairDisplay size="lg"/>
+                    <TokenPairDisplay size="lg" token0ImageUrl={tokenState.token0ImageUrl} token1ImageUrl={tokenState.token1ImageUrl}/>
                     <Spacer y={1}/>
                     <TokenPriceRatioDisplay style="style2"/>
                 </div>

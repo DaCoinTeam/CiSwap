@@ -4,8 +4,10 @@ import React, { ReactNode, createContext, useEffect, useMemo, useReducer } from 
 import { useSelector } from "react-redux"
 import { TokenState, initialTokenState, tokenReducer } from "./_definitions"
 import { useParams } from "next/navigation"
-import { calculateRedenomination } from "@utils"
+import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
+import { chainInfos } from "@config"
+import { getTokenApi } from "@api"
 
 export const TokenStateContext = createContext<TokenState | null>(null)
 
@@ -41,6 +43,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         const token0Address = await poolContract.token0()
         if (token0Address == null) return
         tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: token0Address })
+
         const token0Contract = new ERC20Contract(chainName, token0Address)
 
         const token1Address = await poolContract.token1()
@@ -48,6 +51,22 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: token1Address })
         const token1Contract = new ERC20Contract(chainName, token1Address)
 
+        const token0DTO = await getTokenApi(token0Address, chainInfos[chainName].chainId)
+        if (token0DTO != null)
+        {
+            const blobUrl = await fetchAndCreateSvgBlobUrl(token0DTO.tokenImageUrl)
+            if (blobUrl == null) return
+            tokenDispatch({ type: "SET_TOKEN1_IMAGE_URL", payload: blobUrl })
+        }
+
+        const token1DTO = await getTokenApi(token1Address, chainInfos[chainName].chainId)
+        if (token1DTO != null)
+        {
+            const blobUrl = await fetchAndCreateSvgBlobUrl(token1DTO.tokenImageUrl)
+            if (blobUrl == null) return
+            tokenDispatch({ type: "SET_TOKEN1_IMAGE_URL", payload: blobUrl })
+        }
+         
         const token0Symbol = await token0Contract.symbol()
         if (token0Symbol == null) return
         tokenDispatch({ type: "SET_TOKEN0_SYMBOL", payload: token0Symbol })

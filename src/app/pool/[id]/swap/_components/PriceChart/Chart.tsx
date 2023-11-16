@@ -1,12 +1,14 @@
 "use client"
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { MutableRefObject, useContext, useEffect, useRef, useState } from "react"
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { BaselineData, IChartApi, ISeriesApi, Time } from "lightweight-charts"
 import {
+    ChartTimePeriod,
     calculateRedenomination,
     createBaselineChartAndSeries,
+    timeToLocal,
     updateBaselineChartWithOptions,
 } from "@utils"
 import { LiquidityPoolContract } from "@blockchain"
@@ -39,10 +41,10 @@ const Chart = () => {
     )
 
     const chartContainerRef =
-    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLDivElement>
+    useRef<HTMLDivElement>() as MutableRefObject<HTMLDivElement>
     const chartRef = useRef<IChartApi | null>(null)
     const seriesRef = useRef<ISeriesApi<"Baseline"> | null>(null)
-
+        
     const [priceTicks, setPriceTicks] = useState<PriceTick[]>([])
 
     useEffect(() => {
@@ -61,7 +63,7 @@ const Chart = () => {
                         tokenState.token0Decimals,
                         3
                     ),
-                    time: tick.timestamp * 1000,
+                    time: timeToLocal(tick.timestamp),
                 }
             })
 
@@ -113,16 +115,39 @@ const Chart = () => {
     useEffect(() => {
         if (!tokenState.finishLoadWithoutConnected) return
 
+        const now = new Date()
+        let _priceTicks: BaselineData<Time>[]
+        switch (period) {
+        case ChartTimePeriod._24H:
+            now.setDate(now.getDate() - 1)
+            _priceTicks = priceTicks.filter(
+                (tick) => tick.time > now.getTime() / 1000
+            ) as BaselineData<Time>[]
+            break
+        case ChartTimePeriod._1W:
+            now.setDate(now.getDate() - 7)
+            _priceTicks = priceTicks.filter(
+                (tick) => tick.time > now.getTime() / 1000
+            ) as BaselineData<Time>[]
+            break
+        case ChartTimePeriod._1M:
+            now.setMonth(now.getMonth() - 1)
+            _priceTicks = priceTicks.filter(
+                (tick) => tick.time > now.getTime() / 1000
+            ) as BaselineData<Time>[]
+            break
+        case ChartTimePeriod._1Y:
+            now.setFullYear(now.getFullYear() - 1)
+            _priceTicks = priceTicks.filter(
+                (tick) => tick.time > now.getTime() / 1000
+            ) as BaselineData<Time>[]
+            break
+        }
+
         const series = seriesRef.current
         if (series == null) return
 
-        series.setData(priceTicks as BaselineData<Time>[])
-        
-        series.update({
-            time: Date.now(),
-            value: tokenState.token0Price,
-        } as BaselineData<Time>)
-        
+        series.setData(_priceTicks)
     }, [priceTicks, period, tokenState.finishLoadWithoutConnected])
 
     return <div ref={chartContainerRef} />

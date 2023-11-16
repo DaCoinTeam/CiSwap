@@ -33,7 +33,7 @@ export const getOptions = (container: HTMLDivElement, darkMode: boolean) => {
             borderVisible: false,
         },
         width: container.clientWidth,
-        height: 300,
+        height: 400,
         timeScale: {
             timeVisible: true,
             borderVisible: false,
@@ -61,7 +61,7 @@ export const createBaselineChartAndSeries = (
 
     return {
         chart,
-        series,
+        series
     }
 }
 
@@ -70,3 +70,17 @@ export const updateBaselineChartWithOptions = (
     container: HTMLDivElement,
     darkMode: boolean
 ) => chart.applyOptions(getOptions(container, darkMode))
+
+
+export const timeToLocal = (originalTime: number) => {
+    const day = new Date(originalTime * 1000)
+    return Date.UTC(
+        day.getFullYear(),
+        day.getMonth(), 
+        day.getDate(), 
+        day.getHours(), 
+        day.getMinutes(), 
+        day.getSeconds(), 
+        day.getMilliseconds()
+    ) / 1000
+}

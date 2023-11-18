@@ -70,8 +70,8 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     if (file == null) return
                     const addFileResponse = await pinataPOSTFile(file)
 
-                    const imageCID = addFileResponse?.IpfsHash
-                    if (!imageCID || imageCID == null) return 
+                    const imageCid = addFileResponse?.IpfsHash
+                    if (!imageCid || imageCid == null) return 
 
                     const NFTAddress = chainInfos[chainName].NFTAddress
                     const erc721Contract = new ERC721Contract(
@@ -88,7 +88,7 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         description: values.description,
                         externalUrl: values.externalUrl,
                         tags: values.tags,
-                        imageCID
+                        imageCid
                     }
 
                     const addJsonResponse = await pinataPOSTJson(uri)
@@ -113,6 +113,6 @@ export interface NFTURI {
     description: string;
     externalUrl: string;
     tags: string[]
-    imageCID: string
+    imageCid: string
   }
   

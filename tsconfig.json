@@ -24,7 +24,7 @@
       "@blockchain": ["./src/blockchain"],
       "@utils": ["./src/utils"],
       "@definitions": ["./src/definitions"],
-      "@thirdparty": ["./src/thirdparty"],
+      "@3rd": ["./src/3rd"],
       "@config": ["./src/config"],
       "@api": ["./src/api"]
     }

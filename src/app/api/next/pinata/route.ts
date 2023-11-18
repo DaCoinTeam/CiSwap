@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { pinata } from "@thirdparty"
+import { pinata } from "@3rd"
 import { PinataRequestType } from "@api"
 import { PinataPinOptions, PinataPinResponse } from "@pinata/sdk"
 import { v4 as uuidv4 } from "uuid"

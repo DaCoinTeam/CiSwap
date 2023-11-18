@@ -1,4 +1,4 @@
-import { storage } from "@thirdparty"
+import { storage } from "@3rd"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 export const uploadImage = async (file: File) : Promise<string> => {

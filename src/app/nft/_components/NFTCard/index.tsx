@@ -24,8 +24,13 @@ const NFTCard = (props: NFTCardProps) => {
                 radius="none"
                 width="100%"
                 alt={props.data.imageBlobUrl}
-                className="w-full"
+                className="w-full object-cover "
                 src={props.data.imageBlobUrl}
+                classNames={
+                    {
+                        wrapper:"w-full !h-[150px] !overflow-hidden flex items-center"
+                    }
+                }
             />
             <CardBody className="p-4">
                 <div className="flex justify-between">

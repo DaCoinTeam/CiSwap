@@ -5,7 +5,7 @@ import {
     where,
     getDocs,
 } from "firebase/firestore"
-import { db } from "@firebase"
+import { db } from "@thirdparty"
 import { Address } from "web3"
 
 export const addTokenDoc = async (

@@ -10,9 +10,9 @@ const nextConfig = {
     rewrites : async () => {
         return [
             {
-                source: "/api/:path*",
+                source: "/api1/:path*",
                 // eslint-disable-next-line no-undef
-                destination: `${process.env.REACT_APP_SERVER_PORT}/api/:path*`
+                destination: "http://localhost:3001/api/:path*"
             }
         ]
     }

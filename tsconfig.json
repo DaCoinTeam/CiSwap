@@ -24,7 +24,7 @@
       "@blockchain": ["./src/blockchain"],
       "@utils": ["./src/utils"],
       "@definitions": ["./src/definitions"],
-      "@firebase": ["./src/firebase"],
+      "@thirdparty": ["./src/thirdparty"],
       "@config": ["./src/config"],
       "@api": ["./src/api"]
     }

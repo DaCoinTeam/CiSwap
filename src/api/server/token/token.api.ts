@@ -6,8 +6,8 @@ export const getTokenApi = async (tokenAddress: Address, chainId: number) : Prom
     try {
         const response = await axios.get("/api/token", {
             params: {
-                tokenAddress: tokenAddress,
-                chainId: chainId,
+                tokenAddress,
+                chainId,
             },
         })
         
@@ -16,4 +16,4 @@ export const getTokenApi = async (tokenAddress: Address, chainId: number) : Prom
         console.error(error)
         return null
     }
-}
+}   

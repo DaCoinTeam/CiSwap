@@ -12,4 +12,3 @@ export const fetchAndCreateSvgBlobUrl = async (url: string) => {
         return null
     }       
 }
-

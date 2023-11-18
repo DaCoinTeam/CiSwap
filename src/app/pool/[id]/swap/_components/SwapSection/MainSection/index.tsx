@@ -26,9 +26,6 @@ const MainSection = () => {
         (state: RootState) => state.blockchain.chainName
     )
 
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
-    const account = useSelector((state: RootState) => state.blockchain.account)
-
     const poolAddress = useContext(PoolAddressContext)
 
     const [preventExecutionToken1, setPreventExecutionToken1] = useState(false)
@@ -36,6 +33,9 @@ const MainSection = () => {
 
     const firstToken0Render = useRef(true)
     const [finishFetchToken1, setFinishFetchToken1] = useState(true)
+    
+    const [inverseChanged, setInverseChanged] = useState(false)
+    const [inverse, setInverse] = useState(false)
 
     useEffect(() => {
         if (firstToken0Render.current) {
@@ -48,17 +48,15 @@ const MainSection = () => {
             return
         }
 
-        if (web3 == null) return
-        if (!account) return
+        if (inverseChanged && inverse) return
 
+        console.log("Called 0")
         const controller = new AbortController()
         const handleEffect = async () => {
             const token0Amount = formik.values.token0Amount
             const contract = new LiquidityPoolContract(
                 chainName,
-                poolAddress,
-                web3,
-                account
+                poolAddress
             )
             const token1AmountOut = await contract.token1AmountOut(
                 calculateIRedenomination(
@@ -76,6 +74,7 @@ const MainSection = () => {
             )
 
             setPreventExecutionToken1(true)
+            setInverseChanged(false)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -84,7 +83,7 @@ const MainSection = () => {
             controller.abort()
             clearTimeout(delayedEffectWithBounce)
         }
-    }, [formik.values.token0Amount])
+    }, [formik.values.token0Amount, inverse])
 
     const firstToken1Render = useRef(true)
     const [finishFetchToken0, setFinishFetchToken0] = useState(true)
@@ -100,17 +99,15 @@ const MainSection = () => {
             return
         }
 
-        if (web3 == null) return
-        if (!account) return
+        if (inverseChanged && !inverse) return
 
+        console.log("Called 1")
         const controller = new AbortController()
         const handleEffect = async () => {
             const token1Amount = formik.values.token1Amount
             const contract = new LiquidityPoolContract(
                 chainName,
-                poolAddress,
-                web3,
-                account
+                poolAddress
             )
             const token0AmountOut = await contract.token0AmountOut(
                 calculateIRedenomination(
@@ -129,6 +126,7 @@ const MainSection = () => {
             )
 
             setPreventExecutionToken0(true)
+            setInverseChanged(false)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -137,7 +135,7 @@ const MainSection = () => {
             controller.abort()
             clearTimeout(delayedEffectWithBounce)
         }
-    }, [formik.values.token1Amount])
+    }, [formik.values.token1Amount, inverse])
 
     const handleToken0InputChange = (value: string) => {
         formik.setFieldValue("token0Amount", value)
@@ -149,10 +147,16 @@ const MainSection = () => {
         setFinishFetchToken0(false)
     }
 
-    const [inverse, setInverse] = useState(false)
     const _inverse = () => {
-        setInverse(!inverse)
+        const _inverse = !inverse
+        setInverse(_inverse)
         formik.setFieldValue("_isBuyAction", !inverse)
+        if (_inverse){
+            setFinishFetchToken0(false)
+        } else {
+            setFinishFetchToken1(false)
+        }
+        setInverseChanged(true)
     }
 
     console.log(formik.values)

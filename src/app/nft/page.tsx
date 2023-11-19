@@ -6,7 +6,7 @@ import { RootState } from "@redux"
 import { chainInfos } from "@config"
 import { getIpfsImageBlobUrl, getIpfsJson } from "../../api/next"
 import { NFTURI } from "./create/_components/MainForm/formik"
-import { NFTCard } from "./_components"
+import { NFTCard, SearchArea } from "./_components"
 import { Address } from "web3"
 
 const Page = () => {
@@ -50,6 +50,7 @@ const Page = () => {
                             tokenId: i,
                             author: _uri.author,
                             collection: _uri.collection,
+                            floor: _uri.floor,
                             description: _uri.description,
                             externalUrl: _uri.externalUrl,
                             imageBlobUrl,
@@ -76,7 +77,17 @@ const Page = () => {
         }
         return cards
     }
-    return <div className="grid grid-cols-4 gap-6">{_renderNFTs(NFTDatas)}</div>
+    return (
+        <>
+            <SearchArea />
+            <div className="max-w-[1024px] m-auto px-6">
+                <div className="grid grid-cols-4 gap-6">
+                    {_renderNFTs(NFTDatas)}
+                </div>
+            </div>
+        </>
+    )
+
 }
 
 export default Page
@@ -86,6 +97,7 @@ export interface NFTData {
   name: string;
   author: Address;
   collection: string;
+  floor: number;
   description: string;
   externalUrl: string;
   tags: string[];

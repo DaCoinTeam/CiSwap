@@ -20,7 +20,7 @@ const Page = () => {
         router.push(`${path}/swap`)
     }
     return (
-        <>
+        <div className="max-w-[1024px] m-auto px-6 py-12">
             <div className="sm:flex justify-between">
                 <div>
                     <TokenPairDisplay size="lg" token0ImageUrl={tokenState.token0ImageUrl} token1ImageUrl={tokenState.token1ImageUrl}/>
@@ -40,7 +40,7 @@ const Page = () => {
             </div>
             <Spacer y={12} />
             <TransactionList />
-        </>
+        </div>
     )
 }
 

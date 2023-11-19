@@ -3,7 +3,7 @@ import { MainForm } from "./_components"
 
 const Page = () => {
     return (
-        <div>
+        <div className="max-w-[1024px] m-auto p-6">
             <MainForm />
         </div>
     )

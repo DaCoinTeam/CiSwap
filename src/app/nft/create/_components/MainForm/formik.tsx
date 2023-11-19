@@ -3,7 +3,7 @@ import React, { ReactNode, createContext } from "react"
 import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { ERC721Contract } from "@blockchain"
+import { ERC20Contract, ERC721Contract } from "@blockchain"
 import { chainInfos } from "@config"
 import { pinataPOSTFile, pinataPOSTJson } from "@api"
 import { Address } from "web3"
@@ -11,6 +11,7 @@ import { Address } from "web3"
 interface FormikValues {
     name: string,
     collection: string,
+    floor: string,
     description: string,
     imageFile: File | null,
     _tagInput: string,
@@ -21,6 +22,7 @@ interface FormikValues {
 const initialValues: FormikValues = {
     name: "",
     collection: "",
+    floor: "",
     description: "",
     imageFile: null,
     _tagInput: "",
@@ -65,6 +67,11 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                 async (values) => {
                     if (web3 == null) return
                     
+                    const erc20Contract = new ERC20Contract(chainName, chainInfos[chainName].exchangeTokenAddress)
+
+                    const decimals = await erc20Contract.decimals()
+                    if (decimals == null) return
+
                     const file = values.imageFile
                     
                     if (file == null) return
@@ -85,6 +92,7 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                         name: values.name,
                         author: account,
                         collection: values.collection,
+                        floor: Number(values.floor),
                         description: values.description,
                         externalUrl: values.externalUrl,
                         tags: values.tags,
@@ -109,6 +117,7 @@ export default FormikProviders
 export interface NFTURI {
     name: string;
     author: Address;
+    floor: number;
     collection: string;
     description: string;
     externalUrl: string;

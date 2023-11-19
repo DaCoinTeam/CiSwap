@@ -1,22 +1,23 @@
 "use client"
-import { Chip, Input, Textarea } from "@nextui-org/react"
+import { Button, Chip, Input, Textarea } from "@nextui-org/react"
 import React, { useContext, } from "react"
 import { FormikPropsContext } from "../formik"
-import { TitleDisplay } from "@app/_shared"
+import { NumberInput, TitleDisplay } from "@app/_shared"
+import { PlusIcon } from "@heroicons/react/24/outline"
 const InputFields = () => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const _handleKeyPress = (event : React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            const tags = formik.values.tags
-            const _tagInput = formik.values._tagInput
-            if (tags.includes(_tagInput)) return
-            tags.push(_tagInput)
-            formik.setFieldValue("_tagInput", "")
-            formik.setFieldValue("tags", tags)
-        }
+    const _handleAddButton = () => {
+        const tags = formik.values.tags
+        const _tagInput = formik.values._tagInput
+        if (tags.includes(_tagInput)) return
+        tags.push(_tagInput)
+        formik.setFieldValue("_tagInput", "")
+        formik.setFieldValue("tags", tags)
     }
+
+    const _handleFloorChange = (value: string) => formik.setFieldValue("floor", value)
     
     return (
         <div className="flex flex-col gap-4">
@@ -65,6 +66,17 @@ const InputFields = () => {
                     />
                 </div>
             </div>
+
+            <div className="flex flex-col gap-1">
+                <TitleDisplay title="Floor"/>
+                <NumberInput
+                    onValueChange={_handleFloorChange}
+                    value={formik.values.floor}
+                    endContent={<span className="text-default-400 text-sm">
+                        STARCI
+                    </span>}
+                /> 
+            </div>
            
             <div className="flex flex-col gap-1">
                 <TitleDisplay title="Description"/>
@@ -89,18 +101,23 @@ const InputFields = () => {
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <TitleDisplay title="Tags"/>
-                    <Input
-                        id="_tagInput"
-                        radius="sm"
-                        labelPlacement="outside"
-                        placeholder="https://www.facebook.com/starci183"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values._tagInput}
-                        isInvalid={!!(formik.errors._tagInput && formik.touched._tagInput)}
-                        errorMessage={formik.touched._tagInput && formik.errors._tagInput}
-                        onKeyDown={_handleKeyPress}
-                    />
+                    <div className="flex gap-4">
+                        <Input
+                            id="_tagInput"
+                            radius="sm"
+                            labelPlacement="outside"
+                            placeholder="https://www.facebook.com/starci183"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values._tagInput}
+                            isInvalid={!!(formik.errors._tagInput && formik.touched._tagInput)}
+                            errorMessage={formik.touched._tagInput && formik.errors._tagInput}
+                        />
+                        <Button isIconOnly variant="light" onPress={_handleAddButton}>
+                            <PlusIcon className="w-6 h-6"/>
+                        </Button>
+                    </div>
+                    
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {

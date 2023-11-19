@@ -1,5 +1,5 @@
 
-import React from "react"
+import React, { ReactNode } from "react"
 import { Input } from "@nextui-org/react"
 import { sanitizeNumericInput } from "@utils"
 
@@ -11,7 +11,8 @@ interface NumberInputProps {
     errorMessage? : string,
     textPosition?: "center" | "left" | "right",
     isDisabled?: boolean,
-    hideErrorMessage?: boolean
+    hideErrorMessage?: boolean,
+    endContent?: ReactNode
 }
 
 const NumberInput = (props: NumberInputProps) => {
@@ -51,6 +52,7 @@ const NumberInput = (props: NumberInputProps) => {
             onValueChange={_handleChange}
             isInvalid={!!props.errorMessage}
             errorMessage={!props.hideErrorMessage ? props.errorMessage : ""}
+            endContent={props.endContent}
         />
     )
 }

@@ -45,10 +45,12 @@ const UploadImage = () => {
                     
                 </div>
                 :
-                <div className="aspect-square">
-                    <Button onPress={_handleButtonClick} isIconOnly variant="light" className="w-full h-full grid place-items-center">
-                        <CameraIcon className="text-teal-500 w-12 h-12"/>
-                    </Button> 
+                <div className="grid items-center">
+                    <div className="aspect-square">
+                        <Button onPress={_handleButtonClick} isIconOnly variant="light" className="w-full h-full grid place-items-center">
+                            <CameraIcon className="text-teal-500 w-12 h-12"/>
+                        </Button> 
+                    </div>
                 </div>
             }
             <input

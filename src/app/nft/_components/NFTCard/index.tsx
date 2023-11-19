@@ -10,6 +10,7 @@ interface NFTCardProps {
     name: string;
     author: Address;
     collection: string;
+    floor: number;
     description: string;
     imageBlobUrl: string;
     tags: string[];

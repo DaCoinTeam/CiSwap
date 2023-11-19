@@ -1,15 +1,15 @@
 import axios from "axios"
 
-export const getIpfsJson = async (CID: string) : Promise<unknown|null> => {
-    const response = await axios.get(buildIpfsUrl(CID))
+export const getIpfsJson = async (cid: string) : Promise<unknown|null> => {
+    const response = await axios.get(buildIpfsUrl(cid))
     return response.data
 }
 
-export const getIpfsImageBlobUrl = async (CID: string) : Promise<string|null> => {
-    const response = await axios.get(buildIpfsUrl(CID), { responseType: "arraybuffer" })
+export const getIpfsImageBlobUrl = async (cid: string) : Promise<string|null> => {
+    const response = await axios.get(buildIpfsUrl(cid), { responseType: "arraybuffer" })
     const blob = new Blob([response.data], { type: response.headers["content-type"] })
     return URL.createObjectURL(blob)
 }
 
 const IPFS_URL = "https://ipfs.io/ipfs/"
-export const buildIpfsUrl = (CID: string) => `${IPFS_URL}${CID}` 
+export const buildIpfsUrl = (cid: string) => `${IPFS_URL}${cid}` 

@@ -78,14 +78,11 @@ const Page = () => {
         return cards
     }
     return (
-        <>
-            <SearchArea />
-            <div className="max-w-[1024px] m-auto px-6">
-                <div className="grid grid-cols-4 gap-6">
-                    {_renderNFTs(NFTDatas)}
-                </div>
+        <div className="max-w-[1024px] m-auto px-6 py-12">
+            <div className="grid grid-cols-4 gap-6">
+                {_renderNFTs(NFTDatas)}
             </div>
-        </>
+        </div>
     )
 
 }

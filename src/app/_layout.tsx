@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect } from "react"
 import { Navbar, Footer, WaitSignModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setAccount, setDefaultPool } from "@redux"
-import { NextUIProvider, Spacer } from "@nextui-org/react"
+import { NextUIProvider } from "@nextui-org/react"
 import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { ToastContainer } from "react-toastify"
@@ -48,10 +48,10 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
 
     return (
         <html lang="en" className={darkMode ? "dark" : "light"}>
-            <body className={mooli.className}>
-                <NextUIProvider>
+            <NextUIProvider>
+                <body className={`${mooli.className} flex flex-col min-h-screen`}>
                     <Navbar />
-                    <main>
+                    <main className="flex-1">
                         {children}
                     </main>
                     <Footer />
@@ -65,8 +65,8 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
                         pauseOnFocusLoss
                         draggable
                     />
-                </NextUIProvider>
-            </body>
+                </body>
+            </NextUIProvider>
         </html>
     )
 }

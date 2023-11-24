@@ -6,7 +6,7 @@ import { RootState } from "@redux"
 import { chainInfos } from "@config"
 import { getIpfsImageBlobUrl, getIpfsJson } from "../../api/next"
 import { NFTURI } from "./create/_components/MainForm/formik"
-import { NFTCard, SearchArea } from "./_components"
+import { NFTCard } from "./_components"
 import { Address } from "web3"
 
 const Page = () => {

@@ -48,25 +48,27 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
 
     return (
         <html lang="en" className={darkMode ? "dark" : "light"}>
-            <NextUIProvider>
-                <body className={`${mooli.className} flex flex-col min-h-screen`}>
-                    <Navbar />
-                    <main className="flex-1">
-                        {children}
+            <body className={mooli.className}>
+                <NextUIProvider>
+                    <main className="flex flex-col min-h-screen">
+                        <Navbar />
+                        <section className="flex-1">
+                            {children}
+                        </section>
+                        <Footer />
+                        <WaitSignModal />
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={false}
+                            newestOnTop={false}
+                            closeOnClick
+                            rtl={false}
+                            pauseOnFocusLoss
+                            draggable
+                        />
                     </main>
-                    <Footer />
-                    <WaitSignModal />
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                    />
-                </body>
-            </NextUIProvider>
+                </NextUIProvider>
+            </body>
         </html>
     )
 }

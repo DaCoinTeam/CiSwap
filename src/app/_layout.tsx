@@ -9,6 +9,7 @@ import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { ToastContainer } from "react-toastify"
 import "./_css/ReactToastify.css"
+import { IconContext } from "react-icons"
 
 export const mooli = Mooli({ weight: "400", subsets: ["latin"] })
 
@@ -50,23 +51,25 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
         <html lang="en" className={darkMode ? "dark" : "light"}>
             <body className={mooli.className}>
                 <NextUIProvider>
-                    <main className="flex flex-col min-h-screen">
-                        <Navbar />
-                        <section className="flex-1">
-                            {children}
-                        </section>
-                        <Footer />
-                        <WaitSignModal />
-                        <ToastContainer
-                            position="top-right"
-                            autoClose={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                        />
-                    </main>
+                    <IconContext.Provider value={{ className: "w-5 h-5" }}>
+                        <main className="flex flex-col min-h-screen">
+                            <Navbar />
+                            <section className="flex-1">
+                                {children}
+                            </section>
+                            <Footer />
+                            <WaitSignModal />
+                            <ToastContainer
+                                position="top-right"
+                                autoClose={false}
+                                newestOnTop={false}
+                                closeOnClick
+                                rtl={false}
+                                pauseOnFocusLoss
+                                draggable
+                            />
+                        </main>
+                    </IconContext.Provider>
                 </NextUIProvider>
             </body>
         </html>

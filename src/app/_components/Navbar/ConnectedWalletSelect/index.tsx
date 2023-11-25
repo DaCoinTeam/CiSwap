@@ -11,23 +11,26 @@ import {
 import { AppDispatch, RootState, setWeb3 } from "@redux"
 import { useDispatch, useSelector } from "react-redux"
 import { shortenAddress } from "@utils"
+import { useRouter } from "next/navigation"
 
 const ConnectedWalletSelect = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
     const dispatch: AppDispatch = useDispatch()
 
+    const router = useRouter()
+
     const menu = [
         {
-            key: "nfts",
-            text: "NFTs",
-            handleOnPress: () => {},
-            isDanger: false
+            key: "profile",
+            text: "Profile",
+            handleOnPress: () => router.push("/profile"),
+            isDanger: false,
         },
         {
             key: "disconnect",
             text: "Disconnect",
             handleOnPress: () => dispatch(setWeb3(null)),
-            isDanger: true
+            isDanger: true,
         },
     ]
 
@@ -38,7 +41,12 @@ const ConnectedWalletSelect = () => {
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
                 {menu.map((item) => (
-                    <DropdownItem color={item.isDanger ? "danger" : "default"} onPress={item.handleOnPress} key={item.key}>
+                    <DropdownItem
+                        className={item.isDanger ? "text-danger" : undefined}
+                        color={item.isDanger ? "danger" : undefined}
+                        onPress={item.handleOnPress}
+                        key={item.key}
+                    >
                         {item.text}
                     </DropdownItem>
                 ))}

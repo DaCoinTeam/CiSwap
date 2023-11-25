@@ -14,11 +14,8 @@ const Page = () => {
                     <Spacer y={6}/>
                     <Collections />
                 </div>
-
-                
             </div>
         </>
-
     )
 }
 

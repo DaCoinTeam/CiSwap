@@ -30,7 +30,7 @@ const Token0Chart = (props: Token0ChartProps) => {
     if (poolContext == null) return
     const { tokenState, poolAddress } = poolContext
     
-    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const [token0Ticks, setToken0Ticks] = useState<RenderToken0Tick[]>([])
 
@@ -38,7 +38,7 @@ const Token0Chart = (props: Token0ChartProps) => {
         if (!tokenState.finishLoadWithoutConnected) return
         
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const contract = new LiquidityPoolContract(chainId, poolAddress)
             const _baseTicks = await contract.getAllBaseTicks()
             if (_baseTicks == null) return
             const _renderToken0Ticks : RenderToken0Tick[] = _baseTicks.map(

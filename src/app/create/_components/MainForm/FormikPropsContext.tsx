@@ -66,7 +66,7 @@ const FormikProviders = (props: ContextProps) => {
     const { web3State } = metamaskContext
     const { web3 } = web3State
     
-    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     return (
@@ -96,11 +96,11 @@ const FormikProviders = (props: ContextProps) => {
                 async (values) => {
                     if (web3 == null) return
 
-                    const token0Contract = new ERC20Contract(chainName, values.token0Address, web3, account)
-                    const token1Contract = new ERC20Contract(chainName, values.token1Address, web3, account)
+                    const token0Contract = new ERC20Contract(chainId, values.token0Address, web3, account)
+                    const token1Contract = new ERC20Contract(chainId, values.token1Address, web3, account)
                 
-                    const factoryAddress = chainInfos[chainName].factoryAddress
-                    const factoryContract = new FactoryContract(chainName, web3, account)
+                    const factoryAddress = chainInfos[chainId].factoryAddress
+                    const factoryContract = new FactoryContract(chainId, web3, account)
                 
                     const token0AddedAmountParsed = calculateIRedenomination(
                         parseNumber(values.token0AddedAmount), values._token0Decimals 

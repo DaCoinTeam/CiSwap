@@ -19,8 +19,8 @@ const AddTokens = (props: AddTokensProps) => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -70,7 +70,7 @@ const AddTokens = (props: AddTokensProps) => {
     useEffect(() => {
         const handleEffect = async () => {
             const token0Contract = new ERC20Contract(
-                chainName,
+                chainId,
                 formik.values.token0Address
             )
 
@@ -87,7 +87,7 @@ const AddTokens = (props: AddTokensProps) => {
             )
 
             const token1Contract = new ERC20Contract(
-                chainName,
+                chainId,
                 formik.values.token1Address
             )
 

@@ -25,8 +25,8 @@ const MainSection = () => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
 
@@ -57,7 +57,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const token0Amount = formik.values.token0Amount
             const contract = new LiquidityPoolContract(
-                chainName,
+                chainId,
                 poolAddress
             )
             const token1AmountOut = await contract.token1AmountOut(
@@ -108,7 +108,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const token1Amount = formik.values.token1Amount
             const contract = new LiquidityPoolContract(
-                chainName,
+                chainId,
                 poolAddress
             )
             const token0AmountOut = await contract.token0AmountOut(

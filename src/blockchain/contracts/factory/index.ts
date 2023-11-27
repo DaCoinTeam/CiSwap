@@ -2,7 +2,7 @@ import {
     GAS_LIMIT,
     GAS_PRICE,
     chainInfos,
-    ChainName
+    ChainId
 } from "@config"
 
 import { getHttpWeb3 } from "../provider"
@@ -11,19 +11,19 @@ import Web3, { Address } from "web3"
 import abi from "./abi"
 
 const getFactoryContract = (web3: Web3) => {
-    const factoryAddress = chainInfos[ChainName.KalytnTestnet].factoryAddress
+    const factoryAddress = chainInfos[ChainId.KalytnTestnet].factoryAddress
     return new web3.eth.Contract(abi, factoryAddress, web3)
 }
 
 class FactoryCountract {
-    private chainName: ChainName
+    private chainId: ChainId
     private factoryAddress: Address
     private web3?: Web3
     private sender?: Address
 
-    constructor(chainName: ChainName, web3?: Web3, sender?: Address) {
-        this.chainName = chainName
-        this.factoryAddress = chainInfos[this.chainName].factoryAddress
+    constructor(chainId: ChainId, web3?: Web3, sender?: Address) {
+        this.chainId = chainId
+        this.factoryAddress = chainInfos[this.chainId].factoryAddress
         this.sender = sender
         this.web3 = web3
     }
@@ -68,7 +68,7 @@ class FactoryCountract {
 
     async getPairs(_token0: Address, _token1: Address) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getFactoryContract(web3)
             return contract.methods.getPair(_token0, _token1).call()
         } catch (ex) {
@@ -79,7 +79,7 @@ class FactoryCountract {
 
     async getAll(){
         try{
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getFactoryContract(web3)
             return contract.methods.getAll().call()
         } catch(ex){

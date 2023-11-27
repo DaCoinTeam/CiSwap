@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { LiquidityPoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
+import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import { calculateIRedenomination } from "@utils"
 import { PoolContext } from "../../../../_hooks"
 import { MetamaskContext } from "@app/_hooks"
@@ -41,8 +41,8 @@ const FormikProviders = (props: ContextProps) => {
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const dispatch : AppDispatch = useDispatch()
@@ -63,14 +63,14 @@ const FormikProviders = (props: ContextProps) => {
                 if (web3 == null || !account) return
 
                 const poolFactory = new LiquidityPoolContract(
-                    chainName,
+                    chainId,
                     poolAddress,
                     web3,
                     account
                 )
 
-                dispatch(setOpenWaitSignModalShow(true))
-                dispatch(setOpenWaitSignModalTitle("Withdraw"))
+                dispatch(setWaitSignModalShow(true))
+                dispatch(setWaitSignModalTitle("Withdraw"))
                 
                 const withdrawReceipt = await poolFactory.withdraw(
                     calculateIRedenomination(
@@ -80,11 +80,11 @@ const FormikProviders = (props: ContextProps) => {
                 )
                 
                 if (!withdrawReceipt){
-                    dispatch(setOpenWaitSignModalShow(false))
+                    dispatch(setWaitSignModalShow(false))
                     return
                 }
 
-                dispatch(setOpenWaitSignModalShow(false))
+                dispatch(setWaitSignModalShow(false))
                 notify(withdrawReceipt.transactionHash.toString())
                 await handlers._handleWithConnected()
             }}

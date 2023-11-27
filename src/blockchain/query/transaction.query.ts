@@ -3,7 +3,7 @@ import web3, {
     Address
 } from "web3"
 import { calculateRedenomination } from "@utils"
-import { ChainName } from "@config"
+import { chainId } from "@config"
 import { getHttpWeb3 } from "../contracts"
 
 export enum TransactionMethod {
@@ -26,7 +26,7 @@ export interface RenderTransaction {
 
 export const getTransaction = async (
     transactionHash: HexString,
-    chainName: ChainName,
+    chainId: chainId,
 
     token0Symbol: string,
     token1Symbol: string,
@@ -37,7 +37,7 @@ export const getTransaction = async (
     LPTokenDecimals: number
 
 ): Promise<RenderTransaction> => {
-    const web3 = getHttpWeb3(chainName)
+    const web3 = getHttpWeb3(chainId)
 
     const transaction = await web3.eth.getTransaction(transactionHash)
     const receipt = await web3.eth.getTransactionReceipt(transactionHash)

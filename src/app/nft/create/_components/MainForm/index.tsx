@@ -1,7 +1,7 @@
 "use client"
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react"
 import React, { createContext } from "react"
-import FormikProviders from "./formik"
+import FormikProviders from "./FormikProviders"
 import UploadImage from "./UploadImage"
 import InputFields from "./InputFields"
 import { AppButton } from "@app/_shared"

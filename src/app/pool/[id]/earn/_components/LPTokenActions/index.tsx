@@ -22,11 +22,11 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
     if (metamaskContext == null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
-    
+
     const { tokenState, poolAddress } = poolContext 
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -38,7 +38,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
         if (web3 == null || !account) return
         const handleEffect = async () => {
             const contract = new LiquidityPoolContract(
-                chainName,
+                chainId,
                 poolAddress
             )  
             const _isProviderRegistered = await contract.isProviderRegistered(account)
@@ -50,7 +50,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
 
     const _handleRegisterProvider = async () => {
         if (web3 == null || !account) return
-        const contract = new LiquidityPoolContract(chainName, poolAddress, web3, account)
+        const contract = new LiquidityPoolContract(chainId, poolAddress, web3, account)
         const receipt = await contract.registerProvider()
         console.log(receipt)
     }

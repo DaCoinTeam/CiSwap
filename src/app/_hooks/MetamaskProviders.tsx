@@ -2,11 +2,13 @@
 import MetaMaskSDK, { MetaMaskSDKOptions, SDKProvider } from "@metamask/sdk"
 import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { AppDispatch, setAccount } from "@redux"
+import { AppDispatch, setAccount, setChainId } from "@redux"
 import Web3 from "web3"
 import { RegisteredSubscription } from "web3-eth"
 import { ContextProps } from "@app/_shared"
 import React from "react"
+import { MetamaskApis } from "@blockchain"
+import { defaultChainId } from "@config"
 
 
 export interface MetamaskContextProps{
@@ -45,14 +47,21 @@ const MetamaskProviders = (props: ContextProps) => {
     }, [])
 
     useEffect(() => {
+        if (ethereum == null) return 
+        const metamaskApis = new MetamaskApis(ethereum)
+
         if (web3 == null) {
             dispatch(setAccount(""))
+            dispatch(setChainId(defaultChainId))
             return
         }
         const handleEffect = async () => {
             const accounts = await web3.eth.getAccounts()
             const account = accounts[0]
             dispatch(setAccount(account))
+
+            const chainId = await metamaskApis.chainId()
+            dispatch(setChainId(chainId))
         }
         handleEffect()
     }, [web3])

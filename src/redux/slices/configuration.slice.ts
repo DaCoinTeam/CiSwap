@@ -1,20 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 export interface ConfigurationSlice {
-    darkMode: boolean,
+  darkMode: boolean;
 
-    openWaitSignModal: {
-        isShow: boolean,
-        title: string
-    }
+  waitSignModal: {
+    isShow: boolean;
+    title: string;
+  };
+
+  wrongChainMetamaskModal: {
+    isShow: boolean;
+    chainId: number;
+  };
 }
 
 const initialState: ConfigurationSlice = {
     darkMode: false,
-    openWaitSignModal: {
+    waitSignModal: {
         isShow: false,
-        title: ""
-    }
+        title: "",
+    },
+    wrongChainMetamaskModal: {
+        isShow: false,
+        chainId: 0,
+    },
 }
 
 export const configurationSlice = createSlice({
@@ -24,15 +33,27 @@ export const configurationSlice = createSlice({
         setDarkMode(state, action) {
             state.darkMode = action.payload
         },
-        setOpenWaitSignModalShow(state, action) {
-            state.openWaitSignModal.isShow = action.payload
+        setWaitSignModalShow(state, action) {
+            state.waitSignModal.isShow = action.payload
         },
-        setOpenWaitSignModalTitle(state, action) {
-            state.openWaitSignModal.title = action.payload
-        }
-    }
+        setWaitSignModalTitle(state, action) {
+            state.waitSignModal.title = action.payload
+        },
+        setWrongChainMetamaskModalShow(state, action) {
+            state.wrongChainMetamaskModal.isShow = action.payload
+        },
+        setWrongChainMetamaskModalChainId(state, action) {
+            state.wrongChainMetamaskModal.chainId = action.payload
+        },
+    },
 })
 
-export const { setDarkMode, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } = configurationSlice.actions
+export const {
+    setDarkMode,
+    setWaitSignModalShow,
+    setWaitSignModalTitle,
+    setWrongChainMetamaskModalShow,
+    setWrongChainMetamaskModalChainId,
+} = configurationSlice.actions
 
 export const configurationReducer = configurationSlice.reducer

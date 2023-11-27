@@ -35,8 +35,8 @@ const Chart = () => {
         (state: RootState) => state.configuration.darkMode
     )
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const chartContainerRef =
@@ -50,7 +50,7 @@ const Chart = () => {
         if (!tokenState.finishLoadWithoutConnected) return
 
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const contract = new LiquidityPoolContract(chainId, poolAddress)
 
             const _baseTicks = await contract.getAllBaseTicks()
             if (_baseTicks == null) return

@@ -14,10 +14,10 @@ interface ViewOnExplorerProps {
 }
 
 const ViewOnExplorer = (props: ViewOnExplorerProps) => {
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
-    const explorerUrl = chainInfos[chainName].explorerUrl
+    const explorerUrl = chainInfos[chainId].explorerUrl
     
     const _external = !props.notExternal
     const _middle = props.isTransaction ? "tx" : "address"

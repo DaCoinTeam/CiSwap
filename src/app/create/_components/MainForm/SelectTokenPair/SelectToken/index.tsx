@@ -42,8 +42,8 @@ const SelectToken = (props: SelectTokenProps) => {
 
     const { setFinishSelectPair } = finishSelectPairContext
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -86,7 +86,7 @@ const SelectToken = (props: SelectTokenProps) => {
 
       const controller = new AbortController()
       const handleEffect = async () => {
-          const contract = new ERC20Contract(chainName, tempTokenAddress)
+          const contract = new ERC20Contract(chainId, tempTokenAddress)
           const symbol = await contract.symbol(controller)
 
           setFinishFetch(true)

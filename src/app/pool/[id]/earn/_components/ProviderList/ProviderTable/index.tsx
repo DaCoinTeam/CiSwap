@@ -29,8 +29,8 @@ const ProviderTable = (props: ProviderTableProps) => {
     if (poolContext == null) return
     const { tokenState, poolAddress } = poolContext
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const [providers, setProviders] = useState<Provider[]>([])
@@ -39,7 +39,7 @@ const ProviderTable = (props: ProviderTableProps) => {
         if (!tokenState.finishLoadWithoutConnected) return
 
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const contract = new LiquidityPoolContract(chainId, poolAddress)
             const addresses = await contract.providerRegisters()
             if (addresses == null) return
 

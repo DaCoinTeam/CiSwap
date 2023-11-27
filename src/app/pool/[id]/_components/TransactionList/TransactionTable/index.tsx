@@ -31,8 +31,8 @@ const TransactionTable = (props: TransactionTableProps) => {
     if (context == null) return 
     const { tokenState, poolAddress } = context
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const [transactions, setTransactions] = useState<RenderTransaction[]>([])
@@ -49,7 +49,7 @@ const TransactionTable = (props: TransactionTableProps) => {
         const handleEffect = async () => {
             const _transactions: RenderTransaction[] = []
 
-            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const contract = new LiquidityPoolContract(chainId, poolAddress)
 
             const txHashs = await contract.getTransactionHashs()
 
@@ -67,7 +67,7 @@ const TransactionTable = (props: TransactionTableProps) => {
 
                 const transactionPromise = getTransaction(
                     txHash, 
-                    chainName,  
+                    chainId,  
                     tokenState.token0Symbol,
                     tokenState.token1Symbol,
                     tokenState.LPTokenSymbol,

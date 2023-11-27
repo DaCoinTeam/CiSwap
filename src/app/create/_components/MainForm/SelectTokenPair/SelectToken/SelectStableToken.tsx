@@ -16,8 +16,8 @@ interface SelectStableTokenProps {
 }
 
 const SelectStableToken = (props: SelectStableTokenProps) => {
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
   interface PresentableToken {
@@ -33,14 +33,13 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
 
   useEffect(() => {
       const handleEffect = async () => {
-          const stableTokens = chainInfos[chainName].stableTokenAddresses
+          const stableTokens = chainInfos[chainId].stableTokenAddresses
 
           const _presentableTokens: PresentableToken[] = []
 
           for (const token of stableTokens) {
-              const contract = new ERC20Contract(chainName, token)
+              const contract = new ERC20Contract(chainId, token)
 
-              const chainId = chainInfos[chainName].chainId
               const symbol = await contract.symbol()
               if (symbol == null) return
 

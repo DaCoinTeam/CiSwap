@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
+import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import {
     calculateIRedenomination,
     calculateMuvBigIntNumber,
@@ -47,8 +47,8 @@ const FormikProviders = (props: ContextProps) => {
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
     
     const dispatch : AppDispatch = useDispatch()
@@ -69,7 +69,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (web3 == null || !account) return
 
                 const token1Contract = new ERC20Contract(
-                    chainName,
+                    chainId,
                     tokenState.token1Address,
                     web3,
                     account
@@ -87,27 +87,27 @@ const FormikProviders = (props: ContextProps) => {
                 )
 
                 if (token1Allowance < token1DepositAmountParsed) {
-                    dispatch(setOpenWaitSignModalShow(true))
-                    dispatch(setOpenWaitSignModalTitle("Approve"))
+                    dispatch(setWaitSignModalShow(true))
+                    dispatch(setWaitSignModalTitle("Approve"))
                     const token1ApproveReceipt = await token1Contract.approve(
                         poolAddress,
                         token1DepositAmountParsed - token1Allowance
                     )
                     if (!token1ApproveReceipt) {
-                        dispatch(setOpenWaitSignModalShow(false))
+                        dispatch(setWaitSignModalShow(false))
                         return
                     }
                     notify(token1ApproveReceipt.transactionHash.toString())
                 }
 
                 const poolFactory = new LiquidityPoolContract(
-                    chainName,
+                    chainId,
                     poolAddress,
                     web3,
                     account
                 )
 
-                dispatch(setOpenWaitSignModalTitle("Deposit"))
+                dispatch(setWaitSignModalTitle("Deposit"))
                 const depositReceipt = await poolFactory.deposit(
                     token1DepositAmountParsed,
                     token1DepositAmountParsed -
@@ -119,11 +119,11 @@ const FormikProviders = (props: ContextProps) => {
                 )
 
                 if (!depositReceipt) {
-                    dispatch(setOpenWaitSignModalShow(false))
+                    dispatch(setWaitSignModalShow(false))
                     return
                 }
 
-                dispatch(setOpenWaitSignModalShow(false))
+                dispatch(setWaitSignModalShow(false))
                 notify(depositReceipt.transactionHash.toString())
                 await handlers._handleWithConnected()
             }}

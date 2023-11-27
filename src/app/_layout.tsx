@@ -1,7 +1,7 @@
 "use client"
 import { Nunito } from "next/font/google"
 import React, { useContext, useEffect } from "react"
-import { Navbar, Footer, WaitSignModal } from "./_components"
+import { Navbar, Footer, WaitSignModal, WrongChainMetamaskModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setDefaultPool } from "@redux"
 import { NextUIProvider } from "@nextui-org/react"
@@ -12,6 +12,7 @@ import "./_css/ReactToastify.css"
 import { IconContext } from "react-icons"
 import { MetamaskContext } from "./_hooks/MetamaskProviders"
 import { ContextProps } from "./_shared"
+import { useMetamask } from "./_hooks"
 
 export const font = Nunito({ weight: "400", subsets: ["latin"] })
 
@@ -24,16 +25,17 @@ const WrappedRootLayout = (props: ContextProps) => {
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
-    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const dispatch: AppDispatch = useDispatch()
+    useMetamask()
 
     useEffect(() => {
         const handleEffect = async () => {
-            const factoryContract = new FactoryContract(chainName)
+            const factoryContract = new FactoryContract(chainId)
             const pairs = await factoryContract.getPairs(
-                chainInfos[chainName].exchangeTokenAddress, 
-                chainInfos[chainName].stableTokenAddresses[0])
+                chainInfos[chainId].exchangeTokenAddress, 
+                chainInfos[chainId].stableTokenAddresses[0])
             if (pairs == null || !pairs.length) return    
             dispatch(setDefaultPool(pairs[0]))
         }
@@ -52,6 +54,7 @@ const WrappedRootLayout = (props: ContextProps) => {
                             </section>
                             <Footer />
                             <WaitSignModal />
+                            <WrongChainMetamaskModal />
                             <ToastContainer
                                 position="top-right"
                                 autoClose={false}

@@ -31,8 +31,8 @@ const LPRewardTable = (props: LPRewardTableProps) => {
     if (poolContext == null) return
     const { tokenState, poolAddress } = poolContext 
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -43,7 +43,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
         if (!tokenState.finishLoadWithConnected) return
 
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainName, poolAddress)
+            const contract = new LiquidityPoolContract(chainId, poolAddress)
             const events = await contract.getAwardEvents(account)
             if (events == null) return
 
@@ -54,7 +54,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
 
                 const logPromise = getRewardLog(
                     event,
-                    chainName,
+                    chainId,
                     tokenState.LPTokenDecimals,
                     tokenState.LPTokenSymbol
                 ).then(_log => _logs.push(_log))

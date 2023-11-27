@@ -1,4 +1,4 @@
-import { ChainName, GAS_LIMIT, GAS_PRICE } from "@config"
+import { ChainId, GAS_LIMIT, GAS_PRICE } from "@config"
 import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
@@ -7,13 +7,13 @@ const getERC720Contract = (web3: Web3, ERC721Address: Address) =>
     new web3.eth.Contract(abi, ERC721Address, web3)
 
 class ERC721Contract {
-    private chainName: ChainName
+    private chainId: ChainId
     private ERC721Address: Address
     private web3?: Web3
     private sender?: Address
 
-    constructor(chainName: ChainName, ERC721Address: Address, web3?: Web3, sender?: string) {
-        this.chainName = chainName
+    constructor(chainId: ChainId, ERC721Address: Address, web3?: Web3, sender?: string) {
+        this.chainId = chainId
         this.ERC721Address = ERC721Address
         this.web3 = web3
         this.sender = sender
@@ -21,7 +21,7 @@ class ERC721Contract {
 
     async name() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return await contract.methods.name().call()
         } catch (ex) {
@@ -32,7 +32,7 @@ class ERC721Contract {
 
     async symbol(controller?: AbortController) {
         try {
-            const web3 = getHttpWeb3(this.chainName, controller)
+            const web3 = getHttpWeb3(this.chainId, controller)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return await contract.methods.symbol().call()
         } catch (ex) {
@@ -43,7 +43,7 @@ class ERC721Contract {
 
     async decimals() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return Number(await contract.methods.decimals().call())
         } catch (ex) {
@@ -54,7 +54,7 @@ class ERC721Contract {
 
     async balanceOf(_owner: Address) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
         } catch (ex) {
@@ -65,7 +65,7 @@ class ERC721Contract {
 
     async numNFTs() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return BigInt((await contract.methods.numNFTs().call()).toString())
         } catch (ex) {
@@ -76,7 +76,7 @@ class ERC721Contract {
 
     async tokenURI(tokenId: bigint) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getERC720Contract(web3, this.ERC721Address)
             return await contract.methods.tokenURI(tokenId).call()
         } catch (ex) {

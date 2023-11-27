@@ -6,7 +6,7 @@ import { RootState } from "@redux"
 import { Address } from "web3"
 
 const AllPools = () => {
-    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const [page, setPage] = React.useState(1)
     const rowsPerPage = 10
@@ -24,22 +24,22 @@ const AllPools = () => {
 
     useEffect(() => {
         const handleEffect = async () => {
-            const contract = new FactoryContract(chainName)
+            const contract = new FactoryContract(chainId)
             const pools = await contract.getAll()
             if (pools == null) return
             
             const poolInfos : PoolInfo[] = [] 
             for (const pool of pools){
-                const contract = new LiquidityPoolContract(chainName, pool)
+                const contract = new LiquidityPoolContract(chainId, pool)
                 const token0Address = await contract.token0()
                 if (token0Address == null) return 
-                const token0Contract = new ERC20Contract(chainName, token0Address)
+                const token0Contract = new ERC20Contract(chainId, token0Address)
                 const token0Symbol =  await token0Contract.symbol()
                 if (token0Symbol == null) return
 
                 const token1Address = await contract.token1()
                 if (token1Address == null) return
-                const token1Contract = new ERC20Contract(chainName, token1Address)
+                const token1Contract = new ERC20Contract(chainId, token1Address)
                 const token1Symbol =  await token1Contract.symbol()
                 if (token1Symbol == null) return
 

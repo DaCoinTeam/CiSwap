@@ -1,6 +1,6 @@
 "use client"
 import React, { useContext, useEffect, useState } from "react"
-import { FormikPropsContext } from "../formik"
+import { FormikPropsContext } from "../FormikProviders"
 import { Button, Image } from "@nextui-org/react"
 import { CameraIcon } from "@heroicons/react/24/outline"
 import { createBlobUrlFromImageFile } from "@utils"

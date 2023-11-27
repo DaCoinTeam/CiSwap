@@ -1,4 +1,4 @@
-import { ChainName, GAS_LIMIT, GAS_PRICE } from "@config"
+import { ChainId, GAS_LIMIT, GAS_PRICE } from "@config"
 import Web3, { Address, HexString } from "web3"
 import abi from "./abi"
 import { getHttpWeb3 } from "../provider"
@@ -8,18 +8,18 @@ const getLiquidityPoolContract = (web3: Web3, poolAddress: Address) =>
     new web3.eth.Contract(abi, poolAddress, web3)
 
 class LiquidityPoolContract {
-    private chainName: ChainName
+    private chainId: ChainId
     private poolAddress: Address
     private sender?: Address
     private web3?: Web3
 
     constructor(
-        chainName: ChainName,
+        chainId: ChainId,
         poolAddress: Address,
         web3?: Web3,
         sender?: Address
     ) {
-        this.chainName = chainName
+        this.chainId = chainId
         this.poolAddress = poolAddress
         this.web3 = web3
         this.sender = sender
@@ -27,7 +27,7 @@ class LiquidityPoolContract {
 
     async getAwardEvents(address: Address) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
 
             return await contract.getPastEvents("Award", {
@@ -47,7 +47,7 @@ class LiquidityPoolContract {
         try {
 
             const transactions : HexString[] = []
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const logs = await web3.eth.getPastLogs({
                 address: this.poolAddress,
                 fromBlock: 0,
@@ -67,7 +67,7 @@ class LiquidityPoolContract {
 
     async token0() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.token0().call()
         } catch (ex) {
@@ -78,7 +78,7 @@ class LiquidityPoolContract {
 
     async token1() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.token1().call()
         } catch (ex) {
@@ -89,7 +89,7 @@ class LiquidityPoolContract {
 
     async protocolFee() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return Number(await contract.methods.protocolFee().call())
         } catch (ex) {
@@ -100,7 +100,7 @@ class LiquidityPoolContract {
 
     async token1AmountOut(_token0AmountIn: bigint, controller?: AbortController) {
         try {
-            const web3 = getHttpWeb3(this.chainName, controller)
+            const web3 = getHttpWeb3(this.chainId, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 await contract.methods.token1AmountOut(_token0AmountIn).call()
@@ -113,7 +113,7 @@ class LiquidityPoolContract {
 
     async token0AmountOut(_token1AmountIn: bigint, controller?: AbortController) {
         try {
-            const web3 = getHttpWeb3(this.chainName, controller)
+            const web3 = getHttpWeb3(this.chainId, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 await contract.methods.token0AmountOut(_token1AmountIn).call()
@@ -129,7 +129,7 @@ class LiquidityPoolContract {
         controller?: AbortController
     ) {
         try {
-            const web3 = getHttpWeb3(this.chainName, controller)
+            const web3 = getHttpWeb3(this.chainId, controller)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 await contract.methods
@@ -144,7 +144,7 @@ class LiquidityPoolContract {
 
     async token0Price() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(await contract.methods.token0Price().call())
         } catch (ex) {
@@ -155,7 +155,7 @@ class LiquidityPoolContract {
 
     async token1Price() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(await contract.methods.token1Price().call())
         } catch (ex) {
@@ -166,7 +166,7 @@ class LiquidityPoolContract {
 
     async token0BasePrice() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(await contract.methods.token0BasePrice().call())
         } catch (ex) {
@@ -177,7 +177,7 @@ class LiquidityPoolContract {
 
     async token0MaxPrice() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(await contract.methods.token0MaxPrice().call())
         } catch (ex) {
@@ -188,7 +188,7 @@ class LiquidityPoolContract {
 
     async isProviderRegistered(_address: Address) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.isProviderRegistered(_address).call()
         } catch (ex) {
@@ -218,7 +218,7 @@ class LiquidityPoolContract {
 
     async name() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.name().call()
         } catch (ex) {
@@ -229,7 +229,7 @@ class LiquidityPoolContract {
 
     async symbol() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.symbol().call()
         } catch (ex) {
@@ -240,7 +240,7 @@ class LiquidityPoolContract {
 
     async decimals() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return Number(await contract.methods.decimals().call())
         } catch (ex) {
@@ -251,7 +251,7 @@ class LiquidityPoolContract {
 
     async providerRegisters() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return await contract.methods.providerRegisters().call()
         } catch (ex) {
@@ -262,7 +262,7 @@ class LiquidityPoolContract {
 
     async balanceOf(_owner: Address) {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 (await contract.methods.balanceOf(_owner).call()).toString()
@@ -275,7 +275,7 @@ class LiquidityPoolContract {
 
     async totalSupply() {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return BigInt(
                 (await contract.methods.totalSupply().call()).toString()
@@ -353,7 +353,7 @@ class LiquidityPoolContract {
 
     async getAllBaseTicks() : Promise<BaseTick[] | null> {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return (await contract.methods.getAllBaseTicks().call()).map(item => {
                 return {
@@ -371,7 +371,7 @@ class LiquidityPoolContract {
 
     async getAllLPTokenTicks() : Promise<LPTokenTick[] | null> {
         try {
-            const web3 = getHttpWeb3(this.chainName)
+            const web3 = getHttpWeb3(this.chainId)
             const contract = getLiquidityPoolContract(web3, this.poolAddress)
             return (await contract.methods.getAllLPTokenTicks().call()).map(item => {
                 return {

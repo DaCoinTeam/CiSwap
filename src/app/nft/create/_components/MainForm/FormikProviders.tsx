@@ -1,5 +1,5 @@
 import { Form, Formik, FormikProps } from "formik"
-import React, { ReactNode, createContext } from "react"
+import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
@@ -7,6 +7,8 @@ import { ERC20Contract, ERC721Contract } from "@blockchain"
 import { chainInfos } from "@config"
 import { pinataPOSTFile, pinataPOSTJson } from "@api"
 import { Address } from "web3"
+import { ContextProps } from "@app/_shared"
+import { MetamaskContext } from "@app/_hooks"
 
 interface FormikValues {
     name: string,
@@ -45,8 +47,12 @@ const _renderBody = (
 )
 
 const FormikProviders = (props: ContextProps) => {
-    const chainName = useSelector((state: RootState) => state.blockchain.chainName)
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
+    
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -67,7 +73,7 @@ const FormikProviders = (props: ContextProps) => {
                 async (values) => {
                     if (web3 == null) return
                     
-                    const erc20Contract = new ERC20Contract(chainName, chainInfos[chainName].exchangeTokenAddress)
+                    const erc20Contract = new ERC20Contract(chainId, chainInfos[chainId].exchangeTokenAddress)
 
                     const decimals = await erc20Contract.decimals()
                     if (decimals == null) return
@@ -80,9 +86,9 @@ const FormikProviders = (props: ContextProps) => {
                     const imageCid = addFileResponse?.IpfsHash
                     if (!imageCid || imageCid == null) return 
 
-                    const NFTAddress = chainInfos[chainName].NFTAddress
+                    const NFTAddress = chainInfos[chainId].NFTAddress
                     const erc721Contract = new ERC721Contract(
-                        chainName,
+                        chainId,
                         NFTAddress,
                         web3,
                         account
@@ -107,7 +113,7 @@ const FormikProviders = (props: ContextProps) => {
                     console.log(receipt)
                 }}
         >
-            {(props) => _renderBody(props, children)}
+            {(_props) => _renderBody(_props, props.children)}
         </Formik>
     )
 }

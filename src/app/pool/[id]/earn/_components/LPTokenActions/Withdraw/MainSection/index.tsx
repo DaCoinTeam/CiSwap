@@ -29,8 +29,8 @@ const MainSection = () => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
 
     const account = useSelector(
@@ -50,7 +50,7 @@ const MainSection = () => {
         const controller = new AbortController()
         const handleEffect = async () => {
             const LPTokenAmountIn = formik.values.LPTokenAmountIn
-            const contract = new LiquidityPoolContract(chainName, poolAddress, web3, account)
+            const contract = new LiquidityPoolContract(chainId, poolAddress, web3, account)
             const token0AmountOut = await contract.token0AmountOutWithLPTokensIn(
                 calculateIRedenomination(parseNumber(LPTokenAmountIn),
                     tokenState.LPTokenDecimals),

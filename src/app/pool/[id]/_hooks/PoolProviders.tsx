@@ -6,7 +6,6 @@ import { TokenState } from "../_hooks"
 import { useParams } from "next/navigation"
 import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
-import { chainInfos } from "@config"
 import { getTokenApi } from "@api"
 import usePoolState from "./usePoolState.hook"
 import { ContextProps } from "@app/_shared"
@@ -28,8 +27,8 @@ interface PoolContext {
 export const PoolContext = createContext<PoolContext|null>(null)
 
 const PoolProviders = (props: ContextProps) => {
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -42,14 +41,14 @@ const PoolProviders = (props: ContextProps) => {
 
     const _handleWithoutConnected = async () => {
         
-        const poolContract = new LiquidityPoolContract(chainName, poolAddress)
+        const poolContract = new LiquidityPoolContract(chainId, poolAddress)
 
         const _handleToken0Promises = async () => {
             const token0Address = await poolContract.token0()
             if (token0Address == null) return
             tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: token0Address })
 
-            const token0Contract = new ERC20Contract(chainName, token0Address) 
+            const token0Contract = new ERC20Contract(chainId, token0Address) 
 
             const token0Decimals = await token0Contract.decimals()
             if (token0Decimals == null) return
@@ -59,7 +58,7 @@ const PoolProviders = (props: ContextProps) => {
             const token0Promises : Promise<void>[] = []
 
             const handleTokenDTO = async () => {
-                const token0DTO = await getTokenApi(token0Address, chainInfos[chainName].chainId)
+                const token0DTO = await getTokenApi(token0Address, chainId)
                 if (token0DTO != null)
                 {
                     const blobUrl = await fetchAndCreateSvgBlobUrl(token0DTO.tokenImageUrl)
@@ -126,7 +125,7 @@ const PoolProviders = (props: ContextProps) => {
             if (token1Address == null) return
             tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: token1Address })
         
-            const token1Contract = new ERC20Contract(chainName, token1Address)
+            const token1Contract = new ERC20Contract(chainId, token1Address)
 
             const token1Decimals = await token1Contract.decimals()
             if (token1Decimals == null) return
@@ -135,7 +134,7 @@ const PoolProviders = (props: ContextProps) => {
             const token1Promises : Promise<void>[] = []
 
             const handleToken1DTO = async () => {
-                const token1DTO = await getTokenApi(token1Address, chainInfos[chainName].chainId)
+                const token1DTO = await getTokenApi(token1Address, chainId)
                 if (token1DTO != null)
                 {
                     const blobUrl = await fetchAndCreateSvgBlobUrl(token1DTO.tokenImageUrl)
@@ -258,13 +257,13 @@ const PoolProviders = (props: ContextProps) => {
             return
         }
 
-        const poolContract = new LiquidityPoolContract(chainName, poolAddress)
+        const poolContract = new LiquidityPoolContract(chainId, poolAddress)
         const token0Contract = new ERC20Contract(
-            chainName,
+            chainId,
             tokenState.token0Address
         )
         const token1Contract = new ERC20Contract(
-            chainName,
+            chainId,
             tokenState.token1Address
         )
 

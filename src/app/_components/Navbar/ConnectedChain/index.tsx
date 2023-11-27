@@ -1,48 +1,86 @@
 "use client"
 
-import React from "react"
+import React, { useContext } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { ChainName } from "@config"
-import { Avatar } from "@nextui-org/react"
+import { ChainId } from "@config"
+import {
+    Image,
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+} from "@nextui-org/react"
+import { MetamaskContext } from "@app/_hooks"
+import { MetamaskApis } from "@blockchain"
 
 const ConnectedChain = () => {
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
-    )
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
+    
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return
+    const { ethereumState } = metamaskContext
+    const { ethereum } = ethereumState
 
-    const connectedChainProps: Record<
-    number,
-    {
-      imageUrl: string;
-      text: "Mainnet" | "Testnet";
-    }
-  > = {
-      [ChainName.KalytnTestnet]: {
-          imageUrl: "/images/klaytn.svg",
-          text: "Testnet",
-      },
-      [ChainName.KlaytnMainnet]: {
-          imageUrl: "/images/klaytn.svg",
-          text: "Mainnet",
-      },
-      [ChainName.PolygonTestnet]: {
-          imageUrl: "/images/polygon.svg",
-          text: "Testnet",
-      },
-      [ChainName.PolygonMainnet]: {
-          imageUrl: "/images/polygon.svg",
-          text: "Mainnet",
-      },
-  }
+    const connectedChains = [
+        {
+            chainId: ChainId.KalytnTestnet,
+            imageUrl: "/images/klaytn.svg",
+            text: "Klaytn Testnet",
+        },
+        {
+            chainId: ChainId.KlaytnMainnet,
+            imageUrl: "/images/klaytn.svg",
+            text: "Klaytn Mainnet",
+        },
+        {
+            chainId: ChainId.PolygonTestnet,
+            imageUrl: "/images/polygon.svg",
+            text: "Polygon Testnet",
+        },
+        {
+            chainId: ChainId.PolygonMainnet,
+            imageUrl: "/images/polygon.svg",
+            text: "Polygon Mainnet",
+        },
+        {
+            chainId: ChainId.BinanceSmartChainTestnet,
+            imageUrl: "/images/binance-smart-chain.svg",
+            text: "BSC Testnet",
+        },
+        {
+            chainId: ChainId.BinanceSmartChainMainnet,
+            imageUrl: "/images/binance-smart-chain.svg",
+            text: "BSC Mainnet",
+        },
+    ]
 
-    const _imageUrl = connectedChainProps[chainName].imageUrl
-    const _text = connectedChainProps[chainName].text
+    const _imageUrl = connectedChains.find(chain => chain.chainId == chainId)?.imageUrl
+    const _text = connectedChains.find(chain => chain.chainId == chainId)?.text
+
     return (
-        <div className="flex gap-4 items-center text-sm">
-            <Avatar isBordered src={_imageUrl} className="w-6 h-6" />
-            <div>{_text}</div>
-        </div>
+        <Dropdown>
+            <DropdownTrigger>
+                <Button
+                    variant="light"
+                    startContent={<Image src={_imageUrl} className="w-5 h-5" />}
+                >
+                    {_text}
+                </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Static Actions">
+                {connectedChains.map(chain => {
+                    const _handleSwitch = async () => {
+                        if (ethereum == null) return
+                        const metamaskApis = new MetamaskApis(ethereum)
+                        await metamaskApis.switchEthereumChain(chain.chainId)
+                    }
+                    return <DropdownItem onPress={_handleSwitch} startContent={<Image src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
+                })}
+                
+            </DropdownMenu>
+        </Dropdown>
     )
 }
 

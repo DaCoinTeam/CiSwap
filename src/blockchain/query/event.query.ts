@@ -1,6 +1,6 @@
 import { HexString } from "web3"
 import { EventLog } from "web3-eth-contract"
-import { ChainName } from "@config"
+import { chainId } from "@config"
 import { getHttpWeb3 } from "../contracts"
 import { calculateRedenomination } from "@utils"
 
@@ -12,11 +12,11 @@ export interface RewardLog {
 
 export const getRewardLog = async (
     event: EventLog,
-    chainName: ChainName,
+    chainId: chainId,
     LPTokenDecimals: number,
     LPTokenSymbol: string
 ) => {
-    const web3 = getHttpWeb3(chainName)
+    const web3 = getHttpWeb3(chainId)
 
     const transactionHash = event.transactionHash as string
 

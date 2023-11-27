@@ -5,21 +5,21 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { chainInfos } from "@config"
 import { getIpfsImageBlobUrl, getIpfsJson } from "../../api/next"
-import { NFTURI } from "./create/_components/MainForm/formik"
+import { NFTURI } from "./create/_components/MainForm/FormikProviders"
 import { NFTCard } from "./_components"
 import { Address } from "web3"
 
 const Page = () => {
-    const chainName = useSelector(
-        (state: RootState) => state.blockchain.chainName
+    const chainId = useSelector(
+        (state: RootState) => state.blockchain.chainId
     )
     const [NFTDatas, setNFTDatas] = useState<NFTData[]>([])
 
     useEffect(() => {
         const handleEffect = async () => {
             const erc721Contract = new ERC721Contract(
-                chainName,
-                chainInfos[chainName].NFTAddress
+                chainId,
+                chainInfos[chainId].NFTAddress
             )
             const numNFTs = await erc721Contract.numNFTs()
             if (numNFTs == null) return

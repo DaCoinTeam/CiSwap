@@ -9,10 +9,10 @@ interface WaitSignModalProps {
 }
 
 const WaitSignModal = (props: WaitSignModalProps) => {
-    const openWaitSignModal = useSelector((state: RootState) => state.configuration.openWaitSignModal)
-    return ( <Modal size="xs" className={props.className} isOpen={openWaitSignModal.isShow} hideCloseButton isDismissable isKeyboardDismissDisabled>
+    const waitSignModal = useSelector((state: RootState) => state.configuration.waitSignModal)
+    return ( <Modal size="xs" className={props.className} isOpen={waitSignModal.isShow} hideCloseButton isDismissable isKeyboardDismissDisabled>
         <ModalContent>
-            <ModalHeader className="p-5"> <TitleDisplay className="w-full text-center" size="lg" title={openWaitSignModal.title}/>  </ModalHeader>
+            <ModalHeader className="p-5"> <TitleDisplay className="w-full text-center" size="lg" title={waitSignModal.title}/>  </ModalHeader>
             <ModalBody className="p-5">
                 <div className="text-sm w-full text-center"> Please process in your wallet </div>
             </ModalBody>

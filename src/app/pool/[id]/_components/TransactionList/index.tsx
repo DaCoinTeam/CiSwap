@@ -1,7 +1,6 @@
 "use client"
 import { Card, CardBody } from "@nextui-org/react"
-import React, { useContext } from "react"
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import React from "react"
 import TransactionTable from "./TransactionTable"
 import { TitleDisplay } from "@app/_shared"
 
@@ -10,8 +9,6 @@ interface TransactionListProps {
 }
 
 const TransactionList = (props: TransactionListProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
 
     return (
         <Card className={`${props.className}`}>

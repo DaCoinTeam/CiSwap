@@ -6,6 +6,7 @@ export type TokenState = {
     token0Locked: number
     token1Locked: number
     token0Price: number
+    token1Price: number
     token0BasePrice: number
     token0MaxPrice: number
     token0Symbol: string
@@ -35,7 +36,7 @@ export interface SetTokenAction {
 }
 
 export interface SetTokenBalanceAction {
-    type: "SET_TOKEN0_BALANCE" | "SET_TOKEN1_BALANCE" | "SET_TOKEN0_PRICE" | "SET_TOKEN0_BASE_PRICE" |  "SET_TOKEN0_MAX_PRICE" |  "SET_LP_TOKEN_BALANCE" | "SET_TOKEN0_LOCKED" | "SET_TOKEN1_LOCKED" 
+    type: "SET_TOKEN0_BALANCE" | "SET_TOKEN1_BALANCE" | "SET_TOKEN0_PRICE" | "SET_TOKEN1_PRICE" | "SET_TOKEN0_BASE_PRICE" |  "SET_TOKEN0_MAX_PRICE" |  "SET_LP_TOKEN_BALANCE" | "SET_TOKEN0_LOCKED" | "SET_TOKEN1_LOCKED" 
     payload: number
 }
 
@@ -82,6 +83,7 @@ export const initialTokenState: TokenState = {
     token1Locked: 0,
     token0BasePrice: 0,
     token0Price: 0,
+    token1Price: 0,
     token0MaxPrice: 0,
     token0Symbol: "",
     token1Symbol: "",
@@ -142,6 +144,11 @@ export const tokenReducer = (
         return {
             ...state,
             token0Price: action.payload
+        }
+    case "SET_TOKEN1_PRICE":
+        return {
+            ...state,
+            token1Price: action.payload
         }
     case "SET_TOKEN0_BASE_PRICE":
         return {

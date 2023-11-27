@@ -4,7 +4,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
-import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../layout"
+import { PoolContext } from "../../../layout"
 import { parseNumber } from "@utils"
 import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
 
@@ -36,14 +36,9 @@ const _renderBody = (
 
 const FormikProviders = ({ children }: { children: ReactNode}) => {
 
-    const poolAddress = useContext(PoolAddressContext)
-    if (poolAddress == null) return
-
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const updateTokenState = useContext(UpdateTokenStateContext)
-    if (updateTokenState == null) return 
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, handlers, poolAddress } = context
     
     const dispatch : AppDispatch = useDispatch()
     const notify = useSelector((state: RootState) => state.configuration.notify)
@@ -143,7 +138,7 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
 
                 dispatch(setOpenWaitSignModalShow(false))
                 notify(depositReceipt.transactionHash.toString())
-                await updateTokenState._handleAll()
+                await handlers._handleAll()
             }
             }
         >

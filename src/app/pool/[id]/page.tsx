@@ -2,13 +2,15 @@
 import React, { useContext } from "react"
 import { Overview, TokenLockedChart, TransactionList } from "./_components"
 import { Spacer } from "@nextui-org/react"
-import { AppButton, TokenPairDisplay, TokenPriceRatioDisplay } from "@app/_shared"
+import { AppButton } from "@app/_shared"
+import { TokenPairDisplay, TokenPriceRatioDisplay } from "./_components"
 import { usePathname, useRouter } from "next/navigation"
-import { TokenStateContext } from "./layout"
+import { PoolContext } from "./layout"
 
 const Page = () => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState } = context
 
     const router = useRouter()
     const path = usePathname()

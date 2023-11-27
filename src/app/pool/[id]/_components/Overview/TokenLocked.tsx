@@ -4,15 +4,16 @@ import React, { useContext } from "react"
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 import { TitleDisplay } from "@app/_shared"
 import TokenLockedDetails from "./TokenLockedDetails"
-import { TokenStateContext } from "../../layout"
+import { PoolContext } from "../../layout"
 
 interface TokenLockedProps {
     clasName? : string
 }
 
 const TokenLocked = (props: TokenLockedProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState } = context
     return (
         <div className = {`${props.clasName}`}>
             <TitleDisplay title="Total Tokens Locked"/>

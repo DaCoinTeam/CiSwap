@@ -6,7 +6,7 @@ import {
     TokenDisplay,
 } from "@app/_shared"
 import { Button } from "@nextui-org/react"
-import { PoolAddressContext, TokenStateContext } from "../../../../layout"
+import { PoolContext } from "../../../../layout"
 import { FormikPropsContext } from "../formik"
 import { LiquidityPoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
@@ -16,7 +16,10 @@ import { calculateRedenomination, parseNumber, calculateIRedenomination } from "
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 
 const MainSection = () => {
-    const tokenState = useContext(TokenStateContext)
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, poolAddress } = context
+    
     if (tokenState == null) return
 
     const formik = useContext(FormikPropsContext)
@@ -26,7 +29,6 @@ const MainSection = () => {
         (state: RootState) => state.blockchain.chainName
     )
 
-    const poolAddress = useContext(PoolAddressContext)
 
     const [preventExecutionToken1, setPreventExecutionToken1] = useState(false)
     const [preventExecutionToken0, setPreventExecutionToken0] = useState(false)

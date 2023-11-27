@@ -5,7 +5,7 @@ import {
     NumberTextarea,
     TokenDisplay,
 } from "@app/_shared"
-import { PoolAddressContext, TokenStateContext } from "../../../../../layout"
+import { PoolContext } from "../../../../../layout"
 import { FormikPropsContext } from "../formik"
 import { LiquidityPoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
@@ -16,8 +16,9 @@ import { calculateIRedenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
 
 const MainSection = () => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, poolAddress } = context
 
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
@@ -32,10 +33,6 @@ const MainSection = () => {
     const account = useSelector(
         (state: RootState) => state.blockchain.account
     )
-
-    console.log(formik.values)
-
-    const poolAddress = useContext(PoolAddressContext)
 
     const firstRender = useRef(true)
     useEffect(() => {

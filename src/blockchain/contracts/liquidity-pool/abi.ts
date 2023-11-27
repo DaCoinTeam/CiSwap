@@ -190,7 +190,7 @@ const abi = [
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "amountLPTokenReward",
+                "name": "amountLPTokenAwarded",
                 "type": "uint256"
             }
         ],
@@ -496,6 +496,11 @@ const abi = [
                     {
                         "internalType": "uint256",
                         "name": "token0Price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "token1Price",
                         "type": "uint256"
                     },
                     {
@@ -840,6 +845,19 @@ const abi = [
     {
         "inputs": [],
         "name": "token1Constant",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "token1Price",
         "outputs": [
             {
                 "internalType": "uint256",

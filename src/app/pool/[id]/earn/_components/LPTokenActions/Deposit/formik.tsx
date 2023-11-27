@@ -9,7 +9,7 @@ import {
     calculateMuvBigIntNumber,
     parseNumber,
 } from "@utils"
-import { PoolAddressContext, TokenStateContext, UpdateTokenStateContext } from "../../../../layout"
+import { PoolContext } from "../../../../layout"
 
 interface FormikValues {
   token1DepositAmount: string;
@@ -38,14 +38,9 @@ const _renderBody = (
 
 
 const FormikProviders = ({ children }: { children: ReactNode}) => {
-    const poolAddress = useContext(PoolAddressContext)
-    if (poolAddress == null) return
-    
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const updateTokenState = useContext(UpdateTokenStateContext)
-    if (updateTokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, handlers, poolAddress } = context
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
@@ -128,7 +123,7 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
 
                 dispatch(setOpenWaitSignModalShow(false))
                 notify(depositReceipt.transactionHash.toString())
-                await updateTokenState._handleWithConnected()
+                await handlers._handleWithConnected()
             }}
         >
             {(props) => _renderBody(props, children)}

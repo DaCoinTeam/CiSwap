@@ -1,8 +1,8 @@
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolContext } from "../../../layout"
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/outline"
 import { Skeleton } from "@nextui-org/react"
 import React, { useContext } from "react"
-import { calculateRound } from "../../../utils/math"
+import { calculateRound } from "../../../../../../utils/math"
 
 interface TokenPriceRatioDisplayProps {
   className?: string;
@@ -12,8 +12,9 @@ interface TokenPriceRatioDisplayProps {
 }
 
 const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return 
+    const context = useContext(PoolContext)
+    if (context == null) return 
+    const { tokenState } = context
 
     let _style = props.style
     if (_style == undefined) _style = "style1"

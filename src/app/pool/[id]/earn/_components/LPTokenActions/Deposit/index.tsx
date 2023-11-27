@@ -7,19 +7,16 @@ import {
     ModalFooter,
     ModalHeader,
 } from "@nextui-org/react"
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import FormikProviders from "./formik"
-import { TokenStateContext } from "../../../../layout"
 
 interface DepositProps {
   className?: string;
 }
 
 const Deposit = (props: DepositProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
 
     const [isOpen, setIsOpen] = useState(false)
 

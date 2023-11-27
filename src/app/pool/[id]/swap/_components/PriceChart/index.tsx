@@ -1,15 +1,11 @@
 "use client"
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useState } from "react"
 
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
-import {
-    PeriodTabs,
-    TokenPairDisplay,
-    TokenPriceRatioDisplay,
-} from "@app/_shared"
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import { PeriodTabs } from "@app/_shared"
+import { TokenPairDisplay, TokenPriceRatioDisplay } from "../../../_components"
 import { ChartTimePeriod } from "@utils"
 
 interface PriceChartProps {
@@ -24,9 +20,6 @@ interface PeriodContext {
 export const PeriodContext = createContext<PeriodContext | null>(null)
 
 const PriceChart = (props: PriceChartProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
 
     return (
@@ -39,7 +32,7 @@ const PriceChart = (props: PriceChartProps) => {
                             <Spacer y={1} />
                             <TokenPriceRatioDisplay />
                         </div>
-                        <PeriodTabs tab = {period} setTab = {setPeriod}/>
+                        <PeriodTabs tab={period} setTab={setPeriod} />
                     </div>
 
                     <Spacer y={6} />

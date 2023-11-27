@@ -4,15 +4,16 @@ import React, { useContext, useState } from "react"
 import Chart from "./Chart"
 import { PeriodTabs, TokenTooltipDisplay } from "@app/_shared"
 import { ChartTimePeriod, calculateRound } from "@utils"
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolContext } from "../../../layout"
 
 interface LPTokenDistributionChartProps {
     className?: string;
   }
   
 const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return 
+    const { tokenState } = context 
 
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
     

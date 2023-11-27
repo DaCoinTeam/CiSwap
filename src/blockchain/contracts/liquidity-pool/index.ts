@@ -153,6 +153,17 @@ class LiquidityPoolContract {
         }
     }
 
+    async token1Price() {
+        try {
+            const web3 = getHttpWeb3(this.chainName)
+            const contract = getLiquidityPoolContract(web3, this.poolAddress)
+            return BigInt(await contract.methods.token1Price().call())
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
+
     async token0BasePrice() {
         try {
             const web3 = getHttpWeb3(this.chainName)

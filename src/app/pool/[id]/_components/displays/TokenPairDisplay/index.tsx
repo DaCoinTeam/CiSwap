@@ -1,4 +1,4 @@
-import { TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolContext } from "../../../layout"
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
@@ -13,7 +13,10 @@ interface TokenPairDisplayProps {
 }
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
-    const tokenState = useContext(TokenStateContext)
+    const context = useContext(PoolContext)
+    if (context == null) return 
+    const { tokenState } = context
+
     if (tokenState == null) return
 
     let _size = props.size

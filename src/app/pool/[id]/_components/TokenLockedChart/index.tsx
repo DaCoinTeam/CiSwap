@@ -1,10 +1,9 @@
 "use client"
-import { Card, CardBody, Spacer } from "@nextui-org/react"
-import React, { createContext, useContext, useState } from "react"
+import { Card, CardBody } from "@nextui-org/react"
+import React, { createContext, useState } from "react"
 import Token0Chart from "./Token0Chart"
-import { PeriodTabs, ViewOnExplorer } from "@app/_shared"
+import { PeriodTabs } from "@app/_shared"
 import { ChartTimePeriod } from "@utils"
-import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
 import ChartTabs, { ChartType } from "./ChartTypeSelect"
 
 interface TokenLockedChartProps {
@@ -19,10 +18,6 @@ interface ChartTypeContext {
 export const ChartTypeContext = createContext<ChartTypeContext | null>(null)
 
 const TokenLockedChart = (props: TokenLockedChartProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const poolAddress = useContext(PoolAddressContext)
 
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
 

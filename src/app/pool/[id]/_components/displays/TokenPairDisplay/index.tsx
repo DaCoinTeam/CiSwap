@@ -14,28 +14,38 @@ interface TokenPairDisplayProps {
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
     const context = useContext(PoolContext)
-    if (context == null) return 
-    const { tokenState } = context
+    if (context == null) return
+    const { tokenState, isToken0PriceState } = context
+    const { isToken0Price, setIsToken0Price } = isToken0PriceState
+
+    const firstTokenSymbol = isToken0Price ? tokenState.token0Symbol : tokenState.token1Symbol 
+    const secondTokenSymbol = isToken0Price ? tokenState.token1Symbol : tokenState.token0Symbol 
 
     if (tokenState == null) return
 
     let _size = props.size
     if (_size == undefined) _size = "sm"
 
-    let _tokenImageClassName: string = ""
-    let _textClassName: string = ""
-    let _skeletonSize: string = ""
+    let _tokenImageClassName = ""
+    let _textClassName = ""
+    let _skeletonSize = ""
+    let _buttonSize = ""
+    let _iconSize = ""
 
     switch (_size) {
     case "sm":
         _tokenImageClassName = "w-5 h-5"
         _textClassName = "text-sm"
-        _skeletonSize = "h-5 w-20"
+        _skeletonSize = "h-6 w-30"
+        _buttonSize = "h-6 w-6"
+        _iconSize = "h-4 h-4"
         break
     case "lg":
         _tokenImageClassName = "w-9 h-9"
         _textClassName = "text-3xl"
-        _skeletonSize = "h-9 w-48"
+        _skeletonSize = "h-9 w-60"
+        _buttonSize = "h-9 w-9"
+        _iconSize = "h-6 w-6"
         break
     }
 
@@ -49,36 +59,57 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
             />
         ) : null
 
+    const _handleSwitch = () => setIsToken0Price(!isToken0Price)
     return (
         <div className={`${props.className}`}>
             {tokenState.finishLoadWithoutConnected ? (
                 <div className="flex gap-2 items-center">
-                    <AvatarGroup>
-                        <Avatar
-                            classNames={{
-                                base: `${_tokenImageClassName}`,
-                            }}
-                            showFallback
-                            src={props.token0ImageUrl}
-                            fallback={<QuestionMarkCircleIcon className={`${_tokenImageClassName}`} />}
-                        />
-                        <Avatar
-                            classNames={{
-                                base: `${_tokenImageClassName}`,
-                            }}
-                            showFallback
-                            src={props.token1ImageUrl}
-                            fallback={<QuestionMarkCircleIcon className={`${_tokenImageClassName}`} />}
-                        />
-                    </AvatarGroup>
-                    <span className={`font-bold ${_textClassName}`}>
-                        {" "}
-                        {tokenState.token0Symbol}/{tokenState.token1Symbol}{" "}
-                    </span>
-                    {_showInverse()}
+                    <div className="flex gap-2 items-center">
+                        <AvatarGroup>
+                            <Avatar
+                                classNames={{
+                                    base: `${_tokenImageClassName}`,
+                                }}
+                                showFallback
+                                src={props.token0ImageUrl}
+                                fallback={
+                                    <QuestionMarkCircleIcon
+                                        className={`${_tokenImageClassName}`}
+                                    />
+                                }
+                            />
+                            <Avatar
+                                classNames={{
+                                    base: `${_tokenImageClassName}`,
+                                }}
+                                showFallback
+                                src={props.token1ImageUrl}
+                                fallback={
+                                    <QuestionMarkCircleIcon
+                                        className={`${_tokenImageClassName}`}
+                                    />
+                                }
+                            />
+                        </AvatarGroup>
+
+                        <span className={`font-bold ${_textClassName}`}>
+                            {" "}
+                            {firstTokenSymbol}/{secondTokenSymbol}{" "}
+                        </span>
+                        {_showInverse()}
+                    </div>
+                    <Button
+                        isIconOnly
+                        variant="light"
+                        onPress={_handleSwitch}
+                        radius="full"
+                        className={`${_buttonSize} min-w-0 flex-none`}
+                    >
+                        <ArrowsRightLeftIcon className={`${_iconSize}`} />
+                    </Button>
                 </div>
             ) : (
-                <Skeleton className={`${_skeletonSize} rounded`}/>
+                <Skeleton className={`${_skeletonSize} rounded`} />
             )}
         </div>
     )

@@ -15,7 +15,7 @@ const LPRewards = (props: LPRewardLogsProps) => {
     return (
         <div className={`flex gap-3 flex-col ${props.className}`}>
             <Card className="grow">
-                <CardBody>
+                <CardBody className="p-5">
                     <div className="flex flex-col gap-4">
                         <TitleDisplay size="lg" title="Rewards" />
                         <LPRewardTable/>

@@ -19,7 +19,7 @@ const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
     
     return (
         <Card className={`${props.className}`}>
-            <CardBody>
+            <CardBody className="p-5">
                 <div className="flex justify-between">
                     <TokenTooltipDisplay
                         tooltipContent="Total LP Token Distributed" 

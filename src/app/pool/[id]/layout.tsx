@@ -1,6 +1,6 @@
 "use client"
 import { RootState } from "@redux"
-import React, { ReactNode, createContext, useEffect, useMemo } from "react"
+import React, { ReactNode, createContext, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { TokenState } from "./_hooks"
 import { useParams } from "next/navigation"
@@ -17,7 +17,11 @@ interface PoolContext {
         _handleWithConnected: () => Promise<void>;
         _handleAll: () => Promise<void>;
     }, 
-    poolAddress: string
+    poolAddress: string,
+    isToken0PriceState: {
+        isToken0Price : boolean,
+        setIsToken0Price: React.Dispatch<React.SetStateAction<boolean>>
+    }
 }
 
 export const PoolContext = createContext<PoolContext|null>(null)
@@ -29,6 +33,8 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     const [tokenState, tokenDispatch] = usePoolState()
+
+    const [isToken0Price, setIsToken0Price] = useState(false)
     
     const params = useParams()
     const poolAddress = params.id as string
@@ -328,7 +334,11 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <PoolContext.Provider value={{
             tokenState,
             handlers,
-            poolAddress
+            poolAddress,
+            isToken0PriceState: {
+                isToken0Price,
+                setIsToken0Price
+            }
         }}>
             {children}
         </PoolContext.Provider>

@@ -6,7 +6,7 @@ import { RootState } from "@redux"
 import { AppButton, TokenTooltipDisplay } from "@app/_shared"
 import Withdraw from "./Withdraw"
 import Deposit from "./Deposit"
-import { PoolAddressContext, TokenStateContext } from "../../../layout"
+import { PoolContext } from "../../../layout"
 import { LiquidityPoolContract } from "@blockchain"
 
 interface LPTokenActionsProps {
@@ -14,10 +14,9 @@ interface LPTokenActionsProps {
 }
 
 const LPTokenActions = (props: LPTokenActionsProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const poolAddress = useContext(PoolAddressContext)
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, poolAddress } = context
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
@@ -65,7 +64,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
 
     return (
         <Card className={`${props.className}`}>
-            <CardBody className="flex flex-cols justify-between">
+            <CardBody className="flex flex-cols p-5 justify-between">
                 <TokenTooltipDisplay 
                     tooltipContent="Your LP Token balance"
                     value={tokenState.LPTokenBalance}

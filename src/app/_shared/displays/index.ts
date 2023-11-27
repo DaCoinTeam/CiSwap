@@ -5,6 +5,7 @@ import TitleDisplay from "./TitleDisplay"
 import DataWidgetDisplay from "./DataWidgetDisplay"
 import ErrorDisplay from "./ErrorDisplay"
 import TokenTooltipDisplay from "./TokenTooltipDisplay"
+import BreadcrumbsDisplay from "./BreadcrumbsDisplay"
 
 export {
     BalanceDisplay,
@@ -13,5 +14,6 @@ export {
     TokenDisplay,
     TitleDisplay,
     DataWidgetDisplay,
-    ErrorDisplay
+    ErrorDisplay,
+    BreadcrumbsDisplay
 }

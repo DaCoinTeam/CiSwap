@@ -94,7 +94,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
             <div className="grid grid-cols-2 gap-4">
                 <div className="grow">
                     <Card>
-                        <CardBody>
+                        <CardBody className="p-5">
                             <div className="text-center w-full font-bold text-sm">
                 Base Price
                             </div>

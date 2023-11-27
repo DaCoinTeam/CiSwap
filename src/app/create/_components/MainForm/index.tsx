@@ -29,7 +29,7 @@ const MainForm = () => {
                 <div className="font-bold text-lg">Create Liquidity Pool</div>
             </CardHeader>
             <Divider />
-            <CardBody>
+            <CardBody className="p-5">
                 <FormikProviders>
                     <div className="grid sm:grid-cols-2 grid-cols-1 gap-12">
                         <FinishSelectPairContext.Provider value={contextValue}>

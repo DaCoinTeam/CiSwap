@@ -20,15 +20,16 @@ interface PeriodContext {
 export const PeriodContext = createContext<PeriodContext | null>(null)
 
 const PriceChart = (props: PriceChartProps) => {
+
     const [period, setPeriod] = useState(ChartTimePeriod._24H)
 
     return (
         <Card className={`${props.className}`}>
-            <CardBody>
+            <CardBody className="p-5">
                 <PeriodContext.Provider value={{ period, setPeriod }}>
                     <div className="grid md:flex justify-between gap-4">
                         <div>
-                            <TokenPairDisplay />
+                            <TokenPairDisplay/>
                             <Spacer y={1} />
                             <TokenPriceRatioDisplay />
                         </div>

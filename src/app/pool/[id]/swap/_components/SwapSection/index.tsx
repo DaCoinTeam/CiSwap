@@ -23,7 +23,7 @@ const SwapSection = (props: SwapSectionProps) => {
                 <span className="font-bold text-lg">Swap</span>
             </CardHeader>
             <Divider />
-            <CardBody>
+            <CardBody className="p-5">
                 <FormikProviders>
                     <MainSection />
                     <Spacer y={12} />

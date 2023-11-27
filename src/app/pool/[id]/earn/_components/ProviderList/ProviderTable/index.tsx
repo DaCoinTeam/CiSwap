@@ -14,7 +14,7 @@ import {
 import { LiquidityPoolContract } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolContext } from "../../../../layout"
 import { Address } from "web3"
 import { calculateRedenomination } from "@utils"
 import { ViewOnExplorer } from "@app/_shared"
@@ -25,10 +25,9 @@ interface ProviderTableProps {
 }
 
 const ProviderTable = (props: ProviderTableProps) => {
-    const poolAddress = useContext(PoolAddressContext)
-
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, poolAddress } = context
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName

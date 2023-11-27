@@ -1,6 +1,6 @@
 "use client"
 
-import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
+import  { PoolContext } from "../../../layout"
 import React, { useContext, useEffect, useState } from "react"
 import {
     AreaChart,
@@ -27,10 +27,9 @@ interface RenderLPTokenTick {
 }
 
 const Chart = (props: ChartProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const poolAddress = useContext(PoolAddressContext)
+    const context = useContext(PoolContext)
+    if (context == null) return
+    const { tokenState, poolAddress } = context
     
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
 

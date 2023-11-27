@@ -5,7 +5,7 @@ import {
     NumberTextarea,
     TokenDisplay,
 } from "@app/_shared"
-import { Button } from "@nextui-org/react"
+import { Button, Spacer } from "@nextui-org/react"
 import { PoolContext } from "../../../../layout"
 import { FormikPropsContext } from "../formik"
 import { LiquidityPoolContract } from "@blockchain"
@@ -207,6 +207,7 @@ const MainSection = () => {
                         tokenBalance={_token0Balance}
                     />
                 </div>
+                <Spacer y={1}/>
                 <NumberTextarea
                     textPosition="right"
                     value={_token0Amount}
@@ -236,6 +237,7 @@ const MainSection = () => {
                         tokenBalance={_token1Balance}
                     />
                 </div>
+                <Spacer y={1}/>
                 <NumberTextarea
                     textPosition="right"
                     value={_token1Amount}

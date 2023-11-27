@@ -13,7 +13,7 @@ const RootLayout = ({
         <ReduxProviders> 
             <WrappedRootLayout>
                 {children}
-            </WrappedRootLayout>
+            </WrappedRootLayout>   
         </ReduxProviders>
     )
 }

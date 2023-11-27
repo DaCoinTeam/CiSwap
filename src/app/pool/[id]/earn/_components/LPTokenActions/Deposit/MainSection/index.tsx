@@ -14,6 +14,7 @@ import { useSelector } from "react-redux"
 import { calculateRedenomination, parseNumber } from "@utils"
 import { calculateIRedenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
+import { Spacer } from "@nextui-org/react"
 
 const MainSection = () => {
     const context = useContext(PoolContext)
@@ -82,6 +83,7 @@ const MainSection = () => {
                         finishLoad={tokenState.finishLoadWithoutConnected}
                         tokenSymbol={tokenState.token1Symbol}
                     />
+                    <Spacer y={1}/>
                     <BalanceDisplay
                         finishLoad={tokenState.finishLoadWithConnected}
                         tokenBalance={tokenState.token1Balance}
@@ -96,6 +98,7 @@ const MainSection = () => {
                     finishLoad={tokenState.finishLoadWithoutConnected}
                     tokenSymbol={tokenState.LPTokenSymbol}
                 />
+                <Spacer y={1}/>
                 <NumberTextarea readOnly textPosition="right" value={formik.values.LPTokenAmountOut.toString()} onValueChange={_handleChange} />
                 <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
             </div>

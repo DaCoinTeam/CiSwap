@@ -13,6 +13,7 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { calculateRedenomination, parseNumber, calculateIRedenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
+import { Spacer } from "@nextui-org/react"
 
 const MainSection = () => {
     const context = useContext(PoolContext)
@@ -75,23 +76,27 @@ const MainSection = () => {
     
     return (
         <div className="w-full grid justify-items-center gap-6">
-            <div className="flex items-center justify-between w-full">
-                <TokenDisplay
-                    finishLoad={tokenState.finishLoadWithoutConnected}
-                    tokenSymbol={tokenState.LPTokenSymbol}
-                />
-                <BalanceDisplay
-                    finishLoad={tokenState.finishLoadWithConnected}
-                    tokenBalance={tokenState.LPTokenBalance}
-                />
+            <div className="w-full">
+                <div className="flex items-center justify-between w-full">
+                    <TokenDisplay
+                        finishLoad={tokenState.finishLoadWithoutConnected}
+                        tokenSymbol={tokenState.LPTokenSymbol}
+                    />
+                    <BalanceDisplay
+                        finishLoad={tokenState.finishLoadWithConnected}
+                        tokenBalance={tokenState.LPTokenBalance}
+                    />
+                </div>
+                <Spacer y={1}/>
+                <NumberTextarea textPosition="right" value={formik.values.LPTokenAmountIn} onValueChange={_handleChange} />
             </div>
-            <NumberTextarea textPosition="right" value={formik.values.LPTokenAmountIn} onValueChange={_handleChange} />
             <ArrowDownIcon height={24} width={24} />
             <div className="w-full">
                 <TokenDisplay
                     finishLoad={tokenState.finishLoadWithoutConnected}
                     tokenSymbol={tokenState.token0Symbol}
                 />
+                <Spacer y={1}/>
                 <NumberTextarea readOnly textPosition="right" value={formik.values.token0AmountOut.toString()} onValueChange={_handleChange} />
                 <LoadingDisplay message="Calculating..." finishLoad={finishFetch}/>
             </div>

@@ -64,7 +64,7 @@ const ConnectedChain = () => {
             <DropdownTrigger>
                 <Button
                     variant="light"
-                    startContent={<Image src={_imageUrl} className="w-5 h-5" />}
+                    startContent={<Image radius="none" src={_imageUrl} className="w-5 h-5" />}
                 >
                     {_text}
                 </Button>
@@ -76,7 +76,7 @@ const ConnectedChain = () => {
                         const metamaskApis = new MetamaskApis(ethereum)
                         await metamaskApis.switchEthereumChain(chain.chainId)
                     }
-                    return <DropdownItem onPress={_handleSwitch} startContent={<Image src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
+                    return <DropdownItem onPress={_handleSwitch} startContent={<Image radius="none" src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
                 })}
                 
             </DropdownMenu>

@@ -35,7 +35,7 @@ const BreadcrumbsDisplay = (props: BreadcrumbsDisplayProps) => {
     return (
         <Breadcrumbs
             classNames={{
-                base: "font-bold",
+                list: "font-bold",
             }}
         >
             {breadcrumbs.map((breadcrumb) => (

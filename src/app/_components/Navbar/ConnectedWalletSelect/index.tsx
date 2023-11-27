@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useContext } from "react"
 import {
     Dropdown,
     DropdownTrigger,
@@ -8,14 +8,18 @@ import {
     DropdownItem,
     Button,
 } from "@nextui-org/react"
-import { AppDispatch, RootState, setWeb3 } from "@redux"
-import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "@redux"
+import { useSelector } from "react-redux"
 import { shortenAddress } from "@utils"
 import { useRouter } from "next/navigation"
+import { MetamaskContext } from "@app/_hooks"
 
 const ConnectedWalletSelect = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
-    const dispatch: AppDispatch = useDispatch()
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return
+    const { web3State } = metamaskContext
+    const { setWeb3 } = web3State
 
     const router = useRouter()
 
@@ -29,7 +33,7 @@ const ConnectedWalletSelect = () => {
         {
             key: "disconnect",
             text: "Disconnect",
-            handleOnPress: () => dispatch(setWeb3(null)),
+            handleOnPress: () => setWeb3(null),
             isDanger: true,
         },
     ]

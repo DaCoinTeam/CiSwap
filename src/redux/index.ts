@@ -1,3 +1,3 @@
 export * from "./slices"
 export * from "./store"
-export * from "./provider"
+export * from "./ReduxProviders"

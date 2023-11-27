@@ -4,7 +4,7 @@ import { BalanceDisplay, NumberInput, TitleDisplay, TokenDisplay } from "@app/_s
 import { Select, SelectItem, Spacer } from "@nextui-org/react"
 import { FinishSelectPairContext } from "../index"
 import { RootState } from "@redux"
-import { FormikPropsContext } from "../formik"
+import { FormikPropsContext } from "../FormikPropsContext"
 import { useSelector } from "react-redux"
 import { ERC20Contract } from "@blockchain"
 import {

@@ -14,7 +14,7 @@ import {
 import { RewardLog, LiquidityPoolContract, getRewardLog } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { PoolContext } from "@app/pool/[id]/layout"
+import { PoolContext } from "../../../../_hooks"
 import { ViewOnExplorer } from "@app/_shared"
 import { LoadingState } from "@react-types/shared/src/collections"
 import dayjs from "dayjs"
@@ -27,9 +27,9 @@ interface LPRewardTableProps {
 }
 
 const LPRewardTable = (props: LPRewardTableProps) => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, poolAddress } = poolContext 
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName

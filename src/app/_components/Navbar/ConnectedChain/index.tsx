@@ -4,7 +4,7 @@ import React from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { ChainName } from "@config"
-import { Image } from "@nextui-org/react"
+import { Avatar } from "@nextui-org/react"
 
 const ConnectedChain = () => {
     const chainName = useSelector(
@@ -39,8 +39,8 @@ const ConnectedChain = () => {
     const _imageUrl = connectedChainProps[chainName].imageUrl
     const _text = connectedChainProps[chainName].text
     return (
-        <div className="flex gap-2 items-center text-sm">
-            <Image src={_imageUrl} className="w-6 h-6" />
+        <div className="flex gap-4 items-center text-sm">
+            <Avatar isBordered src={_imageUrl} className="w-6 h-6" />
             <div>{_text}</div>
         </div>
     )

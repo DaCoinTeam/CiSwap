@@ -1,4 +1,4 @@
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
@@ -13,9 +13,9 @@ interface TokenPairDisplayProps {
 }
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, isToken0PriceState } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, isToken0PriceState } = poolContext
     const { isToken0Price, setIsToken0Price } = isToken0PriceState
 
     const firstTokenSymbol = isToken0Price ? tokenState.token0Symbol : tokenState.token1Symbol 

@@ -1,4 +1,4 @@
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { Skeleton } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { calculateInverse, calculateRound } from "@utils"
@@ -11,9 +11,9 @@ interface TokenPriceRatioDisplayProps {
 }
 
 const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
-    const context = useContext(PoolContext)
-    if (context == null) return 
-    const { tokenState, isToken0PriceState } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return 
+    const { tokenState, isToken0PriceState } = poolContext
     const { isToken0Price } = isToken0PriceState
 
     let _style = props.style

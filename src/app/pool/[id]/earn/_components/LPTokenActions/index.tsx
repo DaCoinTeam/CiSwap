@@ -6,17 +6,24 @@ import { RootState } from "@redux"
 import { AppButton, TokenTooltipDisplay } from "@app/_shared"
 import Withdraw from "./Withdraw"
 import Deposit from "./Deposit"
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { LiquidityPoolContract } from "@blockchain"
+import { MetamaskContext } from "@app/_hooks"
 
 interface LPTokenActionsProps {
   className?: string;
 }
 
 const LPTokenActions = (props: LPTokenActionsProps) => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
+    
+    const { tokenState, poolAddress } = poolContext 
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
@@ -24,7 +31,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
+
 
     const [isProviderRegistered, setIsProviderRegistered] = useState(false)
     useEffect(() => {

@@ -5,12 +5,12 @@ import { Spacer } from "@nextui-org/react"
 import { AppButton, BreadcrumbsDisplay } from "@app/_shared"
 import { TokenPairDisplay, TokenPriceRatioDisplay } from "./_components"
 import { usePathname, useRouter } from "next/navigation"
-import { PoolContext } from "./layout"
+import { PoolContext } from "./_hooks"
 
 const Page = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, poolAddress } = poolContext 
 
     const router = useRouter()
     const path = usePathname()

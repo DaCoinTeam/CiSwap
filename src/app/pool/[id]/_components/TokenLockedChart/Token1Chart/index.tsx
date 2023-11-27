@@ -1,6 +1,6 @@
 "use client"
 
-import { PoolAddressContext, TokenStateContext } from "@app/pool/[id]/layout"
+import { PoolContext  } from "../../../_hooks"
 import React, { useContext, useEffect, useState } from "react"
 import {
     AreaChart,
@@ -26,10 +26,9 @@ interface RenderToken1Tick {
 }
 
 const Token1Chart = (props: Token1ChartProps) => {
-    const tokenState = useContext(TokenStateContext)
-    if (tokenState == null) return
-
-    const poolAddress = useContext(PoolAddressContext)
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return 
+    const { tokenState, poolAddress } = poolContext 
     
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
 

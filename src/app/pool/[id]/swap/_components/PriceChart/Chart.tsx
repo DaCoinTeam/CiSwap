@@ -12,7 +12,7 @@ import {
     updateBaselineChartWithOptions,
 } from "@utils"
 import { LiquidityPoolContract } from "@blockchain"
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { PeriodContext } from "."
 
 interface PriceTick {
@@ -21,9 +21,9 @@ interface PriceTick {
 }
 
 const Chart = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, poolAddress } = poolContext 
 
     const periodContext = useContext(PeriodContext)
     if (periodContext == null) return

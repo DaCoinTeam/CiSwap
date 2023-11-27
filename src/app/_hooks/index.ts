@@ -1,2 +1,2 @@
-import useMetamask from "./useMetamask.hook"
-export { useMetamask }
+import MetamaskProviders, { MetamaskContext } from "./MetamaskProviders"
+export { MetamaskProviders, MetamaskContext }

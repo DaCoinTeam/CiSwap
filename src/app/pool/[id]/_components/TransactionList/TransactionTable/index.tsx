@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react"
 import React, { useContext, useEffect, useMemo, useState } from "react"
 import { ViewOnExplorer } from "@app/_shared"
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { LiquidityPoolContract, RenderTransaction, TransactionMethod, getTransaction } from "@blockchain"

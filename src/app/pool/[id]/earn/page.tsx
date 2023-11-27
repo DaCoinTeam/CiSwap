@@ -3,12 +3,12 @@ import React, { useContext } from "react"
 import { LPTokenActions, LPTokenDistributionChart, ProviderList, LPRewards } from "./_components"
 import { Spacer } from "@nextui-org/react"
 import { BreadcrumbsDisplay } from "@app/_shared"
-import { PoolContext } from "../layout"
+import { PoolContext } from "../_hooks"
 
 const Page = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { poolAddress } = poolContext
     const breadcrumbItems = [
         {
             key: "home",

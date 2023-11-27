@@ -5,7 +5,9 @@ import { LiquidityPoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
 import { calculateIRedenomination } from "@utils"
-import { PoolContext } from "../../../../layout"
+import { PoolContext } from "../../../../_hooks"
+import { MetamaskContext } from "@app/_hooks"
+import { ContextProps, notify } from "@app/_shared"
 
 interface FormikValues {
   LPTokenAmountIn: string;
@@ -29,19 +31,21 @@ const _renderBody = (
     </FormikPropsContext.Provider>
 )
 
-const FormikProviders = ({ children }: { children: ReactNode }) => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, handlers, poolAddress } = context
+const FormikProviders = (props: ContextProps) => {
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, handlers, poolAddress } = poolContext
+
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
 
     const dispatch : AppDispatch = useDispatch()
-    const notify = useSelector((state: RootState) => state.configuration.notify)
-
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -85,7 +89,7 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                 await handlers._handleWithConnected()
             }}
         >
-            {(props) => _renderBody(props, children)}
+            {(_props) => _renderBody(_props, props.children)}
         </Formik>
     )
 }

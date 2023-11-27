@@ -44,7 +44,7 @@ const _renderBody = (
     </FormikPropsContext.Provider>
 )
 
-const FormikProviders = ({ children }: { children: ReactNode }) => {
+const FormikProviders = (props: ContextProps) => {
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
     const web3 = useSelector((state: RootState) => state.blockchain.web3)
 

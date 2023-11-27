@@ -5,8 +5,8 @@ import {
     NumberTextarea,
     TokenDisplay,
 } from "@app/_shared"
-import { PoolContext } from "../../../../../layout"
-import { FormikPropsContext } from "../formik"
+import { PoolContext } from "../../../../../_hooks"
+import { FormikPropsContext } from "../FormikProviders"
 import { LiquidityPoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
@@ -14,11 +14,17 @@ import { useSelector } from "react-redux"
 import { calculateRedenomination, parseNumber, calculateIRedenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
 import { Spacer } from "@nextui-org/react"
+import { MetamaskContext } from "@app/_hooks"
 
 const MainSection = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, poolAddress } = poolContext 
+
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
 
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
@@ -27,9 +33,6 @@ const MainSection = () => {
         (state: RootState) => state.blockchain.chainName
     )
 
-    const web3 = useSelector(
-        (state: RootState) => state.blockchain.web3
-    )
     const account = useSelector(
         (state: RootState) => state.blockchain.account
     )

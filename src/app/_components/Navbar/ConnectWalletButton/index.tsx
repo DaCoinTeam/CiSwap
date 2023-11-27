@@ -1,22 +1,24 @@
 "use client"
 
-import React from "react"
+import React, { useContext } from "react"
 import { MetamaskIcon } from "./MetamaskIcon"
 import { Button } from "@nextui-org/button"
-import { useDispatch, useSelector } from "react-redux"
 import Web3 from "web3"
-import { setWeb3, AppDispatch, RootState, } from "@redux"
+import { MetamaskContext } from "@app/_hooks"
 
 const ConnectWalletButton = () => {
-    const dispatch : AppDispatch = useDispatch()
-    const ethereum = useSelector((state: RootState) => state.blockchain.ethereum)
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return
+    const { web3State, ethereumState } = metamaskContext
+    const { setWeb3 } = web3State
+    const { ethereum } = ethereumState
 
     const connectWallet = async (): Promise<void> => {
         try {
             if (ethereum == null) return 
             await ethereum.request({ method: "eth_requestAccounts", params: [] })
             const web3 = new Web3(ethereum)
-            dispatch(setWeb3(web3))
+            setWeb3(web3)
         } catch (error) {
 		  console.error("Error connecting to MetaMask:", error)
         }

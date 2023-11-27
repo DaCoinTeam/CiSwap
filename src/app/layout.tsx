@@ -3,17 +3,17 @@ import "./globals.css"
 import React from "react"
 import { ReduxProviders } from "@redux"
 import WrappedRootLayout from "./_layout"
+import { ContextProps } from "./_shared"
+import { MetamaskProviders } from "./_hooks"
 
-const RootLayout = ({
-    children,
-}: {
-  children: React.ReactNode
-}) => {
+const RootLayout = (props: ContextProps) => {
     return (
         <ReduxProviders> 
-            <WrappedRootLayout>
-                {children}
-            </WrappedRootLayout>   
+            <MetamaskProviders>
+                <WrappedRootLayout>
+                    {props.children}
+                </WrappedRootLayout>   
+            </MetamaskProviders>
         </ReduxProviders>
     )
 }

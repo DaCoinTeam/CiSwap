@@ -4,9 +4,11 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setOpenWaitSignModalShow, setOpenWaitSignModalTitle } from "@redux"
-import { PoolContext } from "../../../layout"
+import { PoolContext } from "../../../_hooks"
 import { parseNumber } from "@utils"
 import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
+import { MetamaskContext } from "@app/_hooks"
+import { ContextProps, notify} from "@app/_shared"
 
 interface FormikValues {
   token0Amount: string;
@@ -34,21 +36,23 @@ const _renderBody = (
     </FormikPropsContext.Provider>
 )
 
-const FormikProviders = ({ children }: { children: ReactNode}) => {
+const FormikProviders = (props: ContextProps) => {
 
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, handlers, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, handlers, poolAddress } = poolContext
+    
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
     
     const dispatch : AppDispatch = useDispatch()
-    const notify = useSelector((state: RootState) => state.configuration.notify)
 
     const chainName = useSelector(
         (state: RootState) => state.blockchain.chainName
     )
-    const web3 = useSelector(
-        (state: RootState) => state.blockchain.web3
-    )
+
     const account = useSelector(
         (state: RootState) => state.blockchain.account
     )
@@ -142,7 +146,7 @@ const FormikProviders = ({ children }: { children: ReactNode}) => {
             }
             }
         >
-            {(props) => _renderBody(props, children)}
+            {(_props) => _renderBody(_props, props.children)}
         </Formik>
     )
 }

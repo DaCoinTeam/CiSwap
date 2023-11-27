@@ -1,6 +1,6 @@
 "use client"
 import React from "react"
-import FormikProviders from "./formik"
+import FormikProviders from "./FormikProviders"
 import {
     Card,
     CardBody,

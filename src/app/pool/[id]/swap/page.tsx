@@ -1,14 +1,14 @@
 "use client"
 import React, { useContext } from "react"
 import { PriceChart, SwapSection } from "./_components"
-import { PoolContext } from "../layout"
+import { PoolContext } from "../_hooks"
 import { BreadcrumbsDisplay } from "@app/_shared"
 import { Spacer } from "@nextui-org/react"
 
 const Page = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { poolAddress } = poolContext
     const breadcrumbItems = [
         {
             key: "home",

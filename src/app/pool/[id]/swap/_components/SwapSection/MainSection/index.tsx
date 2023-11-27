@@ -6,8 +6,8 @@ import {
     TokenDisplay,
 } from "@app/_shared"
 import { Button, Spacer } from "@nextui-org/react"
-import { PoolContext } from "../../../../layout"
-import { FormikPropsContext } from "../formik"
+import { PoolContext } from "../../../../_hooks"
+import { FormikPropsContext } from "../FormikProviders"
 import { LiquidityPoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
@@ -16,9 +16,9 @@ import { calculateRedenomination, parseNumber, calculateIRedenomination } from "
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 
 const MainSection = () => {
-    const context = useContext(PoolContext)
-    if (context == null) return
-    const { tokenState, poolAddress } = context
+    const poolContext = useContext(PoolContext)
+    if (poolContext == null) return
+    const { tokenState, poolAddress } = poolContext 
     
     if (tokenState == null) return
 

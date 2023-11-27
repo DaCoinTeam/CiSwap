@@ -1,60 +1,32 @@
 "use client"
 import { Nunito } from "next/font/google"
-import React, { ReactNode, useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import { Navbar, Footer, WaitSignModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setAccount, setDefaultPool, setEthereum } from "@redux"
+import { AppDispatch, RootState, setDefaultPool } from "@redux"
 import { NextUIProvider } from "@nextui-org/react"
 import { FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { ToastContainer } from "react-toastify"
 import "./_css/ReactToastify.css"
 import { IconContext } from "react-icons"
-import MetaMaskSDK, { MetaMaskSDKOptions } from "@metamask/sdk"
-import { useMetamask } from "./_hooks"
+import { MetamaskContext } from "./_hooks/MetamaskProviders"
+import { ContextProps } from "./_shared"
 
 export const font = Nunito({ weight: "400", subsets: ["latin"] })
 
-const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
+const WrappedRootLayout = (props: ContextProps) => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
+
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
 
     const dispatch: AppDispatch = useDispatch()
-
-    const { a } = useMetamask()
-
-    useEffect(() => {
-        const handleEffect = async () => {
-            const options: MetaMaskSDKOptions = {
-                dappMetadata: {
-                    name: "CiSwap",
-                    url: "https://ciswap-dacointeam.vercel.app/"
-                },
-                extensionOnly: true
-            }
-            const MMSDK = new MetaMaskSDK(options)
-            await MMSDK.init()
-            const ethereum = MMSDK.getProvider()
-            dispatch(setEthereum(ethereum))
-        }
-        handleEffect()
-    }, [])
-
-    useEffect(() => {
-        if (web3 == null) {
-            dispatch(setAccount(""))
-            return
-        }
-        const handleEffect = async () => {
-            const accounts = await web3.eth.getAccounts()
-            const account = accounts[0]
-            dispatch(setAccount(account))
-        }
-        handleEffect()
-    }, [web3])
 
     useEffect(() => {
         const handleEffect = async () => {
@@ -76,7 +48,7 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
                         <main className="flex flex-col min-h-screen">
                             <Navbar />
                             <section className="flex-1">
-                                {children}
+                                {props.children}
                             </section>
                             <Footer />
                             <WaitSignModal />
@@ -97,3 +69,5 @@ const WrappedRootLayout = ({ children }: { children: ReactNode }) => {
     )
 }
 export default WrappedRootLayout
+
+

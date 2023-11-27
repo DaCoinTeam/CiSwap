@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react"
 import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
-import FormikProviders from "./formik"
+import FormikProviders from "./FormikProviders"
 
 interface DepositProps {
   className?: string;

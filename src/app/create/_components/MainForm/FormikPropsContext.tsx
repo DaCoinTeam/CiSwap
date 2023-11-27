@@ -1,5 +1,5 @@
 import { Form, Formik, FormikProps } from "formik"
-import React, { ReactNode, createContext } from "react"
+import React, { ReactNode, createContext, useContext } from "react"
 import { Address } from "web3"
 import * as Yup from "yup"
 import { ERC20Contract, FactoryContract } from "@blockchain"
@@ -7,6 +7,8 @@ import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { calculateExponent, calculateIRedenomination, parseNumber } from "@utils"
+import { MetamaskContext } from "@app/_hooks"
+import { ContextProps } from "@app/_shared"
 
 interface FormikValues {
   token0Address: Address;
@@ -58,10 +60,13 @@ const _renderBody = (
     </FormikPropsContext.Provider>
 )
 
-const FormikProviders = ({ children }: { children: ReactNode }) => {
+const FormikProviders = (props: ContextProps) => {
+    const metamaskContext = useContext(MetamaskContext)
+    if (metamaskContext == null) return 
+    const { web3State } = metamaskContext
+    const { web3 } = web3State
+    
     const chainName = useSelector((state: RootState) => state.blockchain.chainName)
-    const web3 = useSelector((state: RootState) => state.blockchain.web3)
-
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     return (
@@ -152,7 +157,7 @@ const FormikProviders = ({ children }: { children: ReactNode }) => {
                     console.log(createPoolReceipt)
                 }}
         >
-            {(props) => _renderBody(props, children)}
+            {(_props) => _renderBody(_props, props.children)}
         </Formik>
     )
 }

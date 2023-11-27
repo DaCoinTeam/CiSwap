@@ -1,3 +1,5 @@
+import { useReducer } from "react"
+
 export type TokenState = {
     token0Address: string
     token1Address: string
@@ -239,3 +241,12 @@ export const tokenReducer = (
         return state
     }
 }
+
+const usePoolState = () => {
+    return useReducer(
+        tokenReducer,
+        initialTokenState
+    )
+}
+  
+export default usePoolState

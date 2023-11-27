@@ -1,13 +1,14 @@
 "use client"
 import { RootState } from "@redux"
-import React, { ReactNode, createContext, useEffect, useMemo, useReducer } from "react"
+import React, { ReactNode, createContext, useEffect, useMemo } from "react"
 import { useSelector } from "react-redux"
-import { TokenState, initialTokenState, tokenReducer } from "./_hooks"
+import { TokenState } from "./_hooks"
 import { useParams } from "next/navigation"
 import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { getTokenApi } from "@api"
+import usePoolState from "./_hooks/usePoolState.hook"
 
 interface PoolContext {
     tokenState: TokenState,
@@ -27,13 +28,8 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     )
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const [tokenState, tokenDispatch] = useReducer(
-        tokenReducer,
-        initialTokenState
-    )
-
-    console.log(tokenState)
-
+    const [tokenState, tokenDispatch] = usePoolState()
+    
     const params = useParams()
     const poolAddress = params.id as string
 

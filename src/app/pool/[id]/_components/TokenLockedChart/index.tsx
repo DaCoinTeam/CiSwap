@@ -26,7 +26,7 @@ const TokenLockedChart = (props: TokenLockedChartProps) => {
     return (
         <Card className={`${props.className}`}>
             <ChartTypeContext.Provider value={{ chartType, setChartType }}>
-                <CardBody className="gap-4">
+                <CardBody className="gap-4 p-5">
                     <div className="flex justify-between items-start">
                         <ChartTabs />
                         <PeriodTabs size="sm" tab={period} setTab={setPeriod} />

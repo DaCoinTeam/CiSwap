@@ -13,7 +13,7 @@ const Overview = (props: OverviewProps) => {
 
     return (
         <Card className = {`${props.className}`}>
-            <CardBody className="flex flex-col justify-between">
+            <CardBody className="flex flex-col justify-between p-5">
                 <div>
                     <div className="grid grid-cols-2 gap-4">
                         <DataWidgetDisplay

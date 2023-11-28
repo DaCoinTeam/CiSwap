@@ -1,42 +1,67 @@
 import Web3, { Address } from "web3"
-
-const KLAYTN_MAINNET_HTTP_RPC_URL = "..."
-const KLAYTN_MAINNET_WEBSOCKET_RPC_URL = "..."
-const KLAYTN_MAINNET_CONTRACT_FACTORY = "..."
-
-const KLAYTN_MAINNET_CONTRACT_NFT =
-"..." 
-
-const KLAYTN_MAINNET_EXCHANGE_TOKEN =
-  "0xA6e709154cfc6fBee95C8F2E57a5091C26312753"
-
-const KLAYTN_MAINNET_USDT = "..."
-const KLAYTN_MAINNET_EXPLORER = ""
-
-const KLAYTN_TESTNET_HTTP_RPC_URL = "https://api.baobab.klaytn.net:8651"
-const KLAYTN_TESTNET_WEBSOCKET_RPC_URL = "wss://public-en-baobab.klaytn.net/ws"
-
-const KLAYTN_TESTNET_CONTRACT_FACTORY =
-  "0xBE1a73Da3456e9C69D0A8ed17480B21d26CB4E58"
-
-const KLAYTN_TESTNET_CONTRACT_NFT =
-  "0xEc55699a4127dd36B5b1b95981da512f857FC9de"
-
-
-const KLAYTN_TESTNET_EXCHANGE_TOKEN =
-  "0xA6e709154cfc6fBee95C8F2E57a5091C26312753"
-
-const KLAYTN_TESTNET_USDT =
-  "0xEdEb5f63537EbAe7E6dD79D95Cd2EF20C75Cd732"
-const KLAYTN_TESTNET_EXPLORER = "https://baobab.klaytnscope.com/"
+import {
+    KLAYTN_MAINNET_HTTP_RPC_URL,
+    KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
+    KLAYTN_MAINNET_CONTRACT_FACTORY,
+    KLAYTN_MAINNET_CONTRACT_NFT,
+    KLAYTN_MAINNET_EXCHANGE_TOKEN,
+    KLAYTN_MAINNET_USDT,
+    KLAYTN_MAINNET_EXPLORER,
+    KLAYTN_MAINNET_CHAIN_NAME,
+    KLAYTN_TESTNET_HTTP_RPC_URL,
+    KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
+    KLAYTN_TESTNET_CONTRACT_FACTORY,
+    KLAYTN_TESTNET_CONTRACT_NFT,
+    KLAYTN_TESTNET_EXCHANGE_TOKEN,
+    KLAYTN_TESTNET_USDT,
+    KLAYTN_TESTNET_EXPLORER,
+    KLAYTN_TESTNET_CHAIN_NAME,
+    KLAYTN_MAINNET_NATIVE_CURRENCY,
+    BINANCE_SMART_CHAIN_MAINNET_CHAIN_NAME,
+    BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
+    BINANCE_SMART_CHAIN_MAINNET_CONTRACT_NFT,
+    BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
+    BINANCE_SMART_CHAIN_MAINNET_EXPLORER,
+    BINANCE_SMART_CHAIN_MAINNET_HTTP_RPC_URL,
+    BINANCE_SMART_CHAIN_MAINNET_USDT,
+    BINANCE_SMART_CHAIN_MAINNET_WEBSOCKET_RPC_URL,
+    BINANCE_SMART_CHAIN_TESTNET_CHAIN_NAME,
+    BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
+    BINANCE_SMART_CHAIN_TESTNET_CONTRACT_NFT,
+    BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
+    BINANCE_SMART_CHAIN_TESTNET_EXPLORER,
+    BINANCE_SMART_CHAIN_TESTNET_HTTP_RPC_URL,
+    BINANCE_SMART_CHAIN_TESTNET_USDT,
+    BINANCE_SMART_CHAIN_TESTNET_WEBSOCKET_RPC_URL,
+    POLYGON_MAINNET_CHAIN_NAME,
+    POLYGON_MAINNET_CONTRACT_FACTORY,
+    POLYGON_MAINNET_CONTRACT_NFT,
+    POLYGON_MAINNET_EXCHANGE_TOKEN,
+    POLYGON_MAINNET_EXPLORER,
+    POLYGON_MAINNET_HTTP_RPC_URL,
+    POLYGON_MAINNET_NATIVE_CURRENCY,
+    POLYGON_MAINNET_USDT,
+    POLYGON_MAINNET_WEBSOCKET_RPC_URL,
+    POLYGON_TESTNET_CHAIN_NAME,
+    POLYGON_TESTNET_CONTRACT_FACTORY,
+    POLYGON_TESTNET_CONTRACT_NFT,
+    POLYGON_TESTNET_EXCHANGE_TOKEN,
+    POLYGON_TESTNET_EXPLORER,
+    POLYGON_TESTNET_HTTP_RPC_URL,
+    POLYGON_TESTNET_NATIVE_CURRENCY,
+    POLYGON_TESTNET_USDT,
+    POLYGON_TESTNET_WEBSOCKET_RPC_URL,
+    BINANCE_SMART_CHAIN_MAINNET_NATIVE_CURRENCY,
+    BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY
+} from "./chains"
 
 export enum ChainId {
   KlaytnMainnet = 8217,
   KalytnTestnet = 1001,
-  PolygonMainnet = 137,
-  PolygonTestnet = 80001,
+  PolygonMainnet = 1101,
+  PolygonTestnet = 1442,
   BinanceSmartChainTestnet = 97,
-  BinanceSmartChainMainnet = 56
+  BinanceSmartChainMainnet = 56,
 }
 
 export type ChainInfo = {
@@ -47,12 +72,18 @@ export type ChainInfo = {
   exchangeTokenAddress: Address;
   stableTokenAddresses: Address[];
   explorerUrl: string;
+  chainName: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
+  }
 };
 
 export const defaultChainId = ChainId.KalytnTestnet
 
 export const chainInfos: Record<number, ChainInfo> = {
-    [ChainId.KlaytnMainnet] : {
+    [ChainId.KlaytnMainnet]: {
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
         factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
@@ -60,6 +91,8 @@ export const chainInfos: Record<number, ChainInfo> = {
         exchangeTokenAddress: KLAYTN_MAINNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [KLAYTN_MAINNET_USDT],
         explorerUrl: KLAYTN_MAINNET_EXPLORER,
+        chainName: KLAYTN_MAINNET_CHAIN_NAME,
+        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY
     },
     [ChainId.KalytnTestnet]: {
         httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
@@ -69,45 +102,54 @@ export const chainInfos: Record<number, ChainInfo> = {
         exchangeTokenAddress: KLAYTN_TESTNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [KLAYTN_TESTNET_USDT],
         explorerUrl: KLAYTN_TESTNET_EXPLORER,
-    },
-    [ChainId.PolygonTestnet] : {
-        httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
-        websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
-        NFTAddress: KLAYTN_MAINNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_MAINNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_MAINNET_USDT],
-        explorerUrl: KLAYTN_MAINNET_EXPLORER,
+        chainName: KLAYTN_TESTNET_CHAIN_NAME,
+        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY
     },
     [ChainId.PolygonMainnet]: {
-        httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
-        websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_TESTNET_CONTRACT_FACTORY,
-        NFTAddress: KLAYTN_TESTNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_TESTNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_TESTNET_USDT],
-        explorerUrl: KLAYTN_TESTNET_EXPLORER,
+        httpRpcUrl: POLYGON_MAINNET_HTTP_RPC_URL,
+        websocketRpcUrl: POLYGON_MAINNET_WEBSOCKET_RPC_URL,
+        factoryAddress: POLYGON_MAINNET_CONTRACT_FACTORY,
+        NFTAddress: POLYGON_MAINNET_CONTRACT_NFT,
+        exchangeTokenAddress: POLYGON_MAINNET_EXCHANGE_TOKEN,
+        stableTokenAddresses: [POLYGON_MAINNET_USDT],
+        explorerUrl: POLYGON_MAINNET_EXPLORER,
+        chainName: POLYGON_MAINNET_CHAIN_NAME,
+        nativeCurrency: POLYGON_MAINNET_NATIVE_CURRENCY
     },
-    [ChainId.BinanceSmartChainTestnet] : {
-        httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
-        websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
-        NFTAddress: KLAYTN_MAINNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_MAINNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_MAINNET_USDT],
-        explorerUrl: KLAYTN_MAINNET_EXPLORER,
+    [ChainId.PolygonTestnet]: {
+        httpRpcUrl: POLYGON_TESTNET_HTTP_RPC_URL,
+        websocketRpcUrl: POLYGON_TESTNET_WEBSOCKET_RPC_URL,
+        factoryAddress: POLYGON_TESTNET_CONTRACT_FACTORY,
+        NFTAddress: POLYGON_TESTNET_CONTRACT_NFT,
+        exchangeTokenAddress: POLYGON_TESTNET_EXCHANGE_TOKEN,
+        stableTokenAddresses: [POLYGON_TESTNET_USDT],
+        explorerUrl: POLYGON_TESTNET_EXPLORER,
+        chainName: POLYGON_TESTNET_CHAIN_NAME,
+        nativeCurrency: POLYGON_TESTNET_NATIVE_CURRENCY
     },
     [ChainId.BinanceSmartChainMainnet]: {
-        httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
-        websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_TESTNET_CONTRACT_FACTORY,
-        NFTAddress: KLAYTN_TESTNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_TESTNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_TESTNET_USDT],
-        explorerUrl: KLAYTN_TESTNET_EXPLORER,
+        httpRpcUrl: BINANCE_SMART_CHAIN_MAINNET_HTTP_RPC_URL,
+        websocketRpcUrl: BINANCE_SMART_CHAIN_MAINNET_WEBSOCKET_RPC_URL,
+        factoryAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
+        NFTAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_NFT,
+        exchangeTokenAddress: BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
+        stableTokenAddresses: [BINANCE_SMART_CHAIN_MAINNET_USDT],
+        explorerUrl: BINANCE_SMART_CHAIN_MAINNET_EXPLORER,
+        chainName: BINANCE_SMART_CHAIN_MAINNET_CHAIN_NAME,
+        nativeCurrency: BINANCE_SMART_CHAIN_MAINNET_NATIVE_CURRENCY
     },
+    [ChainId.BinanceSmartChainTestnet]: {
+        httpRpcUrl: BINANCE_SMART_CHAIN_TESTNET_HTTP_RPC_URL,
+        websocketRpcUrl: BINANCE_SMART_CHAIN_TESTNET_WEBSOCKET_RPC_URL,
+        factoryAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
+        NFTAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_NFT,
+        exchangeTokenAddress: BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
+        stableTokenAddresses: [BINANCE_SMART_CHAIN_TESTNET_USDT],
+        explorerUrl: BINANCE_SMART_CHAIN_TESTNET_EXPLORER,
+        chainName: BINANCE_SMART_CHAIN_TESTNET_CHAIN_NAME,
+        nativeCurrency: BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY
+    }
 }
 
 export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
 export const GAS_LIMIT = 3000000
-

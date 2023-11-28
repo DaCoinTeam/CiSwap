@@ -18,6 +18,7 @@ const Page = () => {
         {
             key: "pool",
             text: poolAddress,
+            url: `/pool/${poolAddress}`,
             isAddress: true,
         },
         {

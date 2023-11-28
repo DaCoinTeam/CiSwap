@@ -74,7 +74,16 @@ const ConnectedChain = () => {
                     const _handleSwitch = async () => {
                         if (ethereum == null) return
                         const metamaskApis = new MetamaskApis(ethereum)
-                        await metamaskApis.switchEthereumChain(chain.chainId)
+                        const response = await metamaskApis.switchEthereumChain(chain.chainId)
+                        console.log(response)
+                        if (!response) return 
+                        const code = response.code
+                        if (!code) return 
+                        console.log(1)
+                        if (code != 4902) return
+                        console.log(2)
+                        const _res = await metamaskApis.addEthereumChain(chain.chainId)
+                        console.log(_res)
                     }
                     return <DropdownItem onPress={_handleSwitch} startContent={<Image radius="none" src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
                 })}

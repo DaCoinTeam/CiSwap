@@ -1,48 +1,5 @@
 const abi = [
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_token0",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_token1",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0DepositAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token1DepositAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0BasePrice",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0MaxPrice",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint16",
-                "name": "_protocolFee",
-                "type": "uint16"
-            }
-        ],
-        "name": "createPool",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "stateMutability": "nonpayable",
         "type": "constructor"
@@ -89,21 +46,44 @@ const abi = [
         "type": "event"
     },
     {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "newOwner",
+                "name": "_token0",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_token1",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_token0DepositAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_token1DepositAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_token0BasePrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_token0MaxPrice",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint16",
+                "name": "_protocolFee",
+                "type": "uint16"
             }
         ],
-        "name": "transferOwnership",
+        "name": "createPool",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -146,6 +126,35 @@ const abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "index",
+                "type": "uint16"
+            },
+            {
+                "internalType": "address",
+                "name": "_tokenIn",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_tokenOut",
+                "type": "address"
+            }
+        ],
+        "name": "getPath",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "owner",
         "outputs": [
@@ -156,6 +165,26 @@ const abi = [
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     }
 ] as const 

@@ -10,12 +10,12 @@ class MetamaskApis {
         this.ethereum = ethereum
     }
 
-    async addEthereumChain(chainId: ChainId): Promise<Maybe<ErrorResponse>|null> {
+    async addEthereumChain(chainId: ChainId): Promise<Maybe<ErrorResponse>> {
         try{
             const params = chainInfos[chainId]
             if (!params) return
 
-            return await this.ethereum.request({
+            await this.ethereum.request({
                 method: "wallet_addEthereumChain",
                 params: [
                     {
@@ -35,7 +35,7 @@ class MetamaskApis {
 
     async switchEthereumChain(chainId: ChainId): Promise<Maybe<ErrorResponse>> {
         try{
-            return await this.ethereum.request({
+            await this.ethereum.request({
                 method: "wallet_switchEthereumChain",
                 params: [
                     {

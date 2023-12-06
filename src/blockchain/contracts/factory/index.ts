@@ -87,17 +87,6 @@ class FactoryCountract {
             return null
         }
     }
-
-    async getPath(index: number, token0: Address, token1: Address){
-        try{
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getFactoryContract(web3)
-            return contract.methods.getPath(index, token0, token1).call<Address[]>()
-        } catch(ex){
-            console.log(ex)
-            return null
-        }
-    }
 }
 
 export default FactoryCountract

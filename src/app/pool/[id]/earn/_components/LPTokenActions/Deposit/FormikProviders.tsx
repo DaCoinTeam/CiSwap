@@ -1,7 +1,7 @@
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
-import { ERC20Contract, LiquidityPoolContract } from "@blockchain"
+import { ERC20Contract, PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import {
@@ -100,7 +100,7 @@ const FormikProviders = (props: ContextProps) => {
                     notify(token1ApproveReceipt.transactionHash.toString())
                 }
 
-                const poolFactory = new LiquidityPoolContract(
+                const poolFactory = new PoolContract(
                     chainId,
                     poolAddress,
                     web3,

@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from "@nextui-org/react"
-import { LiquidityPoolContract } from "@blockchain"
+import { PoolContract } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PoolContext } from "../../../../_hooks"
@@ -39,7 +39,7 @@ const ProviderTable = (props: ProviderTableProps) => {
         if (!tokenState.finishLoadWithoutConnected) return
 
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainId, poolAddress)
+            const contract = new PoolContract(chainId, poolAddress)
             const addresses = await contract.providerRegisters()
             if (addresses == null) return
 

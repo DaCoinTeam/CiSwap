@@ -1,7 +1,7 @@
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
-import { LiquidityPoolContract } from "@blockchain"
+import { PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import { calculateIRedenomination } from "@utils"
@@ -62,7 +62,7 @@ const FormikProviders = (props: ContextProps) => {
                 console.log("called")
                 if (web3 == null || !account) return
 
-                const poolFactory = new LiquidityPoolContract(
+                const poolFactory = new PoolContract(
                     chainId,
                     poolAddress,
                     web3,

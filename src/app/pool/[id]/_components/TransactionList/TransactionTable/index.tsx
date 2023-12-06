@@ -15,7 +15,7 @@ import { ViewOnExplorer } from "@app/_shared"
 import { PoolContext } from "../../../_hooks"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { LiquidityPoolContract, RenderTransaction, TransactionMethod, getTransaction } from "@blockchain"
+import { PoolContract, RenderTransaction, TransactionMethod, getTransaction } from "@blockchain"
 import { LoadingState } from "@react-types/shared/src/collections"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -49,7 +49,7 @@ const TransactionTable = (props: TransactionTableProps) => {
         const handleEffect = async () => {
             const _transactions: RenderTransaction[] = []
 
-            const contract = new LiquidityPoolContract(chainId, poolAddress)
+            const contract = new PoolContract(chainId, poolAddress)
 
             const txHashs = await contract.getTransactionHashs()
 

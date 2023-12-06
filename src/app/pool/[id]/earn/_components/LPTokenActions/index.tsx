@@ -7,7 +7,7 @@ import { AppButton, TokenTooltipDisplay } from "@app/_shared"
 import Withdraw from "./Withdraw"
 import Deposit from "./Deposit"
 import { PoolContext } from "../../../_hooks"
-import { LiquidityPoolContract } from "@blockchain"
+import { PoolContract } from "@blockchain"
 import { MetamaskContext } from "@app/_hooks"
 
 interface LPTokenActionsProps {
@@ -37,7 +37,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
     useEffect(() => {
         if (web3 == null || !account) return
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(
+            const contract = new PoolContract(
                 chainId,
                 poolAddress
             )  
@@ -50,7 +50,7 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
 
     const _handleRegisterProvider = async () => {
         if (web3 == null || !account) return
-        const contract = new LiquidityPoolContract(chainId, poolAddress, web3, account)
+        const contract = new PoolContract(chainId, poolAddress, web3, account)
         const receipt = await contract.registerProvider()
         console.log(receipt)
     }

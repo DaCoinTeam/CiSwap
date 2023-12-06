@@ -1,191 +1,97 @@
 const abi = [
+    { inputs: [], stateMutability: "nonpayable", type: "constructor" },
     {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "inputs": [
+        anonymous: false,
+        inputs: [
             {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            }
-        ],
-        "name": "OwnableInvalidOwner",
-        "type": "error"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "account",
-                "type": "address"
-            }
-        ],
-        "name": "OwnableUnauthorizedAccount",
-        "type": "error"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
+                indexed: true,
+                internalType: "address",
+                name: "previousOwner",
+                type: "address",
             },
             {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
+                indexed: true,
+                internalType: "address",
+                name: "newOwner",
+                type: "address",
+            },
         ],
-        "name": "OwnershipTransferred",
-        "type": "event"
+        name: "OwnershipTransferred",
+        type: "event",
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_token0",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_token1",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0DepositAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token1DepositAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0BasePrice",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_token0MaxPrice",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint16",
-                "name": "_protocolFee",
-                "type": "uint16"
-            }
+        inputs: [
+            { internalType: "address", name: "_token0", type: "address" },
+            { internalType: "address", name: "_token1", type: "address" },
+            { internalType: "uint256", name: "_amountToken0Added", type: "uint256" },
+            { internalType: "uint256", name: "_amountToken1Added", type: "uint256" },
+            { internalType: "uint256", name: "_token0BasePrice", type: "uint256" },
+            { internalType: "uint256", name: "_token0MaxPrice", type: "uint256" },
+            { internalType: "uint16", name: "_protocolFee", type: "uint16" },
         ],
-        "name": "createPool",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        name: "createPool",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "getAll",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        inputs: [{ internalType: "address", name: "_WETH9", type: "address" }],
+        name: "createRouter",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_token0",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_token1",
-                "type": "address"
-            }
-        ],
-        "name": "getPair",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        inputs: [],
+        name: "getAll",
+        outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint16",
-                "name": "index",
-                "type": "uint16"
-            },
-            {
-                "internalType": "address",
-                "name": "_tokenIn",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_tokenOut",
-                "type": "address"
-            }
+        inputs: [
+            { internalType: "address", name: "_token0", type: "address" },
+            { internalType: "address", name: "_token1", type: "address" },
         ],
-        "name": "getPath",
-        "outputs": [
-            {
-                "internalType": "address[]",
-                "name": "",
-                "type": "address[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        name: "getPair",
+        outputs: [{ internalType: "address[]", name: "", type: "address[]" }],
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        inputs: [],
+        name: "owner",
+        outputs: [{ internalType: "address", name: "", type: "address" }],
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
+        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        name: "pools",
+        outputs: [{ internalType: "address", name: "", type: "address" }],
+        stateMutability: "view",
+        type: "function",
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-] as const 
+        inputs: [],
+        name: "renounceOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "router",
+        outputs: [{ internalType: "address", name: "", type: "address" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+        name: "transferOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+] as const
 export default abi

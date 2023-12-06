@@ -7,10 +7,8 @@ export type TokenState = {
     token1Balance: number
     token0Locked: number
     token1Locked: number
-    token0Price: number
-    token1Price: number
-    token0BasePrice: number
-    token0MaxPrice: number
+    kLast: bigint
+    liquidity: bigint
     token0Symbol: string
     token1Symbol: string
     token0Decimals: number
@@ -38,7 +36,7 @@ export interface SetTokenAction {
 }
 
 export interface SetTokenBalanceAction {
-    type: "SET_TOKEN0_BALANCE" | "SET_TOKEN1_BALANCE" | "SET_TOKEN0_PRICE" | "SET_TOKEN1_PRICE" | "SET_TOKEN0_BASE_PRICE" |  "SET_TOKEN0_MAX_PRICE" |  "SET_LP_TOKEN_BALANCE" | "SET_TOKEN0_LOCKED" | "SET_TOKEN1_LOCKED" 
+    type: "SET_TOKEN0_BALANCE" | "SET_TOKEN1_BALANCE" | "SET_LP_TOKEN_BALANCE" | "SET_TOKEN0_LOCKED" | "SET_TOKEN1_LOCKED" 
     payload: number
 }
 
@@ -50,6 +48,11 @@ export interface SetTokenSymbolAction {
 export interface SetTokenImageUrlAction {
     type: "SET_TOKEN0_IMAGE_URL" | "SET_TOKEN1_IMAGE_URL" | "SET_TOKEN_LP_IMAGE_URL"
     payload: string
+}
+
+export interface SetPoolInfoAction {
+    type: "SET_K_LAST" | "SET_LIQUIDITY"
+    payload: bigint
 }
 
 
@@ -74,7 +77,7 @@ export interface SetFinishLoad {
 }
 
 
-export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction | SetTokenImageUrlAction
+export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction | SetTokenImageUrlAction | SetPoolInfoAction
 
 export const initialTokenState: TokenState = {
     token0Address: "",
@@ -83,10 +86,8 @@ export const initialTokenState: TokenState = {
     token1Balance: 0,
     token0Locked: 0,
     token1Locked: 0,
-    token0BasePrice: 0,
-    token0Price: 0,
-    token1Price: 0,
-    token0MaxPrice: 0,
+    kLast: BigInt(0),
+    liquidity: BigInt(0),
     token0Symbol: "",
     token1Symbol: "",
     token0Decimals: 0,
@@ -142,25 +143,15 @@ export const tokenReducer = (
             ...state,
             token1Locked: action.payload
         }
-    case "SET_TOKEN0_PRICE":
+    case "SET_K_LAST":
         return {
             ...state,
-            token0Price: action.payload
+            kLast: action.payload
         }
-    case "SET_TOKEN1_PRICE":
+    case "SET_LIQUIDITY":
         return {
             ...state,
-            token1Price: action.payload
-        }
-    case "SET_TOKEN0_BASE_PRICE":
-        return {
-            ...state,
-            token0BasePrice: action.payload
-        }
-    case "SET_TOKEN0_MAX_PRICE":
-        return {
-            ...state,
-            token0MaxPrice: action.payload
+            liquidity: action.payload
         }
     case "SET_TOKEN0_SYMBOL":
         return {

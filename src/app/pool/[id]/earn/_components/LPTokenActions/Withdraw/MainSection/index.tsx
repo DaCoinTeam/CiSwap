@@ -7,7 +7,7 @@ import {
 } from "@app/_shared"
 import { PoolContext } from "../../../../../_hooks"
 import { FormikPropsContext } from "../FormikProviders"
-import { LiquidityPoolContract } from "@blockchain"
+import { PoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
@@ -50,7 +50,7 @@ const MainSection = () => {
         const controller = new AbortController()
         const handleEffect = async () => {
             const LPTokenAmountIn = formik.values.LPTokenAmountIn
-            const contract = new LiquidityPoolContract(chainId, poolAddress, web3, account)
+            const contract = new PoolContract(chainId, poolAddress, web3, account)
             const token0AmountOut = await contract.token0AmountOutWithLPTokensIn(
                 calculateIRedenomination(parseNumber(LPTokenAmountIn),
                     tokenState.LPTokenDecimals),

@@ -26,7 +26,7 @@ const MainForm = () => {
     return (
         <Card>
             <CardHeader className="p-5">
-                <div className="font-bold text-lg">Create Liquidity Pool</div>
+                <div className="font-bold text-lg">Create Pool</div>
             </CardHeader>
             <Divider />
             <CardBody className="p-5">

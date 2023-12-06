@@ -1,5 +1,5 @@
 "use client"
-import { Nunito } from "next/font/google"
+import { Open_Sans } from "next/font/google"
 import React, { useContext, useEffect } from "react"
 import { Navbar, Footer, WaitSignModal, WrongChainMetamaskModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
@@ -14,7 +14,7 @@ import { MetamaskContext } from "./_hooks/MetamaskProviders"
 import { ContextProps } from "./_shared"
 import { useMetamask } from "./_hooks"
 
-export const font = Nunito({ weight: "400", subsets: ["latin"] })
+export const font = Open_Sans({ weight: "400", subsets: ["latin"] })
 
 const WrappedRootLayout = (props: ContextProps) => {
     const darkMode = useSelector(

@@ -1,4 +1,4 @@
-import { ERC20Contract, FactoryContract, LiquidityPoolContract } from "@blockchain"
+import { ERC20Contract, FactoryContract, PoolContract } from "@blockchain"
 import { Table, Pagination, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react"
 import React, { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
@@ -30,7 +30,7 @@ const AllPools = () => {
             
             const poolInfos : PoolInfo[] = [] 
             for (const pool of pools){
-                const contract = new LiquidityPoolContract(chainId, pool)
+                const contract = new PoolContract(chainId, pool)
                 const token0Address = await contract.token0()
                 if (token0Address == null) return 
                 const token0Contract = new ERC20Contract(chainId, token0Address)

@@ -11,7 +11,7 @@ import {
     ResponsiveContainer,
     Legend,
 } from "recharts"
-import { LiquidityPoolContract } from "@blockchain"
+import { PoolContract } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { calculateRedenomination } from "@utils"
@@ -38,7 +38,7 @@ const Token1Chart = (props: Token1ChartProps) => {
         if (!tokenState.finishLoadWithoutConnected) return
         
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainId, poolAddress)
+            const contract = new PoolContract(chainId, poolAddress)
             const _baseTicks = await contract.getAllBaseTicks()
             if (_baseTicks == null) return
             const _renderToken1Ticks : RenderToken1Tick[] = _baseTicks.map(

@@ -11,7 +11,7 @@ import {
     TableHeader,
     TableRow,
 } from "@nextui-org/react"
-import { RewardLog, LiquidityPoolContract, getRewardLog } from "@blockchain"
+import { RewardLog, PoolContract, getRewardLog } from "@blockchain"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PoolContext } from "../../../../_hooks"
@@ -43,7 +43,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
         if (!tokenState.finishLoadWithConnected) return
 
         const handleEffect = async () => {
-            const contract = new LiquidityPoolContract(chainId, poolAddress)
+            const contract = new PoolContract(chainId, poolAddress)
             const events = await contract.getAwardEvents(account)
             if (events == null) return
 

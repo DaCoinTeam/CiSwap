@@ -1,9 +1,9 @@
 "use client"
 import React from "react"
-import { PoolProviders } from "./_hooks"
+import { SwapProviders } from "./_hooks"
 import { ContextProps } from "@app/_shared"
 
 const RootLayout = (props: ContextProps) => {
-    return <PoolProviders>{props.children}</PoolProviders>
+    return <SwapProviders>{props.children}</SwapProviders>
 }
 export default RootLayout

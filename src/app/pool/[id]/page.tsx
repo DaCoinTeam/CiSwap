@@ -11,7 +11,7 @@ const Page = () => {
     const poolContext = useContext(PoolContext)
     if (poolContext == null) return
     const { tokenState, poolAddress } = poolContext 
-
+    console.log(tokenState)
     const router = useRouter()
     const path = usePathname()
 

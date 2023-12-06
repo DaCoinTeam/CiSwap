@@ -1,9 +1,11 @@
 "use client"
 
-import React from "react"
+import React, { useContext } from "react"
 import { Card, CardBody } from "@nextui-org/react"
 import TokenLocked from "./TokenLocked"
-import { DataWidgetDisplay } from "@app/_shared"
+import LiquidityDisplay from "./LiquidityDisplay"
+import { PoolContext } from "../../_hooks"
+import { calculateRedenomination } from "@utils"
 
 interface OverviewProps {
     className? : string
@@ -15,19 +17,8 @@ const Overview = (props: OverviewProps) => {
         <Card className = {`${props.className}`}>
             <CardBody className="flex flex-col justify-between p-5">
                 <div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <DataWidgetDisplay
-                            title="Liquidity"
-                            value={123123}
-                            size="sm"
-                            finishLoad={true} />
-                        <DataWidgetDisplay
-                            title="Volume 24h"
-                            value={123123}
-                            size="sm"
-                            finishLoad={true} 
-                        />
-                    </div>
+                    <LiquidityDisplay />
+
                 </div>
                 <TokenLocked />
             </CardBody>

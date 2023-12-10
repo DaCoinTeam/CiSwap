@@ -19,7 +19,7 @@ export interface Path {
 
 export interface PathResult {
   poolAddresses: Address[];
-  tokenOutAmount: bigint;
+  tokenAmount: bigint;
 }
 
 const arePairsEquivalent = (pair0: Pair, pair1: Pair) => {
@@ -206,7 +206,7 @@ export const findPathsOut = async (
         if (tokenOutAmount == null) return null
         result.push({
             poolAddresses: _path,
-            tokenOutAmount,
+            tokenAmount: tokenOutAmount,
         })
     }
     return result

@@ -4,15 +4,14 @@ import { PinataRequestType } from "@api"
 import { PinataPinOptions, PinataPinResponse } from "@pinata/sdk"
 import { v4 as uuidv4 } from "uuid"
 import { Readable } from "stream"
+import { invalidSearchParameters } from "../shared"
 
 export const POST = async (request: NextRequest) => {
-    const url = new URL(request.url)
+    const { searchParams } = new URL(request.url)
 
-    const type = url.searchParams.get("type") as PinataRequestType | null
+    const type = searchParams.get("type") as PinataRequestType | null
     if (type == null)
-        return new Response("Type not found", {
-            status: 400,
-        })
+        return invalidSearchParameters
 
     const options: PinataPinOptions = {
         pinataMetadata: {

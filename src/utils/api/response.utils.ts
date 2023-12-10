@@ -12,3 +12,11 @@ export const fetchAndCreateSvgBlobUrl = async (url: string) => {
         return null
     }       
 }
+
+export const serializeBigInt = <T>(param: T): T => {
+    return JSON.parse(JSON.stringify(
+        param,
+        (_, value) => (typeof value === "bigint" ? value.toString() : value),
+        2
+    ))
+}

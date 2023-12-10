@@ -6,7 +6,7 @@ import abi from "./abi"
 const getERC20Contract = (web3: Web3, ERC20Address: Address) =>
     new web3.eth.Contract(abi, ERC20Address, web3)
 
-class ERC20Countract {
+class ERC20Contract {
     private chainId: ChainId
     private ERC20Address: Address
     private web3?: Web3
@@ -56,7 +56,7 @@ class ERC20Countract {
         try {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getERC20Contract(web3, this.ERC20Address)
-            return BigInt((await contract.methods.balanceOf(_owner).call()).toString())
+            return await contract.methods.balanceOf(_owner).call<bigint>()
         } catch (ex) {
             console.log(ex)
             return null
@@ -94,4 +94,4 @@ class ERC20Countract {
     }
 }
 
-export default ERC20Countract
+export default ERC20Contract

@@ -5,22 +5,26 @@ import React, {
     createContext,
     useEffect,
     useMemo,
-    useRef
+    useRef,
+    useState,
 } from "react"
 import useSwapState, { SwapState } from "./useSwapState.hook"
 import { useSelector } from "react-redux"
-import { useSearchParams } from "next/navigation"
-import { chainInfos } from "@config"
+import { usePathname, useSearchParams } from "next/navigation"
+import { chains } from "@config"
 import { ERC20Contract } from "@blockchain"
 import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { getTokenApi } from "@api"
+import { useRouter } from "next/navigation"
 
 interface SwapContext {
   swapState: SwapState;
+  actions: {
+    doReverse: () => Promise<void>;
+  };
   handlers: {
-    _handleWithoutConnected: () => Promise<void>;
-    _handleWithConnected: () => Promise<void>;
-    _handleAll: () => Promise<void>;
+    handleWithoutConnected: () => Promise<void>;
+    handleWithConnected: () => Promise<void>;
   };
 }
 
@@ -31,14 +35,59 @@ const SwapProviders = (props: ContextProps) => {
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     const [swapState, swapDispatch] = useSwapState()
+    const router = useRouter()
+    const path = usePathname()
     const searchParams = useSearchParams()
+
+    const _getTokenPair = () => {
+        const tokenInAddress =
+      searchParams.get("tokenInAddress") ??
+      chains[chainId].stableTokenAddresses[0]
+
+        const tokenOutAddress =
+      searchParams.get("tokenOutAddress") ??
+      chains[chainId].exchangeTokenAddress
+        return {
+            tokenInAddress,
+            tokenOutAddress,
+        }
+    }
+
+    const [preventFetch, setPreventFetch] = useState(false)
+
+    const doReverse = async () => {
+        const { tokenInAddress, tokenOutAddress } = _getTokenPair()
+        const params = new URLSearchParams(searchParams)
+        params.set("tokenInAddress", tokenOutAddress)
+        params.set("tokenOutAddress", tokenInAddress)
+        router.push(`${path}?${params.toString()}`)
+
+        const tokenInSelected = swapState.tokenOutSelected
+        const tokenOutSelected = swapState.tokenInSelected
+
+        swapDispatch({
+            type: "SET_TOKEN_IN_SELECTED",
+            payload: tokenInSelected,
+        })
+
+        swapDispatch({
+            type: "SET_TOKEN_OUT_SELECTED",
+            payload: tokenOutSelected,
+        })
+
+        setPreventFetch(true)
+    }
+
+    const actions = useMemo(() => {
+        return { doReverse }
+    }, [doReverse])
 
     const finishInitializeRef = useRef(false)
 
-    useEffect(() => {
+    const handleInitialization = () => {
         const tokenInAddress =
       searchParams.get("tokenInAddress") ??
-      chainInfos[chainId].stableTokenAddresses[0]
+      chains[chainId].stableTokenAddresses[0]
 
         swapDispatch({
             type: "SET_TOKEN_IN_ADDRESS",
@@ -46,7 +95,7 @@ const SwapProviders = (props: ContextProps) => {
         })
         const tokenOutAddress =
       searchParams.get("tokenOutAddress") ??
-      chainInfos[chainId].exchangeTokenAddress
+      chains[chainId].exchangeTokenAddress
 
         swapDispatch({
             type: "SET_TOKEN_OUT_ADDRESS",
@@ -54,10 +103,14 @@ const SwapProviders = (props: ContextProps) => {
         })
 
         finishInitializeRef.current = true
+    }
+
+    useEffect(() => {
+        handleInitialization()
     }, [])
 
-    const _handleWithoutConnected = async () => {
-        const _handleTokenIn = async () => {
+    const handleWithoutConnected = async () => {
+        const handleTokenIn = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
                 swapState.tokenInSelected.address
@@ -94,7 +147,7 @@ const SwapProviders = (props: ContextProps) => {
             await Promise.all(tokenInPromises)
         }
 
-        const _handleTokenOut = async () => {
+        const handleTokenOut = async () => {
             const tokenOutContract = new ERC20Contract(
                 chainId,
                 swapState.tokenOutSelected.address
@@ -135,8 +188,8 @@ const SwapProviders = (props: ContextProps) => {
         }
 
         const promises: Promise<void>[] = []
-        promises.push(_handleTokenIn())
-        promises.push(_handleTokenOut())
+        promises.push(handleTokenIn())
+        promises.push(handleTokenOut())
         await Promise.all(promises)
 
         swapDispatch({
@@ -147,10 +200,18 @@ const SwapProviders = (props: ContextProps) => {
 
     useEffect(() => {
         if (!finishInitializeRef.current) return
-        _handleWithoutConnected()
-    }, [finishInitializeRef.current])
+        if (preventFetch) {
+            setPreventFetch(false)
+            return
+        }
+        handleWithoutConnected()
+    }, [
+        finishInitializeRef.current,
+        swapState.tokenInSelected.address,
+        swapState.tokenOutSelected.address,
+    ])
 
-    const _handleWithConnected = async () => {
+    const handleWithConnected = async () => {
         if (!account || !swapState.load.finishLoadWithoutConnected) {
             swapDispatch({
                 type: "SET_FINISH_LOAD_WITH_CONNECTED",
@@ -200,19 +261,14 @@ const SwapProviders = (props: ContextProps) => {
     }
 
     useEffect(() => {
-        _handleWithConnected()
+        handleWithConnected()
     }, [account, swapState.load.finishLoadWithoutConnected])
 
-    const _handleAll = async () => {
-        await _handleWithoutConnected()
-        await _handleWithConnected()
-    }
-
     const handlers = useMemo(() => {
-        return { _handleWithoutConnected, _handleWithConnected, _handleAll }
-    }, [_handleWithoutConnected, _handleWithConnected, _handleAll])
+        return { handleWithoutConnected, handleWithConnected }
+    }, [handleWithoutConnected, handleWithConnected])
     return (
-        <SwapContext.Provider value={{ swapState, handlers }}>
+        <SwapContext.Provider value={{ swapState, actions, handlers }}>
             {props.children}
         </SwapContext.Provider>
     )

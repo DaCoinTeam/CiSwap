@@ -3,7 +3,10 @@ export const KLAYTN_TESTNET_WEBSOCKET_RPC_URL =
   "wss://public-en-baobab.klaytn.net/ws"
 
 export const KLAYTN_TESTNET_CONTRACT_FACTORY =
-  "0x1f3d2Cb3aA7ae090C359B5740AD49DC5e3271c5C"
+  "0x23Efaada68fC501e96464259Ab8fDeD162777d3E"
+
+export const KLAYTN_TESTNET_CONTRACT_ROUTER =
+  "0x3af13A225b2FFEfc4E62eAA0E13E71e9AF6841d3"
 
 export const KLAYTN_TESTNET_CONTRACT_NFT =
   "0xEc55699a4127dd36B5b1b95981da512f857FC9de"
@@ -16,10 +19,10 @@ export const KLAYTN_TESTNET_BUSD = "0xE7C47FcCd9Ad7e25FcC851EEb51b4acC7E615793"
 export const KLAYTN_TESTNET_NKAY = "0xF72104eEa8B813f85F3dDbf79634f1a2E69B1Cb1"
 export const KLAYTN_TESTNET_EXPLORER = "https://baobab.klaytnscope.com/"
 
-export const KLAYTN_TESTNET_CHAIN_NAME="Klaytn Testnet"
+export const KLAYTN_TESTNET_CHAIN_NAME = "Klaytn Testnet"
 
 export const KLAYTN_TESTNET_NATIVE_CURRENCY = {
     name: "KLAY",
     symbol: "KLAY",
-    decimals: 18
+    decimals: 18,
 }

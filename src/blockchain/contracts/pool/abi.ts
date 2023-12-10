@@ -1,18 +1,5 @@
 const abi = [
-    {
-        inputs: [
-            { internalType: "address", name: "_token0", type: "address" },
-            { internalType: "address", name: "_token1", type: "address" },
-            { internalType: "uint256", name: "_amountToken0Added", type: "uint256" },
-            { internalType: "uint256", name: "_amountToken1Added", type: "uint256" },
-            { internalType: "uint256", name: "_token0BasePrice", type: "uint256" },
-            { internalType: "uint256", name: "_token0MaxPrice", type: "uint256" },
-            { internalType: "uint16", name: "_protocolFee", type: "uint16" },
-            { internalType: "string", name: "_tokenSymbol", type: "string" },
-        ],
-        stateMutability: "nonpayable",
-        type: "constructor",
-    },
+    { inputs: [], stateMutability: "nonpayable", type: "constructor" },
     {
         anonymous: false,
         inputs: [
@@ -60,6 +47,56 @@ const abi = [
     {
         anonymous: false,
         inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "sender",
+                type: "address",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "amountIn",
+                type: "uint256",
+            },
+            {
+                indexed: false,
+                internalType: "uint256",
+                name: "amountOut",
+                type: "uint256",
+            },
+            {
+                indexed: false,
+                internalType: "bool",
+                name: "zeroForOne",
+                type: "bool",
+            },
+        ],
+        name: "Swap",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "uint128",
+                name: "reserve0",
+                type: "uint128",
+            },
+            {
+                indexed: false,
+                internalType: "uint128",
+                name: "reserve1",
+                type: "uint128",
+            },
+        ],
+        name: "Sync",
+        type: "event",
+    },
+    {
+        anonymous: false,
+        inputs: [
             { indexed: true, internalType: "address", name: "from", type: "address" },
             { indexed: true, internalType: "address", name: "to", type: "address" },
             {
@@ -74,82 +111,19 @@ const abi = [
     },
     {
         inputs: [
-            { internalType: "uint256", name: "_amountToken0Added", type: "uint256" },
-            { internalType: "uint256", name: "_amountToken1Added", type: "uint256" },
+            { internalType: "uint128", name: "amount0Desired", type: "uint128" },
+            { internalType: "uint128", name: "amount1Desired", type: "uint128" },
+            { internalType: "uint128", name: "amount0Min", type: "uint128" },
+            { internalType: "uint128", name: "amount1Min", type: "uint128" },
+            { internalType: "uint32", name: "deadline", type: "uint32" },
         ],
         name: "addLiquidity",
         outputs: [
-            {
-                internalType: "uint256",
-                name: "_amountLPTokenMinted",
-                type: "uint256",
-            },
+            { internalType: "uint128", name: "amount0", type: "uint128" },
+            { internalType: "uint128", name: "amount1", type: "uint128" },
+            { internalType: "uint128", name: "amountLP", type: "uint128" },
         ],
         stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                components: [
-                    { internalType: "uint256", name: "liquidity", type: "uint256" },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken0Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken1Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "LPTokenTotalSupply",
-                        type: "uint256",
-                    },
-                    { internalType: "uint256", name: "timestamp", type: "uint256" },
-                ],
-                internalType: "struct IPoolTick.Info",
-                name: "_tick",
-                type: "tuple",
-            },
-        ],
-        name: "addTick",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "allTicks",
-        outputs: [
-            {
-                components: [
-                    { internalType: "uint256", name: "liquidity", type: "uint256" },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken0Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken1Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "LPTokenTotalSupply",
-                        type: "uint256",
-                    },
-                    { internalType: "uint256", name: "timestamp", type: "uint256" },
-                ],
-                internalType: "struct IPoolTick.Info[]",
-                name: "_ticks",
-                type: "tuple[]",
-            },
-        ],
-        stateMutability: "view",
         type: "function",
     },
     {
@@ -159,55 +133,6 @@ const abi = [
         ],
         name: "allowance",
         outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "amountToken0Added",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "amountToken1Added",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            { internalType: "uint256", name: "_amountTokenIn", type: "uint256" },
-            { internalType: "bool", name: "_isToken0", type: "bool" },
-        ],
-        name: "amountTokenOut",
-        outputs: [{ internalType: "uint256", name: "_out", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            {
-                internalType: "uint256",
-                name: "_amountLPTokenRemoved",
-                type: "uint256",
-            },
-            { internalType: "uint256", name: "_token0Percentage", type: "uint256" },
-        ],
-        name: "amountTokenReceivedOnLiquidityRemoval",
-        outputs: [
-            {
-                internalType: "uint256",
-                name: "_amountToken0Received",
-                type: "uint256",
-            },
-            {
-                internalType: "uint256",
-                name: "_amountToken1Received",
-                type: "uint256",
-            },
-        ],
         stateMutability: "view",
         type: "function",
     },
@@ -222,6 +147,20 @@ const abi = [
         type: "function",
     },
     {
+        inputs: [],
+        name: "balance0",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "balance1",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
         inputs: [{ internalType: "address", name: "account", type: "address" }],
         name: "balanceOf",
         outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -230,9 +169,33 @@ const abi = [
     },
     {
         inputs: [],
-        name: "claim",
-        outputs: [],
+        name: "basePriceZeroForOne",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "collect",
+        outputs: [
+            { internalType: "uint128", name: "amount0", type: "uint128" },
+            { internalType: "uint128", name: "amount1", type: "uint128" },
+        ],
         stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "constant0",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "constant1",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
         type: "function",
     },
     {
@@ -260,31 +223,50 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [{ internalType: "uint256", name: "_index", type: "uint256" }],
-        name: "getTick",
+        inputs: [],
+        name: "fee",
+        outputs: [{ internalType: "uint24", name: "", type: "uint24" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            { internalType: "uint128", name: "amountIn", type: "uint128" },
+            { internalType: "bool", name: "zeroForOne", type: "bool" },
+        ],
+        name: "getAmountOut",
+        outputs: [{ internalType: "uint128", name: "amountOut", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "address", name: "", type: "address" }],
+        name: "getProviderInfo",
         outputs: [
             {
                 components: [
-                    { internalType: "uint256", name: "liquidity", type: "uint256" },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken0Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken1Locked",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "LPTokenTotalSupply",
-                        type: "uint256",
-                    },
-                    { internalType: "uint256", name: "timestamp", type: "uint256" },
+                    { internalType: "uint128", name: "amount0", type: "uint128" },
+                    { internalType: "uint128", name: "amount1", type: "uint128" },
                 ],
-                internalType: "struct IPoolTick.Info",
-                name: "_tick",
+                internalType: "struct Pool.DepositAmounts",
+                name: "amounts",
+                type: "tuple",
+            },
+            {
+                components: [
+                    {
+                        internalType: "uint128",
+                        name: "amount0Accumulative",
+                        type: "uint128",
+                    },
+                    {
+                        internalType: "uint128",
+                        name: "amount1Accumulative",
+                        type: "uint128",
+                    },
+                ],
+                internalType: "struct Pool.ProtocolFees",
+                name: "fees",
                 type: "tuple",
             },
         ],
@@ -302,23 +284,41 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [{ internalType: "address", name: "_provider", type: "address" }],
+        inputs: [{ internalType: "address", name: "provider", type: "address" }],
         name: "isProvider",
-        outputs: [{ internalType: "bool", name: "_result", type: "bool" }],
+        outputs: [{ internalType: "bool", name: "", type: "bool" }],
         stateMutability: "view",
         type: "function",
     },
     {
         inputs: [],
         name: "kLast",
-        outputs: [{ internalType: "uint256", name: "_result", type: "uint256" }],
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
         stateMutability: "view",
         type: "function",
     },
     {
         inputs: [],
         name: "liquidity",
-        outputs: [{ internalType: "uint256", name: "_result", type: "uint256" }],
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        name: "liquidityObservations",
+        outputs: [
+            { internalType: "uint32", name: "index", type: "uint32" },
+            { internalType: "uint32", name: "blockTimestamp", type: "uint32" },
+            { internalType: "uint256", name: "liquidityCumulative", type: "uint256" },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "maxPriceZeroForOne",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
         stateMutability: "view",
         type: "function",
     },
@@ -331,13 +331,6 @@ const abi = [
     },
     {
         inputs: [],
-        name: "numProviders",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
         name: "owner",
         outputs: [{ internalType: "address", name: "", type: "address" }],
         stateMutability: "view",
@@ -345,8 +338,23 @@ const abi = [
     },
     {
         inputs: [],
-        name: "protocolFee",
-        outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
+        name: "priceZeroForOne",
+        outputs: [{ internalType: "uint128", name: "", type: "uint128" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        name: "priceZeroForOneObservations",
+        outputs: [
+            { internalType: "uint32", name: "index", type: "uint32" },
+            { internalType: "uint32", name: "blockTimestamp", type: "uint32" },
+            {
+                internalType: "uint256",
+                name: "priceZeroForOneCumulative",
+                type: "uint256",
+            },
+        ],
         stateMutability: "view",
         type: "function",
     },
@@ -360,25 +368,22 @@ const abi = [
     {
         inputs: [],
         name: "register",
-        outputs: [],
+        outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
         stateMutability: "nonpayable",
         type: "function",
     },
     {
         inputs: [
-            {
-                internalType: "uint256",
-                name: "_amountLPTokenRemoved",
-                type: "uint256",
-            },
-            {
-                internalType: "uint256",
-                name: "_percentageOfAmountToken0Received",
-                type: "uint256",
-            },
+            { internalType: "uint128", name: "amountLP", type: "uint128" },
+            { internalType: "uint128", name: "amount0Min", type: "uint128" },
+            { internalType: "uint128", name: "amount1Min", type: "uint128" },
+            { internalType: "uint32", name: "deadline", type: "uint32" },
         ],
         name: "removeLiquidity",
-        outputs: [],
+        outputs: [
+            { internalType: "uint128", name: "amount0", type: "uint128" },
+            { internalType: "uint128", name: "amount1", type: "uint128" },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -390,38 +395,34 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [{ internalType: "address", name: "provider", type: "address" }],
-        name: "rewards",
+        inputs: [],
+        name: "skim",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "state",
         outputs: [
-            {
-                components: [
-                    {
-                        internalType: "uint256",
-                        name: "amountToken0Collected",
-                        type: "uint256",
-                    },
-                    {
-                        internalType: "uint256",
-                        name: "amountToken1Collected",
-                        type: "uint256",
-                    },
-                ],
-                internalType: "struct Pool.Rewards",
-                name: "_result",
-                type: "tuple",
-            },
+            { internalType: "bool", name: "unlocked", type: "bool" },
+            { internalType: "uint128", name: "reserve0", type: "uint128" },
+            { internalType: "uint128", name: "reserve1", type: "uint128" },
         ],
         stateMutability: "view",
         type: "function",
     },
     {
         inputs: [
-            { internalType: "uint256", name: "_amountTokenIn", type: "uint256" },
-            { internalType: "uint256", name: "_minAmountTokenOut", type: "uint256" },
-            { internalType: "bool", name: "_isToken0", type: "bool" },
+            { internalType: "uint128", name: "amountIn", type: "uint128" },
+            { internalType: "uint128", name: "minAmountOut", type: "uint128" },
+            { internalType: "bool", name: "zeroForOne", type: "bool" },
+            { internalType: "uint32", name: "deadline", type: "uint32" },
         ],
         name: "swap",
-        outputs: [],
+        outputs: [
+            { internalType: "uint128", name: "netAmountOut", type: "uint128" },
+        ],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -433,16 +434,10 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        name: "ticks",
-        outputs: [
-            { internalType: "uint256", name: "liquidity", type: "uint256" },
-            { internalType: "uint256", name: "amountToken0Locked", type: "uint256" },
-            { internalType: "uint256", name: "amountToken1Locked", type: "uint256" },
-            { internalType: "uint256", name: "LPTokenTotalSupply", type: "uint256" },
-            { internalType: "uint256", name: "timestamp", type: "uint256" },
-        ],
-        stateMutability: "view",
+        inputs: [],
+        name: "sync",
+        outputs: [],
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
@@ -454,22 +449,8 @@ const abi = [
     },
     {
         inputs: [],
-        name: "token0Constant",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
         name: "token1",
         outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "token1Constant",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
         stateMutability: "view",
         type: "function",
     },

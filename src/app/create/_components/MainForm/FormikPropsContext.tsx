@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import { Address } from "web3"
 import * as Yup from "yup"
 import { ERC20Contract, FactoryContract } from "@blockchain"
-import { chainInfos } from "@config"
+import { chains } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { calculateExponent, calculateIRedenomination, parseNumber } from "@utils"
@@ -99,7 +99,7 @@ const FormikProviders = (props: ContextProps) => {
                     const token0Contract = new ERC20Contract(chainId, values.token0Address, web3, account)
                     const token1Contract = new ERC20Contract(chainId, values.token1Address, web3, account)
                 
-                    const factoryAddress = chainInfos[chainId].factoryAddress
+                    const factoryAddress = chains[chainId].factoryAddress
                     const factoryContract = new FactoryContract(chainId, web3, account)
                 
                     const token0AddedAmountParsed = calculateIRedenomination(
@@ -116,6 +116,8 @@ const FormikProviders = (props: ContextProps) => {
                     const token0MaxPriceParsed = calculateIRedenomination(
                         parseNumber(values.token0MaxPrice), values._token0Decimals 
                     )
+
+                    console.log(token0BasePriceParsed)
 
                     const token0Allowance = await token0Contract.allowance(account, factoryAddress)
                     if (token0Allowance == null) return
@@ -148,11 +150,11 @@ const FormikProviders = (props: ContextProps) => {
                     const createPoolReceipt = await factoryContract.createPool(
                         _token0Address,
                         _token1Address,
+                        2500,
                         _token0AddedAmount,
                         _token1AddedAmount,
                         token0BasePriceParsed,
                         token0MaxPriceParsed,
-                        values.protocolFee * calculateExponent(5)
                     )
                     console.log(createPoolReceipt)
                 }}

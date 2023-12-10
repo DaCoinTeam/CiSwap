@@ -4,24 +4,22 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
-import { PoolContext } from "../../../_hooks"
+import { SwapContext } from "../../_hooks"
 import { parseNumber } from "@utils"
 import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify} from "@app/_shared"
 
 interface FormikValues {
-  token0Amount: string;
-  token1Amount: string;
-  slippage: number;
-  _isBuyAction: boolean;
+    tokenInAmount: string;
+    tokenOutAmount: string;
+    slippage: number;
 }
 
 const initialValues: FormikValues = {
-    token0Amount: "",
-    token1Amount: "",
+    tokenInAmount: "",
+    tokenOutAmount: "",
     slippage: 0.01,
-    _isBuyAction: false,
 }
 
 export const FormikPropsContext =
@@ -38,9 +36,9 @@ const _renderBody = (
 
 const FormikProviders = (props: ContextProps) => {
 
-    const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
-    const { tokenState, handlers, poolAddress } = poolContext
+    const swapContext = useContext(SwapContext)
+    if (swapContext == null) return
+    const { swapState, handlers } = swapContext
     
     const metamaskContext = useContext(MetamaskContext)
     if (metamaskContext == null) return 
@@ -65,7 +63,7 @@ const FormikProviders = (props: ContextProps) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        tokenState.token0Balance,
+                        swapState.tokenInSelected.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
@@ -73,7 +71,7 @@ const FormikProviders = (props: ContextProps) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        tokenState.token1Balance,
+                        swapState.tokenOutSelected.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
@@ -81,15 +79,14 @@ const FormikProviders = (props: ContextProps) => {
             onSubmit={async (values) => {
                 if (web3 == null || !account) return 
                 
-                const tokenInAddress = !values._isBuyAction ? tokenState.token0Address : tokenState.token1Address
-                const tokenAmountIn = !values._isBuyAction ? values.token0Amount : values.token1Amount
-                const tokenInDecimals = !values._isBuyAction ? tokenState.token0Decimals : tokenState.token1Decimals
-
+                const tokenInAddress = swapState.tokenInSelected.address
+                const tokenAmountIn =  values.tokenInAmount
+                const tokenInDecimals = swapState.tokenInSelected.decimals
                 const tokenInContract = new ERC20Contract(chainId, tokenInAddress, web3, account)
 
                 const tokenInAllowance = await tokenInContract.allowance(
                     account,
-                    poolAddress
+                    ""
                 )
 
                 if (tokenInAllowance == null) return
@@ -104,7 +101,7 @@ const FormikProviders = (props: ContextProps) => {
                     dispatch(setWaitSignModalTitle("Approve"))
 
                     const tokenInApproveReceipt = await tokenInContract.approve(
-                        poolAddress,
+                        "",
                         tokenAmountInParsed - tokenInAllowance
                     )
                     if (!tokenInApproveReceipt) {
@@ -118,7 +115,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 const poolFactory = new PoolContract(
                     chainId,
-                    poolAddress,
+                    "",
                     web3,
                     account
                 )
@@ -132,7 +129,7 @@ const FormikProviders = (props: ContextProps) => {
                 tokenAmountInParsed,
                 1 - values.slippage,
                 5
-            ), values._isBuyAction
+            ),  true
                 )
 
                 if (!depositReceipt){

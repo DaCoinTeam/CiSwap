@@ -3,7 +3,7 @@ import { TitleDisplay } from "@app/_shared"
 import { Card, CardBody, Skeleton, Spacer, Image } from "@nextui-org/react"
 import React, { useEffect, useState } from "react"
 import { ERC20Contract } from "@blockchain"
-import { chainInfos } from "@config"
+import { chains } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { Address } from "web3"
@@ -33,7 +33,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
 
   useEffect(() => {
       const handleEffect = async () => {
-          const stableTokens = chainInfos[chainId].stableTokenAddresses
+          const stableTokens = chains[chainId].stableTokenAddresses
 
           const _presentableTokens: PresentableToken[] = []
 

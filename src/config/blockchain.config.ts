@@ -54,7 +54,8 @@ import {
     BINANCE_SMART_CHAIN_MAINNET_NATIVE_CURRENCY,
     BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY,
     KLAYTN_TESTNET_BUSD,
-    KLAYTN_TESTNET_NKAY
+    KLAYTN_TESTNET_NKAY,
+    KLAYTN_TESTNET_CONTRACT_ROUTER
 } from "./chains"
 
 export enum ChainId {
@@ -70,6 +71,7 @@ export type ChainInfo = {
   httpRpcUrl: string;
   websocketRpcUrl: string;
   factoryAddress: Address;
+  routerAddress: Address;
   NFTAddress: Address;
   exchangeTokenAddress: Address;
   stableTokenAddresses: Address[];
@@ -84,11 +86,12 @@ export type ChainInfo = {
 
 export const defaultChainId = ChainId.KalytnTestnet
 
-export const chainInfos: Record<number, ChainInfo> = {
+export const chains: Record<number, ChainInfo> = {
     [ChainId.KlaytnMainnet]: {
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
         factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: KLAYTN_MAINNET_CONTRACT_NFT,
         exchangeTokenAddress: KLAYTN_MAINNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [KLAYTN_MAINNET_USDT],
@@ -100,6 +103,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
         factoryAddress: KLAYTN_TESTNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: KLAYTN_TESTNET_CONTRACT_NFT,
         exchangeTokenAddress: KLAYTN_TESTNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [KLAYTN_TESTNET_USDT, KLAYTN_TESTNET_BUSD, KLAYTN_TESTNET_NKAY],
@@ -111,6 +115,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: POLYGON_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_MAINNET_WEBSOCKET_RPC_URL,
         factoryAddress: POLYGON_MAINNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: POLYGON_MAINNET_CONTRACT_NFT,
         exchangeTokenAddress: POLYGON_MAINNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [POLYGON_MAINNET_USDT],
@@ -122,6 +127,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: POLYGON_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_TESTNET_WEBSOCKET_RPC_URL,
         factoryAddress: POLYGON_TESTNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: POLYGON_TESTNET_CONTRACT_NFT,
         exchangeTokenAddress: POLYGON_TESTNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [POLYGON_TESTNET_USDT],
@@ -133,6 +139,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: BINANCE_SMART_CHAIN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_MAINNET_WEBSOCKET_RPC_URL,
         factoryAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_NFT,
         exchangeTokenAddress: BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [BINANCE_SMART_CHAIN_MAINNET_USDT],
@@ -144,6 +151,7 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: BINANCE_SMART_CHAIN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_TESTNET_WEBSOCKET_RPC_URL,
         factoryAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
+        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
         NFTAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_NFT,
         exchangeTokenAddress: BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
         stableTokenAddresses: [BINANCE_SMART_CHAIN_TESTNET_USDT],
@@ -154,4 +162,4 @@ export const chainInfos: Record<number, ChainInfo> = {
 }
 
 export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
-export const GAS_LIMIT = 3000000
+export const GAS_LIMIT = 30000000

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setDefaultPool } from "@redux"
 import { NextUIProvider } from "@nextui-org/react"
 import { FactoryContract } from "@blockchain"
-import { chainInfos } from "@config"
+import { chains } from "@config"
 import { ToastContainer } from "react-toastify"
 import "./_css/ReactToastify.css"
 import { IconContext } from "react-icons"
@@ -33,11 +33,11 @@ const WrappedRootLayout = (props: ContextProps) => {
     useEffect(() => {
         const handleEffect = async () => {
             const factoryContract = new FactoryContract(chainId)
-            const pairs = await factoryContract.getPairs(
-                chainInfos[chainId].exchangeTokenAddress, 
-                chainInfos[chainId].stableTokenAddresses[0])
-            if (pairs == null || !pairs.length) return    
-            dispatch(setDefaultPool(pairs[0]))
+            // const pairs = await factoryContract.getPairs(
+            //     chains[chainId].exchangeTokenAddress, 
+            //     chains[chainId].stableTokenAddresses[0])
+            // if (pairs == null || !pairs.length) return    
+            // dispatch(setDefaultPool(pairs[0]))
         }
         handleEffect()
     }, [web3])

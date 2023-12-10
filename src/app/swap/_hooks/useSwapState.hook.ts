@@ -17,6 +17,11 @@ export interface SwapState {
   };
 }
 
+export interface SetTokenSelected {
+  type: "SET_TOKEN_IN_SELECTED" | "SET_TOKEN_OUT_SELECTED";
+  payload: SelectedToken;
+}
+
 export interface SetTokenAction {
   type: "SET_TOKEN_IN_ADDRESS" | "SET_TOKEN_OUT_ADDRESS";
   payload: string;
@@ -48,12 +53,13 @@ export interface SetFinishLoadAction {
 }
 
 export type SwapAction =
+  | SetTokenSelected
   | SetTokenAction
   | SetTokenBalanceAction
   | SetTokenSymbolAction
   | SetTokenDecimalsAction
   | SetFinishLoadAction
-  | SetTokenImageUrlAction
+  | SetTokenImageUrlAction;
 
 export const initialSwapState: SwapState = {
     tokenInSelected: {
@@ -78,6 +84,16 @@ export const initialSwapState: SwapState = {
 
 export const swapReducer = (state: SwapState, action: SwapAction) => {
     switch (action.type) {
+    case "SET_TOKEN_IN_SELECTED":
+        return {
+            ...state,
+            tokenInSelected: action.payload,
+        }
+    case "SET_TOKEN_OUT_SELECTED":
+        return {
+            ...state,
+            tokenOutSelected: action.payload,
+        }
     case "SET_TOKEN_IN_ADDRESS":
         return {
             ...state,
@@ -86,7 +102,10 @@ export const swapReducer = (state: SwapState, action: SwapAction) => {
     case "SET_TOKEN_OUT_ADDRESS":
         return {
             ...state,
-            tokenOutSelected: { ...state.tokenOutSelected, address: action.payload },
+            tokenOutSelected: {
+                ...state.tokenOutSelected,
+                address: action.payload,
+            },
         }
     case "SET_TOKEN_IN_BALANCE":
         return {
@@ -96,7 +115,10 @@ export const swapReducer = (state: SwapState, action: SwapAction) => {
     case "SET_TOKEN_OUT_BALANCE":
         return {
             ...state,
-            tokenOutSelected: { ...state.tokenOutSelected, balance: action.payload },
+            tokenOutSelected: {
+                ...state.tokenOutSelected,
+                balance: action.payload,
+            },
         }
     case "SET_TOKEN_IN_SYMBOL":
         return {
@@ -116,7 +138,10 @@ export const swapReducer = (state: SwapState, action: SwapAction) => {
     case "SET_TOKEN_OUT_DECIMALS":
         return {
             ...state,
-            tokenOutSelected: { ...state.tokenOutSelected, decimals: action.payload },
+            tokenOutSelected: {
+                ...state.tokenOutSelected,
+                decimals: action.payload,
+            },
         }
     case "SET_TOKEN_IN_IMAGE_URL":
         return {
@@ -126,7 +151,10 @@ export const swapReducer = (state: SwapState, action: SwapAction) => {
     case "SET_TOKEN_OUT_IMAGE_URL":
         return {
             ...state,
-            tokenOutSelected: { ...state.tokenOutSelected, imageUrl: action.payload },
+            tokenOutSelected: {
+                ...state.tokenOutSelected,
+                imageUrl: action.payload,
+            },
         }
     case "SET_FINISH_LOAD_WITHOUT_CONNECTED":
         return {

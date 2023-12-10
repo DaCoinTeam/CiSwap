@@ -1,8 +1,8 @@
 import Web3, { HttpProvider, WebSocketProvider } from "web3"
-import { chainId, chainInfos } from "@config"
+import { ChainId, chains } from "@config"
 
 export const getHttpWeb3 = (
-    chainId: chainId, 
+    chainId: ChainId, 
     controller?: AbortController
 ) : Web3 => {
     const providerOptions = controller
@@ -12,11 +12,11 @@ export const getHttpWeb3 = (
             }
         } : undefined
     
-    const provider = new HttpProvider(chainInfos[chainId].httpRpcUrl, providerOptions)
+    const provider = new HttpProvider(chains[chainId].httpRpcUrl, providerOptions)
     return new Web3(provider)
 }
 
-export const getWebsocketWeb3 = (chainId: chainId) : Web3 => {
-    const provider = new WebSocketProvider((chainInfos[chainId].websocketRpcUrl))
+export const getWebsocketWeb3 = (chainId: ChainId) : Web3 => {
+    const provider = new WebSocketProvider((chains[chainId].websocketRpcUrl))
     return new Web3(provider)
 }

@@ -135,7 +135,7 @@ const traversePaths = (
     return _paths
 }
 
-export const findPath = async (
+export const findPaths = async (
     chainId: ChainId,
     tokenInAddress: Address,
     tokenOutAddress: Address
@@ -193,7 +193,7 @@ export const findPathsOut = async (
 ): Promise<PathResult[] | null> => {
     const result: PathResult[] = []
 
-    const paths = await findPath(chainId, tokenInAddress, tokenOutAddress)
+    const paths = await findPaths(chainId, tokenInAddress, tokenOutAddress)
     if (paths == null) return null
     const routerContract = new RouterContract(chainId)
     for (const path of paths) {

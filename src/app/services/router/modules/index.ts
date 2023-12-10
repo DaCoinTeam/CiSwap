@@ -195,10 +195,10 @@ export const findPathsOut = async (
 
     const paths = await findPaths(chainId, tokenInAddress, tokenOutAddress)
     if (paths == null) return null
-    const routerContract = new RouterContract(chainId)
+    const contract = new RouterContract(chainId)
     for (const path of paths) {
         const _path = path.pools.map((pool) => pool.address)
-        const tokenOutAmount = await routerContract.getAmountsOut(
+        const tokenOutAmount = await contract.getAmountsOut(
             tokenInAmount,
             tokenInAddress,
             _path

@@ -6,13 +6,13 @@ import UploadImage from "./UploadImage"
 import InputFields from "./InputFields"
 import { AppButton } from "@app/_shared"
 
-interface IFinishSelectPairContext {
-  finishSelectPair: boolean;
-  setFinishSelectPair: React.Dispatch<React.SetStateAction<boolean>>;
+interface IFinishSelectedPairContext {
+  finishSelectedPair: boolean;
+  setFinishSelectedPair: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const FinishSelectPairContext =
-  createContext<IFinishSelectPairContext | null>(null)
+export const FinishSelectedPairContext =
+  createContext<IFinishSelectedPairContext | null>(null)
 
 const MainForm = () => {
     return (

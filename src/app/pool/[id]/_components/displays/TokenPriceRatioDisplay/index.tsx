@@ -2,9 +2,9 @@ import { PoolContext } from "../../../_hooks"
 import { Skeleton } from "@nextui-org/react"
 import React, { useContext } from "react"
 import {
-    calculateInverse,
-    calculateRedenomination,
-    calculateRound,
+    computeInverse,
+    computeRedenomination,
+    computeRound,
 } from "@utils"
 
 interface TokenPriceRatioDisplayProps {
@@ -23,14 +23,14 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
     let _style = props.style
     if (_style == undefined) _style = "style1"
 
-    const price = calculateRedenomination(tokenState.kLast, 5, 3)
+    const price = computeRedenomination(tokenState.kLast, 5, 3)
     const _currentTokenPrice = isToken0Price
         ? price
-        : calculateRound(1 / price, 3)
+        : computeRound(1 / price, 3)
     const _firstTokenSymbol = isToken0Price
         ? tokenState.token0Symbol
         : tokenState.token1Symbol
-    const _basePrice = isToken0Price ? price : calculateInverse(price, 3)
+    const _basePrice = isToken0Price ? price : computeInverse(price, 3)
     const _secondTokenSymbol = isToken0Price
         ? tokenState.token1Symbol
         : tokenState.token0Symbol
@@ -42,11 +42,11 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
 
         return _up ? (
             <span className="text-teal-500">
-        (+{calculateRound(Math.abs(_percentage) * 100, 3)}%)
+        (+{computeRound(Math.abs(_percentage) * 100, 3)}%)
             </span>
         ) : (
             <span className="text-red-500">
-        (-{calculateRound(Math.abs(_percentage) * 100, 3)}%)
+        (-{computeRound(Math.abs(_percentage) * 100, 3)}%)
             </span>
         )
     }

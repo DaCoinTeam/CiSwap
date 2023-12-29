@@ -4,24 +4,24 @@ import React, { createContext, useMemo, useState } from "react"
 import FormikProviders from "./FormikPropsContext"
 import { AppButton } from "@app/_shared"
 import SelectTokenPair from "./SelectTokenPair"
-import PickProtocolFee from "./PickProtocolFee"
-import AddTokens from "./AddTokens"
+import PickFee from "./PickFee"
+import AddTokens from "./DepositTokens"
 import ChooseTokenPrices from "./ChooseTokenPrices"
 
-interface IFinishSelectPairContext {
-  finishSelectPair: boolean;
-  setFinishSelectPair: React.Dispatch<React.SetStateAction<boolean>>;
+interface IFinishSelectedPairContext {
+  finishSelectedPair: boolean;
+  setFinishSelectedPair: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const FinishSelectPairContext =
-  createContext<IFinishSelectPairContext | null>(null)
+export const FinishSelectedPairContext =
+  createContext<IFinishSelectedPairContext | null>(null)
 
 const MainForm = () => {
-    const [finishSelectPair, setFinishSelectPair] = useState(false)
+    const [finishSelectedPair, setFinishSelectedPair] = useState(false)
 
     const contextValue = useMemo(() => {
-        return { finishSelectPair, setFinishSelectPair }
-    }, [finishSelectPair, setFinishSelectPair])
+        return { finishSelectedPair, setFinishSelectedPair }
+    }, [finishSelectedPair, setFinishSelectedPair])
     
     return (
         <Card>
@@ -32,11 +32,11 @@ const MainForm = () => {
             <CardBody className="p-5">
                 <FormikProviders>
                     <div className="grid sm:grid-cols-2 grid-cols-1 gap-12">
-                        <FinishSelectPairContext.Provider value={contextValue}>
+                        <FinishSelectedPairContext.Provider value={contextValue}>
                             <div>
                                 <SelectTokenPair />
                                 <Spacer y={12} />
-                                <PickProtocolFee />
+                                <PickFee />
                                 <Spacer y={12} />
                                 <AddTokens />
                             </div>
@@ -45,7 +45,7 @@ const MainForm = () => {
                                 <Spacer y={12} />
                                 <AppButton typeSubmit content="Create" />
                             </div>
-                        </FinishSelectPairContext.Provider>
+                        </FinishSelectedPairContext.Provider>
                     </div>
                 </FormikProviders>
             </CardBody>

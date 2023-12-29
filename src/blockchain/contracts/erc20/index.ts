@@ -52,33 +52,33 @@ class ERC20Contract {
         }
     }
 
-    async balanceOf(_owner: Address) {
+    async balanceOf(owner: Address) {
         try {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getERC20Contract(web3, this.ERC20Address)
-            return await contract.methods.balanceOf(_owner).call<bigint>()
+            return await contract.methods.balanceOf(owner).call<bigint>()
         } catch (ex) {
             console.log(ex)
             return null
         }
     }
 
-    async allowance(_owner: Address, spender: Address){
+    async allowance(owner: Address, spender: Address){
         try {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getERC20Contract(web3, this.ERC20Address)
-            return BigInt((await contract.methods.allowance(_owner, spender).call()).toString())
+            return await contract.methods.allowance(owner, spender).call<bigint>()
         } catch (ex) {
             console.log(ex)
             return null
         }
     }
 
-    async approve(_spender: string, _value: bigint){
+    async approve(spender: string, value: bigint){
         try{
             if (!this.web3) return null
             const contract = getERC20Contract(this.web3, this.ERC20Address)
-            const data = contract.methods.approve(_spender, _value).encodeABI()
+            const data = contract.methods.approve(spender, value).encodeABI()
             
             return await this.web3.eth.sendTransaction({
                 from: this.sender,

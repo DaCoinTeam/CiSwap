@@ -11,7 +11,7 @@ import { PoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { calculateRedenomination, parseNumber, calculateIRedenomination } from "@utils"
+import { computeRedenomination, parseNumber, computeDenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
 import { Spacer } from "@nextui-org/react"
 import { MetamaskContext } from "@app/_hooks"
@@ -52,14 +52,14 @@ const MainSection = () => {
             const LPTokenAmountIn = formik.values.LPTokenAmountIn
             const contract = new PoolContract(chainId, poolAddress, web3, account)
             const token0AmountOut = await contract.token0AmountOutWithLPTokensIn(
-                calculateIRedenomination(parseNumber(LPTokenAmountIn),
+                computeDenomination(parseNumber(LPTokenAmountIn),
                     tokenState.LPTokenDecimals),
                 controller
             )
             setFinishFetch(true)
             if (token0AmountOut == null) return 
 
-            formik.setFieldValue("token0AmountOut", calculateRedenomination(token0AmountOut, tokenState.token0Decimals,3))
+            formik.setFieldValue("token0AmountOut", computeRedenomination(token0AmountOut, tokenState.token0Decimals,3))
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -83,11 +83,11 @@ const MainSection = () => {
                 <div className="flex items-center justify-between w-full">
                     <TokenDisplay
                         finishLoad={tokenState.finishLoadWithoutConnected}
-                        tokenSymbol={tokenState.LPTokenSymbol}
+                        symbol={tokenState.LPTokenSymbol}
                     />
                     <BalanceDisplay
                         finishLoad={tokenState.finishLoadWithConnected}
-                        tokenBalance={tokenState.LPTokenBalance}
+                        balance={tokenState.LPTokenBalance}
                     />
                 </div>
                 <Spacer y={1}/>
@@ -97,7 +97,7 @@ const MainSection = () => {
             <div className="w-full">
                 <TokenDisplay
                     finishLoad={tokenState.finishLoadWithoutConnected}
-                    tokenSymbol={tokenState.token0Symbol}
+                    symbol={tokenState.token0Symbol}
                 />
                 <Spacer y={1}/>
                 <NumberTextarea readOnly textPosition="right" value={formik.values.token0AmountOut.toString()} onValueChange={_handleChange} />

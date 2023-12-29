@@ -55,7 +55,10 @@ import {
     BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY,
     KLAYTN_TESTNET_BUSD,
     KLAYTN_TESTNET_NKAY,
-    KLAYTN_TESTNET_CONTRACT_ROUTER
+    KLAYTN_TESTNET_CONTRACT_ROUTER,
+    KLAYTN_TESTNET_CONTRACT_WETH10,
+    KLAYTN_TESTNET_CONTRACT_QUOTER,
+    KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
 } from "./chains"
 
 export enum ChainId {
@@ -70,96 +73,121 @@ export enum ChainId {
 export type ChainInfo = {
   httpRpcUrl: string;
   websocketRpcUrl: string;
-  factoryAddress: Address;
+  factory: Address;
   routerAddress: Address;
+  WETH10: Address;
+  quoterAddress: Address;
+  aggregatorAddress: Address;
   NFTAddress: Address;
-  exchangeTokenAddress: Address;
-  stableTokenAddresses: Address[];
+  exchangeToken: Address;
+  stableTokens: Address[];
   explorerUrl: string;
   chainName: string;
   nativeCurrency: {
     name: string;
     symbol: string;
     decimals: number;
-  }
+  };
 };
 
 export const defaultChainId = ChainId.KalytnTestnet
 
-export const chains: Record<number, ChainInfo> = {
+export const chainInfos: Record<number, ChainInfo> = {
     [ChainId.KlaytnMainnet]: {
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_MAINNET_CONTRACT_FACTORY,
+        factory: KLAYTN_MAINNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: KLAYTN_MAINNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_MAINNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_MAINNET_USDT],
+        exchangeToken: KLAYTN_MAINNET_EXCHANGE_TOKEN,
+        stableTokens: [KLAYTN_MAINNET_USDT],
         explorerUrl: KLAYTN_MAINNET_EXPLORER,
         chainName: KLAYTN_MAINNET_CHAIN_NAME,
-        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY
+        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY,
     },
     [ChainId.KalytnTestnet]: {
         httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
-        factoryAddress: KLAYTN_TESTNET_CONTRACT_FACTORY,
+        factory: KLAYTN_TESTNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: KLAYTN_TESTNET_CONTRACT_NFT,
-        exchangeTokenAddress: KLAYTN_TESTNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [KLAYTN_TESTNET_USDT, KLAYTN_TESTNET_BUSD, KLAYTN_TESTNET_NKAY],
+        exchangeToken: KLAYTN_TESTNET_EXCHANGE_TOKEN,
+        stableTokens: [
+            KLAYTN_TESTNET_USDT,
+            KLAYTN_TESTNET_BUSD,
+            KLAYTN_TESTNET_NKAY,
+        ],
         explorerUrl: KLAYTN_TESTNET_EXPLORER,
         chainName: KLAYTN_TESTNET_CHAIN_NAME,
-        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY
+        nativeCurrency: KLAYTN_MAINNET_NATIVE_CURRENCY,
     },
     [ChainId.PolygonMainnet]: {
         httpRpcUrl: POLYGON_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_MAINNET_WEBSOCKET_RPC_URL,
-        factoryAddress: POLYGON_MAINNET_CONTRACT_FACTORY,
+        factory: POLYGON_MAINNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: POLYGON_MAINNET_CONTRACT_NFT,
-        exchangeTokenAddress: POLYGON_MAINNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [POLYGON_MAINNET_USDT],
+        exchangeToken: POLYGON_MAINNET_EXCHANGE_TOKEN,
+        stableTokens: [POLYGON_MAINNET_USDT],
         explorerUrl: POLYGON_MAINNET_EXPLORER,
         chainName: POLYGON_MAINNET_CHAIN_NAME,
-        nativeCurrency: POLYGON_MAINNET_NATIVE_CURRENCY
+        nativeCurrency: POLYGON_MAINNET_NATIVE_CURRENCY,
     },
     [ChainId.PolygonTestnet]: {
         httpRpcUrl: POLYGON_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_TESTNET_WEBSOCKET_RPC_URL,
-        factoryAddress: POLYGON_TESTNET_CONTRACT_FACTORY,
+        factory: POLYGON_TESTNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: POLYGON_TESTNET_CONTRACT_NFT,
-        exchangeTokenAddress: POLYGON_TESTNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [POLYGON_TESTNET_USDT],
+        exchangeToken: POLYGON_TESTNET_EXCHANGE_TOKEN,
+        stableTokens: [POLYGON_TESTNET_USDT],
         explorerUrl: POLYGON_TESTNET_EXPLORER,
         chainName: POLYGON_TESTNET_CHAIN_NAME,
-        nativeCurrency: POLYGON_TESTNET_NATIVE_CURRENCY
+        nativeCurrency: POLYGON_TESTNET_NATIVE_CURRENCY,
     },
     [ChainId.BinanceSmartChainMainnet]: {
         httpRpcUrl: BINANCE_SMART_CHAIN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_MAINNET_WEBSOCKET_RPC_URL,
-        factoryAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
+        factory: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_NFT,
-        exchangeTokenAddress: BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [BINANCE_SMART_CHAIN_MAINNET_USDT],
+        exchangeToken: BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
+        stableTokens: [BINANCE_SMART_CHAIN_MAINNET_USDT],
         explorerUrl: BINANCE_SMART_CHAIN_MAINNET_EXPLORER,
         chainName: BINANCE_SMART_CHAIN_MAINNET_CHAIN_NAME,
-        nativeCurrency: BINANCE_SMART_CHAIN_MAINNET_NATIVE_CURRENCY
+        nativeCurrency: BINANCE_SMART_CHAIN_MAINNET_NATIVE_CURRENCY,
     },
     [ChainId.BinanceSmartChainTestnet]: {
         httpRpcUrl: BINANCE_SMART_CHAIN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_TESTNET_WEBSOCKET_RPC_URL,
-        factoryAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
+        factory: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
         routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
+        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_NFT,
-        exchangeTokenAddress: BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
-        stableTokenAddresses: [BINANCE_SMART_CHAIN_TESTNET_USDT],
+        exchangeToken: BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
+        stableTokens: [BINANCE_SMART_CHAIN_TESTNET_USDT],
         explorerUrl: BINANCE_SMART_CHAIN_TESTNET_EXPLORER,
         chainName: BINANCE_SMART_CHAIN_TESTNET_CHAIN_NAME,
-        nativeCurrency: BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY
-    }
+        nativeCurrency: BINANCE_SMART_CHAIN_TESTNET_NATIVE_CURRENCY,
+    },
 }
 
 export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
-export const GAS_LIMIT = 30000000
+export const GAS_LIMIT = 300000000

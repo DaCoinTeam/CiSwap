@@ -5,19 +5,19 @@ import { TitleDisplay } from "@app/_shared"
 import { FormikPropsContext } from "../FormikPropsContext"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { FinishSelectPairContext } from "../index"
+import { FinishSelectedPairContext } from "../index"
 
-interface PickProtocolFeeProps {
+interface PickFeeProps {
   className?: string;
 }
 
-interface ProtocolFee {
+interface Fee {
   key: number;
   label: string;
   value: number;
 }
 
-const protocolFees: ProtocolFee[] = [
+const protocolFees: Fee[] = [
     {
         key: 0,
         label: "0.25%",
@@ -40,7 +40,7 @@ const protocolFees: ProtocolFee[] = [
     },
 ]
 
-const PickProtocolFee = (props: PickProtocolFeeProps) => {
+const PickFee = (props: PickFeeProps) => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
@@ -48,36 +48,36 @@ const PickProtocolFee = (props: PickProtocolFeeProps) => {
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const finishSelectPairContext = useContext(FinishSelectPairContext)
-    if (finishSelectPairContext == null) return
+    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
+    if (finishSelectedPairContext == null) return
 
-    const { finishSelectPair } = finishSelectPairContext
+    const { finishSelectedPair } = finishSelectedPairContext
 
-    const _click = (fee: ProtocolFee) => {
-        formik.setFieldValue("_protocolFeeId", fee.key)
-        formik.setFieldValue("protocolFee", fee.value)
+    const _click = (fee: Fee) => {
+        formik.setFieldValue("_feeId", fee.key)
+        formik.setFieldValue("fee", fee.value)
     }
 
     const _renderIfSelected = (key: number) => {
-        if (formik.values._protocolFeeId == key){
+        if (formik.values._feeId == key){
             return `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
         } else {
             return ""
         }
     }
 
-    const _finishSelectPair = account != null && finishSelectPair
+    const _finishSelectedPair = account != null && finishSelectedPair
 
     return (
         <div className={props.className}>
-            <TitleDisplay title="Pick Protocol Fee" />
+            <TitleDisplay title="Pick Fee" />
             <Spacer y={4} />
             <div className="grid grid-cols-4 gap-4">
                 {protocolFees.map((fee) => (
                     <Card
                         key={fee.key}
                         onPress={() => _click(fee)}
-                        isPressable = {_finishSelectPair}
+                        isPressable = {_finishSelectedPair}
                         className={`${_renderIfSelected(fee.key)} glow`}
                     >
                         <CardBody className="p-5">
@@ -90,4 +90,4 @@ const PickProtocolFee = (props: PickProtocolFeeProps) => {
     )
 }
 
-export default PickProtocolFee
+export default PickFee

@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
-import { calculateIRedenomination } from "@utils"
+import { computeDenomination } from "@utils"
 import { PoolContext } from "../../../../_hooks"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
@@ -54,7 +54,7 @@ const FormikProviders = (props: ContextProps) => {
             initialValues={initialValues}
             validationSchema={Yup.object({
                 token1DepositAmount: Yup.number().max(
-                    tokenState.token1Balance,
+                    tokenState.balanceB,
                     "Input must not exceed your available balance"
                 ),
             })}
@@ -73,7 +73,7 @@ const FormikProviders = (props: ContextProps) => {
                 dispatch(setWaitSignModalTitle("Withdraw"))
                 
                 const withdrawReceipt = await poolFactory.withdraw(
-                    calculateIRedenomination(
+                    computeDenomination(
                         values.token0AmountOut,
                         tokenState.token0Decimals
                     )

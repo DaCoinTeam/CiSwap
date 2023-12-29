@@ -26,7 +26,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
     let _size = props.size
     if (_size == undefined) _size = "sm"
 
-    let _tokenImageClassName = ""
+    let _imageUrlClassName = ""
     let _textClassName = ""
     let _skeletonSize = ""
     let _buttonSize = ""
@@ -34,14 +34,14 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
 
     switch (_size) {
     case "sm":
-        _tokenImageClassName = "w-5 h-5"
+        _imageUrlClassName = "w-5 h-5"
         _textClassName = "text-sm"
         _skeletonSize = "h-6 w-30"
         _buttonSize = "h-6 w-6"
         _iconSize = "h-4 h-4"
         break
     case "lg":
-        _tokenImageClassName = "w-9 h-9"
+        _imageUrlClassName = "w-9 h-9"
         _textClassName = "text-3xl"
         _skeletonSize = "h-9 w-60"
         _buttonSize = "h-9 w-9"
@@ -68,25 +68,25 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                         <AvatarGroup>
                             <Avatar
                                 classNames={{
-                                    base: `${_tokenImageClassName}`,
+                                    base: `${_imageUrlClassName}`,
                                 }}
                                 showFallback
                                 src={props.token0ImageUrl}
                                 fallback={
                                     <QuestionMarkCircleIcon
-                                        className={`${_tokenImageClassName}`}
+                                        className={`${_imageUrlClassName}`}
                                     />
                                 }
                             />
                             <Avatar
                                 classNames={{
-                                    base: `${_tokenImageClassName}`,
+                                    base: `${_imageUrlClassName}`,
                                 }}
                                 showFallback
                                 src={props.token1ImageUrl}
                                 fallback={
                                     <QuestionMarkCircleIcon
-                                        className={`${_tokenImageClassName}`}
+                                        className={`${_imageUrlClassName}`}
                                     />
                                 }
                             />

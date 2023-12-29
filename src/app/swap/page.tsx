@@ -1,13 +1,11 @@
 "use client"
-import React, { useContext } from "react"
+import React from "react"
 import { SwapSection } from "./_components"
-import { SwapContext } from "./_hooks"
 import { BreadcrumbsDisplay } from "@app/_shared"
 import { Spacer } from "@nextui-org/react"
 
 const Page = () => {
-    const swapContext = useContext(SwapContext)
-    if (swapContext == null) return
+    
     const breadcrumbItems = [
         {
             key: "home",
@@ -19,7 +17,7 @@ const Page = () => {
             text: "Swap"
         }
     ]
-    console.log(swapContext.swapState)
+
     return (
         <div className="max-w-[1024px] m-auto px-6 py-12">
             <BreadcrumbsDisplay items={breadcrumbItems}/>

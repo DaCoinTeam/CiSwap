@@ -3,7 +3,7 @@ import React, { useContext } from "react"
 import { ErrorDisplay, NumberInput, TitleDisplay } from "@app/_shared"
 import { Button, Card, CardBody, Spacer } from "@nextui-org/react"
 import { RootState } from "@redux"
-import { FinishSelectPairContext } from "../index"
+import { FinishSelectedPairContext } from "../index"
 import { FormikPropsContext } from "../FormikPropsContext"
 import { useSelector } from "react-redux"
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline"
@@ -17,73 +17,59 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const token0BasePriceParsed = parseNumber(formik.values.token0BasePrice)
-    const token0MaxPriceParsed = parseNumber(formik.values.token0MaxPrice)
+    const basePriceAParsed = parseNumber(formik.values.basePriceA)
+    const maxPriceAParsed = parseNumber(formik.values.maxPriceA)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const finishSelectPairContext = useContext(FinishSelectPairContext)
-    if (finishSelectPairContext == null) return
+    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
+    if (finishSelectedPairContext == null) return
 
-    const { finishSelectPair } = finishSelectPairContext
+    const { finishSelectedPair } = finishSelectedPairContext
 
-    const _finishSelectPair = account != null && finishSelectPair
+    const _finishSelectedPair = account != null && finishSelectedPair
 
-    const _handleChange = (
-        value: string,
-        isTokenMax0Card?: boolean
-    ) => {
-        const priceName = isTokenMax0Card 
-            ? "token0MaxPrice" 
-            : "token0BasePrice"
+    const _handleChange = (value: string, isTokenAMax?: boolean) => {
+        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
         formik.setFieldValue(priceName, value)
     }
 
-    const _renderError = (hasError?: boolean, isTokenMax0Card?: boolean) => {
-        const _message = isTokenMax0Card
-            ? formik.errors.token0MaxPrice
-            : formik.errors.token0BasePrice
+    const _renderError = (hasError?: boolean, isTokenAMax?: boolean) => {
+        const _message = isTokenAMax
+            ? formik.errors.maxPriceA
+            : formik.errors.basePriceA
         return hasError ? <ErrorDisplay message={_message} /> : null
     }
 
-    const _renderDescription = (isTokenMax0Card?: boolean) => {
-        const firstTokenSymbol = formik.values._isToken0Sell
-            ? formik.values._token0Symbol
-            : formik.values._token1Symbol
+    const _renderDescription = (isTokenAMax?: boolean) => {
+        const firstTokenSymbol = formik.values._zeroForOne
+            ? formik.values._symbolA
+            : formik.values._symbolB
 
-        const secondTokenSymbol = formik.values._isToken0Sell
-            ? formik.values._token1Symbol
-            : formik.values._token0Symbol
+        const secondTokenSymbol = formik.values._zeroForOne
+            ? formik.values._symbolB
+            : formik.values._symbolA
 
-        const price = isTokenMax0Card
-            ? token0MaxPriceParsed
-            : token0BasePriceParsed
+        const price = isTokenAMax ? maxPriceAParsed : basePriceAParsed
         const _message = `1 ${firstTokenSymbol} = ${price} ${secondTokenSymbol}`
-        return _finishSelectPair ? <div className="font-bold text-center text-sm"> {_message} </div> : null
+        return _finishSelectedPair ? (
+            <div className="font-bold text-center text-sm"> {_message} </div>
+        ) : null
     }
 
-    const _onPlusPress = (isTokenMax0Card?: boolean) => {    
-        const priceName = isTokenMax0Card 
-            ? "token0MaxPrice" 
-            : "token0BasePrice"
+    const _onPlusPress = (isTokenAMax?: boolean) => {
+        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
-        const priceValue = isTokenMax0Card
-            ? token0MaxPriceParsed
-            : token0BasePriceParsed
-        
-        
+        const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
+
         formik.setFieldValue(priceName, priceValue + 1)
     }
 
-    const _onMinusPress = (isTokenMax0Card?: boolean) => {
-        const priceName = isTokenMax0Card 
-            ? "token0MaxPrice" 
-            : "token0BasePrice"
+    const _onMinusPress = (isTokenAMax?: boolean) => {
+        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
-        const priceValue = isTokenMax0Card
-            ? token0MaxPriceParsed
-            : token0BasePriceParsed
-        
+        const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
+
         formik.setFieldValue(priceName, priceValue < 1 ? 0 : priceValue - 1)
     }
 
@@ -110,14 +96,14 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 />
 
                                 <NumberInput
-                                    isDisabled={!_finishSelectPair}
+                                    isDisabled={!_finishSelectedPair}
                                     textPosition="center"
-                                    errorMessage={formik.errors.token0BasePrice}
+                                    errorMessage={formik.errors.basePriceA}
                                     onValueChange={_handleChange}
-                                    value={_finishSelectPair ? formik.values.token0BasePrice: ""}
+                                    value={_finishSelectedPair ? formik.values.basePriceA : ""}
                                     hideErrorMessage
                                 />
-                                
+
                                 <Button
                                     variant="flat"
                                     isIconOnly
@@ -131,11 +117,11 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {_renderDescription()}
                         </CardBody>
                     </Card>
-                    {_renderError(!!formik.errors.token0BasePrice)}
+                    {_renderError(!!formik.errors.basePriceA)}
                 </div>
                 <div className="grow">
                     <Card>
-                        <CardBody>
+                        <CardBody className="p-5">
                             <div className="text-center w-full font-bold text-sm">
                 Max Price
                             </div>
@@ -150,11 +136,11 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     radius="full"
                                 />
                                 <NumberInput
-                                    isDisabled={!_finishSelectPair}
+                                    isDisabled={!_finishSelectedPair}
                                     textPosition="center"
-                                    errorMessage={formik.errors.token0MaxPrice}
-                                    onValueChange={value => _handleChange(value, true)}
-                                    value={_finishSelectPair ? formik.values.token0MaxPrice : ""}
+                                    errorMessage={formik.errors.maxPriceA}
+                                    onValueChange={(value) => _handleChange(value, true)}
+                                    value={_finishSelectedPair ? formik.values.maxPriceA : ""}
                                 />
                                 <Button
                                     variant="flat"
@@ -169,7 +155,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {_renderDescription(true)}
                         </CardBody>
                     </Card>
-                    {_renderError(!!formik.errors.token0MaxPrice, true)}
+                    {_renderError(!!formik.errors.maxPriceA, true)}
                 </div>
             </div>
         </div>

@@ -2,19 +2,19 @@ import { createSlice } from "@reduxjs/toolkit"
 import { Address } from "web3"
 import { ChainId, defaultChainId } from "@config"
 
-export interface BlockchainSlice {
+export interface BlockchainInfoslice {
   account: string;
   chainId: ChainId;
   defaultPool: Address
 }
 
-const initialState: BlockchainSlice = {
+const initialState: BlockchainInfoslice = {
     account: "",
     chainId: defaultChainId,
     defaultPool: "",
 }
 
-export const blockchainSlice = createSlice({
+export const blockchainInfoslice = createSlice({
     name: "blockchain",
     initialState,
     reducers: {
@@ -30,6 +30,6 @@ export const blockchainSlice = createSlice({
     },
 })
 
-export const { setAccount, setChainId, setDefaultPool } = blockchainSlice.actions
+export const { setAccount, setChainId, setDefaultPool } = blockchainInfoslice.actions
 
-export const blockchainReducer = blockchainSlice.reducer
+export const blockchainReducer = blockchainInfoslice.reducer

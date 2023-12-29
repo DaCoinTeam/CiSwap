@@ -2,7 +2,7 @@ import web3, {
     HexString,
     Address
 } from "web3"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 import { chainId } from "@config"
 import { getHttpWeb3 } from "../contracts"
 
@@ -77,12 +77,12 @@ export const getTransaction = async (
             
             _isBuyAction = (params[0] as bigint) == BigInt(0)
 
-            const _tokenInAmount = calculateRedenomination(
+            const _tokenInAmount = computeRedenomination(
                 _isBuyAction ? (params[2] as bigint) : (params[0] as bigint),
                 _isBuyAction ? token1Decimals : token0Decimals,
                 3
             )
-            const _tokenOutAmount = calculateRedenomination(
+            const _tokenOutAmount = computeRedenomination(
                 _isBuyAction ? (params[1] as bigint) : (params[3] as bigint),
                 _isBuyAction ? token0Decimals : token0Decimals,
                 3
@@ -110,8 +110,8 @@ export const getTransaction = async (
                 data
             )
 
-            tokenIn = `${calculateRedenomination(params[0] as bigint, token1Decimals, 3)} ${token1Symbol}`
-            tokenOut = `${calculateRedenomination(params[1] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
+            tokenIn = `${computeRedenomination(params[0] as bigint, token1Decimals, 3)} ${token1Symbol}`
+            tokenOut = `${computeRedenomination(params[1] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
         }
         break
 
@@ -130,8 +130,8 @@ export const getTransaction = async (
                 data
             )
 
-            tokenIn = `${calculateRedenomination(params[0] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
-            tokenOut = `${calculateRedenomination(params[1] as bigint, token0Decimals, 3)} ${token0Symbol}`
+            tokenIn = `${computeRedenomination(params[0] as bigint, LPTokenDecimals, 3)} ${LPTokenSymbol}`
+            tokenOut = `${computeRedenomination(params[1] as bigint, token0Decimals, 3)} ${token0Symbol}`
         }
         break
     

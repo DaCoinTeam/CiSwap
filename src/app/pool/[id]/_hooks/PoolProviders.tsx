@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
 import { TokenState } from "../_hooks"
 import { useParams } from "next/navigation"
-import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
+import { computeRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { ERC20Contract, PoolContract } from "@blockchain"
 import { getTokenApi } from "@api"
 import usePoolState from "./usePoolState.hook"
@@ -41,11 +41,11 @@ const PoolProviders = (props: ContextProps) => {
         const poolContract = new PoolContract(chainId, poolAddress)
 
         const _handleToken0Promises = async () => {
-            const token0Address = await poolContract.token0()
-            if (token0Address == null) return
-            tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: token0Address })
+            const token0 = await poolContract.token0()
+            if (token0 == null) return
+            tokenDispatch({ type: "SET_TOKEN0_ADDRESS", payload: token0 })
 
-            const token0Contract = new ERC20Contract(chainId, token0Address)
+            const token0Contract = new ERC20Contract(chainId, token0)
 
             const token0Decimals = await token0Contract.decimals()
             if (token0Decimals == null) return
@@ -54,10 +54,10 @@ const PoolProviders = (props: ContextProps) => {
             const token0Promises: Promise<void>[] = []
 
             const handleTokenDTO = async () => {
-                const token0DTO = await getTokenApi(token0Address, chainId)
+                const token0DTO = await getTokenApi(token0, chainId)
                 if (token0DTO != null) {
                     const blobUrl = await fetchAndCreateSvgBlobUrl(
-                        token0DTO.tokenImageUrl
+                        token0DTO.imageUrlUrl
                     )
                     if (blobUrl == null) return
                     tokenDispatch({ type: "SET_TOKEN1_IMAGE_URL", payload: blobUrl })
@@ -77,7 +77,7 @@ const PoolProviders = (props: ContextProps) => {
                 if (token0Locked == null) return
                 tokenDispatch({
                     type: "SET_TOKEN0_LOCKED",
-                    payload: calculateRedenomination(token0Locked, token0Decimals, 3),
+                    payload: computeRedenomination(token0Locked, token0Decimals, 3),
                 })
             }
             token0Promises.push(handleToken0Locked())
@@ -86,11 +86,11 @@ const PoolProviders = (props: ContextProps) => {
         }
 
         const _handleToken1Promises = async () => {
-            const token1Address = await poolContract.token1()
-            if (token1Address == null) return
-            tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: token1Address })
+            const token1 = await poolContract.token1()
+            if (token1 == null) return
+            tokenDispatch({ type: "SET_TOKEN1_ADDRESS", payload: token1 })
 
-            const token1Contract = new ERC20Contract(chainId, token1Address)
+            const token1Contract = new ERC20Contract(chainId, token1)
 
             const token1Decimals = await token1Contract.decimals()
             if (token1Decimals == null) return
@@ -99,10 +99,10 @@ const PoolProviders = (props: ContextProps) => {
             const token1Promises: Promise<void>[] = []
 
             const handleToken1DTO = async () => {
-                const token1DTO = await getTokenApi(token1Address, chainId)
+                const token1DTO = await getTokenApi(token1, chainId)
                 if (token1DTO != null) {
                     const blobUrl = await fetchAndCreateSvgBlobUrl(
-                        token1DTO.tokenImageUrl
+                        token1DTO.imageUrlUrl
                     )
                     if (blobUrl == null) return
                     tokenDispatch({ type: "SET_TOKEN1_IMAGE_URL", payload: blobUrl })
@@ -122,7 +122,7 @@ const PoolProviders = (props: ContextProps) => {
                 if (token1Locked == null) return
                 tokenDispatch({
                     type: "SET_TOKEN1_LOCKED",
-                    payload: calculateRedenomination(token1Locked, token1Decimals, 3),
+                    payload: computeRedenomination(token1Locked, token1Decimals, 3),
                 })
             }
             token1Promises.push(handleToken1Locked())
@@ -155,7 +155,7 @@ const PoolProviders = (props: ContextProps) => {
                 if (LPTokenTotalSupply == null) return
                 tokenDispatch({
                     type: "SET_LP_TOKEN_TOTAL_SUPPLY",
-                    payload: calculateRedenomination(
+                    payload: computeRedenomination(
                         LPTokenTotalSupply,
                         LPTokenDecimals,
                         3
@@ -169,7 +169,7 @@ const PoolProviders = (props: ContextProps) => {
                 if (LPTokenAmountLocked == null) return
                 tokenDispatch({
                     type: "SET_LP_TOKEN_AMOUNT_LOCKED",
-                    payload: calculateRedenomination(
+                    payload: computeRedenomination(
                         LPTokenAmountLocked,
                         LPTokenDecimals,
                         3
@@ -246,45 +246,45 @@ const PoolProviders = (props: ContextProps) => {
         }
 
         const poolContract = new PoolContract(chainId, poolAddress)
-        const token0Contract = new ERC20Contract(chainId, tokenState.token0Address)
-        const token1Contract = new ERC20Contract(chainId, tokenState.token1Address)
+        const token0Contract = new ERC20Contract(chainId, tokenState.token0)
+        const token1Contract = new ERC20Contract(chainId, tokenState.token1)
 
         const promises: Promise<void>[] = []
 
-        const handleToken0Balance = async () => {
-            const token0Balance = await token0Contract.balanceOf(account)
-            if (token0Balance == null) return
+        const handlebalanceA = async () => {
+            const balanceA = await token0Contract.balanceOf(account)
+            if (balanceA == null) return
             tokenDispatch({
                 type: "SET_TOKEN0_BALANCE",
-                payload: calculateRedenomination(
-                    token0Balance,
+                payload: computeRedenomination(
+                    balanceA,
                     tokenState.token0Decimals,
                     3
                 ),
             })
         }
-        promises.push(handleToken0Balance())
+        promises.push(handlebalanceA())
 
-        const handleToken1Balance = async () => {
-            const token1Balance = await token1Contract.balanceOf(account)
-            if (token1Balance == null) return
+        const handlebalanceB = async () => {
+            const balanceB = await token1Contract.balanceOf(account)
+            if (balanceB == null) return
             tokenDispatch({
                 type: "SET_TOKEN1_BALANCE",
-                payload: calculateRedenomination(
-                    token1Balance,
+                payload: computeRedenomination(
+                    balanceB,
                     tokenState.token1Decimals,
                     3
                 ),
             })
         }
-        promises.push(handleToken1Balance())
+        promises.push(handlebalanceB())
 
         const handleLPTokenBalance = async () => {
             const LPTokenBalance = await poolContract.balanceOf(account)
             if (LPTokenBalance == null) return
             tokenDispatch({
                 type: "SET_LP_TOKEN_BALANCE",
-                payload: calculateRedenomination(
+                payload: computeRedenomination(
                     LPTokenBalance,
                     tokenState.token0Decimals,
                     3

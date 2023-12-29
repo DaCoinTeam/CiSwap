@@ -3,7 +3,7 @@ import { Skeleton } from "@nextui-org/react"
 
 interface BalanceDisplayProps {
   className?: string;
-  tokenBalance: number;
+  balance: string;
   finishLoad?: boolean;
 }
 
@@ -12,7 +12,7 @@ const BalanceDisplay = (props: BalanceDisplayProps) => {
         <div className={`${props.className} text-xs  flex gap-1`}>
             <span> Balance : </span>
             {props.finishLoad ? (
-                <span>{props.tokenBalance}</span>
+                <span>{props.balance}</span>
             ) : (
                 <Skeleton className="h-4 w-4 rounded" />
             )}{" "}

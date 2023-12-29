@@ -20,9 +20,9 @@ const TokenLocked = (props: TokenLockedProps) => {
             <Spacer y={2}/>
             <Card>
                 <CardBody className="p-3">
-                    <TokenLockedDetails tokenLocked={tokenState.token0Locked} tokenSymbol={tokenState.token0Symbol}/>
+                    <TokenLockedDetails tokenLocked={tokenState.token0Locked} symbol={tokenState.token0Symbol}/>
                     <Spacer y={2}/>
-                    <TokenLockedDetails tokenLocked={tokenState.token1Locked} tokenSymbol={tokenState.token1Symbol}/>
+                    <TokenLockedDetails tokenLocked={tokenState.token1Locked} symbol={tokenState.token1Symbol}/>
                 </CardBody>
             </Card>
         </div>

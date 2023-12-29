@@ -1,5 +1,5 @@
 import { SDKProvider } from "@metamask/sdk"
-import { ChainId, chains } from "@config"
+import { ChainId, chainInfos } from "@config"
 import web3 from "web3"
 import { Maybe } from "@metamask/providers/dist/utils"
 
@@ -12,7 +12,7 @@ class MetamaskApis {
 
     async addEthereumChain(chainId: ChainId): Promise<Maybe<ErrorResponse>> {
         try{
-            const params = chains[chainId]
+            const params = chainInfos[chainId]
             if (!params) return
 
             await this.ethereum.request({

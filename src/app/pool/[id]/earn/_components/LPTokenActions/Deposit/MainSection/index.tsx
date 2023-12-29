@@ -11,8 +11,8 @@ import { PoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { calculateRedenomination, parseNumber } from "@utils"
-import { calculateIRedenomination } from "@utils"
+import { computeRedenomination, parseNumber } from "@utils"
+import { computeDenomination } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
 import { Spacer } from "@nextui-org/react"
 import { MetamaskContext } from "@app/_hooks"
@@ -53,14 +53,14 @@ const MainSection = () => {
             const token1DepositAmount = formik.values.token1DepositAmount
             const contract = new PoolContract(chainId, poolAddress, web3, account)
             const LPTokenAmountOut = await contract.token0AmountOut(
-                calculateIRedenomination(parseNumber(token1DepositAmount),
+                computeDenomination(parseNumber(token1DepositAmount),
                     tokenState.LPTokenDecimals),
                 controller
             )
             setFinishFetch(true)
             if (LPTokenAmountOut == null) return 
 
-            formik.setFieldValue("LPTokenAmountOut", calculateRedenomination(LPTokenAmountOut, tokenState.LPTokenDecimals,3))
+            formik.setFieldValue("LPTokenAmountOut", computeRedenomination(LPTokenAmountOut, tokenState.LPTokenDecimals,3))
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -84,12 +84,12 @@ const MainSection = () => {
                 <div className="flex items-center justify-between">
                     <TokenDisplay
                         finishLoad={tokenState.finishLoadWithoutConnected}
-                        tokenSymbol={tokenState.token1Symbol}
+                        symbol={tokenState.token1Symbol}
                     />
                     <Spacer y={1}/>
                     <BalanceDisplay
                         finishLoad={tokenState.finishLoadWithConnected}
-                        tokenBalance={tokenState.token1Balance}
+                        balance={tokenState.balanceB}
                     />
                 </div>
                 <NumberTextarea textPosition="right" value={formik.values.token1DepositAmount} onValueChange={_handleChange} />
@@ -99,7 +99,7 @@ const MainSection = () => {
             <div  className="w-full">
                 <TokenDisplay
                     finishLoad={tokenState.finishLoadWithoutConnected}
-                    tokenSymbol={tokenState.LPTokenSymbol}
+                    symbol={tokenState.LPTokenSymbol}
                 />
                 <Spacer y={1}/>
                 <NumberTextarea readOnly textPosition="right" value={formik.values.LPTokenAmountOut.toString()} onValueChange={_handleChange} />

@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { ERC20Contract, ERC721Contract } from "@blockchain"
-import { chains } from "@config"
+import { chainInfos } from "@config"
 import { pinataPOSTFile, pinataPOSTJson } from "@api"
 import { Address } from "web3"
 import { ContextProps } from "@app/_shared"
@@ -73,7 +73,7 @@ const FormikProviders = (props: ContextProps) => {
                 async (values) => {
                     if (web3 == null) return
                     
-                    const erc20Contract = new ERC20Contract(chainId, chains[chainId].exchangeTokenAddress)
+                    const erc20Contract = new ERC20Contract(chainId, chainInfos[chainId].exchangeToken)
 
                     const decimals = await erc20Contract.decimals()
                     if (decimals == null) return
@@ -86,7 +86,7 @@ const FormikProviders = (props: ContextProps) => {
                     const imageCid = addFileResponse?.IpfsHash
                     if (!imageCid || imageCid == null) return 
 
-                    const NFTAddress = chains[chainId].NFTAddress
+                    const NFTAddress = chainInfos[chainId].NFTAddress
                     const erc721Contract = new ERC721Contract(
                         chainId,
                         NFTAddress,

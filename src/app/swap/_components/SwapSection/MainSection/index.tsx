@@ -13,66 +13,61 @@ import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import {
-    calculateRedenomination,
+    computeRedenomination,
     parseNumber,
-    calculateIRedenomination,
+    computeDenomination,
 } from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)
-    if (swapContext == null) return
-    const { swapState, actions } = swapContext
 
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
-    const [preventExecutionTokenOut, setPreventExecutionTokenOut] = useState(false)
-    const [preventExecutionTokenIn, setPreventExecutionTokenIn] = useState(false)
+    const [preventExecutionOut, setPreventExecutionOut] = useState(false)
+    const [preventExecutionIn, setPreventExecutionIn] = useState(false)
 
-    const firstTokenInRender = useRef(true)
-    const [finishFetchTokenOut, setFinishFetchTokenOut] = useState(true)
+    const firstInRef = useRef(true)
+    const [finishExecuteOut, setFinishExecuteOut] = useState(true)
 
     useEffect(() => {
-        if (firstTokenInRender.current) {
-            firstTokenInRender.current = false
+        if (firstInRef.current) {
+            firstInRef.current = false
             return
         }
 
-        if (preventExecutionTokenIn) {
-            setPreventExecutionTokenIn(false)
+        if (preventExecutionIn) {
+            setPreventExecutionIn(false)
             return
         }
 
-        console.log("Called in")
         const controller = new AbortController()
         const handleEffect = async () => {
-            const tokenInAmount = formik.values.tokenInAmount
-            const contract = new RouterContract(chainId)
-            const tokenOutAmount = await contract.getAmountsOut(
-                calculateIRedenomination(
-                    parseNumber(tokenInAmount),
-                    swapState.tokenOutSelected.decimals
+            const routerContract = new RouterContract(chainId)
+            const amountOut = await routerContract.getAmountsOut(
+                computeDenomination(
+                    parseNumber(formik.values.amountIn),
+                    swapState.tokenInInfo.decimals
                 ),
-                swapState.tokenInSelected.address,
-                [],
+                swapState.tokenInInfo.address,
+                [
+                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855",
+                    "0x4E0B265B5e253A76aD2D469c31721fFBf2f38120",
+                ],
                 controller
             )
-            setFinishFetchTokenOut(true)
-            if (tokenOutAmount == null) return
+            setFinishExecuteOut(true)
+            if (amountOut == null) return
 
             formik.setFieldValue(
-                "tokenOutAmount",
-                calculateRedenomination(
-                    tokenOutAmount,
-                    swapState.tokenOutSelected.decimals,
-                    3
-                )
+                "amountOut",
+                computeRedenomination(amountOut, swapState.tokenOutInfo.decimals, 3)
             )
 
-            setPreventExecutionTokenOut(true)
+            setPreventExecutionOut(true)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -81,50 +76,47 @@ const MainSection = () => {
             controller.abort()
             clearTimeout(delayedEffectWithBounce)
         }
-    }, [formik.values.tokenInAmount])
+    }, [formik.values.amountIn])
 
-    const firstTokenOutRender = useRef(true)
-    const [finishFetchTokenIn, setFinishFetchTokenIn] = useState(true)
+    const firstOutRef = useRef(true)
+    const [finishExecuteIn, setFinishExecuteIn] = useState(true)
 
     useEffect(() => {
-        if (firstTokenOutRender.current) {
-            firstTokenOutRender.current = false
+        if (firstOutRef.current) {
+            firstOutRef.current = false
             return
         }
 
-        if (preventExecutionTokenOut) {
-            setPreventExecutionTokenOut(false)
+        if (preventExecutionOut) {
+            setPreventExecutionOut(false)
             return
         }
 
-        console.log("Called out")
         const controller = new AbortController()
         const handleEffect = async () => {
-            const tokenOutAmount = formik.values.tokenOutAmount
-            const contract = new RouterContract(chainId)
-            const tokenInAmount = await contract.getAmountsOut(
-                calculateIRedenomination(
-                    parseNumber(tokenOutAmount),
-                    swapState.tokenOutSelected.decimals
+            const routerContract = new RouterContract(chainId)
+            const amountIn = await routerContract.getAmountsIn(
+                computeDenomination(
+                    parseNumber(formik.values.amountOut),
+                    swapState.tokenOutInfo.decimals
                 ),
-                swapState.tokenInSelected.address,
-                [],
+                swapState.tokenInInfo.address,
+                [
+                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855",
+                    "0x4E0B265B5e253A76aD2D469c31721fFBf2f38120",
+                ],
                 controller
             )
 
-            setFinishFetchTokenIn(true)
-            if (tokenInAmount == null) return
+            setFinishExecuteIn(true)
+            if (amountIn == null) return
 
             formik.setFieldValue(
-                "tokenInAmount",
-                calculateRedenomination(
-                    tokenInAmount,
-                    swapState.tokenInSelected.decimals,
-                    3
-                )
+                "amountIn",
+                computeRedenomination(amountIn, swapState.tokenInInfo.decimals, 3)
             )
 
-            setPreventExecutionTokenIn(true)
+            setPreventExecutionIn(true)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -133,29 +125,27 @@ const MainSection = () => {
             controller.abort()
             clearTimeout(delayedEffectWithBounce)
         }
-    }, [formik.values.tokenOutAmount])
+    }, [formik.values.amountOut])
 
-    const handleTokenInInputChange = (value: string) => {
-        formik.setFieldValue("tokenInAmount", value)
-        setFinishFetchTokenOut(false)
+    const handleInChange = (value: string) => {
+        formik.setFieldValue("amountIn", value)
+        setFinishExecuteOut(false)
     }
 
-    const handleTokenOutInputChange = (value: string) => {
-        formik.setFieldValue("tokenOutAmount", value)
-        setFinishFetchTokenIn(false)
+    const handleOutChange = (value: string) => {
+        formik.setFieldValue("amountOut", value)
+        setFinishExecuteIn(false)
     }
 
-    const _inverse = () => actions.doReverse()
+    if (swapContext == null) return
+    const { swapState, actions } = swapContext
+    const { doReverse } = actions
 
-
-    console.log(formik.values)
-
-    // const _handleTokenInInputChange = !inverse
-    //     ? handleToken0InputChange
-    //     : handleToken1InputChange
-    // const _handleToken1InputChange = !inverse
-    //     ? handleToken1InputChange
-    //     : handleToken0InputChange
+    const _handleReverse = async () => {
+        await doReverse()
+        formik.setFieldValue("amountIn", formik.values.amountOut)
+        setFinishExecuteOut(false)
+    }
 
     return (
         <div className="grid gap-6 justify-items-center">
@@ -163,51 +153,48 @@ const MainSection = () => {
                 <div className="justify-between flex">
                     <TokenDisplay
                         finishLoad={swapState.load.finishLoadWithoutConnected}
-                        tokenSymbol={swapState.tokenInSelected.symbol}
+                        symbol={swapState.tokenInInfo.symbol}
                     />
                     <BalanceDisplay
                         finishLoad={swapState.load.finishLoadWithConnected}
-                        tokenBalance={swapState.tokenInSelected.balance}
+                        balance={swapState.tokenInInfo.balance}
                     />
                 </div>
                 <Spacer y={1} />
                 <NumberTextarea
                     textPosition="right"
-                    value={formik.values.tokenInAmount}
-                    onValueChange={handleTokenInInputChange}
+                    value={formik.values.amountIn}
+                    onValueChange={handleInChange}
                 />
-                <LoadingDisplay
-                    finishLoad={finishFetchTokenIn}
-                    message="Calculating..."
-                />
+                <LoadingDisplay finishLoad={finishExecuteIn} message="Calculating..." />
             </div>
 
             <Button
                 isIconOnly
                 endContent={<ArrowsUpDownIcon height={24} width={24} />}
                 radius="full"
-                onPress={_inverse}
+                onPress={_handleReverse}
             />
 
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
                         finishLoad={swapState.load.finishLoadWithoutConnected}
-                        tokenSymbol={swapState.tokenOutSelected.symbol}
+                        symbol={swapState.tokenOutInfo.symbol}
                     />
                     <BalanceDisplay
                         finishLoad={swapState.load.finishLoadWithConnected}
-                        tokenBalance={swapState.tokenOutSelected.balance}
+                        balance={swapState.tokenOutInfo.balance}
                     />
                 </div>
                 <Spacer y={1} />
                 <NumberTextarea
                     textPosition="right"
-                    value={formik.values.tokenOutAmount}
-                    onValueChange={handleTokenOutInputChange}
+                    value={formik.values.amountOut}
+                    onValueChange={handleOutChange}
                 />
                 <LoadingDisplay
-                    finishLoad={finishFetchTokenOut}
+                    finishLoad={finishExecuteOut}
                     message="Calculating..."
                 />
             </div>

@@ -8,7 +8,7 @@ const abi = [
             },
             {
                 "internalType": "string",
-                "name": "tokenSymbol",
+                "name": "symbol",
                 "type": "string"
             }
         ],

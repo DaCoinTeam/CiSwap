@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react"
 import { MetamaskContext } from "./MetamaskProviders"
 import { useDispatch, useSelector } from "react-redux"
 import web3 from "web3"
-import { chains } from "@config"
+import { chainInfos } from "@config"
 
 const useMetamask = () => {
     const metamaskContext = useContext(MetamaskContext)
@@ -20,7 +20,7 @@ const useMetamask = () => {
 
         ethereum.on("chainChanged", (chainId) => {
             const _chainId = Number(web3.utils.toDecimal(chainId as string))
-            const existedChainId = chains[_chainId]
+            const existedChainId = chainInfos[_chainId]
             console.log(existedChainId)
             if (!existedChainId)
             {

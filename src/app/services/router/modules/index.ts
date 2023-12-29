@@ -1,79 +1,124 @@
-import { Address } from "web3"
-import { FactoryContract, PoolContract, RouterContract } from "@blockchain"
+import web3, { Address, Bytes } from "web3"
+import {
+    FactoryContract,
+    PoolContract,
+    QuoterContract,
+} from "@blockchain"
 import { ChainId } from "@config"
+import {
+    BigIntElement,
+    findMaxBigIntIndexAndValue,
+    findMinBigIntIndexAndValue,
+} from "@utils"
 
-export interface Pair {
-  token0Address: Address;
-  token1Address: Address;
+export interface PoolInfo {
+  token0: Address;
+  token1: Address;
+  indexPool: bigint;
 }
 
-export interface Pool {
-  address: Address;
-  pair: Pair;
-}
+const getAllPoolInfos = async (
+    chainId: ChainId
+): Promise<PoolInfo[] | null> => {
+    const factory = new FactoryContract(chainId)
 
-export interface Path {
-  pools: Pool[];
-  nextTokenAddress: Address;
-}
+    const poolInfos: PoolInfo[] = []
 
-export interface PathResult {
-  poolAddresses: Address[];
-  tokenAmount: bigint;
-}
-
-const arePairsEquivalent = (pair0: Pair, pair1: Pair) => {
-    return (
-        (pair0.token0Address == pair1.token0Address &&
-      pair0.token1Address == pair1.token1Address) ||
-    (pair0.token0Address == pair1.token1Address &&
-      pair1.token0Address == pair0.token1Address)
-    )
-}
-
-const hasPathEncounteredPair = (path: Path, pair: Pair): boolean => {
-    const pathPairs: Pair[] = path.pools.map((pool) => {
-        return {
-            token0Address: pool.pair.token0Address,
-            token1Address: pool.pair.token1Address,
-        }
-    })
-
-    for (const pathPair of pathPairs) {
-        if (arePairsEquivalent(pathPair, pair)) return true
+    const allPools = await factory.allPools()
+    if (allPools == null) return null
+    for (const pool of allPools) {
+        const poolContract = new PoolContract(chainId, pool)
+        const token0 = await poolContract.token0()
+        if (token0 == null) return null
+        const token1 = await poolContract.token1()
+        if (token1 == null) return null
+        const indexPool = await poolContract.indexPool()
+        if (indexPool == null) return null
+        poolInfos.push({
+            token0,
+            token1,
+            indexPool,
+        })
     }
 
+    return poolInfos
+}
+
+const arePoolsEquivalent = (poolInfo0: PoolInfo, poolInfo1: PoolInfo) => {
+    const hasSameTokens =
+    (poolInfo0.token0 == poolInfo1.token1 &&
+      poolInfo0.token1 == poolInfo1.token0) ||
+    (poolInfo0.token0 == poolInfo1.token0 &&
+      poolInfo0.token1 == poolInfo1.token1)
+    return hasSameTokens && poolInfo0.indexPool == poolInfo1.indexPool
+}
+
+export interface PoolSwapInfo {
+  tokenStart: Address;
+  tokenEnd: Address;
+  indexPool: bigint;
+}
+
+const convert = (info: PoolSwapInfo): PoolInfo => {
+    const zeroForOne =
+    web3.utils.stringToHex(info.tokenStart) <
+    web3.utils.stringToHex(info.tokenEnd)
+    return {
+        token0: zeroForOne ? info.tokenStart : info.tokenEnd,
+        token1: zeroForOne ? info.tokenEnd : info.tokenStart,
+        indexPool: info.indexPool,
+    }
+}
+
+export type Path = (Address | bigint)[];
+
+const encodePath = (path: Path): Bytes => {
+    return web3.utils.encodePacked(path)
+}
+
+const hasPathEncounteredPool = (
+    path: Path,
+    indexPool: bigint,
+    token: Address
+): boolean => {
+    const length = path.length
+    if (length < 3) {
+        throw new Error("Path length must be at least 3")
+    }
+    const poolSwapInfoNext: PoolSwapInfo = {
+        tokenStart: path[length - 1] as Address,
+        indexPool,
+        tokenEnd: token,
+    }
+    for (let i = 0; i < length - 2; i++) {
+        const poolSwapInfo: PoolSwapInfo = {
+            tokenStart: path[i] as Address,
+            indexPool: path[i + 1] as bigint,
+            tokenEnd: path[i + 2] as Address,
+        }
+        if (arePoolsEquivalent(convert(poolSwapInfoNext), convert(poolSwapInfo)))
+            return true
+    }
     return false
 }
 
+const pushPoolToPath = (path: Path, indexPool: bigint, token: Address) =>
+    path.push(indexPool, token)
+
 const initialize = (
-    tokenInAddress: Address,
-    tokenOutAddress: Address,
-    allPools: Pool[],
+    tokenStart: Address,
+    tokenEnd: Address,
+    allPoolInfos: PoolInfo[],
     output: Path[]
-): Path[] | null => {
+): Path[] => {
     const paths: Path[] = []
-    for (const pool of allPools) {
-        const token0Address = pool.pair.token0Address
-        const token1Address = pool.pair.token1Address
+    for (const poolInfo of allPoolInfos) {
+        if (tokenStart == poolInfo.token0 || tokenStart == poolInfo.token1) {
+            const tokenEndPaired =
+        tokenStart == poolInfo.token0 ? poolInfo.token1 : poolInfo.token0
+            const path: Path = [tokenStart, poolInfo.indexPool, tokenEndPaired]
 
-        if (tokenInAddress == token0Address || tokenInAddress == token1Address) {
-            const nextTokenAddress =
-        tokenInAddress == token0Address ? token1Address : token0Address
-            const path: Path = {
-                pools: [
-                    {
-                        address: pool.address,
-                        pair: {
-                            token0Address,
-                            token1Address,
-                        },
-                    },
-                ],
-                nextTokenAddress,
-            }
-
-            if (nextTokenAddress == tokenOutAddress) {
+            if (tokenEndPaired == tokenEnd) {
                 output.push(path)
             } else {
                 paths.push(path)
@@ -84,130 +129,97 @@ const initialize = (
 }
 
 const traversePaths = (
-    tokenOutAddress: Address,
-    allPools: Pool[],
+    tokenEnd: Address,
+    allPoolInfos: PoolInfo[],
     paths: Path[],
     output: Path[]
 ): Path[] | null => {
-    const _paths: Path[] = []
+    const returnPaths: Path[] = []
     for (const path of paths) {
-        const tokenInAddress = path.nextTokenAddress
+        const tokenStart = path.at(-1)
 
-        const pools = path.pools
-        const lastPool = pools.at(-1) as Pool
-
-        if (!lastPool) return null
-
-        for (const pool of allPools) {
-            const token0Address = pool.pair.token0Address
-            const token1Address = pool.pair.token1Address
-            const _pools: Pool[] = Object.assign([], pools)
-
-            if (hasPathEncounteredPair(path, { token0Address, token1Address })) {
+        for (const poolInfo of allPoolInfos) {
+            const tokenEndPaired =
+        poolInfo.token0 == tokenStart ? poolInfo.token1 : poolInfo.token0
+            if (hasPathEncounteredPool(path, poolInfo.indexPool, tokenEndPaired))
                 continue
-            }
 
-            if (tokenInAddress == token0Address || tokenInAddress == token1Address) {
-                _pools.push({
-                    address: pool.address,
-                    pair: {
-                        token0Address,
-                        token1Address,
-                    },
-                })
+            if (
+                tokenEndPaired == poolInfo.token0 ||
+        tokenEndPaired == poolInfo.token1
+            ) {
+                const tokenEndNext =
+          tokenEndPaired == poolInfo.token0 ? poolInfo.token1 : poolInfo.token0
+                pushPoolToPath(path, poolInfo.indexPool, tokenEndNext)
 
-                const nextTokenAddress =
-          tokenInAddress == token0Address ? token1Address : token0Address
-
-                const _path: Path = {
-                    pools: _pools,
-                    nextTokenAddress,
-                }
-
-                if (nextTokenAddress == tokenOutAddress) {
-                    output.push(_path)
+                if (tokenEndNext == tokenEnd) {
+                    output.push(path)
                 } else {
-                    _paths.push(_path)
+                    returnPaths.push(path)
                 }
             }
         }
     }
-    return _paths
+    return returnPaths
 }
 
-export const findPaths = async (
-    chainId: ChainId,
-    tokenInAddress: Address,
-    tokenOutAddress: Address
-): Promise<Path[] | null> => {
-    const factoryContract = new FactoryContract(chainId)
-
-    const poolAddresses = await factoryContract.getPools()
-    if (poolAddresses == null) return null
-
-    const pools: Pool[] = []
-
-    const promises: Promise<void>[] = []
-    for (const poolAddress of poolAddresses) {
-        const promise = async () => {
-            const poolContract = new PoolContract(chainId, poolAddress)
-            const token0Address = await poolContract.token0()
-            if (token0Address == null) return
-            const token1Address = await poolContract.token1()
-            if (token1Address == null) return
-
-            pools.push({
-                address: poolAddress,
-                pair: {
-                    token0Address,
-                    token1Address,
-                },
-            })
-        }
-
-        promises.push(promise())
-    }
-    await Promise.all(promises)
-
-    if (poolAddresses == null) return null
-
-    const output: Path[] = []
-
-    let paths = initialize(tokenInAddress, tokenOutAddress, pools, output)
-
-    if (paths == null) return null
-    const length = paths.length
-    do {
-        paths = traversePaths(tokenOutAddress, pools, paths, output)
-        break
-    } while (length)
-
-    return output
+export interface OptimalResult {
+  amountQuoted: bigint;
+  path: Path;
 }
 
-export const findPathsOut = async (
+const getOptimalResult = async (
     chainId: ChainId,
-    tokenInAddress: Address,
-    tokenOutAddress: Address,
-    tokenInAmount: bigint
-): Promise<PathResult[] | null> => {
-    const result: PathResult[] = []
+    amount: bigint,
+    paths: Path[],
+    exactInput: boolean
+): Promise<OptimalResult | null> => {
+    if (!paths.length) throw new Error("Paths array is empty")
 
-    const paths = await findPaths(chainId, tokenInAddress, tokenOutAddress)
-    if (paths == null) return null
-    const contract = new RouterContract(chainId)
+    const quoterContract = new QuoterContract(chainId)
+    const amounts: bigint[] = []
     for (const path of paths) {
-        const _path = path.pools.map((pool) => pool.address)
-        const tokenOutAmount = await contract.getAmountsOut(
-            tokenInAmount,
-            tokenInAddress,
-            _path
-        )
-        if (tokenOutAmount == null) return null
-        result.push({
-            poolAddresses: _path,
-            tokenAmount: tokenOutAmount,
-        })
+        const encodedPath = encodePath(path)
+        let amountQuoted: bigint
+        if (exactInput) {
+            const amountOut = await quoterContract.quoteExactInput(
+                amount,
+                encodedPath
+            )
+            if (amountOut == null) return null
+            amountQuoted = amountOut
+        } else {
+            const amountIn = await quoterContract.quoteExactOutput(
+                amount,
+                encodedPath
+            )
+            if (amountIn == null) return null
+            amountQuoted = amountIn
+        }
+        amounts.push(amountQuoted)
     }
-    return result
+    const element: BigIntElement = exactInput
+        ? findMaxBigIntIndexAndValue(amounts)
+        : findMinBigIntIndexAndValue(amounts)
+    return {
+        amountQuoted: element.value,
+        path: paths[element.index],
+    }
+}
+
+export const findOptimalResult = async (
+    chainId: ChainId,
+    tokenStart: Address,
+    tokenEnd: Address,
+    amount: bigint,
+    exactInput: boolean
+): Promise<OptimalResult | null> => {
+    const allPoolInfos = await getAllPoolInfos(chainId)
+    if (allPoolInfos == null) return null
+    const output: Path[] = []
+    const paths = initialize(tokenStart, tokenEnd, allPoolInfos, output)
+    while (paths.length) {
+        traversePaths(tokenEnd, allPoolInfos, paths, output)
+    }
+    return await getOptimalResult(chainId, amount, output, exactInput)
 }

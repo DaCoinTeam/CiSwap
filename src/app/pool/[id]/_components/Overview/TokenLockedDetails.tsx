@@ -6,9 +6,9 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 
 interface TokenLockedDetailsProps {
     clasName? : string,
-    tokenSymbol: string,
+    symbol: string,
     tokenLocked: number,
-    tokenImageUrl?: string
+    imageUrlUrl?: string
 }
 
 const TokenLockedDetails = (props: TokenLockedDetailsProps) => {
@@ -19,12 +19,12 @@ const TokenLockedDetails = (props: TokenLockedDetailsProps) => {
                     <Avatar
                         className="w-5 h-5"
                         showFallback
-                        src={props.tokenImageUrl}
+                        src={props.imageUrlUrl}
                         fallback={<QuestionMarkCircleIcon className="w-5 h-5"/>}
                     />
                 }
                
-                <span className="font-bold text-sm">{props.tokenSymbol}</span>
+                <span className="font-bold text-sm">{props.symbol}</span>
             </div>
             <span className="text-sm"> {props.tokenLocked} </span>
         </div>

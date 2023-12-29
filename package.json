@@ -27,6 +27,7 @@
     "js-untar": "^2.0.0",
     "keccak": "^3.0.4",
     "lightweight-charts": "^4.1.0",
+    "mathjs": "^12.2.1",
     "next": "^14.0.3",
     "numeral": "^2.0.6",
     "pako": "^2.1.0",

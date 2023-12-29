@@ -2,7 +2,7 @@ const abi = [
     {
         inputs: [
             { internalType: "string", name: "tokenName", type: "string" },
-            { internalType: "string", name: "tokenSymbol", type: "string" },
+            { internalType: "string", name: "symbol", type: "string" },
         ],
         stateMutability: "nonpayable",
         type: "constructor",

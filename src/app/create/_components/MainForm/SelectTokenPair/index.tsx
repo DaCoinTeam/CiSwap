@@ -19,9 +19,9 @@ const SelectTokenPair = (props: SelectTokenPairProps) => {
             <TitleDisplay title="Select Token" />
             <Spacer y={4} />
             <div className="flex items-center gap-4">
-                <SelectToken otherTokenAddress={formik.values.token1Address} className="grow" />
+                <SelectToken otherToken={formik.values.tokenB} className="flex-1" />
                 <PlusIcon width={24} height={24} />
-                <SelectToken otherTokenAddress={formik.values.token0Address} isToken1Select className="grow" />
+                <SelectToken otherToken={formik.values.tokenA} isTokenBSelected className="flex-1" />
             </div>
         </div>
     )

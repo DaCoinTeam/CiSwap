@@ -5,7 +5,7 @@ import { Card, CardBody } from "@nextui-org/react"
 import TokenLocked from "./TokenLocked"
 import LiquidityDisplay from "./LiquidityDisplay"
 import { PoolContext } from "../../_hooks"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 
 interface OverviewProps {
     className? : string

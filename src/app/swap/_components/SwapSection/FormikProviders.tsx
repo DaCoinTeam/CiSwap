@@ -1,24 +1,31 @@
-import { ERC20Contract, PoolContract } from "@blockchain"
+import { Call, ERC20Contract, PoolContract, RouterContract } from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
+import {
+    AppDispatch,
+    RootState,
+    setWaitSignModalShow,
+    setWaitSignModalTitle,
+} from "@redux"
 import { SwapContext } from "../../_hooks"
 import { parseNumber } from "@utils"
-import { calculateIRedenomination, calculateMuvBigIntNumber } from "@utils"
+import { computeDenomination } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
-import { ContextProps, notify} from "@app/_shared"
+import { ContextProps, notify } from "@app/_shared"
+import { Address } from "web3"
+import { chainInfos } from "../../../../config/blockchain.config"
 
 interface FormikValues {
-    tokenInAmount: string;
-    tokenOutAmount: string;
-    slippage: number;
+  amountIn: string;
+  amountOut: string;
+  slippage: number;
 }
 
 const initialValues: FormikValues = {
-    tokenInAmount: "",
-    tokenOutAmount: "",
+    amountIn: "",
+    amountOut: "",
     slippage: 0.01,
 }
 
@@ -35,113 +42,137 @@ const _renderBody = (
 )
 
 const FormikProviders = (props: ContextProps) => {
-
     const swapContext = useContext(SwapContext)
+    const metamaskContext = useContext(MetamaskContext)
+
+    console.log(swapContext?.swapState)
+
+    const dispatch: AppDispatch = useDispatch()
+
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
+
+    const account = useSelector((state: RootState) => state.blockchain.account)
+
     if (swapContext == null) return
     const { swapState, handlers } = swapContext
-    
-    const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+
+    if (metamaskContext == null) return
     const { web3State } = metamaskContext
     const { web3 } = web3State
-    
-    const dispatch : AppDispatch = useDispatch()
-
-    const chainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    )
-
-    const account = useSelector(
-        (state: RootState) => state.blockchain.account
-    )
 
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={Yup.object({
-                token0Amount: Yup.number()
+                amountIn: Yup.number()
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        swapState.tokenInSelected.balance,
+                        swapState.tokenInInfo.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
-                token1Amount: Yup.number()
+                amountOut: Yup.number()
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        swapState.tokenOutSelected.balance,
+                        swapState.tokenOutInfo.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
             })}
             onSubmit={async (values) => {
-                if (web3 == null || !account) return 
-                
-                const tokenInAddress = swapState.tokenInSelected.address
-                const tokenAmountIn =  values.tokenInAmount
-                const tokenInDecimals = swapState.tokenInSelected.decimals
-                const tokenInContract = new ERC20Contract(chainId, tokenInAddress, web3, account)
+                if (web3 == null || !account) return
 
-                const tokenInAllowance = await tokenInContract.allowance(
-                    account,
-                    ""
-                )
-
-                if (tokenInAllowance == null) return
-
-                const tokenAmountInParsed = calculateIRedenomination(
-                    parseNumber(tokenAmountIn),
-                    tokenInDecimals
-                )
-
-                if (tokenInAllowance < tokenAmountInParsed) {     
-                    dispatch(setWaitSignModalShow(true))
-                    dispatch(setWaitSignModalTitle("Approve"))
-
-                    const tokenInApproveReceipt = await tokenInContract.approve(
-                        "",
-                        tokenAmountInParsed - tokenInAllowance
-                    )
-                    if (!tokenInApproveReceipt) {
-                        dispatch(setWaitSignModalShow(false))
-                        return
-                    }
-                    notify(tokenInApproveReceipt.transactionHash.toString())
-                }
-
-                
-
-                const poolFactory = new PoolContract(
+                const tokenInContract = new ERC20Contract(
                     chainId,
-                    "",
+                    swapState.tokenInInfo.address,
                     web3,
                     account
                 )
 
-                dispatch(setWaitSignModalTitle("Swap"))
+                const factory = chainInfos[chainId].factory
+                const allowanceIn = await tokenInContract.allowance(account, factory)
 
-                const depositReceipt = await poolFactory.swap(
-                    tokenAmountInParsed,
-                    tokenAmountInParsed -
-            calculateMuvBigIntNumber(
-                tokenAmountInParsed,
-                1 - values.slippage,
-                5
-            ),  true
+                if (allowanceIn == null) return
+
+                const parsedAmountIn = computeDenomination(
+                    parseNumber(values.amountIn),
+                    swapState.tokenInInfo.decimals
                 )
 
-                if (!depositReceipt){
+                if (allowanceIn < parsedAmountIn) {
+                    dispatch(setWaitSignModalShow(true))
+                    dispatch(setWaitSignModalTitle("Approve"))
+
+                    const approveInReceipt = await tokenInContract.approve(
+                        factory,
+                        parsedAmountIn - allowanceIn
+                    )
+                    if (!approveInReceipt) {
+                        dispatch(setWaitSignModalShow(false))
+                        return
+                    }
+                    notify(approveInReceipt.transactionHash.toString())
+                }
+
+                dispatch(setWaitSignModalTitle("Swap"))
+
+                const routerContract = new RouterContract(chainId, web3, account)
+                const _encodeData = async (
+                    pools: Address[]
+                ): Promise<Call[] | null> => {
+                    const data: Call[] = []
+                    let amountIn = parsedAmountIn
+
+                    for (const pool of pools) {
+                        const poolContract = new PoolContract(chainId, pool, web3, account)
+                        const token0 = await poolContract.token0()
+                        const zeroForOne = token0 == swapState.tokenInInfo.address
+
+                        const amountOut = await poolContract.getAmountOut(
+                            parsedAmountIn,
+                            zeroForOne
+                        )
+                        if (amountOut == null) return null
+
+                        const encoding = poolContract.encodeSwap(
+                            parsedAmountIn,
+                            BigInt(0),
+                            zeroForOne,
+                            BigInt(Date.now()) / BigInt(1000)
+                        )
+
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        amountIn = amountOut
+                        data.push({
+                            target: pool,
+                            encoding
+                        })
+                    }
+                    return data
+                }
+
+                const data = await _encodeData([
+                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855"
+                ])
+                if (data == null) return
+
+                console.log(data)
+                
+                const multicallReceipt = await routerContract.multicall2(data)
+
+                if (!multicallReceipt) {
                     dispatch(setWaitSignModalShow(false))
                     return
                 }
 
                 dispatch(setWaitSignModalShow(false))
-                notify(depositReceipt.transactionHash.toString())
-                await handlers._handleAll()
-            }
-            }
+                notify(multicallReceipt.transactionHash.toString())
+
+                await handlers.handleWithoutConnected()
+                await handlers.handleWithConnected()
+            }}
         >
             {(_props) => _renderBody(_props, props.children)}
         </Formik>

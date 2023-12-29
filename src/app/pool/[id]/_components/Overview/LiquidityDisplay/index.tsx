@@ -3,7 +3,7 @@ import { Skeleton, Spacer, Tooltip } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { TitleDisplay } from "@app/_shared"
 import { PoolContext } from "../../../_hooks"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 import numeral from "numeral"
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 
@@ -17,7 +17,7 @@ const LiquidityDisplay = (props: LiquidityDisplayProps) => {
     const { tokenState } = poolContext
     const _renderLiquidity = () => {
         const liquidity = tokenState.liquidity
-        const redenLiquidity = calculateRedenomination(
+        const redenLiquidity = computeRedenomination(
             liquidity,
             tokenState.token0Decimals + tokenState.token1Decimals,
             0

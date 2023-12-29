@@ -1,10 +1,10 @@
 import { useReducer } from "react"
 
 export type TokenState = {
-    token0Address: string
-    token1Address: string
-    token0Balance: number
-    token1Balance: number
+    token0: string
+    token1: string
+    balanceA: number
+    balanceB: number
     token0Locked: number
     token1Locked: number
     kLast: bigint
@@ -80,10 +80,10 @@ export interface SetFinishLoad {
 export type TokenAction = SetTokenAction | SetTokenBalanceAction | SetTokenSymbolAction | SetTokenDecimalsAction | SetTokenConstantAction | SetFinishLoad | SetLPTokenTotalSupplyAction | SetTokenImageUrlAction | SetPoolInfoAction
 
 export const initialTokenState: TokenState = {
-    token0Address: "",
-    token1Address: "",
-    token0Balance: 0,
-    token1Balance: 0,
+    token0: "",
+    token1: "",
+    balanceA: 0,
+    balanceB: 0,
     token0Locked: 0,
     token1Locked: 0,
     kLast: BigInt(0),
@@ -116,22 +116,22 @@ export const tokenReducer = (
     case "SET_TOKEN0_ADDRESS":
         return {
             ...state,
-            token0Address: action.payload
+            token0: action.payload
         }
     case "SET_TOKEN1_ADDRESS":
         return {
             ...state,
-            token1Address: action.payload
+            token1: action.payload
         }
     case "SET_TOKEN0_BALANCE":
         return {
             ...state,
-            token0Balance: action.payload
+            balanceA: action.payload
         }
     case "SET_TOKEN1_BALANCE":
         return {
             ...state,
-            token1Balance: action.payload
+            balanceB: action.payload
         }
     case "SET_TOKEN0_LOCKED":
         return {

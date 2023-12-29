@@ -23,7 +23,7 @@ const ConnectedChain = () => {
     const { ethereumState } = metamaskContext
     const { ethereum } = ethereumState
 
-    const connectedChains = [
+    const connectedchainInfos = [
         {
             chainId: ChainId.KalytnTestnet,
             imageUrl: "/images/klaytn.svg",
@@ -56,8 +56,8 @@ const ConnectedChain = () => {
         },
     ]
 
-    const _imageUrl = connectedChains.find(chain => chain.chainId == chainId)?.imageUrl
-    const _text = connectedChains.find(chain => chain.chainId == chainId)?.text
+    const _imageUrl = connectedchainInfos.find(chain => chain.chainId == chainId)?.imageUrl
+    const _text = connectedchainInfos.find(chain => chain.chainId == chainId)?.text
 
     return (
         <Dropdown>
@@ -70,7 +70,7 @@ const ConnectedChain = () => {
                 </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
-                {connectedChains.map(chain => {
+                {connectedchainInfos.map(chain => {
                     const _handleSwitch = async () => {
                         if (ethereum == null) return
                         const metamaskApis = new MetamaskApis(ethereum)

@@ -16,7 +16,7 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PoolContext } from "../../../../_hooks"
 import { Address } from "web3"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 import { ViewOnExplorer } from "@app/_shared"
 import { LoadingState } from "@react-types/shared/src/collections"
 
@@ -52,7 +52,7 @@ const ProviderTable = (props: ProviderTableProps) => {
                     if (balance == null) return
                     const _provider = {
                         address,
-                        balance: calculateRedenomination(
+                        balance: computeRedenomination(
                             balance,
                             tokenState.LPTokenDecimals,
                             3

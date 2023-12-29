@@ -5,8 +5,8 @@ import { ERC20Contract, PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import {
-    calculateIRedenomination,
-    calculateMuvBigIntNumber,
+    computeDenomination,
+    computeMultiplyBigIntAndNumber,
     parseNumber,
 } from "@utils"
 import { PoolContext } from "../../../../_hooks"
@@ -60,7 +60,7 @@ const FormikProviders = (props: ContextProps) => {
             initialValues={initialValues}
             validationSchema={Yup.object({
                 token1DepositAmount: Yup.number().max(
-                    tokenState.token1Balance,
+                    tokenState.balanceB,
                     "Input must not exceed your available balance"
                 ),
             })}
@@ -70,7 +70,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 const token1Contract = new ERC20Contract(
                     chainId,
-                    tokenState.token1Address,
+                    tokenState.token1,
                     web3,
                     account
                 )
@@ -81,7 +81,7 @@ const FormikProviders = (props: ContextProps) => {
                 )
                 if (token1Allowance == null) return
 
-                const token1DepositAmountParsed = calculateIRedenomination(
+                const token1DepositAmountParsed = computeDenomination(
                     parseNumber(values.token1DepositAmount),
                     tokenState.token1Decimals
                 )
@@ -111,7 +111,7 @@ const FormikProviders = (props: ContextProps) => {
                 const depositReceipt = await poolFactory.deposit(
                     token1DepositAmountParsed,
                     token1DepositAmountParsed -
-            calculateMuvBigIntNumber(
+            computeMultiplyBigIntAndNumber(
                 token1DepositAmountParsed,
                 1 - values.slippage,
                 5

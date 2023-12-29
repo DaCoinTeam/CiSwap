@@ -3,7 +3,7 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 import React, { useContext, useState } from "react"
 import Chart from "./Chart"
 import { PeriodTabs, TokenTooltipDisplay } from "@app/_shared"
-import { ChartTimePeriod, calculateRound } from "@utils"
+import { ChartTimePeriod, computeRound } from "@utils"
 import { PoolContext } from "../../../_hooks"
 
 interface LPTokenDistributionChartProps {
@@ -23,7 +23,7 @@ const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
                 <div className="flex justify-between">
                     <TokenTooltipDisplay
                         tooltipContent="Total LP Token Distributed" 
-                        value={calculateRound(tokenState.LPTokenTotalSupply - tokenState.LPTokenAmountLocked, 3)}
+                        value={computeRound(tokenState.LPTokenTotalSupply - tokenState.LPTokenAmountLocked, 3)}
                         prefix={tokenState.LPTokenSymbol}
                         finishLoad={tokenState.finishLoadWithoutConnected}
                     />

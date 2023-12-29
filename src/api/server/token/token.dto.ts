@@ -1,6 +1,6 @@
 export interface TokenDTO {
     tokenId: string
-    tokenImageUrl: string
+    imageUrlUrl: string
     chainId: number
-    tokenAddress: string
+    token: string
 }

@@ -14,7 +14,7 @@ import {
 import { PoolContract } from "@blockchain"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 
 interface Token1ChartProps {
   className?: string;
@@ -45,7 +45,7 @@ const Token1Chart = (props: Token1ChartProps) => {
                 tick => {
                     return {
                         name: new Date(tick.timestamp * 1000).toString(),
-                        token1AmountLocked: calculateRedenomination(tick.token0AmountLocked, tokenState.token0Decimals, 3)
+                        token1AmountLocked: computeRedenomination(tick.token0AmountLocked, tokenState.token0Decimals, 3)
                     }
                 }
             )

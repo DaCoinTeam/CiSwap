@@ -8,12 +8,12 @@ import React, {
     useRef,
     useState,
 } from "react"
-import useSwapState, { SwapState } from "./useSwapState.hook"
+import useSwapReducer, { SwapState } from "./useSwapReducer.hook"
 import { useSelector } from "react-redux"
 import { usePathname, useSearchParams } from "next/navigation"
-import { chains } from "@config"
+import { chainInfos } from "@config"
 import { ERC20Contract } from "@blockchain"
-import { calculateRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
+import { computeRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { getTokenApi } from "@api"
 import { useRouter } from "next/navigation"
 
@@ -23,6 +23,7 @@ interface SwapContext {
     doReverse: () => Promise<void>;
   };
   handlers: {
+    handleInitialization: () => void;
     handleWithoutConnected: () => Promise<void>;
     handleWithConnected: () => Promise<void>;
   };
@@ -34,48 +35,45 @@ const SwapProviders = (props: ContextProps) => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const [swapState, swapDispatch] = useSwapState()
+    const [swapState, swapDispatch] = useSwapReducer()
     const router = useRouter()
     const path = usePathname()
     const searchParams = useSearchParams()
 
     const _getTokenPair = () => {
-        const tokenInAddress =
-      searchParams.get("tokenInAddress") ??
-      chains[chainId].stableTokenAddresses[0]
+        const tokenIn =
+      searchParams.get("tokenIn") ?? chainInfos[chainId].stableTokens[0]
 
-        const tokenOutAddress =
-      searchParams.get("tokenOutAddress") ??
-      chains[chainId].exchangeTokenAddress
+        const tokenOut =
+      searchParams.get("tokenOut") ?? chainInfos[chainId].exchangeToken
         return {
-            tokenInAddress,
-            tokenOutAddress,
+            tokenIn,
+            tokenOut,
         }
     }
 
-    const [preventFetch, setPreventFetch] = useState(false)
+    const [preventExecution, setPreventExecution] = useState(false)
 
     const doReverse = async () => {
-        const { tokenInAddress, tokenOutAddress } = _getTokenPair()
+        const { tokenIn, tokenOut } = _getTokenPair()
         const params = new URLSearchParams(searchParams)
-        params.set("tokenInAddress", tokenOutAddress)
-        params.set("tokenOutAddress", tokenInAddress)
+        params.set("tokenIn", tokenOut)
+        params.set("tokenOut", tokenIn)
         router.push(`${path}?${params.toString()}`)
 
-        const tokenInSelected = swapState.tokenOutSelected
-        const tokenOutSelected = swapState.tokenInSelected
+        const { tokenInInfo, tokenOutInfo } = swapState
 
         swapDispatch({
-            type: "SET_TOKEN_IN_SELECTED",
-            payload: tokenInSelected,
+            type: "SET_TOKEN_IN_INFO",
+            payload: tokenOutInfo
         })
 
         swapDispatch({
-            type: "SET_TOKEN_OUT_SELECTED",
-            payload: tokenOutSelected,
+            type: "SET_TOKEN_OUT_INFO",
+            payload: tokenInInfo
         })
 
-        setPreventFetch(true)
+        setPreventExecution(true)
     }
 
     const actions = useMemo(() => {
@@ -85,21 +83,19 @@ const SwapProviders = (props: ContextProps) => {
     const finishInitializeRef = useRef(false)
 
     const handleInitialization = () => {
-        const tokenInAddress =
-      searchParams.get("tokenInAddress") ??
-      chains[chainId].stableTokenAddresses[0]
+        const tokenIn =
+      searchParams.get("tokenIn") ?? chainInfos[chainId].stableTokens[0]
 
         swapDispatch({
-            type: "SET_TOKEN_IN_ADDRESS",
-            payload: tokenInAddress,
+            type: "SET_TOKEN_IN",
+            payload: tokenIn,
         })
-        const tokenOutAddress =
-      searchParams.get("tokenOutAddress") ??
-      chains[chainId].exchangeTokenAddress
+        const tokenOut =
+      searchParams.get("tokenOut") ?? chainInfos[chainId].exchangeToken
 
         swapDispatch({
-            type: "SET_TOKEN_OUT_ADDRESS",
-            payload: tokenOutAddress,
+            type: "SET_TOKEN_OUT",
+            payload: tokenOut,
         })
 
         finishInitializeRef.current = true
@@ -110,86 +106,79 @@ const SwapProviders = (props: ContextProps) => {
     }, [])
 
     const handleWithoutConnected = async () => {
-        const handleTokenIn = async () => {
+        const handleTokenInInfo = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
-                swapState.tokenInSelected.address
+                swapState.tokenInInfo.address
             )
 
-            const tokenInDecimals = await tokenInContract.decimals()
-            if (tokenInDecimals == null) return
-            swapDispatch({ type: "SET_TOKEN_IN_DECIMALS", payload: tokenInDecimals })
+            const decimalsIn = await tokenInContract.decimals()
+            if (decimalsIn == null) return
+            swapDispatch({ type: "SET_DECIMALS_IN", payload: decimalsIn })
 
-            const tokenInPromises: Promise<void>[] = []
+            const promises: Promise<void>[] = []
 
-            const handleTokenInDTO = async () => {
-                const tokenInDTO = await getTokenApi(
-                    swapState.tokenInSelected.address,
-                    chainId
-                )
-                if (tokenInDTO != null) {
-                    const blobUrl = await fetchAndCreateSvgBlobUrl(
-                        tokenInDTO.tokenImageUrl
-                    )
+            const handleAdditionalIn = async () => {
+                const additionalIn = await getTokenApi(swapState.tokenInInfo.address, chainId)
+                if (additionalIn != null) {
+                    const blobUrl = await fetchAndCreateSvgBlobUrl(additionalIn.imageUrlUrl)
                     if (blobUrl == null) return
-                    swapDispatch({ type: "SET_TOKEN_OUT_IMAGE_URL", payload: blobUrl })
+                    swapDispatch({ type: "SET_IMAGE_URL_IN", payload: blobUrl })
                 }
             }
-            tokenInPromises.push(handleTokenInDTO())
+            promises.push(handleAdditionalIn())
 
-            const handleTokenInSymbol = async () => {
-                const tokenInSymbol = await tokenInContract.symbol()
-                if (tokenInSymbol == null) return
-                swapDispatch({ type: "SET_TOKEN_IN_SYMBOL", payload: tokenInSymbol })
+            const handleSymbolIn = async () => {
+                const symbolIn = await tokenInContract.symbol()
+                if (symbolIn == null) return
+                swapDispatch({ type: "SET_SYMBOL_IN", payload: symbolIn })
             }
-            tokenInPromises.push(handleTokenInSymbol())
+            promises.push(handleSymbolIn())
 
-            await Promise.all(tokenInPromises)
+            await Promise.all(promises)
         }
 
-        const handleTokenOut = async () => {
+        const handleTokenOutInfo = async () => {
             const tokenOutContract = new ERC20Contract(
                 chainId,
-                swapState.tokenOutSelected.address
+                swapState.tokenOutInfo.address
             )
 
-            const tokenOutDecimals = await tokenOutContract.decimals()
-            if (tokenOutDecimals == null) return
+            const decimalsOut = await tokenOutContract.decimals()
+            if (decimalsOut == null) return
             swapDispatch({
-                type: "SET_TOKEN_IN_DECIMALS",
-                payload: tokenOutDecimals,
+                type: "SET_DECIMALS_OUT",
+                payload: decimalsOut,
             })
 
-            const tokenOutPromises: Promise<void>[] = []
+            const promises: Promise<void>[] = []
 
-            const handleTokenOutDTO = async () => {
-                const tokenOutDTO = await getTokenApi(
-                    swapState.tokenInSelected.address,
+            const handleAdditionalOut = async () => {
+                const additionalOut = await getTokenApi(
+                    swapState.tokenInInfo.address,
                     chainId
                 )
-                if (tokenOutDTO != null) {
-                    const blobUrl = await fetchAndCreateSvgBlobUrl(
-                        tokenOutDTO.tokenImageUrl
-                    )
+                if (additionalOut != null) {
+                    const blobUrl = await fetchAndCreateSvgBlobUrl(additionalOut.imageUrlUrl)
                     if (blobUrl == null) return
-                    swapDispatch({ type: "SET_TOKEN_OUT_IMAGE_URL", payload: blobUrl })
+                    swapDispatch({ type: "SET_IMAGE_URL_OUT", payload: blobUrl })
                 }
             }
-            tokenOutPromises.push(handleTokenOutDTO())
+            promises.push(handleAdditionalOut())
 
-            const handleTokenOutSymbol = async () => {
-                const tokenOutSymbol = await tokenOutContract.symbol()
-                if (tokenOutSymbol == null) return
-                swapDispatch({ type: "SET_TOKEN_OUT_SYMBOL", payload: tokenOutSymbol })
+            const handleSymbolOut = async () => {
+                const symbolOut = await tokenOutContract.symbol()
+                if (symbolOut == null) return
+                swapDispatch({ type: "SET_SYMBOL_OUT", payload: symbolOut })
             }
-            tokenOutPromises.push(handleTokenOutSymbol())
+            promises.push(handleSymbolOut())
 
-            await Promise.all(tokenOutPromises)
+            await Promise.all(promises)
         }
 
         const promises: Promise<void>[] = []
-        promises.push(handleTokenIn())
-        promises.push(handleTokenOut())
+        promises.push(handleTokenInInfo())
+        promises.push(handleTokenOutInfo())
         await Promise.all(promises)
 
         swapDispatch({
@@ -200,15 +189,15 @@ const SwapProviders = (props: ContextProps) => {
 
     useEffect(() => {
         if (!finishInitializeRef.current) return
-        if (preventFetch) {
-            setPreventFetch(false)
+        if (preventExecution) {
+            setPreventExecution(false)
             return
         }
         handleWithoutConnected()
     }, [
         finishInitializeRef.current,
-        swapState.tokenInSelected.address,
-        swapState.tokenOutSelected.address,
+        swapState.tokenInInfo.address,
+        swapState.tokenOutInfo.address,
     ])
 
     const handleWithConnected = async () => {
@@ -222,42 +211,42 @@ const SwapProviders = (props: ContextProps) => {
 
         const tokenInContract = new ERC20Contract(
             chainId,
-            swapState.tokenInSelected.address
+            swapState.tokenInInfo.address
         )
         const tokenOutContract = new ERC20Contract(
             chainId,
-            swapState.tokenOutSelected.address
+            swapState.tokenOutInfo.address
         )
 
         const promises: Promise<void>[] = []
 
-        const handleTokenInBalance = async () => {
+        const handleBalanceIn = async () => {
             const tokenInBalance = await tokenInContract.balanceOf(account)
             if (tokenInBalance == null) return
             swapDispatch({
-                type: "SET_TOKEN_IN_BALANCE",
-                payload: calculateRedenomination(
+                type: "SET_BALANCE_IN",
+                payload: computeRedenomination(
                     tokenInBalance,
-                    swapState.tokenInSelected.decimals,
+                    swapState.tokenInInfo.decimals,
                     3
                 ),
             })
         }
-        promises.push(handleTokenInBalance())
+        promises.push(handleBalanceIn())
 
-        const handleTokenOutBalance = async () => {
+        const handleBalanceOut = async () => {
             const tokenOutBalance = await tokenOutContract.balanceOf(account)
             if (tokenOutBalance == null) return
             swapDispatch({
-                type: "SET_TOKEN_OUT_BALANCE",
-                payload: calculateRedenomination(
+                type: "SET_BALANCE_OUT",
+                payload: computeRedenomination(
                     tokenOutBalance,
-                    swapState.tokenOutSelected.decimals,
+                    swapState.tokenOutInfo.decimals,
                     3
                 ),
             })
         }
-        promises.push(handleTokenOutBalance())
+        promises.push(handleBalanceOut())
     }
 
     useEffect(() => {
@@ -265,8 +254,12 @@ const SwapProviders = (props: ContextProps) => {
     }, [account, swapState.load.finishLoadWithoutConnected])
 
     const handlers = useMemo(() => {
-        return { handleWithoutConnected, handleWithConnected }
-    }, [handleWithoutConnected, handleWithConnected])
+        return {
+            handleInitialization,
+            handleWithoutConnected,
+            handleWithConnected,
+        }
+    }, [handleInitialization, handleWithoutConnected, handleWithConnected])
     return (
         <SwapContext.Provider value={{ swapState, actions, handlers }}>
             {props.children}

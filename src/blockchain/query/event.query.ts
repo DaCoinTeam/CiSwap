@@ -2,7 +2,7 @@ import { HexString } from "web3"
 import { EventLog } from "web3-eth-contract"
 import { chainId } from "@config"
 import { getHttpWeb3 } from "../contracts"
-import { calculateRedenomination } from "@utils"
+import { computeRedenomination } from "@utils"
 
 export interface RewardLog {
   transactionHash: HexString;
@@ -24,7 +24,7 @@ export const getRewardLog = async (
 
     const timestamp = new Date(Number(block.timestamp) * 1000)  
 
-    const LPTokenAwardAmount = calculateRedenomination(
+    const LPTokenAwardAmount = computeRedenomination(
     web3.eth.abi.decodeParameter("uint256", event.data) as bigint,
     LPTokenDecimals,
     3

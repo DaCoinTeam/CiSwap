@@ -31,15 +31,15 @@ const AllPools = () => {
             const poolInfos : PoolInfo[] = [] 
             for (const pool of pools){
                 const contract = new PoolContract(chainId, pool)
-                const token0Address = await contract.token0()
-                if (token0Address == null) return 
-                const token0Contract = new ERC20Contract(chainId, token0Address)
+                const token0 = await contract.token0()
+                if (token0 == null) return 
+                const token0Contract = new ERC20Contract(chainId, token0)
                 const token0Symbol =  await token0Contract.symbol()
                 if (token0Symbol == null) return
 
-                const token1Address = await contract.token1()
-                if (token1Address == null) return
-                const token1Contract = new ERC20Contract(chainId, token1Address)
+                const token1 = await contract.token1()
+                if (token1 == null) return
+                const token1Contract = new ERC20Contract(chainId, token1)
                 const token1Symbol =  await token1Contract.symbol()
                 if (token1Symbol == null) return
 

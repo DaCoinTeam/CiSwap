@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import { BaselineData, IChartApi, ISeriesApi, Time } from "lightweight-charts"
 import {
     ChartTimePeriod,
-    calculateRedenomination,
+    computeRedenomination,
     createBaselineChartAndSeries,
     timeToLocal,
     updateBaselineChartWithOptions,
@@ -57,7 +57,7 @@ const Chart = () => {
 
             const _priceTicks: PriceTick[] = _baseTicks.map((tick) => {
                 return {
-                    value: calculateRedenomination(
+                    value: computeRedenomination(
                         tick.token0Price,
                         tokenState.token0Decimals,
                         3

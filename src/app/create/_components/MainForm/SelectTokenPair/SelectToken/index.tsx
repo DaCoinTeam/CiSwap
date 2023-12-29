@@ -25,26 +25,24 @@ import { TIME_OUT } from "@config"
 import { Address } from "web3"
 import { AppButton, LoadingDisplay } from "@app/_shared"
 import { FormikPropsContext } from "../../FormikPropsContext"
-import { FinishSelectPairContext } from "../../index"
+import { FinishSelectedPairContext } from "../../index"
 
 interface SelectTokenProps {
   className?: string;
-  otherTokenAddress: Address;
-  isToken1Select?: boolean;
+  otherToken: Address;
+  isTokenBSelected?: boolean;
 }
 
 const SelectToken = (props: SelectTokenProps) => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const finishSelectPairContext = useContext(FinishSelectPairContext)
-    if (finishSelectPairContext == null) return
+    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
+    if (finishSelectedPairContext == null) return
 
-    const { setFinishSelectPair } = finishSelectPairContext
+    const { setFinishSelectedPair } = finishSelectedPairContext
 
-    const chainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    )
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -55,13 +53,13 @@ const SelectToken = (props: SelectTokenProps) => {
     const _open = () => setIsOpen(true)
     const _close = () => {
         setIsOpen(false)
-        setTempTokenAddress("")
+        setTempToken("")
         setError(ErrorType.Undefined)
     }
-    const [tempTokenAddress, setTempTokenAddress] = useState("")
-    const [tempTokenSymbol, setTempTokenSymbol] = useState("")
+    const [tempToken, setTempToken] = useState("")
+    const [tempSymbol, setTempSymbol] = useState("")
 
-    const [tokenSymbol, setTokenSymbol] = useState("")
+    const [symbol, setTokenSymbol] = useState("")
 
   enum ErrorType {
     Undefined = "Undefined",
@@ -82,11 +80,11 @@ const SelectToken = (props: SelectTokenProps) => {
           return
       }
 
-      if (!tempTokenAddress) return
+      if (!tempToken) return
 
       const controller = new AbortController()
       const handleEffect = async () => {
-          const contract = new ERC20Contract(chainId, tempTokenAddress)
+          const contract = new ERC20Contract(chainId, tempToken)
           const symbol = await contract.symbol(controller)
 
           setFinishFetch(true)
@@ -94,11 +92,11 @@ const SelectToken = (props: SelectTokenProps) => {
               setError(ErrorType.InvalidTokenAddress)
               return
           }
-          if (tempTokenAddress == props.otherTokenAddress) {
+          if (tempToken == props.otherToken) {
               setError(ErrorType.Duplicated)
               return
           }
-          setTempTokenSymbol(symbol)
+          setTempSymbol(symbol)
           setError(ErrorType.None)
       }
 
@@ -108,14 +106,14 @@ const SelectToken = (props: SelectTokenProps) => {
           controller.abort()
           clearTimeout(delayedEffectWithBounce)
       }
-  }, [tempTokenAddress])
+  }, [tempToken])
 
   const _changeTempTokenAddress = (event: ChangeEvent<HTMLInputElement>) => {
-      const _tokenAddress = event.target.value
+      const _token = event.target.value
 
-      setTempTokenAddress(_tokenAddress)
+      setTempToken(_token)
 
-      if (!_tokenAddress) {
+      if (!_token) {
           setError(ErrorType.Required)
           return
       }
@@ -126,41 +124,33 @@ const SelectToken = (props: SelectTokenProps) => {
     error != ErrorType.Undefined && error != ErrorType.None && finishFetch
   const _message = _invalid && finishFetch ? error : ""
 
-  const _click = (tokenAddress: Address) => {
-      if (tempTokenAddress == tokenAddress) return
-      setTempTokenAddress(tokenAddress)
+  const _click = (token: Address) => {
+      if (tempToken == token) return
+      setTempToken(token)
       setFinishFetch(false)
   }
 
-  const _import = (tokenAddress: Address, tokenSymbol: Address) => {
-      setTokenSymbol(tokenSymbol)
+  const _import = (token: Address, symbol: Address) => {
+      setTokenSymbol(symbol)
       setIsOpen(false)
 
-      const _tokenAddress = props.isToken1Select
-          ? "token1Address"
-          : "token0Address"
-      const _tokenSymbol = props.isToken1Select
-          ? "_token1Symbol"
-          : "_token0Symbol"
-      formik.setFieldValue(_tokenAddress, tokenAddress)
-      formik.setFieldValue(_tokenSymbol, tokenSymbol)
+      const _token = props.isTokenBSelected ? "tokenB" : "tokenA"
+      formik.setFieldValue(_token, token)
+      const _symbol = props.isTokenBSelected ? "_symbolB" : "_symbolA"
+      formik.setFieldValue(_symbol, symbol)
   }
 
-  const token0Address = formik.values.token0Address
-  const token1Address = formik.values.token1Address
+  const tokenA = formik.values.tokenA
+  const tokenB = formik.values.tokenB
   useEffect(() => {
-      const value = account && token0Address && token1Address
-      setFinishSelectPair(!!value)
-  }, [
-      account,
-      token0Address,
-      token1Address
-  ])
+      const value = account && tokenA && tokenB
+      setFinishSelectedPair(!!value)
+  }, [account, tokenA, tokenB])
 
   return (
       <>
           <Button className={`${props.className}`} variant="flat" onPress={_open}>
-              {tokenSymbol || "Select Token"}
+              {symbol || "Select Token"}
           </Button>
           <Modal isOpen={isOpen} onClose={_close}>
               <ModalContent>
@@ -171,7 +161,7 @@ const SelectToken = (props: SelectTokenProps) => {
                           <Input
                               onChange={_changeTempTokenAddress}
                               label="Token Address"
-                              value={tempTokenAddress}
+                              value={tempToken}
                               isInvalid={_invalid}
                               errorMessage={_message}
                           />
@@ -188,11 +178,11 @@ const SelectToken = (props: SelectTokenProps) => {
                                   isBlock
                                   className="text-lg font-bold"
                               >
-                                  {tempTokenSymbol}
+                                  {tempSymbol}
                               </Link>
                               <AppButton
                                   size="lg"
-                                  onPress={() => _import(tempTokenAddress, tempTokenSymbol)}
+                                  onPress={() => _import(tempToken, tempSymbol)}
                                   content="Import"
                               />
                           </div>

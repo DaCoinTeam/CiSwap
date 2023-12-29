@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "@nextui-org/react"
-import { chains } from "@config"
+import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { shortenAddress } from "@utils"
@@ -17,7 +17,7 @@ const ViewOnExplorer = (props: ViewOnExplorerProps) => {
     const chainId = useSelector(
         (state: RootState) => state.blockchain.chainId
     )
-    const explorerUrl = chains[chainId].explorerUrl
+    const explorerUrl = chainInfos[chainId].explorerUrl
     
     const _external = !props.notExternal
     const _middle = props.isTransaction ? "tx" : "address"

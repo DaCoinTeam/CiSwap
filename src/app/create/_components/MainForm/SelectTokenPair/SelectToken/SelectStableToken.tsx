@@ -3,7 +3,7 @@ import { TitleDisplay } from "@app/_shared"
 import { Card, CardBody, Skeleton, Spacer, Image } from "@nextui-org/react"
 import React, { useEffect, useState } from "react"
 import { ERC20Contract } from "@blockchain"
-import { chains } from "@config"
+import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { Address } from "web3"
@@ -12,18 +12,16 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 
 interface SelectStableTokenProps {
   className?: string;
-  onClick: (tokenAddress: string) => void;
+  onClick: (token: string) => void;
 }
 
 const SelectStableToken = (props: SelectStableTokenProps) => {
-    const chainId = useSelector(
-        (state: RootState) => state.blockchain.chainId
-    )
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
   interface PresentableToken {
-    tokenAddress: Address;
-    tokenSymbol: string;
-    tokenImage: string | null;
+    token: Address;
+    symbol: string;
+    imageUrl: string | null;
   }
   const [presentableTokens, setPresentableTokens] = useState<
     PresentableToken[]
@@ -33,7 +31,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
 
   useEffect(() => {
       const handleEffect = async () => {
-          const stableTokens = chains[chainId].stableTokenAddresses
+          const stableTokens = chainInfos[chainId].stableTokens
 
           const _presentableTokens: PresentableToken[] = []
 
@@ -43,15 +41,15 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
               const symbol = await contract.symbol()
               if (symbol == null) return
 
-              let tokenImage = await fetchAndCreateSvgBlobUrl(
-                  `api/static/images/token?tokenAddress=${token}&chainId=${chainId}`
+              let imageUrl = await fetchAndCreateSvgBlobUrl(
+                  `api/static/images/token?token=${token}&chainId=${chainId}`
               )
-              if (tokenImage == null) tokenImage = null
+              if (imageUrl == null) imageUrl = null
 
               _presentableTokens.push({
-                  tokenAddress: token,
-                  tokenSymbol: symbol,
-                  tokenImage: tokenImage,
+                  token: token,
+                  symbol: symbol,
+                  imageUrl: imageUrl,
               })
 
               setFinishLoad(true)
@@ -62,24 +60,24 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
       handleEffect()
   }, [])
 
-  const _click = (tokenAddress: Address) => props.onClick(tokenAddress)
+  const _click = (token: Address) => props.onClick(token)
   const _renderCards = (presentableTokens: PresentableToken[]) =>
       presentableTokens.map((token) => (
           <Card
               isPressable
-              key={token.tokenAddress}
-              onClick={() => _click(token.tokenAddress)}
+              key={token.token}
+              onClick={() => _click(token.token)}
           >
               {" "}
               <CardBody className="p-4">
-                  {token.tokenImage ? (
-                      <Image className="w-12 h-12" radius="full" src={token.tokenImage} />
+                  {token.imageUrl ? (
+                      <Image className="w-12 h-12" radius="full" src={token.imageUrl} />
                   ) : (
                       <QuestionMarkCircleIcon className="w-12 h-12" />
                   )}
 
                   <Spacer y={4} />
-                  <div className="font-bold text-center">{token.tokenSymbol}</div>
+                  <div className="font-bold text-center">{token.symbol}</div>
               </CardBody>
           </Card>
       ))

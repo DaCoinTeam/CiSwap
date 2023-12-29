@@ -15,7 +15,7 @@ import { useSelector } from "react-redux"
 import {
     computeRedenomination,
     parseNumber,
-    computeDenomination,
+    computeDeRedenomination,
 } from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 
@@ -48,7 +48,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const routerContract = new RouterContract(chainId)
             const amountOut = await routerContract.getAmountsOut(
-                computeDenomination(
+                computeDeRedenomination(
                     parseNumber(formik.values.amountIn),
                     swapState.tokenInInfo.decimals
                 ),
@@ -96,7 +96,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const routerContract = new RouterContract(chainId)
             const amountIn = await routerContract.getAmountsIn(
-                computeDenomination(
+                computeDeRedenomination(
                     parseNumber(formik.values.amountOut),
                     swapState.tokenOutInfo.decimals
                 ),

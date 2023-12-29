@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import {
     computeExponent,
-    computeDenomination,
+    computeDeRedenomination,
     parseNumber,
     computeMultiplyX96,
 } from "@utils"
@@ -111,45 +111,51 @@ const FormikProviders = (props: ContextProps) => {
                 const factory = chainInfos[chainId].factory
                 const factoryContract = new FactoryContract(chainId, web3, account)
 
-                const amountAParsed = computeDenomination(
+                const amountADeRedenominated = computeDeRedenomination(
                     parseNumber(values.amountA),
                     values._decimalsA
                 )
 
-                const amountBParsed = computeDenomination(
+                const amountBDeRedenominated = computeDeRedenomination(
                     parseNumber(values.amountB),
                     values._decimalsB
                 )
 
-                const basePriceAX96 = computeMultiplyX96(parseNumber(values.basePriceA))
+                const basePriceAX96 = computeMultiplyX96(
+                    parseNumber(values.basePriceA)
+                )
                 const maxPriceAX96 = computeMultiplyX96(parseNumber(values.maxPriceA))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
                 if (allowanceA == null) return
-                if (allowanceA < amountAParsed) {
-                    const tokenAApproveReceipt = await tokenAContract.approve(
+                if (allowanceA < amountADeRedenominated) {
+                    const approveAReceipt = await tokenAContract.approve(
                         factory,
-                        amountAParsed - allowanceA
+                        amountADeRedenominated - allowanceA
                     )
-                    if (!tokenAApproveReceipt) return
+                    if (!approveAReceipt) return
                 }
 
                 const allowanceB = await tokenBContract.allowance(account, factory)
                 if (allowanceB == null) return
 
-                if (allowanceB < amountBParsed) {
-                    const tokenBApproveReceipt = await tokenBContract.approve(
+                if (allowanceB < amountBDeRedenominated) {
+                    const approveBReceipt = await tokenBContract.approve(
                         factory,
-                        amountBParsed - allowanceB
+                        amountBDeRedenominated - allowanceB
                     )
-                    if (!tokenBApproveReceipt) return
+                    if (!approveBReceipt) return
                 }
 
                 const _tokenA = values._zeroForOne ? values.tokenA : values.tokenB
                 const _tokenB = values._zeroForOne ? values.tokenB : values.tokenA
 
-                const _amountA = values._zeroForOne ? amountAParsed : amountBParsed
-                const _amountB = values._zeroForOne ? amountBParsed : amountAParsed
+                const _amountA = values._zeroForOne
+                    ? amountADeRedenominated
+                    : amountBDeRedenominated
+                const _amountB = values._zeroForOne
+                    ? amountADeRedenominated
+                    : amountBDeRedenominated
 
                 console.log(_amountA, _amountB)
 

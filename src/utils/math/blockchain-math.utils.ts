@@ -22,7 +22,7 @@ export const computeRedenomination = (
     }
 }
 
-export const computeDenomination = (
+export const computeDeRedenomination = (
     amount: number,
     decimals: number
 ): bigint => {

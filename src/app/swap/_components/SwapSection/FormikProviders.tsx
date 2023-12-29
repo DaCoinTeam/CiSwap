@@ -11,7 +11,7 @@ import {
 } from "@redux"
 import { SwapContext } from "../../_hooks"
 import { parseNumber } from "@utils"
-import { computeDenomination } from "@utils"
+import { computeDeRedenomination } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
 import { Address } from "web3"
@@ -96,7 +96,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 if (allowanceIn == null) return
 
-                const parsedAmountIn = computeDenomination(
+                const parsedAmountIn = computeDeRedenomination(
                     parseNumber(values.amountIn),
                     swapState.tokenInInfo.decimals
                 )

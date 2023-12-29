@@ -5,7 +5,7 @@ import { ERC20Contract, PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
 import {
-    computeDenomination,
+    computeDeRedenomination,
     computeMultiplyBigIntAndNumber,
     parseNumber,
 } from "@utils"
@@ -81,7 +81,7 @@ const FormikProviders = (props: ContextProps) => {
                 )
                 if (token1Allowance == null) return
 
-                const token1DepositAmountParsed = computeDenomination(
+                const token1DepositAmountParsed = computeDeRedenomination(
                     parseNumber(values.token1DepositAmount),
                     tokenState.token1Decimals
                 )

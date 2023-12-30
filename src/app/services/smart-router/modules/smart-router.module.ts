@@ -8,7 +8,10 @@ import { ChainId, chainInfos } from "@config"
 import web3, { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
-import { findMaxBigIntIndexAndValue } from "../../../../utils/array"
+import {
+    findMaxBigIntIndexAndValue,
+    findMinBigIntIndexAndValue,
+} from "../../../../utils/array"
 
 const MAX_HOPS = 2
 
@@ -200,7 +203,6 @@ class SmartRouter {
             }
             data.push(encodedFunction)
         }
-        console.log(data)
         const bytes = await this.multicallContract.multicall(data).call()
         if (bytes == null) return null
 
@@ -208,7 +210,12 @@ class SmartRouter {
             BigInt(web3.utils.hexToNumber(web3.utils.bytesToHex(byte)))
         )
 
-        const { index, value } = findMaxBigIntIndexAndValue(amountsQuoted)
+        const typeInput =
+      type == QuoteType.ExactInput || type == QuoteType.ExactInputSingle
+        const { index, value } = typeInput
+            ? findMaxBigIntIndexAndValue(amountsQuoted)
+            : findMinBigIntIndexAndValue(amountsQuoted)
+
         return {
             path: paths[index],
             amount: value,

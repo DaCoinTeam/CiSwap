@@ -72,11 +72,11 @@ class Path {
         pools: Pool[],
         tokenEnd: Address
     ): {
-    exactEndPaths: Path[];
-    restPaths: Path[];
+    pathExactEnds: Path[];
+    pathRests: Path[];
   } {
-        const exactEndPaths: Path[] = []
-        const restPaths: Path[] = []
+        const pathExactEnds: Path[] = []
+        const pathRests: Path[] = []
         const tokenStart = this.steps.at(-1) as Address
 
         for (const pool of pools) {
@@ -90,13 +90,13 @@ class Path {
 
             if (!pushResult) continue
             if (pair.tokenEnd == tokenEnd) {
-                exactEndPaths.push(pathCurrent)
+                pathExactEnds.push(pathCurrent)
                 continue
             }
 
-            restPaths.push(pathCurrent)
+            pathRests.push(pathCurrent)
         }
-        return { exactEndPaths, restPaths }
+        return { pathExactEnds, pathRests }
     }
 }
 export default Path

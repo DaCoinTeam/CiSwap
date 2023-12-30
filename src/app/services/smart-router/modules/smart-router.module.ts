@@ -85,8 +85,8 @@ class SmartRouter {
         tokenStart: Address,
         tokenEnd: Address
     ): Promise<Path[] | null> {
-        let restPaths: Path[] = []
-        const exactEndPaths: Path[] = []
+        let pathRests: Path[] = []
+        const pathExactEnds: Path[] = []
         const pools = await this.getAllPools()
         if (pools == null) return null
 
@@ -97,31 +97,31 @@ class SmartRouter {
             if (!createResult) continue
 
             if (pathCurrent.getLast() == tokenEnd) {
-                exactEndPaths.push(pathCurrent)
+                pathExactEnds.push(pathCurrent)
                 continue
             }
-            restPaths.push(pathCurrent)
+            pathRests.push(pathCurrent)
         }
 
         let hopsCount = 0
-        while (restPaths.length) {
+        while (pathRests.length) {
             if (hopsCount == MAX_HOPS - 1) break
 
-            const restPathsTemp: Path[] = []
+            const pathRestsTemp: Path[] = []
 
-            for (const restPath of restPaths) {
-                const { exactEndPaths: _exactEndPaths, restPaths: _restPaths } =
-          restPath.generatePathsFromNextHop(pools, tokenEnd)
+            for (const pathRest of pathRests) {
+                const { pathExactEnds: _pathExactEnds, pathRests: _pathRests } =
+          pathRest.generatePathsFromNextHop(pools, tokenEnd)
 
-                exactEndPaths.push(..._exactEndPaths)
-                restPathsTemp.push(..._restPaths)
+                pathExactEnds.push(..._pathExactEnds)
+                pathRestsTemp.push(..._pathRests)
             }
-            restPaths = restPathsTemp
+            pathRests = pathRestsTemp
 
             hopsCount++
         }
-        if (!exactEndPaths.length) throw new Error("No path found")
-        return exactEndPaths
+        if (!pathExactEnds.length) throw new Error("No path found")
+        return pathExactEnds
     }
     async findBestRouteExactInput(
         amountIn: bigint,

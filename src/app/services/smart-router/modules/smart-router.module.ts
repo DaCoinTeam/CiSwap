@@ -34,58 +34,6 @@ class SmartRouter {
         )
     }
 
-    async findBestRouteExactInputSingle(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenIn,
-            tokenOut,
-            QuoteType.ExactInputSingle
-        )
-    }
-
-    async findBestRouteExactInput(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenIn,
-            tokenOut,
-            QuoteType.ExactInput
-        )
-    }
-
-    async findBestRouteExactOutputSingle(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenOut,
-            tokenIn,
-            QuoteType.ExactOutputSingle
-        )
-    }
-
-    async findBestRouteExactOutput(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenOut,
-            tokenIn,
-            QuoteType.ExactOutput
-        )
-    }
-
     private async getAllPools(): Promise<Pool[] | null> {
         const poolAddresses = await this.factoryContract.allPools()
         if (poolAddresses == null) return null
@@ -150,6 +98,31 @@ class SmartRouter {
 
         return exactEndPaths
     }
+    async findBestRouteExactInput(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestRouteResult | null> {
+        return this.findBestRoute(
+            amountIn,
+            tokenIn,
+            tokenOut,
+            QuoteType.ExactInput
+        )
+    }
+
+    async findBestRouteExactOutput(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestRouteResult | null> {
+        return this.findBestRoute(
+            amountIn,
+            tokenOut,
+            tokenIn,
+            QuoteType.ExactOutput
+        )
+    }
 
     private async findBestRoute(
         amountIn: bigint,
@@ -164,41 +137,42 @@ class SmartRouter {
         for (const path of paths) {
             let encodedFunction: Bytes
             switch (type) {
-            case QuoteType.ExactInputSingle:
-                encodedFunction = this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactInputSingle(
-                        amountIn,
-                        path.getFirstPool().tokenStart,
-                        path.getFirstPool().tokenEnd,
-                        path.getFirstPool().indexPool
-                    )
-                    .encodeABI()
-                break
             case QuoteType.ExactInput:
-                encodedFunction = this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactInput(amountIn, path.encodePacked())
-                    .encodeABI()
+                if (path.steps.length == 3) {
+                    encodedFunction = this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactInputSingle(
+                            amountIn,
+                            path.getFirstPool().tokenStart,
+                            path.getFirstPool().tokenEnd,
+                            path.getFirstPool().indexPool
+                        )
+                        .encodeABI()
+                } else {
+                    encodedFunction = this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactInput(amountIn, path.encodePacked())
+                        .encodeABI()
+                }
                 break
-            case QuoteType.ExactOutputSingle:
-                encodedFunction = this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactOutputSingle(
-                        amountIn,
-                        path.getFirstPool().tokenStart,
-                        path.getFirstPool().tokenEnd,
-                        path.getFirstPool().indexPool
-                    )
-                    .encodeABI()
-                break
-
             case QuoteType.ExactOutput:
-                encodedFunction = this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactOutput(amountIn, path.encodePacked())
-                    .encodeABI()
-                console.log(path.encodePacked())
+                if (path.steps.length == 3) {
+                    encodedFunction = this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactOutputSingle(
+                            amountIn,
+                            path.getFirstPool().tokenStart,
+                            path.getFirstPool().tokenEnd,
+                            path.getFirstPool().indexPool
+                        )
+                        .encodeABI()
+                } else {
+                    encodedFunction = this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactOutput(amountIn, path.encodePacked())
+                        .encodeABI()
+                    console.log(path.encodePacked())
+                }
                 break
             }
             data.push(encodedFunction)
@@ -210,11 +184,10 @@ class SmartRouter {
             BigInt(web3.utils.hexToNumber(web3.utils.bytesToHex(byte)))
         )
 
-        const typeInput =
-      type == QuoteType.ExactInput || type == QuoteType.ExactInputSingle
-        const { index, value } = typeInput
-            ? findMaxBigIntIndexAndValue(amountsQuoted)
-            : findMinBigIntIndexAndValue(amountsQuoted)
+        const { index, value } =
+      type == QuoteType.ExactInput
+          ? findMaxBigIntIndexAndValue(amountsQuoted)
+          : findMinBigIntIndexAndValue(amountsQuoted)
 
         return {
             path: paths[index],
@@ -225,9 +198,7 @@ class SmartRouter {
 export default SmartRouter
 
 export enum QuoteType {
-  ExactInputSingle,
   ExactInput,
-  ExactOutputSingle,
   ExactOutput,
 }
 

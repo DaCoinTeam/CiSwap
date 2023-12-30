@@ -10,7 +10,6 @@ class Path {
 
     encodePacked(): Bytes {
         const inputs: Sha3Input[] = this.steps.map((step) => {
-            
             if (typeof step == "number") {
                 console.log("num" + step)
                 return { type: "uint32", value: step }
@@ -56,8 +55,8 @@ class Path {
     }
 
     create(pool: Pool, tokenStart: Address): boolean {
-        if (!pool.hasToken(tokenStart)) return false
         const pair = pool.getPair(tokenStart)
+        if (pair == null) return false
 
         this.steps.push(pair.tokenStart, pool.indexPool, pair.tokenEnd)
         return true

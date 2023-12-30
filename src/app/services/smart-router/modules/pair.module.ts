@@ -1,4 +1,4 @@
-import web3, { Address } from "web3"
+import { Address } from "web3"
 
 class Pair {
     tokenStart: Address
@@ -7,13 +7,6 @@ class Pair {
     constructor(tokenStart: Address, tokenEnd: Address) {
         this.tokenStart = tokenStart
         this.tokenEnd = tokenEnd
-    }
-
-    zeroForOne(): boolean {
-        return (
-            web3.utils.hexToNumber(this.tokenStart) <
-      web3.utils.hexToNumber(this.tokenEnd)
-        )
     }
 
     compare(pair: Pair): boolean {

@@ -31,13 +31,13 @@ class Path {
         }
     }
 
-    private hasEncounteredPair(token: Address): boolean {
+    private hasEncounteredPair(tokenNext: Address): boolean {
         const length = this.steps.length
         if (length < 3) {
             throw new Error("Path length must be at least 3")
         }
 
-        const pairNext = new Pair(this.steps.at(-1) as Address, token)
+        const pairNext = new Pair(this.steps.at(-1) as Address, tokenNext)
 
         for (let i = 0; i < (length - 1) / 2; i++) {
             const pairCurrent = new Pair(
@@ -86,9 +86,7 @@ class Path {
             const steps = Object.assign([], this.steps)
             const pathCurrent = new Path(steps)
             
-            console.log(pathCurrent.steps.length)
             const pushResult = pathCurrent.pushNextHop(pool.indexPool, pair.tokenEnd)
-            console.log(pathCurrent.steps.length)
 
             if (!pushResult) continue
             if (pair.tokenEnd == tokenEnd) {

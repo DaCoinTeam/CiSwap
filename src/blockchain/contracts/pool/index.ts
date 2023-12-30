@@ -72,7 +72,7 @@ class PoolContract {
         try {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getPoolContract(web3, this.address)
-            return await contract.methods.indexPool().call<bigint>()
+            return await contract.methods.indexPool().call<number>()
         } catch (ex) {
             console.log(ex)
             return null

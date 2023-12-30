@@ -128,12 +128,7 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenIn,
-            tokenOut,
-            QuoteType.ExactInput
-        )
+        return this.findBestRoute(amountIn, tokenIn, tokenOut, true)
     }
 
     async findBestRouteExactOutput(
@@ -141,62 +136,52 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(
-            amountIn,
-            tokenOut,
-            tokenIn,
-            QuoteType.ExactOutput
-        )
+        return this.findBestRoute(amountIn, tokenOut, tokenIn, false)
     }
 
     private async findBestRoute(
         amountIn: bigint,
         tokenStart: Address,
         tokenEnd: Address,
-        type: QuoteType
+        exactInput: boolean
     ): Promise<BestRouteResult | null> {
         const paths = await this.getAllPaths(tokenStart, tokenEnd)
         if (paths == null) return null
         const data: Bytes[] = []
         for (const path of paths) {
             let encodedFunction: Bytes
-            switch (type) {
-            case QuoteType.ExactInput:
-                encodedFunction =
-            path.steps.length == 3
-                ? this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactInputSingle(
-                        amountIn,
-                        path.getFirstPool().tokenStart,
-                        path.getFirstPool().tokenEnd,
-                        path.getFirstPool().indexPool
-                    )
-                    .encodeABI()
-                : (encodedFunction = this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactInput(amountIn, path.encodePacked())
-                    .encodeABI())
-                break
-
-            case QuoteType.ExactOutput:
-                encodedFunction =
-            path.steps.length == 3
-                ? this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactOutputSingle(
-                        amountIn,
-                        path.getFirstPool().tokenStart,
-                        path.getFirstPool().tokenEnd,
-                        path.getFirstPool().indexPool
-                    )
-                    .encodeABI()
-                : this.quoterContract
-                    .getInstance()
-                    .methods.quoteExactOutput(amountIn, path.encodePacked())
-                    .encodeABI()
-                break
+            if (exactInput) {
+                encodedFunction = path.steps.length == 3
+                    ? this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactInputSingle(
+                            amountIn,
+                            path.getFirstPool().tokenStart,
+                            path.getFirstPool().tokenEnd,
+                            path.getFirstPool().indexPool
+                        )
+                        .encodeABI()
+                    : (encodedFunction = this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactInput(amountIn, path.encodePacked())
+                        .encodeABI())
+            } else {
+                encodedFunction = path.steps.length == 3
+                    ? this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactOutputSingle(
+                            amountIn,
+                            path.getFirstPool().tokenStart,
+                            path.getFirstPool().tokenEnd,
+                            path.getFirstPool().indexPool
+                        )
+                        .encodeABI()
+                    : this.quoterContract
+                        .getInstance()
+                        .methods.quoteExactOutput(amountIn, path.encodePacked())
+                        .encodeABI()
             }
+
             data.push(encodedFunction)
         }
         const bytes = await this.multicallContract.multicall(data).call()
@@ -206,10 +191,9 @@ class SmartRouter {
             BigInt(web3.utils.hexToNumber(web3.utils.bytesToHex(byte)))
         )
 
-        const { index, value } =
-      type == QuoteType.ExactInput
-          ? findMaxBigIntIndexAndValue(amountsQuoted)
-          : findMinBigIntIndexAndValue(amountsQuoted)
+        const { index, value } = exactInput
+            ? findMaxBigIntIndexAndValue(amountsQuoted)
+            : findMinBigIntIndexAndValue(amountsQuoted)
 
         return {
             path: paths[index],
@@ -218,11 +202,6 @@ class SmartRouter {
     }
 }
 export default SmartRouter
-
-export enum QuoteType {
-  ExactInput,
-  ExactOutput,
-}
 
 export interface BestRouteResult {
   amount: bigint;

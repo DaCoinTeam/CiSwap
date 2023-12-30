@@ -5,13 +5,14 @@ import {
     MulticallContract,
 } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
-import { Address, Bytes } from "web3"
-import Path from "./Path.module"
-import Pool from "./Pool.modules"
+import web3, { Address, Bytes } from "web3"
+import Path from "./path.module"
+import Pool from "./pool.module"
+import { findMaxBigIntIndexAndValue } from "../../../../utils/array"
 
 const MAX_HOPS = 2
 
-class Router {
+class SmartRouter {
     private chainId: ChainId
     private factoryContract: FactoryContract
     private quoterContract: QuoterContract
@@ -30,7 +31,59 @@ class Router {
         )
     }
 
-    async getAllPools(): Promise<Pool[] | null> {
+    async findBestRouteExactInputSingle(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestQuoteResult | null> {
+        return this.getBestQuote(
+            amountIn,
+            tokenIn,
+            tokenOut,
+            QuoteType.ExactInputSingle
+        )
+    }
+
+    async findBestRouteExactInput(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestQuoteResult | null> {
+        return this.getBestQuote(
+            amountIn,
+            tokenIn,
+            tokenOut,
+            QuoteType.ExactInput
+        )
+    }
+
+    async findBestRouteExactOutputSingle(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestQuoteResult | null> {
+        return this.getBestQuote(
+            amountIn,
+            tokenOut,
+            tokenIn,
+            QuoteType.ExactOutputSingle
+        )
+    }
+
+    async findBestRouteExactOutput(
+        amountIn: bigint,
+        tokenIn: Address,
+        tokenOut: Address
+    ): Promise<BestQuoteResult | null> {
+        return this.getBestQuote(
+            amountIn,
+            tokenOut,
+            tokenIn,
+            QuoteType.ExactOutput
+        )
+    }
+
+    private async getAllPools(): Promise<Pool[] | null> {
         const poolAddresses = await this.factoryContract.allPools()
         if (poolAddresses == null) return null
         const pools: Pool[] = []
@@ -52,7 +105,7 @@ class Router {
         return pools
     }
 
-    async getAllPaths(
+    private async getAllPaths(
         tokenStart: Address,
         tokenEnd: Address
     ): Promise<Path[] | null> {
@@ -71,8 +124,12 @@ class Router {
             }
             restPaths.push(pathCurrent)
         }
+        console.log(restPaths)
 
+        let hopsCount = 0
         while (restPaths.length) {
+            if (hopsCount == MAX_HOPS) break
+
             const restPathsTemp: Path[] = []
             const exactEndPathsTemp: Path[] = []
 
@@ -84,18 +141,21 @@ class Router {
             }
             exactEndPaths.push(...exactEndPathsTemp)
             restPaths = restPathsTemp
+
+            hopsCount++
         }
 
         return exactEndPaths
     }
 
-    async getBestQuote(
+    private async getBestQuote(
         amountIn: bigint,
         tokenStart: Address,
         tokenEnd: Address,
         type: QuoteType
-    ) {
+    ): Promise<BestQuoteResult | null> {
         const paths = await this.getAllPaths(tokenStart, tokenEnd)
+
         if (paths == null) return null
         const data: Bytes[] = []
         for (const path of paths) {
@@ -135,20 +195,36 @@ class Router {
                     .getInstance()
                     .methods.quoteExactOutput(amountIn, path.toPackedBytes())
                     .encodeABI()
+                console.log(path.toPackedBytes())
                 break
             }
             data.push(encodedFunction)
         }
+        console.log(data)
+        const bytes = await this.multicallContract.multicall(data).call()
+        if (bytes == null) return null
 
-        const bytes = await this.multicallContract.multicallCall(data)
-        console.log(bytes)
+        const amountsQuoted = bytes.map((byte) =>
+            BigInt(web3.utils.hexToNumber(web3.utils.bytesToHex(byte)))
+        )
+
+        const { index, value } = findMaxBigIntIndexAndValue(amountsQuoted)
+        return {
+            path: paths[index],
+            amount: value,
+        }
     }
 }
-export default Router
+export default SmartRouter
 
-enum QuoteType {
+export enum QuoteType {
   ExactInputSingle,
   ExactInput,
   ExactOutputSingle,
   ExactOutput,
+}
+
+export interface BestQuoteResult {
+  amount: bigint;
+  path: Path;
 }

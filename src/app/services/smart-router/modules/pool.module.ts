@@ -1,5 +1,5 @@
 import { Address } from "web3"
-import Pair from "./Pair.module"
+import Pair from "./pair.module"
 
 class Pool {
     token0: Address

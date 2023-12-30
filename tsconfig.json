@@ -56,7 +56,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/N"
-  ],
+, "src/app/services/smart-router/modules/pool.module.ts"  ],
   "exclude": [
     "node_modules"
   ]

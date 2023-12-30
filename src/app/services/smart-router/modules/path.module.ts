@@ -1,6 +1,7 @@
-import web3, { Address, Bytes } from "web3"
-import Pair from "./Pair.module"
-import Pool from "./Pool.modules"
+import web3, { Address, Bytes, Sha3Input } from "web3"
+import Pair from "./pair.module"
+import Pool from "./pool.module"
+
 class Path {
     steps: (Address | number)[]
     constructor(steps?: (Address | number)[]) {
@@ -8,7 +9,16 @@ class Path {
     }
 
     toPackedBytes(): Bytes {
-        return web3.utils.encodePacked(this.steps)
+        console.log(this.steps)
+        const inputs: Sha3Input[] = this.steps.map((step) => {
+            
+            if (typeof step == "number") {
+                console.log("num" + step)
+                return { type: "uint32", value: step }
+            }
+            return { type: "address", value: step }
+        })
+        return web3.utils.encodePacked(...inputs)
     }
 
     getFirstPool(): {

@@ -8,7 +8,7 @@ import {
 import { Button, Spacer } from "@nextui-org/react"
 import { SwapContext } from "../../../_hooks"
 import { FormikPropsContext } from "../FormikProviders"
-import { RouterContract } from "@blockchain"
+import { QuoterContract, RouterContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
@@ -18,6 +18,7 @@ import {
     computeDeRedenomination,
 } from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
+import numeral from "numeral"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)
@@ -46,8 +47,8 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const routerContract = new RouterContract(chainId)
-            const amountOut = await routerContract.getAmountsOut(
+            const quoterContract = new QuoterContract(chainId)
+            const amountOut = await quoterContract.quoteExactInput(
                 computeDeRedenomination(
                     parseNumber(formik.values.amountIn),
                     swapState.tokenInInfo.decimals
@@ -157,7 +158,7 @@ const MainSection = () => {
                     />
                     <BalanceDisplay
                         finishLoad={swapState.load.finishLoadWithConnected}
-                        balance={swapState.tokenInInfo.balance}
+                        balance={numeral(swapState.tokenInInfo.balance).format("0.0a")}
                     />
                 </div>
                 <Spacer y={1} />
@@ -184,7 +185,7 @@ const MainSection = () => {
                     />
                     <BalanceDisplay
                         finishLoad={swapState.load.finishLoadWithConnected}
-                        balance={swapState.tokenOutInfo.balance}
+                        balance={numeral(swapState.tokenOutInfo.balance).format("0.0f")}
                     />
                 </div>
                 <Spacer y={1} />

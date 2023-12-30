@@ -10,9 +10,9 @@ export const GET = async (request: NextRequest) => {
     const chainId = searchParams.get("chainId") as ChainId | null
     const tokenIn = searchParams.get("tokenIn") as Address | null
     const tokenOut = searchParams.get("tokenOut") as Address | null
-    const amount = searchParams.get("amount") as bigint | null
+    const amount = searchParams.get("amount") as string | null
     const exactInput = searchParams.get("exactInput") as boolean | null
-
+    console.log(tokenIn, tokenOut, amount, exactInput, chainId)
     if (
         chainId == null ||
     tokenIn == null ||
@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest) => {
         chainId,
         tokenIn,
         tokenOut,
-        amount,
+        BigInt(amount),
         exactInput
     )
 

@@ -27,6 +27,7 @@ const initialValues: FormikValues = {
     amountIn: "",
     amountOut: "",
     slippage: 0.01,
+    exactInput: true
 }
 
 export const FormikPropsContext =

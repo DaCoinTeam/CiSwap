@@ -26,11 +26,11 @@ class Router {
             const promise = async () => {
                 const poolContract = new PoolContract(this.chainId, poolAddress)
                 const token0 = await poolContract.token0()
-                if (token0 == null) return 
+                if (token0 == null) return
                 const token1 = await poolContract.token1()
-                if (token1 == null) return 
+                if (token1 == null) return
                 const indexPool = await poolContract.indexPool()
-                if (indexPool == null) return 
+                if (indexPool == null) return
                 pools.push(new Pool(token0, token1, indexPool))
             }
             promises.push(promise())
@@ -40,15 +40,26 @@ class Router {
     }
 
     async getAllPaths(
-        tokenIn: Address,
-        tokenOut: Address
+        tokenStart: Address,
+        tokenEnd: Address
     ): Promise<Path[] | null> {
-        let paths: Path[] = []
+        const exactEndPaths: Path[] = []
+        const restPaths: Path[] = []
         const pools = await this.getAllPools()
+        if (pools == null) return null
 
-        while (paths.length){
-            paths = co
+        for (const pool of pools) {
+            const pathCurrent = new Path()
+            const createResult = pathCurrent.create(pool, tokenStart)
+            if (!createResult) continue
+            if (pathCurrent.getLast() == tokenEnd) {
+                exactEndPaths.push(pathCurrent)
+                continue
+            }
+            restPaths.push(pathCurrent)
         }
+
+        return exactEndPaths
     }
 }
 export default Router

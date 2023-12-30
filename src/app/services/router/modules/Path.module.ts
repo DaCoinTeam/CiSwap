@@ -30,6 +30,18 @@ class Path {
         return false
     }
 
+    getLast(): Address {
+        return this.steps.at(-1) as Address
+    }
+
+    create(pool: Pool, tokenStart: Address): boolean {
+        if (!pool.hasToken(tokenStart)) return false
+        const pair = pool.getPair(tokenStart)
+
+        this.steps.push(pair.tokenStart, pool.indexPool, pair.tokenEnd)
+        return true
+    }
+
     addNextHop(indexPool: number, token: Address): boolean {
         if (this.hasEncounteredPair(token)) return false
         this.steps.push(indexPool, token)
@@ -47,7 +59,7 @@ class Path {
         const tokenStart = this.steps.at(-1) as Address
 
         for (const pool of pools) {
-            if (pool.token0 != tokenStart && pool.token1 != tokenStart) continue
+            if (!pool.hasToken(tokenStart)) continue
             const tokenEndPaired =
         pool.token0 === tokenStart ? pool.token1 : pool.token0
             const pathCurrent = new Path(this.steps)

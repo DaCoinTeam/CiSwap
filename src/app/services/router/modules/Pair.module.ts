@@ -1,8 +1,8 @@
 import web3, { Address } from "web3"
 
 class Pair {
-    private tokenStart: Address
-    private tokenEnd: Address
+    tokenStart: Address
+    tokenEnd: Address
 
     constructor(tokenStart: Address, tokenEnd: Address) {
         this.tokenStart = tokenStart

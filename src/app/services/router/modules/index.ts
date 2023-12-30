@@ -1,6 +1,11 @@
-import { QuoterContract, FactoryContract, PoolContract } from "@blockchain"
-import { ChainId } from "@config"
-import { Address } from "web3"
+import {
+    QuoterContract,
+    FactoryContract,
+    PoolContract,
+    MulticallContract,
+} from "@blockchain"
+import { ChainId, chainInfos } from "@config"
+import { Address, Bytes } from "web3"
 import Path from "./Path.module"
 import Pool from "./Pool.modules"
 
@@ -10,11 +15,19 @@ class Router {
     private chainId: ChainId
     private factoryContract: FactoryContract
     private quoterContract: QuoterContract
+    private multicallContract: MulticallContract
 
     constructor(chainId: ChainId) {
         this.chainId = chainId
         this.factoryContract = new FactoryContract(this.chainId)
-        this.quoterContract = new QuoterContract(this.chainId)
+        this.quoterContract = new QuoterContract(
+            this.chainId,
+            chainInfos[chainId].quoterAddress
+        )
+        this.multicallContract = new MulticallContract(
+            this.chainId,
+            chainInfos[chainId].quoterAddress
+        )
     }
 
     async getAllPools(): Promise<Pool[] | null> {
@@ -43,8 +56,8 @@ class Router {
         tokenStart: Address,
         tokenEnd: Address
     ): Promise<Path[] | null> {
-        let exactEndPaths: Path[] = []
         let restPaths: Path[] = []
+        const exactEndPaths: Path[] = []
         const pools = await this.getAllPools()
         if (pools == null) return null
 
@@ -60,8 +73,8 @@ class Router {
         }
 
         while (restPaths.length) {
-            const exactEndPathsTemp: Path[] = []
             const restPathsTemp: Path[] = []
+            const exactEndPathsTemp: Path[] = []
 
             for (const restPath of restPaths) {
                 const { exactEndPaths: _exactEndPaths, restPaths: _restPaths } =
@@ -69,11 +82,73 @@ class Router {
                 exactEndPathsTemp.push(..._exactEndPaths)
                 restPathsTemp.push(..._restPaths)
             }
-            exactEndPaths = exactEndPathsTemp
+            exactEndPaths.push(...exactEndPathsTemp)
             restPaths = restPathsTemp
         }
 
         return exactEndPaths
     }
+
+    async getBestQuote(
+        amountIn: bigint,
+        tokenStart: Address,
+        tokenEnd: Address,
+        type: QuoteType
+    ) {
+        const paths = await this.getAllPaths(tokenStart, tokenEnd)
+        if (paths == null) return null
+        const data: Bytes[] = []
+        for (const path of paths) {
+            let encodedFunction: Bytes
+            switch (type) {
+            case QuoteType.ExactInputSingle:
+                encodedFunction = this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactInputSingle(
+                        amountIn,
+                        path.getFirstPool().tokenStart,
+                        path.getFirstPool().tokenEnd,
+                        path.getFirstPool().indexPool
+                    )
+                    .encodeABI()
+                break
+            case QuoteType.ExactInput:
+                encodedFunction = this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactInput(amountIn, path.toPackedBytes())
+                    .encodeABI()
+                break
+            case QuoteType.ExactOutputSingle:
+                encodedFunction = this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactOutputSingle(
+                        amountIn,
+                        path.getFirstPool().tokenStart,
+                        path.getFirstPool().tokenEnd,
+                        path.getFirstPool().indexPool
+                    )
+                    .encodeABI()
+                break
+
+            case QuoteType.ExactOutput:
+                encodedFunction = this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactOutput(amountIn, path.toPackedBytes())
+                    .encodeABI()
+                break
+            }
+            data.push(encodedFunction)
+        }
+
+        const bytes = await this.multicallContract.multicallCall(data)
+        console.log(bytes)
+    }
 }
 export default Router
+
+enum QuoteType {
+  ExactInputSingle,
+  ExactInput,
+  ExactOutputSingle,
+  ExactOutput,
+}

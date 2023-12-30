@@ -2,13 +2,25 @@ import web3, { Address, Bytes } from "web3"
 import Pair from "./Pair.module"
 import Pool from "./Pool.modules"
 class Path {
-    private steps: (Address | number)[]
+    steps: (Address | number)[]
     constructor(steps?: (Address | number)[]) {
         this.steps = steps ?? []
     }
 
     toPackedBytes(): Bytes {
         return web3.utils.encodePacked(this.steps)
+    }
+
+    getFirstPool(): {
+    tokenStart: Address;
+    tokenEnd: Address;
+    indexPool: number;
+    } {
+        return {
+            tokenStart: this.steps[0] as Address,
+            tokenEnd: this.steps[2] as Address,
+            indexPool: this.steps[1] as number,
+        }
     }
 
     private hasEncounteredPair(token: Address): boolean {

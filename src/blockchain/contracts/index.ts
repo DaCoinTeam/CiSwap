@@ -5,9 +5,11 @@ import PoolContract from "./pool"
 import RouterContract from "./router"
 import QuoterContract from "./quoter"
 import AggregatorContract from "./aggregator"
+import MulticallContract from "./multicall"
 export * from "./provider"
 
 export {
+    MulticallContract,
     ERC20Contract,
     ERC721Contract,
     FactoryContract,

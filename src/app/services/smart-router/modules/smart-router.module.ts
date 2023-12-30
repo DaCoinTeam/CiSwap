@@ -138,41 +138,40 @@ class SmartRouter {
             let encodedFunction: Bytes
             switch (type) {
             case QuoteType.ExactInput:
-                if (path.steps.length == 3) {
-                    encodedFunction = this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactInputSingle(
-                            amountIn,
-                            path.getFirstPool().tokenStart,
-                            path.getFirstPool().tokenEnd,
-                            path.getFirstPool().indexPool
-                        )
-                        .encodeABI()
-                } else {
-                    encodedFunction = this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactInput(amountIn, path.encodePacked())
-                        .encodeABI()
-                }
+                encodedFunction =
+            path.steps.length == 3
+                ? this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactInputSingle(
+                        amountIn,
+                        path.getFirstPool().tokenStart,
+                        path.getFirstPool().tokenEnd,
+                        path.getFirstPool().indexPool
+                    )
+                    .encodeABI()
+                : (encodedFunction = this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactInput(amountIn, path.encodePacked())
+                    .encodeABI())
+
                 break
             case QuoteType.ExactOutput:
-                if (path.steps.length == 3) {
-                    encodedFunction = this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactOutputSingle(
-                            amountIn,
-                            path.getFirstPool().tokenStart,
-                            path.getFirstPool().tokenEnd,
-                            path.getFirstPool().indexPool
-                        )
-                        .encodeABI()
-                } else {
-                    encodedFunction = this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactOutput(amountIn, path.encodePacked())
-                        .encodeABI()
-                    console.log(path.encodePacked())
-                }
+                encodedFunction =
+            path.steps.length == 3
+                ? this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactOutputSingle(
+                        amountIn,
+                        path.getFirstPool().tokenStart,
+                        path.getFirstPool().tokenEnd,
+                        path.getFirstPool().indexPool
+                    )
+                    .encodeABI()
+                : this.quoterContract
+                    .getInstance()
+                    .methods.quoteExactOutput(amountIn, path.encodePacked())
+                    .encodeABI()
+
                 break
             }
             data.push(encodedFunction)

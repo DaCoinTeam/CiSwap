@@ -107,9 +107,14 @@ const FormikProviders = (props: ContextProps) => {
                     web3,
                     account
                 )
-
+                
                 const factory = chainInfos[chainId].factory
-                const factoryContract = new FactoryContract(chainId, web3, account)
+                const factoryContract = new FactoryContract(
+                    chainId,
+                    factory,
+                    web3,
+                    account
+                )
 
                 const amountADeRedenominated = computeDeRedenomination(
                     parseNumber(values.amountA),
@@ -157,8 +162,18 @@ const FormikProviders = (props: ContextProps) => {
                     ? amountADeRedenominated
                     : amountBDeRedenominated
 
-                console.log(_amountA, _amountB)
-
+                console.log({
+                    fee: values.fee * computeExponent(5),
+                    config: {
+                        tokenA: _tokenA,
+                        tokenB: _tokenB,
+                        amountA: _amountA,
+                        amountB: _amountB,
+                        basePriceAX96: basePriceAX96,
+                        maxPriceAX96: maxPriceAX96,
+                    },
+                })
+                console.log( chainInfos[chainId].factory)
                 const createPoolReceipt = await factoryContract.createPool({
                     fee: values.fee * computeExponent(5),
                     config: {

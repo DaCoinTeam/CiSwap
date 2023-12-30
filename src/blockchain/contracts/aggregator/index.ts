@@ -4,7 +4,7 @@ import abi from "./abi"
 import { getHttpWeb3 } from "../provider"
 
 const getAggregatorContract = (web3: Web3, chainId: ChainId) =>
-    new web3.eth.Contract(abi, chainInfos[chainId].aggregatorAddress)
+    new web3.eth.Contract(abi, chainInfos[chainId].aggregator)
 
 class AggregatorContract {
     private chainId: ChainId

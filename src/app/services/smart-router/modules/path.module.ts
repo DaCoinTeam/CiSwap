@@ -62,11 +62,12 @@ class Path {
         return true
     }
 
-    addNextHop(indexPool: number, token: Address): boolean {
+    pushNextHop(indexPool: number, token: Address): boolean {
         if (this.hasEncounteredPair(token)) return false
         this.steps.push(indexPool, token)
         return true
     }
+
     generatePathsFromNextHop(
         pools: Pool[],
         tokenEnd: Address
@@ -79,16 +80,22 @@ class Path {
         const tokenStart = this.steps.at(-1) as Address
 
         for (const pool of pools) {
-            if (!pool.hasToken(tokenStart)) continue
-            const tokenEndPaired =
-        pool.token0 === tokenStart ? pool.token1 : pool.token0
-            const pathCurrent = new Path(this.steps)
-            const addResult = pathCurrent.addNextHop(pool.indexPool, tokenEndPaired)
-            if (!addResult) continue
-            if (tokenEndPaired == tokenEnd) {
+            const pair = pool.getPair(tokenStart)
+            if (pair == null) continue
+
+            const steps = Object.assign([], this.steps)
+            const pathCurrent = new Path(steps)
+            
+            console.log(pathCurrent.steps.length)
+            const pushResult = pathCurrent.pushNextHop(pool.indexPool, pair.tokenEnd)
+            console.log(pathCurrent.steps.length)
+
+            if (!pushResult) continue
+            if (pair.tokenEnd == tokenEnd) {
                 exactEndPaths.push(pathCurrent)
                 continue
             }
+
             restPaths.push(pathCurrent)
         }
         return { exactEndPaths, restPaths }

@@ -74,10 +74,10 @@ export type ChainInfo = {
   httpRpcUrl: string;
   websocketRpcUrl: string;
   factory: Address;
-  routerAddress: Address;
+  router: Address;
   WETH10: Address;
-  quoterAddress: Address;
-  aggregatorAddress: Address;
+  quoter: Address;
+  aggregator: Address;
   NFTAddress: Address;
   exchangeToken: Address;
   stableTokens: Address[];
@@ -97,10 +97,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
         factory: KLAYTN_MAINNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: KLAYTN_MAINNET_CONTRACT_NFT,
         exchangeToken: KLAYTN_MAINNET_EXCHANGE_TOKEN,
         stableTokens: [KLAYTN_MAINNET_USDT],
@@ -112,10 +112,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: KLAYTN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_TESTNET_WEBSOCKET_RPC_URL,
         factory: KLAYTN_TESTNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: KLAYTN_TESTNET_CONTRACT_NFT,
         exchangeToken: KLAYTN_TESTNET_EXCHANGE_TOKEN,
         stableTokens: [
@@ -131,10 +131,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: POLYGON_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_MAINNET_WEBSOCKET_RPC_URL,
         factory: POLYGON_MAINNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: POLYGON_MAINNET_CONTRACT_NFT,
         exchangeToken: POLYGON_MAINNET_EXCHANGE_TOKEN,
         stableTokens: [POLYGON_MAINNET_USDT],
@@ -146,10 +146,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: POLYGON_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: POLYGON_TESTNET_WEBSOCKET_RPC_URL,
         factory: POLYGON_TESTNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: POLYGON_TESTNET_CONTRACT_NFT,
         exchangeToken: POLYGON_TESTNET_EXCHANGE_TOKEN,
         stableTokens: [POLYGON_TESTNET_USDT],
@@ -161,10 +161,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: BINANCE_SMART_CHAIN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_MAINNET_WEBSOCKET_RPC_URL,
         factory: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: BINANCE_SMART_CHAIN_MAINNET_CONTRACT_NFT,
         exchangeToken: BINANCE_SMART_CHAIN_MAINNET_EXCHANGE_TOKEN,
         stableTokens: [BINANCE_SMART_CHAIN_MAINNET_USDT],
@@ -176,10 +176,10 @@ export const chainInfos: Record<number, ChainInfo> = {
         httpRpcUrl: BINANCE_SMART_CHAIN_TESTNET_HTTP_RPC_URL,
         websocketRpcUrl: BINANCE_SMART_CHAIN_TESTNET_WEBSOCKET_RPC_URL,
         factory: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_FACTORY,
-        routerAddress: KLAYTN_TESTNET_CONTRACT_ROUTER,
+        router: KLAYTN_TESTNET_CONTRACT_ROUTER,
         WETH10: KLAYTN_TESTNET_CONTRACT_WETH10,
-        quoterAddress: KLAYTN_TESTNET_CONTRACT_QUOTER,
-        aggregatorAddress: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
+        quoter: KLAYTN_TESTNET_CONTRACT_QUOTER,
+        aggregator: KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
         NFTAddress: BINANCE_SMART_CHAIN_TESTNET_CONTRACT_NFT,
         exchangeToken: BINANCE_SMART_CHAIN_TESTNET_EXCHANGE_TOKEN,
         stableTokens: [BINANCE_SMART_CHAIN_TESTNET_USDT],
@@ -190,4 +190,4 @@ export const chainInfos: Record<number, ChainInfo> = {
 }
 
 export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
-export const GAS_LIMIT = 300000000
+export const GAS_LIMIT = "3000000000"

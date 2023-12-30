@@ -25,6 +25,11 @@ class PoolContract {
         this.sender = sender
     }
 
+    getInstance() {
+        const web3 = getHttpWeb3(this.chainId)
+        return getPoolContract(web3, this.address)
+    }
+
     async getTransactionHashs() {
         try {
             const transactions: HexString[] = []
@@ -90,50 +95,6 @@ class PoolContract {
         }
     }
 
-    async name() {
-        try {
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getPoolContract(web3, this.address)
-            return await contract.methods.name().call()
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
-    async symbol() {
-        try {
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getPoolContract(web3, this.address)
-            return await contract.methods.symbol().call()
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
-    async decimals() {
-        try {
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getPoolContract(web3, this.address)
-            return Number(await contract.methods.decimals().call())
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
-    async balanceOf(owner: Address) {
-        try {
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getPoolContract(web3, this.address)
-            return await contract.methods.balanceOf(owner).call<bigint>()
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
     async liquidity() {
         try {
             const web3 = getHttpWeb3(this.chainId)
@@ -161,17 +122,6 @@ class PoolContract {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getPoolContract(web3, this.address)
             return await contract.methods.price1X96().call<bigint>()
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
-    async totalSupply() {
-        try {
-            const web3 = getHttpWeb3(this.chainId)
-            const contract = getPoolContract(web3, this.address)
-            return await contract.methods.totalSupply().call<bigint>()
         } catch (ex) {
             console.log(ex)
             return null

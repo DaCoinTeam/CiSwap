@@ -3,17 +3,17 @@ import Web3, { Address, Bytes } from "web3"
 import abi from "./abi"
 
 const getRouterContract = (web3: Web3, chainId: ChainId) =>
-    new web3.eth.Contract(abi, chainInfos[chainId].routerAddress)
+    new web3.eth.Contract(abi, chainInfos[chainId].router)
 
 class RouterContract {
     private chainId: ChainId
-    private routerAddress: Address
+    private router: Address
     private sender?: Address
     private web3?: Web3
 
     constructor(chainId: ChainId, web3?: Web3, sender?: Address) {
         this.chainId = chainId;
-        (this.routerAddress = chainInfos[chainId].routerAddress),
+        (this.router = chainInfos[chainId].router),
         (this.web3 = web3)
         this.sender = sender
     }
@@ -33,7 +33,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
@@ -61,7 +61,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
@@ -87,7 +87,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
@@ -115,7 +115,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
@@ -136,7 +136,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: _data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
@@ -157,7 +157,7 @@ class RouterContract {
 
             return await this.web3.eth.sendTransaction({
                 from: this.sender,
-                to: this.routerAddress,
+                to: this.router,
                 data: _data,
                 gasLimit: GAS_LIMIT,
                 gasPrice: GAS_PRICE,

@@ -27,7 +27,7 @@ export const computeDeRedenomination = (
     decimals: number
 ): bigint => {
     try {
-        const result = BigInt(amount * computeExponent(decimals))
+        const result = BigInt(amount) * BigInt(computeExponent(decimals))
         if (isNaN(Number(result))) throw new Error()
         return result
     } catch (error) {

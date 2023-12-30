@@ -29,17 +29,12 @@ export const GET = async (request: NextRequest) => {
 
         const smartRouter = new SmartRouter(chainId)
 
-        const response = exactInput
-            ? await smartRouter.findBestRouteExactInput(
-                BigInt(amount),
-                tokenIn,
-                tokenOut
-            )
-            : await smartRouter.findBestRouteExactOutput(
-                BigInt(amount),
-                tokenIn,
-                tokenOut
-            )
+        const response = await smartRouter.findBestRoute(
+            BigInt(amount),
+            tokenIn,
+            tokenOut,
+            exactInput
+        )
 
         return NextResponse.json(convertBigIntsToStringsForResponse(response))
     } catch (ex) {

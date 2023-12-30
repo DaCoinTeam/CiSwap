@@ -123,23 +123,8 @@ class SmartRouter {
         if (!pathExactEnds.length) throw new Error("No path found")
         return pathExactEnds
     }
-    async findBestRouteExactInput(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(amountIn, tokenIn, tokenOut, true)
-    }
 
-    async findBestRouteExactOutput(
-        amountIn: bigint,
-        tokenIn: Address,
-        tokenOut: Address
-    ): Promise<BestRouteResult | null> {
-        return this.findBestRoute(amountIn, tokenOut, tokenIn, false)
-    }
-
-    private async findBestRoute(
+    async findBestRoute(
         amountIn: bigint,
         tokenStart: Address,
         tokenEnd: Address,
@@ -178,7 +163,7 @@ class SmartRouter {
                         .encodeABI()
                     : this.quoterContract
                         .getInstance()
-                        .methods.quoteExactOutput(amountIn, path.encodePacked())
+                        .methods.quoteExactOutput(amountIn, path.reverse().encodePacked())
                         .encodeABI()
             }
 

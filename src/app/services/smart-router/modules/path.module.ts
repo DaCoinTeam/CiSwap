@@ -50,6 +50,11 @@ class Path {
         return false
     }
 
+    reverse() : Path {
+        this.steps.reverse()
+        return this
+    }
+
     getLast(): Address {
         return this.steps.at(-1) as Address
     }

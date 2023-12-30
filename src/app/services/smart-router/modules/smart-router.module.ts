@@ -36,7 +36,7 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.getBestRoute(
+        return this.findBestRoute(
             amountIn,
             tokenIn,
             tokenOut,
@@ -49,7 +49,7 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.getBestRoute(
+        return this.findBestRoute(
             amountIn,
             tokenIn,
             tokenOut,
@@ -62,7 +62,7 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.getBestRoute(
+        return this.findBestRoute(
             amountIn,
             tokenOut,
             tokenIn,
@@ -75,7 +75,7 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address
     ): Promise<BestRouteResult | null> {
-        return this.getBestRoute(
+        return this.findBestRoute(
             amountIn,
             tokenOut,
             tokenIn,
@@ -148,7 +148,7 @@ class SmartRouter {
         return exactEndPaths
     }
 
-    private async getBestRoute(
+    private async findBestRoute(
         amountIn: bigint,
         tokenStart: Address,
         tokenEnd: Address,

@@ -8,7 +8,7 @@ class Path {
         this.steps = steps ?? []
     }
 
-    toPackedBytes(): Bytes {
+    encodePacked(): Bytes {
         console.log(this.steps)
         const inputs: Sha3Input[] = this.steps.map((step) => {
             

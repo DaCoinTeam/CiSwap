@@ -175,7 +175,7 @@ class SmartRouter {
             case QuoteType.ExactInput:
                 encodedFunction = this.quoterContract
                     .getInstance()
-                    .methods.quoteExactInput(amountIn, path.toPackedBytes())
+                    .methods.quoteExactInput(amountIn, path.encodePacked())
                     .encodeABI()
                 break
             case QuoteType.ExactOutputSingle:
@@ -193,9 +193,9 @@ class SmartRouter {
             case QuoteType.ExactOutput:
                 encodedFunction = this.quoterContract
                     .getInstance()
-                    .methods.quoteExactOutput(amountIn, path.toPackedBytes())
+                    .methods.quoteExactOutput(amountIn, path.encodePacked())
                     .encodeABI()
-                console.log(path.toPackedBytes())
+                console.log(path.encodePacked())
                 break
             }
             data.push(encodedFunction)

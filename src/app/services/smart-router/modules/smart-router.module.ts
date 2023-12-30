@@ -6,7 +6,7 @@ import {
 } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
-import Path from "./path.module"
+import Path, { Step } from "./path.module"
 import Pool from "./pool.module"
 import {
     bytesToAddress,
@@ -190,5 +190,5 @@ export default SmartRouter
 
 export interface BestRouteResult {
   amount: bigint;
-  path: (Address | number)[];
+  path: Step[];
 }

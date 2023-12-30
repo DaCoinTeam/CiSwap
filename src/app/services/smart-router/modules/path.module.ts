@@ -3,7 +3,7 @@ import Pair from "./pair.module"
 import Pool from "./pool.module"
 
 class Path {
-    steps: (Address | number)[]
+    steps: Step[]
     constructor(steps?: (Address | number)[]) {
         this.steps = steps ?? []
     }
@@ -11,7 +11,6 @@ class Path {
     encodePacked(): Bytes {
         const inputs: Sha3Input[] = this.steps.map((step) => {
             if (typeof step == "number") {
-                console.log("num" + step)
                 return { type: "uint32", value: step }
             }
             return { type: "address", value: step }
@@ -50,7 +49,7 @@ class Path {
         return false
     }
 
-    reverse() : Path {
+    reverse(): Path {
         this.steps.reverse()
         return this
     }
@@ -90,7 +89,7 @@ class Path {
 
             const steps = Object.assign([], this.steps)
             const pathCurrent = new Path(steps)
-            
+
             const pushResult = pathCurrent.pushNextHop(pool.indexPool, pair.tokenEnd)
 
             if (!pushResult) continue
@@ -104,4 +103,7 @@ class Path {
         return { pathExactEnds, pathRests }
     }
 }
+
+export type Step = Address | number;
+
 export default Path

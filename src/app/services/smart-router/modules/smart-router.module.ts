@@ -11,7 +11,7 @@ import Pool from "./pool.module"
 import {
     findMaxBigIntIndexAndValue,
     findMinBigIntIndexAndValue,
-} from "../../../../utils/array"
+} from "@utils"
 
 const MAX_HOPS = 2
 
@@ -153,8 +153,8 @@ class SmartRouter {
                     .getInstance()
                     .methods.quoteExactInput(amountIn, path.encodePacked())
                     .encodeABI())
-
                 break
+
             case QuoteType.ExactOutput:
                 encodedFunction =
             path.steps.length == 3
@@ -171,7 +171,6 @@ class SmartRouter {
                     .getInstance()
                     .methods.quoteExactOutput(amountIn, path.encodePacked())
                     .encodeABI()
-
                 break
             }
             data.push(encodedFunction)

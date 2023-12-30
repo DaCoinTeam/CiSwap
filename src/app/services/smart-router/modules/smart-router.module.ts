@@ -35,8 +35,8 @@ class SmartRouter {
         amountIn: bigint,
         tokenIn: Address,
         tokenOut: Address
-    ): Promise<BestQuoteResult | null> {
-        return this.getBestQuote(
+    ): Promise<BestRouteResult | null> {
+        return this.getBestRoute(
             amountIn,
             tokenIn,
             tokenOut,
@@ -48,8 +48,8 @@ class SmartRouter {
         amountIn: bigint,
         tokenIn: Address,
         tokenOut: Address
-    ): Promise<BestQuoteResult | null> {
-        return this.getBestQuote(
+    ): Promise<BestRouteResult | null> {
+        return this.getBestRoute(
             amountIn,
             tokenIn,
             tokenOut,
@@ -61,8 +61,8 @@ class SmartRouter {
         amountIn: bigint,
         tokenIn: Address,
         tokenOut: Address
-    ): Promise<BestQuoteResult | null> {
-        return this.getBestQuote(
+    ): Promise<BestRouteResult | null> {
+        return this.getBestRoute(
             amountIn,
             tokenOut,
             tokenIn,
@@ -74,8 +74,8 @@ class SmartRouter {
         amountIn: bigint,
         tokenIn: Address,
         tokenOut: Address
-    ): Promise<BestQuoteResult | null> {
-        return this.getBestQuote(
+    ): Promise<BestRouteResult | null> {
+        return this.getBestRoute(
             amountIn,
             tokenOut,
             tokenIn,
@@ -148,12 +148,12 @@ class SmartRouter {
         return exactEndPaths
     }
 
-    private async getBestQuote(
+    private async getBestRoute(
         amountIn: bigint,
         tokenStart: Address,
         tokenEnd: Address,
         type: QuoteType
-    ): Promise<BestQuoteResult | null> {
+    ): Promise<BestRouteResult | null> {
         const paths = await this.getAllPaths(tokenStart, tokenEnd)
 
         if (paths == null) return null
@@ -224,7 +224,7 @@ export enum QuoteType {
   ExactOutput,
 }
 
-export interface BestQuoteResult {
+export interface BestRouteResult {
   amount: bigint;
   path: Path;
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { BestQuoteResult, QuoteType, SmartRouter } from "./modules"
+import { BestRouteResult, QuoteType, SmartRouter } from "./modules"
 import { ChainId } from "@config"
 import { Address } from "web3"
 import { invalidSearchParameters } from "../shared"
@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest) => {
 
     const smartRouter = new SmartRouter(chainId)
 
-    let response: BestQuoteResult | null
+    let response: BestRouteResult | null
 
     const quoteTypeInput: QuoteType = single
         ? QuoteType.ExactInputSingle

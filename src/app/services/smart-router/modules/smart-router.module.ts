@@ -125,7 +125,7 @@ class SmartRouter {
     }
 
     async findBestRoute(
-        amountIn: bigint,
+        amount: bigint,
         tokenStart: Address,
         tokenEnd: Address,
         exactInput: boolean
@@ -140,7 +140,7 @@ class SmartRouter {
                     ? this.quoterContract
                         .getInstance()
                         .methods.quoteExactInputSingle(
-                            amountIn,
+                            amount,
                             path.getFirstPool().tokenStart,
                             path.getFirstPool().tokenEnd,
                             path.getFirstPool().indexPool
@@ -148,14 +148,14 @@ class SmartRouter {
                         .encodeABI()
                     : (encodedFunction = this.quoterContract
                         .getInstance()
-                        .methods.quoteExactInput(amountIn, path.encodePacked())
+                        .methods.quoteExactInput(amount, path.encodePacked())
                         .encodeABI())
             } else {
                 encodedFunction = path.steps.length == 3
                     ? this.quoterContract
                         .getInstance()
                         .methods.quoteExactOutputSingle(
-                            amountIn,
+                            amount,
                             path.getFirstPool().tokenStart,
                             path.getFirstPool().tokenEnd,
                             path.getFirstPool().indexPool
@@ -163,7 +163,7 @@ class SmartRouter {
                         .encodeABI()
                     : this.quoterContract
                         .getInstance()
-                        .methods.quoteExactOutput(amountIn, path.reverse().encodePacked())
+                        .methods.quoteExactOutput(amount, path.reverse().encodePacked())
                         .encodeABI()
             }
 

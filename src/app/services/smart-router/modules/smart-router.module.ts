@@ -5,11 +5,13 @@ import {
     MulticallContract,
 } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
-import web3, { Address, Bytes } from "web3"
+import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
 import {
     bytesToAddress,
+    bytesToBigInt,
+    bytesToNumber,
     findMaxBigIntIndexAndValue,
     findMinBigIntIndexAndValue,
 } from "@utils"
@@ -70,9 +72,7 @@ class SmartRouter {
                 if (bytes == null) return
                 const token0 = bytesToAddress(bytes[0])
                 const token1 = bytesToAddress(bytes[1])
-                const indexPool = Number(
-                    web3.utils.hexToNumber(web3.utils.bytesToHex(bytes[2]))
-                )
+                const indexPool = bytesToNumber(bytes[2])
                 pools.push(new Pool(token0, token1, indexPool))
             }
             promises.push(promise())
@@ -136,35 +136,37 @@ class SmartRouter {
         for (const path of paths) {
             let encodedFunction: Bytes
             if (exactInput) {
-                encodedFunction = path.steps.length == 3
-                    ? this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactInputSingle(
-                            amount,
-                            path.getFirstPool().tokenStart,
-                            path.getFirstPool().tokenEnd,
-                            path.getFirstPool().indexPool
-                        )
-                        .encodeABI()
-                    : (encodedFunction = this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactInput(amount, path.encodePacked())
-                        .encodeABI())
+                encodedFunction =
+          path.steps.length == 3
+              ? this.quoterContract
+                  .getInstance()
+                  .methods.quoteExactInputSingle(
+                      amount,
+                      path.getFirstPool().tokenStart,
+                      path.getFirstPool().tokenEnd,
+                      path.getFirstPool().indexPool
+                  )
+                  .encodeABI()
+              : (encodedFunction = this.quoterContract
+                  .getInstance()
+                  .methods.quoteExactInput(amount, path.encodePacked())
+                  .encodeABI())
             } else {
-                encodedFunction = path.steps.length == 3
-                    ? this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactOutputSingle(
-                            amount,
-                            path.getFirstPool().tokenStart,
-                            path.getFirstPool().tokenEnd,
-                            path.getFirstPool().indexPool
-                        )
-                        .encodeABI()
-                    : this.quoterContract
-                        .getInstance()
-                        .methods.quoteExactOutput(amount, path.reverse().encodePacked())
-                        .encodeABI()
+                encodedFunction =
+          path.steps.length == 3
+              ? this.quoterContract
+                  .getInstance()
+                  .methods.quoteExactOutputSingle(
+                      amount,
+                      path.getFirstPool().tokenStart,
+                      path.getFirstPool().tokenEnd,
+                      path.getFirstPool().indexPool
+                  )
+                  .encodeABI()
+              : this.quoterContract
+                  .getInstance()
+                  .methods.quoteExactOutput(amount, path.reverse().encodePacked())
+                  .encodeABI()
             }
 
             data.push(encodedFunction)
@@ -172,9 +174,7 @@ class SmartRouter {
         const bytes = await this.multicallContract.multicall(data).call()
         if (bytes == null) return null
 
-        const amountsQuoted = bytes.map((byte) =>
-            BigInt(web3.utils.hexToNumber(web3.utils.bytesToHex(byte)))
-        )
+        const amountsQuoted = bytes.map((byte) => bytesToBigInt(byte))
 
         const { index, value } = exactInput
             ? findMaxBigIntIndexAndValue(amountsQuoted)

@@ -31,10 +31,10 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    createPrimaryParams(slippage: number): PrimaryParams {
+    createBaseParams(slippage: number): BaseParams {
         const quoteType = this.getQuoteType()
 
-        const quoteTypeToPrimaryParams: Record<QuoteType, PrimaryParams> = {
+        const quoteTypeToBaseParams: Record<QuoteType, BaseParams> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 amountIn: this.amountIn,
@@ -65,7 +65,7 @@ class Quote {
             },
         }
 
-        return quoteTypeToPrimaryParams[quoteType]
+        return quoteTypeToBaseParams[quoteType]
     }
 }
 
@@ -79,7 +79,7 @@ export enum QuoteType {
   ExactOutput,
 }
 
-export interface ExactInputSinglePrimaryParams {
+export interface ExactInputSingleBaseParams {
   quoteType: QuoteType.ExactInputSingle;
   amountIn: bigint;
   amountOutMin: bigint;
@@ -88,21 +88,21 @@ export interface ExactInputSinglePrimaryParams {
   indexPool: number;
 }
 
-export interface ExactInputPrimaryParams {
+export interface ExactInputBaseParams {
   quoteType: QuoteType.ExactInput;
   amountIn: bigint;
   amountOutMin: bigint;
   path: Bytes;
 }
 
-export interface ExactOutputPrimaryParams {
+export interface ExactOutputBaseParams {
   quoteType: QuoteType.ExactOutput;
   amountOut: bigint;
   amountInMax: bigint;
   path: Bytes;
 }
 
-export interface ExactOutputSinglePrimaryParams {
+export interface ExactOutputSingleBaseParams {
   quoteType: QuoteType.ExactOutputSingle;
   amountOut: bigint;
   amountInMax: bigint;
@@ -111,8 +111,8 @@ export interface ExactOutputSinglePrimaryParams {
   indexPool: number;
 }
 
-export type PrimaryParams =
-  | ExactInputPrimaryParams
-  | ExactInputSinglePrimaryParams
-  | ExactOutputSinglePrimaryParams
-  | ExactOutputPrimaryParams;
+export type BaseParams =
+  | ExactInputBaseParams
+  | ExactInputSingleBaseParams
+  | ExactOutputSingleBaseParams
+  | ExactOutputBaseParams;

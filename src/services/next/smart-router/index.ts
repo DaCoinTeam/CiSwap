@@ -1,6 +1,8 @@
+export * from "./modules"
+
 import { ChainId } from "@config"
 import { Address } from "web3"
-import Quote from "./modules/quote.module"
+import { Quote } from "./modules"
 import { SmartRouter } from "./modules"
 
 export const smartRouterService = {

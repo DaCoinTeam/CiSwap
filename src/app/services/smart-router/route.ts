@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest) => {
 
         const smartRouter = new SmartRouter(chainId)
 
-        const response = await smartRouter.findBestRoute(
+        const response = await smartRouter.findBestQuote(
             BigInt(amount),
             tokenIn,
             tokenOut,

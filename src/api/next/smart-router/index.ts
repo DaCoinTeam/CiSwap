@@ -1,6 +1,6 @@
 import axios from "axios"
 import { ChainId } from "@config"
-import { Address, Bytes } from "web3"
+import { Address } from "web3"
 
 const ROUTER_URL = "/services/smart-router"
 
@@ -11,7 +11,7 @@ export const smartRouterService = {
         tokenIn: Address,
         tokenOut: Address,
         exactInput: boolean
-    ): Promise<BestRouteResult | null> => {
+    ): Promise<Quote | null> => {
         try {
             const params = new URLSearchParams()
             params.set("chainId", chainId.toString())
@@ -19,7 +19,9 @@ export const smartRouterService = {
             params.set("tokenIn", tokenIn)
             params.set("tokenOut", tokenOut)
             params.set("exactInput", exactInput.toString())
-            return await axios.get(`${ROUTER_URL}?${params.toString()}`) as BestRouteResult
+            return (await axios.get(
+                `${ROUTER_URL}?${params.toString()}`
+            )) as Quote
         } catch (ex) {
             console.log(ex)
             return null
@@ -31,8 +33,15 @@ export default smartRouterService
 
 export type Step = Address | number;
 
-export interface BestRouteResult {
+export enum QuoteType {
+  ExactInputSingle,
+  ExactInput,
+  ExactOutputSingle,
+  ExactOutput,
+}
+
+export interface Quote {
   amount: bigint;
   path: Step[];
-  bytes: Bytes;
+  quoteType: QuoteType;
 }

@@ -183,6 +183,7 @@ class SmartRouter {
         return {
             path: paths[index].steps,
             amount: value,
+            bytes: paths[index].encodePacked()
         }
     }
 }
@@ -191,4 +192,5 @@ export default SmartRouter
 export interface BestRouteResult {
   amount: bigint;
   path: Step[];
+  bytes: Bytes
 }

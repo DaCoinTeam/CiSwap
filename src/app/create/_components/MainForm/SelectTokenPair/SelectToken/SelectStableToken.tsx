@@ -12,7 +12,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 
 interface SelectStableTokenProps {
   className?: string;
-  onClick: (token: string) => void;
+  callback: (token: Address) => void;
 }
 
 const SelectStableToken = (props: SelectStableTokenProps) => {
@@ -60,13 +60,13 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
       handleEffect()
   }, [])
 
-  const _click = (token: Address) => props.onClick(token)
-  const _renderCards = (presentableTokens: PresentableToken[]) =>
+  const onClick = (token: Address) => props.callback(token)
+  const renderCards = (presentableTokens: PresentableToken[]) =>
       presentableTokens.map((token) => (
           <Card
               isPressable
               key={token.token}
-              onClick={() => _click(token.token)}
+              onClick={() => onClick(token.token)}
           >
               {" "}
               <CardBody className="p-4">
@@ -88,7 +88,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
           <Spacer y={4} />
           <div className="flex gap-4">
               {finishLoad
-                  ? _renderCards(presentableTokens)
+                  ? renderCards(presentableTokens)
                   : [0, 1].map((key) => (
                       <Card key={key} className="col-span-1">
                           <CardBody className="p-4">

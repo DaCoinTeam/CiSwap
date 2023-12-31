@@ -108,7 +108,7 @@ const SelectToken = (props: SelectTokenProps) => {
       }
   }, [tempToken])
 
-  const _changeTempTokenAddress = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeTempToken = (event: ChangeEvent<HTMLInputElement>) => {
       const _token = event.target.value
 
       setTempToken(_token)
@@ -124,13 +124,13 @@ const SelectToken = (props: SelectTokenProps) => {
     error != ErrorType.Undefined && error != ErrorType.None && finishFetch
   const _message = _invalid && finishFetch ? error : ""
 
-  const _click = (token: Address) => {
+  const onClickStableToken = (token: Address) => {
       if (tempToken === token) return
       setTempToken(token)
       setFinishFetch(false)
   }
 
-  const _import = (token: Address, symbol: Address) => {
+  const onClickImport = (token: Address, symbol: Address) => {
       setTokenSymbol(symbol)
       setIsOpen(false)
 
@@ -159,7 +159,7 @@ const SelectToken = (props: SelectTokenProps) => {
                   <ModalBody className="p-5 gap-6">
                       <div>
                           <Input
-                              onChange={_changeTempTokenAddress}
+                              onChange={onChangeTempToken}
                               label="Token Address"
                               value={tempToken}
                               isInvalid={_invalid}
@@ -167,7 +167,7 @@ const SelectToken = (props: SelectTokenProps) => {
                           />
                           <LoadingDisplay finishLoad={finishFetch} message="Checking" />
                       </div>
-                      <SelectStableToken onClick={_click} />
+                      <SelectStableToken callback={onClickStableToken} />
                   </ModalBody>
                   <ModalFooter className="p-5">
                       {error === ErrorType.None ? (
@@ -182,7 +182,7 @@ const SelectToken = (props: SelectTokenProps) => {
                               </Link>
                               <AppButton
                                   size="lg"
-                                  onPress={() => _import(tempToken, tempSymbol)}
+                                  onPress={() => onClickImport(tempToken, tempSymbol)}
                                   content="Import"
                               />
                           </div>

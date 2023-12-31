@@ -53,12 +53,12 @@ const PickFee = (props: PickFeeProps) => {
 
     const { finishSelectedPair } = finishSelectedPairContext
 
-    const _click = (fee: Fee) => {
+    const onClick = (fee: Fee) => {
         formik.setFieldValue("_feeId", fee.key)
         formik.setFieldValue("fee", fee.value)
     }
 
-    const _renderIfSelected = (key: number) => {
+    const renderSelected = (key: number) => {
         if (formik.values._feeId === key){
             return `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
         } else {
@@ -76,9 +76,9 @@ const PickFee = (props: PickFeeProps) => {
                 {protocolFees.map((fee) => (
                     <Card
                         key={fee.key}
-                        onPress={() => _click(fee)}
+                        onPress={() => onClick(fee)}
                         isPressable = {_finishSelectedPair}
-                        className={`${_renderIfSelected(fee.key)} glow`}
+                        className={`${renderSelected(fee.key)} glow`}
                     >
                         <CardBody className="p-5">
                             <span className="font-bold text-center">{fee.label}</span>

@@ -39,7 +39,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
 
     const classNames = typeToClassNames[type]
 
-    const _handleSwitch = props.callback
+    const onClickSwitch = props.callback
     return (
         <div className={`${props.className}`}>
             {props.finishLoad ? (
@@ -80,7 +80,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                     <Button
                         isIconOnly
                         variant="light"
-                        onPress={_handleSwitch}
+                        onPress={onClickSwitch}
                         radius="full"
                         className={`${classNames.button} min-w-0 flex-none`}
                     >

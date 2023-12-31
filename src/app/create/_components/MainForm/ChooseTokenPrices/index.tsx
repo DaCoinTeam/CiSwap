@@ -29,19 +29,19 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
 
     const _finishSelectedPair = account != null && finishSelectedPair
 
-    const _handleChange = (value: string, isTokenAMax?: boolean) => {
+    const onChangeInput = (value: string, isTokenAMax?: boolean) => {
         const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
         formik.setFieldValue(priceName, value)
     }
 
-    const _renderError = (hasError?: boolean, isTokenAMax?: boolean) => {
+    const renderError = (hasError?: boolean, isTokenAMax?: boolean) => {
         const _message = isTokenAMax
             ? formik.errors.maxPriceA
             : formik.errors.basePriceA
         return hasError ? <ErrorDisplay message={_message} /> : null
     }
 
-    const _renderDescription = (isTokenAMax?: boolean) => {
+    const renderDescription = (isTokenAMax?: boolean) => {
         const firstTokenSymbol = formik.values._zeroForOne
             ? formik.values._symbolA
             : formik.values._symbolB
@@ -57,7 +57,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
         ) : null
     }
 
-    const _onPlusPress = (isTokenAMax?: boolean) => {
+    const onClickPlus = (isTokenAMax?: boolean) => {
         const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
         const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
@@ -65,7 +65,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
         formik.setFieldValue(priceName, priceValue + 1)
     }
 
-    const _onMinusPress = (isTokenAMax?: boolean) => {
+    const onClickMinus = (isTokenAMax?: boolean) => {
         const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
         const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
@@ -89,7 +89,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => _onMinusPress()}
+                                    onPress={() => onClickMinus()}
                                     endContent={<MinusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none grow hidden sm:inline-flex"
                                     radius="full"
@@ -99,7 +99,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
                                     errorMessage={formik.errors.basePriceA}
-                                    onValueChange={_handleChange}
+                                    onValueChange={onChangeInput}
                                     value={_finishSelectedPair ? formik.values.basePriceA : ""}
                                     hideErrorMessage
                                 />
@@ -107,17 +107,17 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => _onPlusPress()}
+                                    onPress={() => onClickPlus()}
                                     endContent={<PlusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none grow hidden sm:inline-flex"
                                     radius="full"
                                 />
                             </div>
                             <Spacer y={6} />
-                            {_renderDescription()}
+                            {renderDescription()}
                         </CardBody>
                     </Card>
-                    {_renderError(!!formik.errors.basePriceA)}
+                    {renderError(!!formik.errors.basePriceA)}
                 </div>
                 <div className="grow">
                     <Card>
@@ -130,7 +130,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => _onMinusPress(true)}
+                                    onPress={() => onClickMinus(true)}
                                     endContent={<MinusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none hidden sm:inline-flex"
                                     radius="full"
@@ -139,23 +139,23 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
                                     errorMessage={formik.errors.maxPriceA}
-                                    onValueChange={(value) => _handleChange(value, true)}
+                                    onValueChange={(value) => onChangeInput(value, true)}
                                     value={_finishSelectedPair ? formik.values.maxPriceA : ""}
                                 />
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => _onPlusPress(true)}
+                                    onPress={() => onClickPlus(true)}
                                     endContent={<PlusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none hidden sm:inline-flex"
                                     radius="full"
                                 />
                             </div>
                             <Spacer y={6} />
-                            {_renderDescription(true)}
+                            {renderDescription(true)}
                         </CardBody>
                     </Card>
-                    {_renderError(!!formik.errors.maxPriceA, true)}
+                    {renderError(!!formik.errors.maxPriceA, true)}
                 </div>
             </div>
         </div>

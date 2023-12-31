@@ -17,7 +17,7 @@ interface TokenPriceDisplayProps {
 const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
     const type: Type = props.type ?? 0
 
-    const _renderTrend = () => <div></div>
+    const renderTrend = () => <div></div>
 
     return () => {
         const typeToReturn: Record<Type, JSX.Element> = {
@@ -33,7 +33,7 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
                                         {props.symbolA}/{props.symbolB}{" "}
                                     </span>
                                 </div>
-                                <div>{_renderTrend()}</div>
+                                <div>{renderTrend()}</div>
                             </div>
                         </>
                     ) : (
@@ -50,7 +50,7 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
                             <span>
                 1 {props.symbolA} = {props.price} {props.symbolB}{" "}
                             </span>
-                            {_renderTrend()}
+                            {renderTrend()}
                         </div>
                     ) : (
                         <>

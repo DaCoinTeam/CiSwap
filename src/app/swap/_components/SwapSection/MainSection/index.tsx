@@ -132,12 +132,12 @@ const MainSection = () => {
         }
     }, [formik.values.amountOut])
 
-    const _handleInChange = (value: string) => {
+    const onChangeIn = (value: string) => {
         formik.setFieldValue("amountIn", value)
         setFinishExecuteOut(false)
     }
 
-    const _handleOutChange = (value: string) => {
+    const onChangeOut = (value: string) => {
         formik.setFieldValue("amountOut", value)
         setFinishExecuteIn(false)
     }
@@ -146,7 +146,7 @@ const MainSection = () => {
     const { swapState, actions } = swapContext
     const { doReverse } = actions
 
-    const _handleReverse = async () => {
+    const onClickReverse = async () => {
         await doReverse()
         formik.setFieldValue("amountIn", formik.values.amountOut)
         setFinishExecuteOut(false)
@@ -169,7 +169,7 @@ const MainSection = () => {
                 <NumberTextarea
                     textPosition="right"
                     value={formik.values.amountIn}
-                    onValueChange={_handleInChange}
+                    onValueChange={onChangeIn}
                 />
                 <LoadingDisplay finishLoad={finishExecuteIn} message="Calculating..." />
             </div>
@@ -178,7 +178,7 @@ const MainSection = () => {
                 isIconOnly
                 endContent={<ArrowsUpDownIcon height={24} width={24} />}
                 radius="full"
-                onPress={_handleReverse}
+                onPress={onClickReverse}
             />
 
             <div className="w-full">
@@ -196,7 +196,7 @@ const MainSection = () => {
                 <NumberTextarea
                     textPosition="right"
                     value={formik.values.amountOut}
-                    onValueChange={_handleOutChange}
+                    onValueChange={onChangeOut}
                 />
                 <LoadingDisplay
                     finishLoad={finishExecuteOut}

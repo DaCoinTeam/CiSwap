@@ -40,7 +40,7 @@ const SwapProviders = (props: ContextProps) => {
     const path = usePathname()
     const searchParams = useSearchParams()
 
-    const _getTokenPair = () => {
+    const getTokenPair = () => {
         const tokenIn =
       searchParams.get("tokenIn") ?? chainInfos[chainId].stableTokens[0]
 
@@ -56,7 +56,7 @@ const SwapProviders = (props: ContextProps) => {
     const [preventExecution, setPreventExecution] = useState(false)
 
     const doReverse = async () => {
-        const { tokenIn, tokenOut } = _getTokenPair()
+        const { tokenIn, tokenOut } = getTokenPair()
         const params = new URLSearchParams(searchParams)
         params.set("tokenIn", tokenOut)
         params.set("tokenOut", tokenIn)

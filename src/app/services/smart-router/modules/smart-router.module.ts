@@ -8,7 +8,7 @@ import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
-import { Quote } from "@api"
+import { Quote, QuoteType } from "@api"
 import {
     bytesToAddress,
     bytesToBigInt,
@@ -129,8 +129,10 @@ class SmartRouter {
         amount: bigint,
         tokenIn: Address,
         tokenOut: Address,
-        exactInput: boolean
+        exactInput?: boolean
     ): Promise<Quote | null> {
+        exactInput = exactInput ?? false
+
         const paths = await this.computeAllPaths(tokenIn, tokenOut)
         if (paths == null) return null
 
@@ -190,18 +192,12 @@ class SmartRouter {
         const { index, value } = exactInput
             ? findMaxBigIntIndexAndValue(amountsQuoted)
             : findMinBigIntIndexAndValue(amountsQuoted)
-        return {
-            path: paths[index].steps,
-            amount: value,
-            exactInput: exactInputs[index],
-        }
+
+        const amountIn = exactInput ? amount : value
+        const amountOut = exactInput ? value : amount
+        
+        return new Quote(amountIn, amountOut, paths[index].steps, exactInputs[index])
+
     }
 }
 export default SmartRouter
-
-enum QuoteType {
-  ExactInputSingle,
-  ExactInput,
-  ExactOutputSingle,
-  ExactOutput,
-}

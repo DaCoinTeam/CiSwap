@@ -1,7 +1,6 @@
 export * from "./smart-router"
-import smartRouterService from "./smart-router"
+import { smartRouterService } from "./smart-router"
 
-const services = {
+export const services = {
     smartRouter: smartRouterService,
 }
-export default services

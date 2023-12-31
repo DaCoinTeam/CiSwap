@@ -2,6 +2,7 @@ import {
     computeExponent,
     computeLeftShift,
     computeRightShift,
+    computeRound,
 } from "./base-math.util"
 
 export const computeRedenomination = (
@@ -38,6 +39,21 @@ export const computeDeRedenomination = (
 
 export const computeMultiplyX96 = (value: number): bigint =>
     computeLeftShift(value, 96)
-    
+
 export const computeDivideX96 = (value: bigint): number =>
     computeRightShift(value, 96)
+
+export const computeSlippage = (
+    amount: bigint,
+    slippage: number,
+    round: number,
+    exactInput?: boolean
+) => {
+    const exponent = computeExponent(round)
+    const percentageMultipleExponent = BigInt(
+        computeRound(slippage * exponent, 0)
+    )
+    return exactInput
+        ? (amount * percentageMultipleExponent) / BigInt(exponent)
+        : (amount * BigInt(exponent)) / percentageMultipleExponent
+}

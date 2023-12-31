@@ -1,11 +1,6 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
-import {
-    Avatar,
-    AvatarGroup,
-    Button,
-    Skeleton
-} from "@nextui-org/react"
+import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
 import React from "react"
 import { Address } from "web3"
 
@@ -17,23 +12,23 @@ interface TokenPairDisplayProps {
   imageUrlB?: string;
   symbolA: string;
   symbolB: string;
-  size?: Size;
-  isInversed?: boolean;
+  type?: Type;
   finishLoad?: boolean;
+  callback?: () => void;
 }
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
-    props.size = props.size ?? "sm"
+    props.type = props.type ?? 0
 
-    const sizeToClassNames: Record<Size, ClassNames> = {
-        sm: {
+    const typeToClassNames: Record<Type, ClassNames> = {
+        0: {
             imageUrl: "w-5 h-5",
             text: "text-sm",
             skeleton: "h-6 w-30",
             button: "h-6 w-6",
             icon: "h-4 h-4",
         },
-        lg: {
+        1: {
             imageUrl: "w-9 h-9",
             text: "text-3xl",
             skeleton: "h-9 w-60",
@@ -42,28 +37,9 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
         },
     }
 
-    const classNames = sizeToClassNames[props.size]
+    const classNames = typeToClassNames[props.type]
 
-    const states = {
-        tokenIn: props.isInversed ? props.tokenA : props.tokenB,
-        tokenOut: props.isInversed ? props.tokenB : props.tokenA,
-        imageUrlIn: props.isInversed ? props.imageUrlA : props.imageUrlB,
-        imageUrlOut: props.isInversed ? props.imageUrlB : props.imageUrlA,
-        symbolIn: props.isInversed ? props.symbolA : props.symbolB,
-        symbolOut: props.isInversed ? props.symbolB : props.symbolA,
-    }
-
-    const _inverse = () =>
-        props.isInversed ? (
-            <Button
-                isIconOnly
-                variant="light"
-                className="w-6 h-6 min-w-0 justify-none"
-                endContent={<ArrowsRightLeftIcon height={16} width={16} />}
-            />
-        ) : null
-
-    const _handleSwitch = () => {}
+    const _handleSwitch = props.callback
     return (
         <div className={`${props.className}`}>
             {props.finishLoad ? (
@@ -75,9 +51,11 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                                     base: `${classNames.imageUrl}`,
                                 }}
                                 showFallback
-                                src={states.imageUrlIn}
+                                src={props.imageUrlA}
                                 fallback={
-                                    <QuestionMarkCircleIcon className={`${classNames.imageUrl}`} />
+                                    <QuestionMarkCircleIcon
+                                        className={`${classNames.imageUrl}`}
+                                    />
                                 }
                             />
                             <Avatar
@@ -85,18 +63,19 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                                     base: `${classNames.imageUrl}`,
                                 }}
                                 showFallback
-                                src={states.imageUrlOut}
+                                src={props.imageUrlB}
                                 fallback={
-                                    <QuestionMarkCircleIcon className={`${classNames.imageUrl}`} />
+                                    <QuestionMarkCircleIcon
+                                        className={`${classNames.imageUrl}`}
+                                    />
                                 }
                             />
                         </AvatarGroup>
 
                         <span className={`font-bold ${classNames.text}`}>
                             {" "}
-                            {states.symbolIn}/{states.symbolOut}{" "}
+                            {props.symbolA}/{props.symbolB}{" "}
                         </span>
-                        {_inverse()}
                     </div>
                     <Button
                         isIconOnly
@@ -117,7 +96,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
 
 export default TokenPairDisplay
 
-type Size = "sm" | "lg";
+type Type = 0 | 1;
 
 interface ClassNames {
   imageUrl: string;

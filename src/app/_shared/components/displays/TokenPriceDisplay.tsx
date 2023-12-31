@@ -4,9 +4,11 @@ import utils from "@utils"
 
 interface TokenPriceDisplayProps {
   className?: string;
-  token0ImageUrl?: string;
-  token1ImageUrl?: string;
-  style?: "style1" | "style2";
+  imageUrlA?: string;
+  imageUrlB?: string;
+  symbolA: string;
+  symbolB: string;
+  type?: Type;
 }
 
 const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
@@ -99,3 +101,5 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
 }
 
 export default TokenPriceDisplay
+
+type Type = 0 | 1;

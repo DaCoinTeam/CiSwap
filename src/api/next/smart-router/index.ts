@@ -21,6 +21,7 @@ export const smartRouterService = {
             params.set("exactInput", exactInput.toString())
             return await axios.get(`${ROUTER_URL}?${params.toString()}`) as BestRouteResult
         } catch (ex) {
+            console.log(ex)
             return null
         }
     },

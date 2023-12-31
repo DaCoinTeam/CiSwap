@@ -1,4 +1,4 @@
-import { Call, ERC20Contract, PoolContract, RouterContract } from "@blockchain"
+import { ERC20Contract } from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
@@ -10,24 +10,26 @@ import {
     setWaitSignModalTitle,
 } from "@redux"
 import { SwapContext } from "../../_hooks"
-import { parseNumber } from "@utils"
-import { computeDeRedenomination } from "@utils"
+import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
-import { Address } from "web3"
-import { chainInfos } from "../../../../config/blockchain.config"
+import { chainInfos } from "@config"
+import { Step } from "@services"
 
 interface FormikValues {
   amountIn: string;
   amountOut: string;
+  path: Step[]
   slippage: number;
+  exactInput: boolean;
 }
 
 const initialValues: FormikValues = {
     amountIn: "",
     amountOut: "",
+    path: [],
     slippage: 0.01,
-    exactInput: true
+    exactInput: true,
 }
 
 export const FormikPropsContext =
@@ -55,7 +57,7 @@ const FormikProviders = (props: ContextProps) => {
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     if (swapContext == null) return
-    const { swapState, handlers } = swapContext
+    const { swapState } = swapContext
 
     if (metamaskContext == null) return
     const { web3State } = metamaskContext
@@ -69,7 +71,7 @@ const FormikProviders = (props: ContextProps) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        swapState.tokenInInfo.balance,
+                        swapState.infoIn.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
@@ -77,7 +79,7 @@ const FormikProviders = (props: ContextProps) => {
                     .typeError("Input must be a number")
                     .min(0, "Input must be greater than or equal to 0")
                     .max(
-                        swapState.tokenOutInfo.balance,
+                        swapState.infoOut.balance,
                         "Input cannot exceed available balance"
                     )
                     .required("This field is required"),
@@ -87,7 +89,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 const tokenInContract = new ERC20Contract(
                     chainId,
-                    swapState.tokenInInfo.address,
+                    swapState.infoIn.address,
                     web3,
                     account
                 )
@@ -97,9 +99,9 @@ const FormikProviders = (props: ContextProps) => {
 
                 if (allowanceIn == null) return
 
-                const parsedAmountIn = computeDeRedenomination(
-                    parseNumber(values.amountIn),
-                    swapState.tokenInInfo.decimals
+                const parsedAmountIn = utils.math.computeDeRedenomination(
+                    utils.format.parseNumber(values.amountIn),
+                    swapState.infoIn.decimals
                 )
 
                 if (allowanceIn < parsedAmountIn) {
@@ -118,61 +120,6 @@ const FormikProviders = (props: ContextProps) => {
                 }
 
                 dispatch(setWaitSignModalTitle("Swap"))
-
-                const routerContract = new RouterContract(chainId, web3, account)
-                const _encodeData = async (
-                    pools: Address[]
-                ): Promise<Call[] | null> => {
-                    const data: Call[] = []
-                    let amountIn = parsedAmountIn
-
-                    for (const pool of pools) {
-                        const poolContract = new PoolContract(chainId, pool, web3, account)
-                        const token0 = await poolContract.token0()
-                        const zeroForOne = token0 == swapState.tokenInInfo.address
-
-                        const amountOut = await poolContract.getAmountOut(
-                            parsedAmountIn,
-                            zeroForOne
-                        )
-                        if (amountOut == null) return null
-
-                        const encoding = poolContract.encodeSwap(
-                            parsedAmountIn,
-                            BigInt(0),
-                            zeroForOne,
-                            BigInt(Date.now()) / BigInt(1000)
-                        )
-
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        amountIn = amountOut
-                        data.push({
-                            target: pool,
-                            encoding
-                        })
-                    }
-                    return data
-                }
-
-                const data = await _encodeData([
-                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855"
-                ])
-                if (data == null) return
-
-                console.log(data)
-                
-                const multicallReceipt = await routerContract.multicall2(data)
-
-                if (!multicallReceipt) {
-                    dispatch(setWaitSignModalShow(false))
-                    return
-                }
-
-                dispatch(setWaitSignModalShow(false))
-                notify(multicallReceipt.transactionHash.toString())
-
-                await handlers.handleWithoutConnected()
-                await handlers.handleWithConnected()
             }}
         >
             {(_props) => _renderBody(_props, props.children)}

@@ -8,17 +8,13 @@ import {
 import { Button, Spacer } from "@nextui-org/react"
 import { SwapContext } from "../../../_hooks"
 import { FormikPropsContext } from "../FormikProviders"
-import { QuoterContract, RouterContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import {
-    computeRedenomination,
-    parseNumber,
-    computeDeRedenomination,
-} from "@utils"
+import utils from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 import numeral from "numeral"
+import { services } from "@services"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)
@@ -47,26 +43,34 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quoterContract = new QuoterContract(chainId)
-            const amountOut = await quoterContract.quoteExactInput(
-                computeDeRedenomination(
-                    parseNumber(formik.values.amountIn),
-                    swapState.tokenInInfo.decimals
+            const quote = await services.next.smartRouter.get(
+                chainId,
+                utils.math.computeDeRedenomination(
+                    utils.format.parseNumber(formik.values.amountIn),
+                    swapState.infoIn.decimals
                 ),
-                swapState.tokenInInfo.address,
-                [
-                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855",
-                    "0x4E0B265B5e253A76aD2D469c31721fFBf2f38120",
-                ],
-                controller
+                swapState.infoIn.address,
+                swapState.infoOut.address,
+                true
             )
             setFinishExecuteOut(true)
-            if (amountOut == null) return
-
+            if (quote == null) return
+            console.log(  utils.math.computeRedenomination(
+                quote.amountOut,
+                swapState.infoOut.decimals,
+                3
+            ))
+            console.log(quote.amountOut)
             formik.setFieldValue(
                 "amountOut",
-                computeRedenomination(amountOut, swapState.tokenOutInfo.decimals, 3)
+                utils.math.computeRedenomination(
+                    quote.amountOut,
+                    swapState.infoOut.decimals,
+                    3
+                )
             )
+            formik.setFieldValue("exactInput", false)
+            formik.setFieldValue("path", quote.path)
 
             setPreventExecutionOut(true)
         }
@@ -95,27 +99,30 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const routerContract = new RouterContract(chainId)
-            const amountIn = await routerContract.getAmountsIn(
-                computeDeRedenomination(
-                    parseNumber(formik.values.amountOut),
-                    swapState.tokenOutInfo.decimals
+            const quote = await services.next.smartRouter.get(
+                chainId,
+                utils.math.computeDeRedenomination(
+                    utils.format.parseNumber(formik.values.amountOut),
+                    swapState.infoIn.decimals
                 ),
-                swapState.tokenInInfo.address,
-                [
-                    "0xB0b003476e9BaaE679c5B41D002bfe77b3aBe855",
-                    "0x4E0B265B5e253A76aD2D469c31721fFBf2f38120",
-                ],
-                controller
+                swapState.infoIn.address,
+                swapState.infoOut.address,
+                false
             )
-
-            setFinishExecuteIn(true)
-            if (amountIn == null) return
+            setFinishExecuteOut(true)
+            if (quote == null) return
 
             formik.setFieldValue(
                 "amountIn",
-                computeRedenomination(amountIn, swapState.tokenInInfo.decimals, 3)
+                utils.math.computeRedenomination(
+                    quote.amountIn,
+                    swapState.infoIn.decimals,
+                    3
+                )
             )
+
+            formik.setFieldValue("exactInput", true)
+            formik.setFieldValue("path", quote.path)
 
             setPreventExecutionIn(true)
         }
@@ -153,12 +160,12 @@ const MainSection = () => {
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.load.finishLoadWithoutConnected}
-                        symbol={swapState.tokenInInfo.symbol}
+                        finishLoad={swapState.state.finishUpdateBeforeConnected}
+                        symbol={swapState.infoIn.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.load.finishLoadWithConnected}
-                        balance={numeral(swapState.tokenInInfo.balance).format("0.0a")}
+                        finishLoad={swapState.state.finishUpdateAfterConnected}
+                        balance={numeral(swapState.infoOut.balance).format("0.0a")}
                     />
                 </div>
                 <Spacer y={1} />
@@ -180,12 +187,12 @@ const MainSection = () => {
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.load.finishLoadWithoutConnected}
-                        symbol={swapState.tokenOutInfo.symbol}
+                        finishLoad={swapState.state.finishUpdateBeforeConnected}
+                        symbol={swapState.infoOut.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.load.finishLoadWithConnected}
-                        balance={numeral(swapState.tokenOutInfo.balance).format("0.0f")}
+                        finishLoad={swapState.state.finishUpdateAfterConnected}
+                        balance={numeral(swapState.infoOut.balance).format("0.0f")}
                     />
                 </div>
                 <Spacer y={1} />

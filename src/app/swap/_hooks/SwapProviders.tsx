@@ -22,10 +22,10 @@ interface SwapContext {
   actions: {
     doReverse: () => Promise<void>;
   };
-  handlers: {
-    handleInitialization: () => void;
-    handleWithoutConnected: () => Promise<void>;
-    handleWithConnected: () => Promise<void>;
+  updaters: {
+    initialize: () => void;
+    updateBeforeConnected: () => Promise<void>;
+    upateAfterConnected: () => Promise<void>;
   };
 }
 
@@ -61,16 +61,16 @@ const SwapProviders = (props: ContextProps) => {
         params.set("tokenOut", tokenIn)
         router.push(`${path}?${params.toString()}`)
 
-        const { tokenInInfo, tokenOutInfo } = swapState
+        const { infoIn, infoOut } = swapState
 
         swapDispatch({
-            type: "SET_TOKEN_IN_INFO",
-            payload: tokenOutInfo,
+            type: "SET_INFO_OUT",
+            payload: infoOut,
         })
 
         swapDispatch({
-            type: "SET_TOKEN_OUT_INFO",
-            payload: tokenInInfo,
+            type: "SET_INFO_IN",
+            payload: infoIn,
         })
 
         setPreventExecution(true)
@@ -82,7 +82,7 @@ const SwapProviders = (props: ContextProps) => {
 
     const finishInitializeRef = useRef(false)
 
-    const handleInitialization = () => {
+    const initialize = () => {
         const tokenIn =
       searchParams.get("tokenIn") ?? chainInfos[chainId].stableTokens[0]
 
@@ -102,14 +102,14 @@ const SwapProviders = (props: ContextProps) => {
     }
 
     useEffect(() => {
-        handleInitialization()
+        initialize()
     }, [])
 
-    const handleWithoutConnected = async () => {
-        const handleTokenInInfo = async () => {
+    const updateBeforeConnected = async () => {
+        const updateTokenInInfo = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
-                swapState.tokenInInfo.address
+                swapState.infoIn.address
             )
 
             const decimalsIn = await tokenInContract.decimals()
@@ -118,9 +118,9 @@ const SwapProviders = (props: ContextProps) => {
 
             const promises: Promise<void>[] = []
 
-            const handleAdditionalIn = async () => {
+            const additionalInPromise = async () => {
                 const additionalIn = await getTokenApi(
-                    swapState.tokenInInfo.address,
+                    swapState.infoIn.address,
                     chainId
                 )
                 if (additionalIn != null) {
@@ -129,22 +129,22 @@ const SwapProviders = (props: ContextProps) => {
                     // swapDispatch({ type: "SET_IMAGE_URL_IN", payload: blobUrl })
                 }
             }
-            promises.push(handleAdditionalIn())
+            promises.push(additionalInPromise())
 
-            const handleSymbolIn = async () => {
+            const symbolInPromise = async () => {
                 const symbolIn = await tokenInContract.symbol()
                 if (symbolIn == null) return
                 swapDispatch({ type: "SET_SYMBOL_IN", payload: symbolIn })
             }
-            promises.push(handleSymbolIn())
+            promises.push(symbolInPromise())
 
             await Promise.all(promises)
         }
 
-        const handleTokenOutInfo = async () => {
+        const updateTokenOutInfo = async () => {
             const tokenOutContract = new ERC20Contract(
                 chainId,
-                swapState.tokenOutInfo.address
+                swapState.infoOut.address
             )
 
             const decimalsOut = await tokenOutContract.decimals()
@@ -156,9 +156,9 @@ const SwapProviders = (props: ContextProps) => {
 
             const promises: Promise<void>[] = []
 
-            const handleAdditionalOut = async () => {
+            const additionalOutPromise = async () => {
                 const additionalOut = await getTokenApi(
-                    swapState.tokenInInfo.address,
+                    swapState.infoIn.address,
                     chainId
                 )
                 if (additionalOut != null) {
@@ -167,25 +167,25 @@ const SwapProviders = (props: ContextProps) => {
                     // swapDispatch({ type: "SET_IMAGE_URL_OUT", payload: blobUrl })
                 }
             }
-            promises.push(handleAdditionalOut())
+            promises.push(additionalOutPromise())
 
-            const handleSymbolOut = async () => {
+            const symbolOutPromise = async () => {
                 const symbolOut = await tokenOutContract.symbol()
                 if (symbolOut == null) return
                 swapDispatch({ type: "SET_SYMBOL_OUT", payload: symbolOut })
             }
-            promises.push(handleSymbolOut())
+            promises.push(symbolOutPromise())
 
             await Promise.all(promises)
         }
 
         const promises: Promise<void>[] = []
-        promises.push(handleTokenInInfo())
-        promises.push(handleTokenOutInfo())
+        promises.push(updateTokenInInfo())
+        promises.push(updateTokenOutInfo())
         await Promise.all(promises)
 
         swapDispatch({
-            type: "SET_FINISH_LOAD_WITHOUT_CONNECTED",
+            type: "SET_FINISH_UPDATE_BEFORE_CONNECTED",
             payload: true,
         })
     }
@@ -196,17 +196,17 @@ const SwapProviders = (props: ContextProps) => {
             setPreventExecution(false)
             return
         }
-        handleWithoutConnected()
+        updateBeforeConnected()
     }, [
         finishInitializeRef.current,
-        swapState.tokenInInfo.address,
-        swapState.tokenOutInfo.address,
+        swapState.infoIn.address,
+        swapState.infoOut.address,
     ])
 
-    const handleWithConnected = async () => {
-        if (!account || !swapState.load.finishLoadWithoutConnected) {
+    const upateAfterConnected = async () => {
+        if (!account || !swapState.state.finishUpdateAfterConnected) {
             swapDispatch({
-                type: "SET_FINISH_LOAD_WITH_CONNECTED",
+                type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
                 payload: false,
             })
             return
@@ -214,57 +214,57 @@ const SwapProviders = (props: ContextProps) => {
 
         const tokenInContract = new ERC20Contract(
             chainId,
-            swapState.tokenInInfo.address
+            swapState.infoIn.address
         )
         const tokenOutContract = new ERC20Contract(
             chainId,
-            swapState.tokenOutInfo.address
+            swapState.infoOut.address
         )
 
         const promises: Promise<void>[] = []
 
-        const handleBalanceIn = async () => {
-            const tokenInBalance = await tokenInContract.balanceOf(account)
-            if (tokenInBalance == null) return
+        const balanceInPromise = async () => {
+            const balanceIn = await tokenInContract.balanceOf(account)
+            if (balanceIn == null) return
             swapDispatch({
                 type: "SET_BALANCE_IN",
                 payload: utils.math.computeRedenomination(
-                    tokenInBalance,
-                    swapState.tokenInInfo.decimals,
+                    balanceIn,
+                    swapState.infoIn.decimals,
                     3
                 ),
             })
         }
-        promises.push(handleBalanceIn())
+        promises.push(balanceInPromise())
 
-        const handleBalanceOut = async () => {
-            const tokenOutBalance = await tokenOutContract.balanceOf(account)
-            if (tokenOutBalance == null) return
+        const balanceOutPromise = async () => {
+            const balanceOut = await tokenOutContract.balanceOf(account)
+            if (balanceOut == null) return
             swapDispatch({
                 type: "SET_BALANCE_OUT",
                 payload: utils.math.computeRedenomination(
-                    tokenOutBalance,
-                    swapState.tokenOutInfo.decimals,
+                    balanceOut,
+                    swapState.infoOut.decimals,
                     3
                 ),
             })
         }
-        promises.push(handleBalanceOut())
+        promises.push(balanceOutPromise())
     }
 
     useEffect(() => {
-        handleWithConnected()
-    }, [account, swapState.load.finishLoadWithoutConnected])
+        upateAfterConnected()
+    }, [account, swapState.state.finishUpdateBeforeConnected])
 
-    const handlers = useMemo(() => {
+    const updaters = useMemo(() => {
         return {
-            handleInitialization,
-            handleWithoutConnected,
-            handleWithConnected,
+            initialize,
+            updateBeforeConnected,
+            upateAfterConnected,
         }
-    }, [handleInitialization, handleWithoutConnected, handleWithConnected])
+    }, [initialize, updateBeforeConnected, upateAfterConnected])
     return (
-        <SwapContext.Provider value={{ swapState, actions, handlers }}>
+        <SwapContext.Provider value={{ swapState, actions, updaters }}>
             {props.children}
         </SwapContext.Provider>
     )

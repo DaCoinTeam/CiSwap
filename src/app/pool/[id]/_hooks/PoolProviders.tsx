@@ -212,7 +212,7 @@ const PoolProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         tokenDispatch({
-            type: "SET_FINISH_LOAD_WITHOUT_CONNECTED",
+            type: "SET_FINISH_UPDATE_BEFORE_CONNECTED",
             payload: true,
         })
     }
@@ -239,7 +239,7 @@ const PoolProviders = (props: ContextProps) => {
             })
 
             tokenDispatch({
-                type: "SET_FINISH_LOAD_WITH_CONNECTED",
+                type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
                 payload: false,
             })
             return
@@ -290,7 +290,7 @@ const PoolProviders = (props: ContextProps) => {
                     3
                 ),
             })
-            tokenDispatch({ type: "SET_FINISH_LOAD_WITH_CONNECTED", payload: true })
+            tokenDispatch({ type: "SET_FINISH_UPDATE_AFTER_CONNECTED", payload: true })
         }
         promises.push(handleLPTokenBalance())
 

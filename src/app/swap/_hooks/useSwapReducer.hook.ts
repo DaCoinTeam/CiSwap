@@ -10,16 +10,16 @@ export interface TokenInfo {
 }
 
 export interface SwapState {
-  tokenInInfo: TokenInfo;
-  tokenOutInfo: TokenInfo;
-  load: {
-    finishLoadWithoutConnected: boolean;
-    finishLoadWithConnected: boolean;
+  infoIn: TokenInfo;
+  infoOut: TokenInfo;
+  state: {
+    finishUpdateBeforeConnected: boolean;
+    finishUpdateAfterConnected: boolean;
   };
 }
 
 export interface SetTokenInfoAction {
-  type: "SET_TOKEN_IN_INFO" | "SET_TOKEN_OUT_INFO";
+  type: "SET_INFO_IN" | "SET_INFO_OUT";
   payload: TokenInfo;
 }
 
@@ -49,7 +49,7 @@ export interface SetDecimalsAction {
 }
 
 export interface SetFinishLoadAction {
-  type: "SET_FINISH_LOAD_WITHOUT_CONNECTED" | "SET_FINISH_LOAD_WITH_CONNECTED";
+  type: "SET_FINISH_UPDATE_BEFORE_CONNECTED" | "SET_FINISH_UPDATE_AFTER_CONNECTED";
   payload: boolean;
 }
 
@@ -64,91 +64,91 @@ export type swapAction =
   | SetImageUrlAction;
 
 export const swapState: SwapState = {
-    tokenInInfo: {
+    infoIn: {
         address: "",
         decimals: 0,
         symbol: "",
         balance: 0,
         imageUrl: "",
     },
-    tokenOutInfo: {
+    infoOut: {
         address: "",
         decimals: 0,
         symbol: "",
         balance: 0,
         imageUrl: "",
     },
-    load: {
-        finishLoadWithoutConnected: false,
-        finishLoadWithConnected: false,
+    state: {
+        finishUpdateBeforeConnected: false,
+        finishUpdateAfterConnected: false,
     },
 }
 
 export const swapReducer = (state: SwapState, action: swapAction) => {
     switch (action.type) {
-    case "SET_TOKEN_IN_INFO":
-        return { ...state, tokenInInfo: action.payload }
-    case "SET_TOKEN_OUT_INFO":
-        return { ...state, tokenOutInfo: action.payload }
+    case "SET_INFO_IN":
+        return { ...state, infoIn: action.payload }
+    case "SET_INFO_OUT":
+        return { ...state, infoOut: action.payload }
     case "SET_TOKEN_IN":
         return {
             ...state,
-            tokenInInfo: { ...state.tokenInInfo, address: action.payload },
+            infoIn: { ...state.infoIn, address: action.payload },
         }
     case "SET_TOKEN_OUT":
         return {
             ...state,
-            tokenOutInfo: { ...state.tokenOutInfo, address: action.payload },
+            infoOut: { ...state.infoOut, address: action.payload },
         }
     case "SET_BALANCE_IN":
         return {
             ...state,
-            tokenInInfo: { ...state.tokenInInfo, balance: action.payload },
+            infoIn: { ...state.infoIn, balance: action.payload },
         }
     case "SET_BALANCE_OUT":
         return {
             ...state,
-            tokenOutInfo: { ...state.tokenOutInfo, balance: action.payload },
+            infoOut: { ...state.infoOut, balance: action.payload },
         }
     case "SET_SYMBOL_IN":
         return {
             ...state,
-            tokenInInfo: { ...state.tokenInInfo, symbol: action.payload },
+            infoIn: { ...state.infoIn, symbol: action.payload },
         }
     case "SET_SYMBOL_OUT":
         return {
             ...state,
-            tokenOutInfo: { ...state.tokenOutInfo, symbol: action.payload },
+            infoOut: { ...state.infoOut, symbol: action.payload },
         }
     case "SET_DECIMALS_IN":
         return {
             ...state,
-            tokenInInfo: { ...state.tokenInInfo, decimals: action.payload },
+            infoIn: { ...state.infoIn, decimals: action.payload },
         }
     case "SET_DECIMALS_OUT":
         return {
             ...state,
-            tokenOutInfo: { ...state.tokenOutInfo, decimals: action.payload },
+            infoOut: { ...state.infoOut, decimals: action.payload },
         }
     case "SET_IMAGE_URL_IN":
         return {
             ...state,
-            tokenInInfo: { ...state.tokenInInfo, imageUrl: action.payload },
+            infoIn: { ...state.infoIn, imageUrl: action.payload },
         }
     case "SET_IMAGE_URL_OUT":
         return {
             ...state,
-            tokenOutInfo: { ...state.tokenOutInfo, imageUrl: action.payload },
+            infoOut: { ...state.infoOut, imageUrl: action.payload },
         }
-    case "SET_FINISH_LOAD_WITHOUT_CONNECTED":
+    case "SET_FINISH_UPDATE_BEFORE_CONNECTED":
         return {
             ...state,
-            load: { ...state.load, finishLoadWithoutConnected: action.payload },
+            state: { ...state.state, finishUpdateBeforeConnected: action.payload },
         }
-    case "SET_FINISH_LOAD_WITH_CONNECTED":
+    case "SET_FINISH_UPDATE_AFTER_CONNECTED":
         return {
             ...state,
-            load: { ...state.load, finishLoadWithConnected: action.payload },
+            state: { ...state.state, finishUpdateAfterConnected: action.payload },
         }
     default:
         return state

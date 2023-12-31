@@ -1,7 +1,7 @@
 
 import React from "react"
 import { Textarea } from "@nextui-org/react"
-import { sanitizeNumericInput } from "@utils"
+import utils from "@utils"
 
 interface NumberTextareaProps {
     className?: string,
@@ -31,7 +31,7 @@ const NumberTextarea = (props: NumberTextareaProps) => {
     const _handleChange = (
         value: string
     ) => {
-        const sanitizeInput = sanitizeNumericInput(value)
+        const sanitizeInput = utils.format.sanitizeNumericInput(value)
         if (sanitizeInput != null) {
             props.onValueChange(sanitizeInput)
         } 

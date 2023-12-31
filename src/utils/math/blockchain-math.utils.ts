@@ -15,7 +15,7 @@ export const computeRedenomination = (
         const result =
       Number((amount * BigInt(computeExponent(round))) / BigInt(divisor)) /
       computeExponent(round)
-
+ 
         return result
     } catch (error) {
         console.error(error)
@@ -53,7 +53,7 @@ export const computeSlippage = (
     const percentageMultipleExponent = BigInt(
         computeRound(slippage * exponent, 0)
     )
-    return exactInput
-        ? (amount * percentageMultipleExponent) / BigInt(exponent)
-        : (amount * BigInt(exponent)) / percentageMultipleExponent
+    const amountSlippage =
+    (amount * percentageMultipleExponent) / BigInt(exponent)
+    return exactInput ? amount - amountSlippage : amount + amountSlippage
 }

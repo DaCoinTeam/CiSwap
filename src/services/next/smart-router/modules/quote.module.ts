@@ -1,26 +1,27 @@
 import web3, { Address, Bytes, Sha3Input } from "web3"
-import { computeSlippage } from "../../../utils/math"
+import utils from "@utils"
+import Path from "./path.module"
 
 class Quote {
     amountIn: bigint
     amountOut: bigint
-    path: Step[]
+    path: Path
     exactInput: boolean
 
     constructor(
-        amountIn: bigint,
-        amountOut: bigint,
-        path: Step[],
+        amountIn?: bigint,
+        amountOut?: bigint,
+        path?: Path,
         exactInput?: boolean
     ) {
-        this.amountIn = amountIn
-        this.amountOut = amountOut
-        this.path = path
+        this.amountIn = amountIn ?? BigInt(0)
+        this.amountOut = amountOut ?? BigInt(0)
+        this.path = path ?? new Path()
         this.exactInput = exactInput ?? true
     }
 
     private getQuoteType(): QuoteType {
-        const has3Steps = this.path.length == 3
+        const has3Steps = this.path.steps.length == 3
         const quoteTypeInput = has3Steps
             ? QuoteType.ExactInputSingle
             : QuoteType.ExactInput
@@ -36,7 +37,7 @@ class Quote {
             pathCloned.reverse()
         }
 
-        const inputs: Sha3Input[] = this.path.map((step) => {
+        const inputs: Sha3Input[] = this.path.steps.map((step) => {
             if (typeof step == "number") {
                 return { type: "uint32", value: step }
             }
@@ -52,29 +53,29 @@ class Quote {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 amountIn: this.amountIn,
-                amountOutMin: computeSlippage(this.amountOut, slippage, 3, true),
-                tokenIn: this.path[0] as Address,
-                tokenOut: this.path[2] as Address,
-                indexPool: this.path[1] as number,
+                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, 3, true),
+                tokenIn: this.path.steps[0] as Address,
+                tokenOut: this.path.steps[2] as Address,
+                indexPool: this.path.steps[1] as number,
             },
             [QuoteType.ExactInput]: {
                 quoteType: QuoteType.ExactInput,
                 amountIn: this.amountIn,
-                amountOutMin: computeSlippage(this.amountOut, slippage, 3, true),
+                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, 3, true),
                 path: this.encodePacked(),
             },
             [QuoteType.ExactOutputSingle]: {
                 quoteType: QuoteType.ExactOutputSingle,
                 amountOut: this.amountIn,
-                amountInMax: computeSlippage(this.amountOut, slippage, 3),
-                tokenIn: this.path[0] as Address,
-                tokenOut: this.path[2] as Address,
-                indexPool: this.path[1] as number,
+                amountInMax: utils.math.computeSlippage(this.amountOut, slippage, 3),
+                tokenIn: this.path.steps[0] as Address,
+                tokenOut: this.path.steps[2] as Address,
+                indexPool: this.path.steps[1] as number,
             },
             [QuoteType.ExactOutput]: {
                 quoteType: QuoteType.ExactOutput,
                 amountOut: this.amountIn,
-                amountInMax: computeSlippage(this.amountOut, slippage, 3),
+                amountInMax: utils.math.computeSlippage(this.amountOut, slippage, 3),
                 path: this.encodePacked(),
             },
         }

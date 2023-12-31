@@ -86,7 +86,6 @@ class Quote {
 
 export default Quote
 
-export type Step = Address | number;
 
 export enum QuoteType {
   ExactInputSingle,

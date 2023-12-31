@@ -9,13 +9,7 @@ import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
 import { Quote, QuoteType } from "@services"
-import {
-    bytesToAddress,
-    bytesToBigInt,
-    bytesToNumber,
-    findMaxBigIntIndexAndValue,
-    findMinBigIntIndexAndValue,
-} from "@utils"
+import utils from "@utils"
 
 const MAX_HOPS = 2
 
@@ -71,9 +65,9 @@ class SmartRouter {
                     .multicall([encodedToken0, encodedToken1, encodedIndexPool])
                     .call()
                 if (bytes == null) return
-                const token0 = bytesToAddress(bytes[0])
-                const token1 = bytesToAddress(bytes[1])
-                const indexPool = bytesToNumber(bytes[2])
+                const token0 = utils.web3.bytesToAddress(bytes[0])
+                const token1 = utils.web3.bytesToAddress(bytes[1])
+                const indexPool = utils.web3.bytesToNumber(bytes[2])
                 pools.push(new Pool(token0, token1, indexPool))
             }
             promises.push(promise())
@@ -187,11 +181,11 @@ class SmartRouter {
         const bytes = await this.multicallContract.multicall(data).call()
         if (bytes == null) return null
 
-        const amountsQuoted = bytes.map((byte) => bytesToBigInt(byte))
+        const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
 
         const { index, value } = exactInput
-            ? findMaxBigIntIndexAndValue(amountsQuoted)
-            : findMinBigIntIndexAndValue(amountsQuoted)
+            ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
+            : utils.array.findMinBigIntIndexAndValue(amountsQuoted)
 
         const amountIn = exactInput ? amount : value
         const amountOut = exactInput ? value : amount

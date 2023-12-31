@@ -6,12 +6,7 @@ import { ERC20Contract, FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import {
-    computeExponent,
-    computeDeRedenomination,
-    parseNumber,
-    computeMultiplyX96,
-} from "@utils"
+import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps } from "@app/_shared"
 
@@ -116,20 +111,20 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                const amountADeRedenominated = computeDeRedenomination(
-                    parseNumber(values.amountA),
+                const amountADeRedenominated = utils.math.computeDeRedenomination(
+                    utils.format.parseNumber(values.amountA),
                     values._decimalsA
                 )
 
-                const amountBDeRedenominated = computeDeRedenomination(
-                    parseNumber(values.amountB),
+                const amountBDeRedenominated = utils.math.computeDeRedenomination(
+                    utils.format.parseNumber(values.amountB),
                     values._decimalsB
                 )
 
-                const basePriceAX96 = computeMultiplyX96(
-                    parseNumber(values.basePriceA)
+                const basePriceAX96 = utils.math.computeMultiplyX96(
+                    utils.format.parseNumber(values.basePriceA)
                 )
-                const maxPriceAX96 = computeMultiplyX96(parseNumber(values.maxPriceA))
+                const maxPriceAX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.maxPriceA))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
                 if (allowanceA == null) return
@@ -163,7 +158,7 @@ const FormikProviders = (props: ContextProps) => {
                     : amountBDeRedenominated
 
                 console.log({
-                    fee: values.fee * computeExponent(5),
+                    fee: values.fee * utils.math.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,
@@ -175,7 +170,7 @@ const FormikProviders = (props: ContextProps) => {
                 })
                 console.log( chainInfos[chainId].factory)
                 const createPoolReceipt = await factoryContract.createPool({
-                    fee: values.fee * computeExponent(5),
+                    fee: values.fee *  utils.math.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,

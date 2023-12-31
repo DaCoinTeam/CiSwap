@@ -3,7 +3,7 @@ export interface BigIntElement {
   value: bigint;
 }
 
-export const findMaxBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
+const findMaxBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
     if (array.length === 0) {
         throw new Error("Cannot find maximum index in an empty array")
     }
@@ -18,11 +18,11 @@ export const findMaxBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
 
     return {
         index: maxIndex,
-        value
+        value,
     }
 }
 
-export const findMinBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
+const findMinBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
     if (array.length === 0) {
         throw new Error("Cannot find minimum index in an empty array")
     }
@@ -37,6 +37,13 @@ export const findMinBigIntIndexAndValue = (array: bigint[]): BigIntElement => {
 
     return {
         index: minIndex,
-        value
+        value,
     }
 }
+
+const arrayUtils = {
+    findMaxBigIntIndexAndValue: findMaxBigIntIndexAndValue,
+    findMinBigIntIndexAndValue: findMinBigIntIndexAndValue
+} 
+
+export default arrayUtils

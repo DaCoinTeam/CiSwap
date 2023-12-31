@@ -28,7 +28,7 @@ interface TransactionTableProps {
 
 const TransactionTable = (props: TransactionTableProps) => {
     const context = useContext(PoolContext)
-    if (context == null) return 
+    if (context === null) return 
     const { tokenState, poolAddress } = context
 
     const chainId = useSelector(
@@ -53,7 +53,7 @@ const TransactionTable = (props: TransactionTableProps) => {
 
             const txHashs = await contract.getTransactionHashs()
 
-            if (txHashs == null) return
+            if (txHashs === null) return
 
             setNumPages(txHashs.length)
 
@@ -105,7 +105,7 @@ const TransactionTable = (props: TransactionTableProps) => {
                     <div className="flex w-full justify-center">
                         <Pagination
                             isCompact
-                            isDisabled={loadingState == "loading"}
+                            isDisabled={loadingState === "loading"}
                             showControls
                             showShadow
                             color="secondary"
@@ -145,7 +145,7 @@ const TransactionTable = (props: TransactionTableProps) => {
             <TableBody
                 items={transactions}
                 emptyContent={
-                    loadingState == "idle" ? "No rows to display." : undefined
+                    loadingState === "idle" ? "No rows to display." : undefined
                 }
                 loadingContent={<Spinner color="default" />}
                 loadingState={loadingState}

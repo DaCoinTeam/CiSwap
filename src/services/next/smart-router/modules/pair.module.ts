@@ -11,8 +11,8 @@ class Pair {
 
     compare(pair: Pair): boolean {
         return (
-            (this.tokenStart == pair.tokenStart && this.tokenEnd == pair.tokenEnd) ||
-      (this.tokenStart == pair.tokenEnd && this.tokenEnd == pair.tokenStart)
+            (this.tokenStart === pair.tokenStart && this.tokenEnd === pair.tokenEnd) ||
+      (this.tokenStart === pair.tokenEnd && this.tokenEnd === pair.tokenStart)
         )
     }
 }

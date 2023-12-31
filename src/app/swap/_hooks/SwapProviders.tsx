@@ -46,6 +46,7 @@ const SwapProviders = (props: ContextProps) => {
 
         const tokenOut =
       searchParams.get("tokenOut") ?? chainInfos[chainId].exchangeToken
+
         return {
             tokenIn,
             tokenOut,
@@ -65,12 +66,12 @@ const SwapProviders = (props: ContextProps) => {
 
         swapDispatch({
             type: "SET_INFO_OUT",
-            payload: infoOut,
+            payload: infoIn,
         })
 
         swapDispatch({
             type: "SET_INFO_IN",
-            payload: infoIn,
+            payload: infoOut,
         })
 
         setPreventExecution(true)
@@ -106,14 +107,14 @@ const SwapProviders = (props: ContextProps) => {
     }, [])
 
     const updateBeforeConnected = async () => {
-        const updateTokenInInfo = async () => {
+        const updateInfoIn = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
                 swapState.infoIn.address
             )
 
             const decimalsIn = await tokenInContract.decimals()
-            if (decimalsIn == null) return
+            if (decimalsIn === null) return
             swapDispatch({ type: "SET_DECIMALS_IN", payload: decimalsIn })
 
             const promises: Promise<void>[] = []
@@ -125,7 +126,7 @@ const SwapProviders = (props: ContextProps) => {
                 )
                 if (additionalIn != null) {
                     // const blobUrl = await fetchAndCreateSvgBlobUrl(additionalIn.imageUrlUrl)
-                    // if (blobUrl == null) return
+                    // if (blobUrl === null) return
                     // swapDispatch({ type: "SET_IMAGE_URL_IN", payload: blobUrl })
                 }
             }
@@ -133,7 +134,7 @@ const SwapProviders = (props: ContextProps) => {
 
             const symbolInPromise = async () => {
                 const symbolIn = await tokenInContract.symbol()
-                if (symbolIn == null) return
+                if (symbolIn === null) return
                 swapDispatch({ type: "SET_SYMBOL_IN", payload: symbolIn })
             }
             promises.push(symbolInPromise())
@@ -141,14 +142,14 @@ const SwapProviders = (props: ContextProps) => {
             await Promise.all(promises)
         }
 
-        const updateTokenOutInfo = async () => {
+        const updateInfoOut = async () => {
             const tokenOutContract = new ERC20Contract(
                 chainId,
                 swapState.infoOut.address
             )
 
             const decimalsOut = await tokenOutContract.decimals()
-            if (decimalsOut == null) return
+            if (decimalsOut === null) return
             swapDispatch({
                 type: "SET_DECIMALS_OUT",
                 payload: decimalsOut,
@@ -163,7 +164,7 @@ const SwapProviders = (props: ContextProps) => {
                 )
                 if (additionalOut != null) {
                     // const blobUrl = await fetchAndCreateSvgBlobUrl(additionalOut.imageUrlUrl)
-                    // if (blobUrl == null) return
+                    // if (blobUrl === null) return
                     // swapDispatch({ type: "SET_IMAGE_URL_OUT", payload: blobUrl })
                 }
             }
@@ -171,7 +172,7 @@ const SwapProviders = (props: ContextProps) => {
 
             const symbolOutPromise = async () => {
                 const symbolOut = await tokenOutContract.symbol()
-                if (symbolOut == null) return
+                if (symbolOut === null) return
                 swapDispatch({ type: "SET_SYMBOL_OUT", payload: symbolOut })
             }
             promises.push(symbolOutPromise())
@@ -180,8 +181,8 @@ const SwapProviders = (props: ContextProps) => {
         }
 
         const promises: Promise<void>[] = []
-        promises.push(updateTokenInInfo())
-        promises.push(updateTokenOutInfo())
+        promises.push(updateInfoIn())
+        promises.push(updateInfoOut())
         await Promise.all(promises)
 
         swapDispatch({
@@ -204,7 +205,7 @@ const SwapProviders = (props: ContextProps) => {
     ])
 
     const upateAfterConnected = async () => {
-        if (!account || !swapState.state.finishUpdateAfterConnected) {
+        if (!account) {
             swapDispatch({
                 type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
                 payload: false,
@@ -225,7 +226,8 @@ const SwapProviders = (props: ContextProps) => {
 
         const balanceInPromise = async () => {
             const balanceIn = await tokenInContract.balanceOf(account)
-            if (balanceIn == null) return
+            console.log(balanceIn)
+            if (balanceIn === null) return
             swapDispatch({
                 type: "SET_BALANCE_IN",
                 payload: utils.math.computeRedenomination(
@@ -239,7 +241,7 @@ const SwapProviders = (props: ContextProps) => {
 
         const balanceOutPromise = async () => {
             const balanceOut = await tokenOutContract.balanceOf(account)
-            if (balanceOut == null) return
+            if (balanceOut === null) return
             swapDispatch({
                 type: "SET_BALANCE_OUT",
                 payload: utils.math.computeRedenomination(
@@ -250,11 +252,17 @@ const SwapProviders = (props: ContextProps) => {
             })
         }
         promises.push(balanceOutPromise())
+        await Promise.all(promises)
+
+        swapDispatch({
+            type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
+            payload: true,
+        })
     }
 
     useEffect(() => {
         upateAfterConnected()
-    }, [account, swapState.state.finishUpdateBeforeConnected])
+    }, [account, swapState.state.finishUpdateAfterConnected])
 
     const updaters = useMemo(() => {
         return {

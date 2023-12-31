@@ -7,7 +7,7 @@ import { chainInfos } from "@config"
 
 const useMetamask = () => {
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { ethereumState } = metamaskContext
     const { ethereum } = ethereumState
 
@@ -16,7 +16,7 @@ const useMetamask = () => {
     console.log(chainId)
 
     useEffect(() => {
-        if (ethereum == null) return 
+        if (ethereum === null) return 
 
         ethereum.on("chainChanged", (chainId) => {
             const _chainId = Number(web3.utils.toDecimal(chainId as string))

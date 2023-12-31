@@ -22,13 +22,13 @@ const WrongChainMetamaskModal = (props: MetamaskModalProps) => {
     const dispatch: AppDispatch = useDispatch()
 
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State, ethereumState } = metamaskContext
     const { setWeb3 } = web3State
     const { ethereum } = ethereumState
 
     const _switchChain = async () => {
-        if (ethereum == null) return
+        if (ethereum === null) return
         const metamaskApis = new MetamaskApis(ethereum)
         await metamaskApis.switchEthereumChain(chainId)
         const _web3 = new Web3(ethereum)

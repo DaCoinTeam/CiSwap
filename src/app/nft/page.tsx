@@ -22,13 +22,13 @@ const Page = () => {
                 chainInfos[chainId].NFTAddress
             )
             const numNFTs = await erc721Contract.numNFTs()
-            if (numNFTs == null) return
+            if (numNFTs === null) return
 
             const cids: string[] = []
             const cidPromises: Promise<void>[] = []
             for (let i: bigint = BigInt(0); i < numNFTs; i++) {
                 const cidPromise = erc721Contract.tokenURI(i).then((cid) => {
-                    if (cid == null) return
+                    if (cid === null) return
                     cids.push(cid)
                 })
                 cidPromises.push(cidPromise)
@@ -40,11 +40,11 @@ const Page = () => {
             for (let i: bigint = BigInt(0); i < numNFTs; i++) {
                 const NFTDataPromise = getIpfsJson(cids[Number(i)]).then(
                     async (uri) => {
-                        if (uri == null) return
+                        if (uri === null) return
                         const _uri = uri as NFTURI
 
                         const imageBlobUrl = await getIpfsImageBlobUrl(_uri.imageCid)
-                        if (imageBlobUrl == null) return
+                        if (imageBlobUrl === null) return
 
                         const data: NFTData = {
                             tokenId: i,

@@ -12,7 +12,7 @@ interface TokenLockedProps {
 
 const TokenLocked = (props: TokenLockedProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState } = poolContext
     return (
         <div className = {`${props.clasName}`}>

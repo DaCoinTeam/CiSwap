@@ -3,7 +3,7 @@ import { Link } from "@nextui-org/react"
 import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import { shortenAddress } from "@utils"
+import utils from "@utils"
 
 interface ViewOnExplorerProps {
   className?: string;
@@ -22,7 +22,7 @@ const ViewOnExplorer = (props: ViewOnExplorerProps) => {
     const _external = !props.notExternal
     const _middle = props.isTransaction ? "tx" : "address"
     
-    const _content = props.showShorten ? shortenAddress(props.hexString) : "View on Explorer"
+    const _content = props.showShorten ? utils.format.shortenAddress(props.hexString) : "View on Explorer"
     return (
         <Link
             isExternal = {_external}

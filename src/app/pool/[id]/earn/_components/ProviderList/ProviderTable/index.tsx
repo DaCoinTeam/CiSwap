@@ -26,7 +26,7 @@ interface ProviderTableProps {
 
 const ProviderTable = (props: ProviderTableProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext
 
     const chainId = useSelector(
@@ -41,7 +41,7 @@ const ProviderTable = (props: ProviderTableProps) => {
         const handleEffect = async () => {
             const contract = new PoolContract(chainId, poolAddress)
             const addresses = await contract.providerRegisters()
-            if (addresses == null) return
+            if (addresses === null) return
 
             const _providers: Provider[] = []
             
@@ -49,7 +49,7 @@ const ProviderTable = (props: ProviderTableProps) => {
 
             for (const address of addresses) {
                 const providerPromise = contract.balanceOf(address).then(balance => {
-                    if (balance == null) return
+                    if (balance === null) return
                     const _provider = {
                         address,
                         balance: computeRedenomination(
@@ -102,7 +102,7 @@ const ProviderTable = (props: ProviderTableProps) => {
                     </TableColumn>
                 </TableHeader>
                 <TableBody items={items}  emptyContent={
-                    loadingState == "idle" ? "No rows to display." : undefined
+                    loadingState === "idle" ? "No rows to display." : undefined
                 } 
                 loadingContent={<Spinner color="default" />}
                 loadingState={loadingState}>

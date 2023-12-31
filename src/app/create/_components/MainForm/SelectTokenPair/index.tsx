@@ -12,7 +12,7 @@ interface SelectTokenPairProps {
 
 const SelectTokenPair = (props: SelectTokenPairProps) => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     return (
         <div className = {props.className}>

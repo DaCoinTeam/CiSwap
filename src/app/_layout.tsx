@@ -21,7 +21,7 @@ const WrappedRootLayout = (props: ContextProps) => {
         (state: RootState) => state.configuration.darkMode
     )
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
@@ -36,7 +36,7 @@ const WrappedRootLayout = (props: ContextProps) => {
             // const pairs = await factoryContract.getPairs(
             //     chainInfos[chainId].exchangeToken, 
             //     chainInfos[chainId].stableTokens[0])
-            // if (pairs == null || !pairs.length) return    
+            // if (pairs === null || !pairs.length) return    
             // dispatch(setDefaultPool(pairs[0]))
         }
         handleEffect()

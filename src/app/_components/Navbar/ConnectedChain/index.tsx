@@ -19,7 +19,7 @@ const ConnectedChain = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return
+    if (metamaskContext === null) return
     const { ethereumState } = metamaskContext
     const { ethereum } = ethereumState
 
@@ -56,8 +56,8 @@ const ConnectedChain = () => {
         },
     ]
 
-    const _imageUrl = connectedchainInfos.find(chain => chain.chainId == chainId)?.imageUrl
-    const _text = connectedchainInfos.find(chain => chain.chainId == chainId)?.text
+    const _imageUrl = connectedchainInfos.find(chain => chain.chainId === chainId)?.imageUrl
+    const _text = connectedchainInfos.find(chain => chain.chainId === chainId)?.text
 
     return (
         <Dropdown>
@@ -72,7 +72,7 @@ const ConnectedChain = () => {
             <DropdownMenu aria-label="Static Actions">
                 {connectedchainInfos.map(chain => {
                     const _handleSwitch = async () => {
-                        if (ethereum == null) return
+                        if (ethereum === null) return
                         const metamaskApis = new MetamaskApis(ethereum)
                         const response = await metamaskApis.switchEthereumChain(chain.chainId)
                         console.log(response)

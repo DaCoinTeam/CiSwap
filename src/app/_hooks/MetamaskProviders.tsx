@@ -47,10 +47,10 @@ const MetamaskProviders = (props: ContextProps) => {
     }, [])
 
     useEffect(() => {
-        if (ethereum == null) return 
+        if (ethereum === null) return 
         const metamaskApis = new MetamaskApis(ethereum)
 
-        if (web3 == null) {
+        if (web3 === null) {
             dispatch(setAccount(""))
             dispatch(setChainId(defaultChainId))
             return
@@ -86,7 +86,7 @@ const MetamaskProviders = (props: ContextProps) => {
 export default MetamaskProviders
 
 //     useEffect(() => {
-//         if (ethereum == null) return 
+//         if (ethereum === null) return 
 //         const handleChainChanged = (chainId: unknown) => {
 //             console.log(chainId)
 //         }

@@ -63,7 +63,7 @@ export const getTransaction = async (
     case TransactionMethod.Swap:
         for (const log of logs) {
             const topics = log.topics
-            if (topics == undefined) continue
+            if (topics === undefined) continue
             const topic = topics[0].toString()
 
             if (topic != SWAP_METHOD_TOPIC) continue
@@ -75,7 +75,7 @@ export const getTransaction = async (
                 data
             )
             
-            _isBuyAction = (params[0] as bigint) == BigInt(0)
+            _isBuyAction = (params[0] as bigint) === BigInt(0)
 
             const _tokenInAmount = computeRedenomination(
                 _isBuyAction ? (params[2] as bigint) : (params[0] as bigint),
@@ -98,7 +98,7 @@ export const getTransaction = async (
     case TransactionMethod.Deposit:
         for (const log of logs) {
             const topics = log.topics
-            if (topics == undefined) continue
+            if (topics === undefined) continue
             const topic = topics[0].toString()
 
             if (topic != DEPOSIT_METHOD_TOPIC) continue
@@ -118,7 +118,7 @@ export const getTransaction = async (
     case TransactionMethod.Withdraw:
         for (const log of logs) {
             const topics = log.topics
-            if (topics == undefined) continue
+            if (topics === undefined) continue
             const topic = topics[0].toString()
 
             if (topic != WITHDRAW_METHOD_TOPIC) continue

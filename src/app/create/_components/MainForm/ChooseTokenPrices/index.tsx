@@ -15,7 +15,7 @@ interface ChooseTokenPricesProps {
 
 const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const basePriceAParsed = utils.format.parseNumber(formik.values.basePriceA)
     const maxPriceAParsed = utils.format.parseNumber(formik.values.maxPriceA)
@@ -23,7 +23,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext == null) return
+    if (finishSelectedPairContext === null) return
 
     const { finishSelectedPair } = finishSelectedPairContext
 

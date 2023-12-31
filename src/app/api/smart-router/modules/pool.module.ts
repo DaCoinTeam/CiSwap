@@ -13,14 +13,14 @@ class Pool {
     }
 
     hasToken(token: Address): boolean {
-        return (token == this.token0 || token == this.token1)
+        return (token === this.token0 || token === this.token1)
     }
 
     getPair(tokenStart: Address): Pair | null {
         if (!this.hasToken(tokenStart)) return null
         return new Pair(
-            this.token0 == tokenStart ? this.token0 : this.token1,
-            this.token0 == tokenStart ? this.token1 : this.token0
+            this.token0 === tokenStart ? this.token0 : this.token1,
+            this.token0 === tokenStart ? this.token1 : this.token0
         )
     }
 }

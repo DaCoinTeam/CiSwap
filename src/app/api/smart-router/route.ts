@@ -16,14 +16,14 @@ export const GET = async (request: NextRequest) => {
         console.log(tokenIn, tokenOut, amount, exactInput, chainId)
 
         if (
-            chainId == null ||
-      tokenIn == null ||
-      tokenOut == null ||
-      amount == null
+            chainId === null ||
+      tokenIn === null ||
+      tokenOut === null ||
+      amount === null
         )
             return invalidSearchParametersError
 
-        if (exactInput == null) {
+        if (exactInput === null) {
             exactInput = true
         }
 

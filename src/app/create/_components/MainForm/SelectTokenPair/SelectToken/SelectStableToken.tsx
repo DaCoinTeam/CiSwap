@@ -39,12 +39,12 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
               const contract = new ERC20Contract(chainId, token)
 
               const symbol = await contract.symbol()
-              if (symbol == null) return
+              if (symbol === null) return
 
               let imageUrl = await fetchAndCreateSvgBlobUrl(
                   `api/static/images/token?token=${token}&chainId=${chainId}`
               )
-              if (imageUrl == null) imageUrl = null
+              if (imageUrl === null) imageUrl = null
 
               _presentableTokens.push({
                   token: token,

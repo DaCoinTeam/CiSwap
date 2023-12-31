@@ -18,16 +18,16 @@ import { MetamaskContext } from "@app/_hooks"
 
 const MainSection = () => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext 
 
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const chainId = useSelector(
         (state: RootState) => state.blockchain.chainId
@@ -44,7 +44,7 @@ const MainSection = () => {
             return
         }
 
-        if (web3 == null) return
+        if (web3 === null) return
         if (!account) return
 
         const controller = new AbortController()
@@ -57,7 +57,7 @@ const MainSection = () => {
                 controller
             )
             setFinishFetch(true)
-            if (token0AmountOut == null) return 
+            if (token0AmountOut === null) return 
 
             formik.setFieldValue("token0AmountOut", computeRedenomination(token0AmountOut, tokenState.token0Decimals,3))
         }

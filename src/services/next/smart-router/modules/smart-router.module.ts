@@ -37,7 +37,7 @@ class SmartRouter {
 
     private async getAllPools(): Promise<Pool[] | null> {
         const poolAddresses = await this.factoryContract.allPools()
-        if (poolAddresses == null) return null
+        if (poolAddresses === null) return null
         if (!poolAddresses.length) throw new Error("No pool found")
 
         const pools: Pool[] = []
@@ -64,7 +64,7 @@ class SmartRouter {
                 const bytes = await multicallContract
                     .multicall([encodedToken0, encodedToken1, encodedIndexPool])
                     .call()
-                if (bytes == null) return
+                if (bytes === null) return
                 const token0 = utils.web3.bytesToAddress(bytes[0])
                 const token1 = utils.web3.bytesToAddress(bytes[1])
                 const indexPool = utils.web3.bytesToNumber(bytes[2])
@@ -83,7 +83,7 @@ class SmartRouter {
         let pathRests: Path[] = []
         const pathExactEnds: Path[] = []
         const pools = await this.getAllPools()
-        if (pools == null) return null
+        if (pools === null) return null
 
         for (const pool of pools) {
             const pathCurrent = new Path()
@@ -91,7 +91,7 @@ class SmartRouter {
             const createResult = pathCurrent.create(pool, tokenStart)
             if (!createResult) continue
 
-            if (pathCurrent.getLast() == tokenEnd) {
+            if (pathCurrent.getLast() === tokenEnd) {
                 pathExactEnds.push(pathCurrent)
                 continue
             }
@@ -100,7 +100,7 @@ class SmartRouter {
 
         let hopsCount = 0
         while (pathRests.length) {
-            if (hopsCount == MAX_HOPS - 1) break
+            if (hopsCount === MAX_HOPS - 1) break
 
             const pathRestsTemp: Path[] = []
 
@@ -128,7 +128,7 @@ class SmartRouter {
         exactInput = exactInput ?? false
 
         const paths = await this.computeAllPaths(tokenIn, tokenOut)
-        if (paths == null) return null
+        if (paths === null) return null
 
         const data: Bytes[] = []
         const exactInputs: boolean[] = []
@@ -175,17 +175,16 @@ class SmartRouter {
             }
 
             const encodedFunction = quoteTypeToEncodedFunction[quoteType]
-
             data.push(encodedFunction)
         }
         const bytes = await this.multicallContract.multicall(data).call()
-        if (bytes == null) return null
+        if (bytes === null) return null
 
         const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
-
+        console.log(amountsQuoted)
         const { index, value } = exactInput
             ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
-            : utils.array.findMinBigIntIndexAndValue(amountsQuoted)
+            : utils.array.findMinBigIntIndexAndValueExceptZero(amountsQuoted)
 
         const amountIn = exactInput ? amount : value
         const amountOut = exactInput ? value : amount

@@ -6,7 +6,7 @@ import { NumberInput, TitleDisplay } from "@app/_shared"
 import { PlusIcon } from "@heroicons/react/24/outline"
 const InputFields = () => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const _handleAddButton = () => {
         const tags = formik.values.tags

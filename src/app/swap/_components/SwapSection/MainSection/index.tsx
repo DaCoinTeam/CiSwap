@@ -13,14 +13,13 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import utils from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
-import numeral from "numeral"
 import { services } from "@services"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)
 
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
@@ -43,7 +42,7 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.get(
+            const quote = await services.next.smartRouter.findBestQuote(
                 chainId,
                 utils.math.computeDeRedenomination(
                     utils.format.parseNumber(formik.values.amountIn),
@@ -54,7 +53,7 @@ const MainSection = () => {
                 true
             )
             setFinishExecuteOut(true)
-            if (quote == null) return
+            if (quote === null) return
             console.log(  utils.math.computeRedenomination(
                 quote.amountOut,
                 swapState.infoOut.decimals,
@@ -65,8 +64,7 @@ const MainSection = () => {
                 "amountOut",
                 utils.math.computeRedenomination(
                     quote.amountOut,
-                    swapState.infoOut.decimals,
-                    3
+                    swapState.infoOut.decimals
                 )
             )
             formik.setFieldValue("exactInput", false)
@@ -99,7 +97,7 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.get(
+            const quote = await services.next.smartRouter.findBestQuote(
                 chainId,
                 utils.math.computeDeRedenomination(
                     utils.format.parseNumber(formik.values.amountOut),
@@ -109,15 +107,14 @@ const MainSection = () => {
                 swapState.infoOut.address,
                 false
             )
-            setFinishExecuteOut(true)
-            if (quote == null) return
+            setFinishExecuteIn(true)
+            if (quote === null) return
 
             formik.setFieldValue(
                 "amountIn",
                 utils.math.computeRedenomination(
                     quote.amountIn,
-                    swapState.infoIn.decimals,
-                    3
+                    swapState.infoIn.decimals
                 )
             )
 
@@ -135,17 +132,17 @@ const MainSection = () => {
         }
     }, [formik.values.amountOut])
 
-    const handleInChange = (value: string) => {
+    const _handleInChange = (value: string) => {
         formik.setFieldValue("amountIn", value)
         setFinishExecuteOut(false)
     }
 
-    const handleOutChange = (value: string) => {
+    const _handleOutChange = (value: string) => {
         formik.setFieldValue("amountOut", value)
         setFinishExecuteIn(false)
     }
 
-    if (swapContext == null) return
+    if (swapContext === null) return
     const { swapState, actions } = swapContext
     const { doReverse } = actions
 
@@ -165,14 +162,14 @@ const MainSection = () => {
                     />
                     <BalanceDisplay
                         finishLoad={swapState.state.finishUpdateAfterConnected}
-                        balance={numeral(swapState.infoOut.balance).format("0.0a")}
+                        balance={swapState.infoIn.balance}
                     />
                 </div>
                 <Spacer y={1} />
                 <NumberTextarea
                     textPosition="right"
                     value={formik.values.amountIn}
-                    onValueChange={handleInChange}
+                    onValueChange={_handleInChange}
                 />
                 <LoadingDisplay finishLoad={finishExecuteIn} message="Calculating..." />
             </div>
@@ -192,14 +189,14 @@ const MainSection = () => {
                     />
                     <BalanceDisplay
                         finishLoad={swapState.state.finishUpdateAfterConnected}
-                        balance={numeral(swapState.infoOut.balance).format("0.0f")}
+                        balance={swapState.infoOut.balance}
                     />
                 </div>
                 <Spacer y={1} />
                 <NumberTextarea
                     textPosition="right"
                     value={formik.values.amountOut}
-                    onValueChange={handleOutChange}
+                    onValueChange={_handleOutChange}
                 />
                 <LoadingDisplay
                     finishLoad={finishExecuteOut}

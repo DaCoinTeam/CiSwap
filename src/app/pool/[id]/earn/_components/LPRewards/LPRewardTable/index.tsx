@@ -28,7 +28,7 @@ interface LPRewardTableProps {
 
 const LPRewardTable = (props: LPRewardTableProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext 
 
     const chainId = useSelector(
@@ -45,12 +45,12 @@ const LPRewardTable = (props: LPRewardTableProps) => {
         const handleEffect = async () => {
             const contract = new PoolContract(chainId, poolAddress)
             const events = await contract.getAwardEvents(account)
-            if (events == null) return
+            if (events === null) return
 
             const _logs: RewardLog[] = []
             const promises : Promise<number>[] = []
             for (const event of events) {
-                if (typeof event == "string") return
+                if (typeof event === "string") return
 
                 const logPromise = getRewardLog(
                     event,
@@ -107,7 +107,7 @@ const LPRewardTable = (props: LPRewardTableProps) => {
                 </TableHeader>
                 <TableBody items={items} 
                     emptyContent={
-                        loadingState == "idle" ? "No rows to display." : undefined
+                        loadingState === "idle" ? "No rows to display." : undefined
                     } 
                     loadingContent={<Spinner color="default" />}
                     loadingState={loadingState}

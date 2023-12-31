@@ -48,7 +48,7 @@ const _renderBody = (
 
 const FormikProviders = (props: ContextProps) => {
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
     
@@ -71,20 +71,20 @@ const FormikProviders = (props: ContextProps) => {
             })}
             onSubmit={
                 async (values) => {
-                    if (web3 == null) return
+                    if (web3 === null) return
                     
                     const erc20Contract = new ERC20Contract(chainId, chainInfos[chainId].exchangeToken)
 
                     const decimals = await erc20Contract.decimals()
-                    if (decimals == null) return
+                    if (decimals === null) return
 
                     const file = values.imageFile
                     
-                    if (file == null) return
+                    if (file === null) return
                     const addFileResponse = await pinataPOSTFile(file)
 
                     const imageCid = addFileResponse?.IpfsHash
-                    if (!imageCid || imageCid == null) return 
+                    if (!imageCid || imageCid === null) return 
 
                     const NFTAddress = chainInfos[chainId].NFTAddress
                     const erc721Contract = new ERC721Contract(
@@ -107,7 +107,7 @@ const FormikProviders = (props: ContextProps) => {
 
                     const addJsonResponse = await pinataPOSTJson(uri)
                     const uriHash = addJsonResponse?.IpfsHash
-                    if (!uriHash || uriHash == null) return 
+                    if (!uriHash || uriHash === null) return 
 
                     const receipt = await erc721Contract.safeMint(account, uriHash)
                     console.log(receipt)

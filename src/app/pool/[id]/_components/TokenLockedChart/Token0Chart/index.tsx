@@ -27,7 +27,7 @@ interface RenderToken0Tick {
 
 const Token0Chart = (props: Token0ChartProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext
     
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
@@ -40,7 +40,7 @@ const Token0Chart = (props: Token0ChartProps) => {
         const handleEffect = async () => {
             const contract = new PoolContract(chainId, poolAddress)
             const _baseTicks = await contract.getAllBaseTicks()
-            if (_baseTicks == null) return
+            if (_baseTicks === null) return
             const _renderToken0Ticks : RenderToken0Tick[] = _baseTicks.map(
                 tick => {
                     return {

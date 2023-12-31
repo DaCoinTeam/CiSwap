@@ -5,7 +5,7 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
 import { PeriodTabs } from "@app/_shared"
-import { TokenPairDisplay, TokenPriceRatioDisplay } from "../../../_components"
+import { TokenPairDisplay, TokenPriceRatioDisplay } from "../../_components"
 import { ChartTimePeriod } from "@utils"
 
 interface PriceChartProps {

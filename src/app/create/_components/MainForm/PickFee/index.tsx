@@ -42,14 +42,14 @@ const protocolFees: Fee[] = [
 
 const PickFee = (props: PickFeeProps) => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext == null) return
+    if (finishSelectedPairContext === null) return
 
     const { finishSelectedPair } = finishSelectedPairContext
 
@@ -59,7 +59,7 @@ const PickFee = (props: PickFeeProps) => {
     }
 
     const _renderIfSelected = (key: number) => {
-        if (formik.values._feeId == key){
+        if (formik.values._feeId === key){
             return `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
         } else {
             return ""

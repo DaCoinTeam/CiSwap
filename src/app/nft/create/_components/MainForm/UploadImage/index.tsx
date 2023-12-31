@@ -7,23 +7,23 @@ import { createBlobUrlFromImageFile } from "@utils"
 
 const UploadImage = () => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const [imageBlobUrl, setImageBlobUrl] = useState("")
 
     const imageFile = formik.values.imageFile
     useEffect(() => {
-        if (imageFile == null) return
+        if (imageFile === null) return
         const _url = createBlobUrlFromImageFile(imageFile)
-        if (_url == null) return 
+        if (_url === null) return 
         setImageBlobUrl(_url)
     }, [imageFile])
 
     const _handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
-        if (files == null) return
+        if (files === null) return
         const file = files[0]
-        if (file == null) return
+        if (file === null) return
         formik.setFieldValue("imageFile", file)
     }
 

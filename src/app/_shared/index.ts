@@ -1,4 +1,3 @@
-export * from "./displays"
-export * from "./uis"
+export * from "./components"
 export * from "./interfaces"
 export * from "./functions"

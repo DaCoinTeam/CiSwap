@@ -19,16 +19,16 @@ import { MetamaskContext } from "@app/_hooks"
 
 const MainSection = () => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext 
 
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const chainId = useSelector(
         (state: RootState) => state.blockchain.chainId
@@ -45,7 +45,7 @@ const MainSection = () => {
             return
         }
 
-        if (web3 == null) return
+        if (web3 === null) return
         if (!account) return
 
         const controller = new AbortController()
@@ -58,9 +58,9 @@ const MainSection = () => {
                 controller
             )
             setFinishFetch(true)
-            if (LPTokenAmountOut == null) return 
+            if (LPTokenAmountOut === null) return 
 
-            formik.setFieldValue("LPTokenAmountOut", computeRedenomination(LPTokenAmountOut, tokenState.LPTokenDecimals,3))
+            formik.setFieldValue("LPTokenAmountOut", computeRedenomination(LPTokenAmountOut, tokenState.LPTokenDecimals))
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)

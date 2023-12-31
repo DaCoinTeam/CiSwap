@@ -13,7 +13,7 @@ interface LiquidityDisplayProps {
 
 const LiquidityDisplay = (props: LiquidityDisplayProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState } = poolContext
     const _renderLiquidity = () => {
         const liquidity = tokenState.liquidity

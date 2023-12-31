@@ -11,7 +11,7 @@ class Path {
 
     encodePacked(): Bytes {
         const inputs: Sha3Input[] = this.steps.map((step) => {
-            if (typeof step == "number") {
+            if (typeof step === "number") {
                 return { type: "uint32", value: step }
             }
             return { type: "address", value: step }
@@ -61,7 +61,7 @@ class Path {
 
     create(pool: Pool, tokenStart: Address): boolean {
         const pair = pool.getPair(tokenStart)
-        if (pair == null) return false
+        if (pair === null) return false
 
         this.steps.push(pair.tokenStart, pool.indexPool, pair.tokenEnd)
         return true
@@ -86,7 +86,7 @@ class Path {
 
         for (const pool of pools) {
             const pair = pool.getPair(tokenStart)
-            if (pair == null) continue
+            if (pair === null) continue
 
             const steps = Object.assign([], this.steps)
             const pathCurrent = new Path(steps)
@@ -94,7 +94,7 @@ class Path {
             const pushResult = pathCurrent.pushNextHop(pool.indexPool, pair.tokenEnd)
 
             if (!pushResult) continue
-            if (pair.tokenEnd == tokenEnd) {
+            if (pair.tokenEnd === tokenEnd) {
                 pathExactEnds.push(pathCurrent)
                 continue
             }

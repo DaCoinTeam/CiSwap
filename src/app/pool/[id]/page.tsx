@@ -9,7 +9,7 @@ import { PoolContext } from "./_hooks"
 
 const Page = () => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext 
     console.log(tokenState)
     const router = useRouter()

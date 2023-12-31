@@ -41,7 +41,7 @@ class PoolContract {
             })
 
             for (const log of logs) {
-                if (typeof log == "string") return null
+                if (typeof log === "string") return null
                 transactions.push(log.transactionHash as HexString)
             }
             return uniqueArray(transactions)

@@ -26,26 +26,26 @@ const AllPools = () => {
         const handleEffect = async () => {
             const contract = new FactoryContract(chainId)
             const pools = await contract.getAll()
-            if (pools == null) return
+            if (pools === null) return
             
             const poolInfos : PoolInfo[] = [] 
             for (const pool of pools){
                 const contract = new PoolContract(chainId, pool)
                 const token0 = await contract.token0()
-                if (token0 == null) return 
+                if (token0 === null) return 
                 const token0Contract = new ERC20Contract(chainId, token0)
                 const token0Symbol =  await token0Contract.symbol()
-                if (token0Symbol == null) return
+                if (token0Symbol === null) return
 
                 const token1 = await contract.token1()
-                if (token1 == null) return
+                if (token1 === null) return
                 const token1Contract = new ERC20Contract(chainId, token1)
                 const token1Symbol =  await token1Contract.symbol()
-                if (token1Symbol == null) return
+                if (token1Symbol === null) return
 
 
                 const protocolFee = await contract.protocolFee()
-                if (protocolFee == null) return
+                if (protocolFee === null) return
 
                 const poolInfo: PoolInfo = {
                     address: pool,

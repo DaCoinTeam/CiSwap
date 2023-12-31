@@ -10,7 +10,7 @@ export const POST = async (request: NextRequest) => {
     const { searchParams } = new URL(request.url)
 
     const type = searchParams.get("type") as PinataRequestType | null
-    if (type == null)
+    if (type === null)
         return invalidSearchParameters
 
     const options: PinataPinOptions = {

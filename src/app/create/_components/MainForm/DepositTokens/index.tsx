@@ -16,7 +16,7 @@ interface AddTokensProps {
 
 const DepositTokens = (props: AddTokensProps) => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const chainId = useSelector(
         (state: RootState) => state.blockchain.chainId
@@ -24,7 +24,7 @@ const DepositTokens = (props: AddTokensProps) => {
     const account = useSelector((state: RootState) => state.blockchain.account)
 
     const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext == null) return
+    if (finishSelectedPairContext === null) return
 
     const { finishSelectedPair } = finishSelectedPairContext
 
@@ -53,7 +53,7 @@ const DepositTokens = (props: AddTokensProps) => {
     const _handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
         formik.setFieldValue(
             "_zeroForOne",
-            event.target.value == formik.values.tokenA
+            event.target.value === formik.values.tokenA
         )
     }
 
@@ -75,15 +75,15 @@ const DepositTokens = (props: AddTokensProps) => {
             )
 
             const decimalsA = await tokenAContract.decimals()
-            if (decimalsA == null) return
+            if (decimalsA === null) return
             formik.setFieldValue("_decimalsA", decimalsA)
 
             const balanceA = await tokenAContract.balanceOf(account)
-            if (balanceA == null) return
+            if (balanceA === null) return
 
             formik.setFieldValue(
                 "_balanceA",
-                utils.math.computeRedenomination(balanceA, decimalsA, 3)
+                utils.math.computeRedenomination(balanceA, decimalsA)
             )
 
             const tokenBContract = new ERC20Contract(
@@ -92,14 +92,14 @@ const DepositTokens = (props: AddTokensProps) => {
             )
 
             const decimalsB = await tokenBContract.decimals()
-            if (decimalsB == null) return
+            if (decimalsB === null) return
             formik.setFieldValue("_decimalsB", decimalsB)
 
             const balanceB = await tokenBContract.balanceOf(account)
-            if (balanceB == null) return
+            if (balanceB === null) return
             formik.setFieldValue(
                 "_balanceB",
-                utils.math.computeRedenomination(balanceB, decimalsB, 3)
+                utils.math.computeRedenomination(balanceB, decimalsB)
             )
         }
         handleEffect()
@@ -133,7 +133,7 @@ const DepositTokens = (props: AddTokensProps) => {
                             finishLoad={_finishSelectedPair}
                         />
                         <BalanceDisplay
-                            balance={numeral(formik.values._balanceA).format("0.0a")}
+                            balance={formik.values._balanceA}
                             finishLoad={_finishSelectedPair}
                         />
                     </div>
@@ -152,7 +152,7 @@ const DepositTokens = (props: AddTokensProps) => {
                             finishLoad={_finishSelectedPair}
                         />
                         <BalanceDisplay
-                            balance={numeral(formik.values._balanceB).format("0.0a")}
+                            balance={formik.values._balanceB}
                             finishLoad={_finishSelectedPair}
                         />
                     </div>

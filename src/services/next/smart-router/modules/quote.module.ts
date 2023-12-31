@@ -21,7 +21,7 @@ class Quote {
     }
 
     private getQuoteType(): QuoteType {
-        const has3Steps = this.path.steps.length == 3
+        const has3Steps = this.path.steps.length === 3
         const quoteTypeInput = has3Steps
             ? QuoteType.ExactInputSingle
             : QuoteType.ExactInput
@@ -38,7 +38,7 @@ class Quote {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 amountIn: this.amountIn,
-                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, 3, true),
+                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, true),
                 tokenIn: this.path.steps[0] as Address,
                 tokenOut: this.path.steps[2] as Address,
                 indexPool: this.path.steps[1] as number,
@@ -46,13 +46,13 @@ class Quote {
             [QuoteType.ExactInput]: {
                 quoteType: QuoteType.ExactInput,
                 amountIn: this.amountIn,
-                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, 3, true),
+                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, true),
                 path: this.path.encodePacked(),
             },
             [QuoteType.ExactOutputSingle]: {
                 quoteType: QuoteType.ExactOutputSingle,
                 amountOut: this.amountIn,
-                amountInMax: utils.math.computeSlippage(this.amountOut, slippage, 3),
+                amountInMax: utils.math.computeSlippage(this.amountOut, slippage),
                 tokenIn: this.path.steps[0] as Address,
                 tokenOut: this.path.steps[2] as Address,
                 indexPool: this.path.steps[1] as number,
@@ -60,7 +60,7 @@ class Quote {
             [QuoteType.ExactOutput]: {
                 quoteType: QuoteType.ExactOutput,
                 amountOut: this.amountIn,
-                amountInMax: utils.math.computeSlippage(this.amountOut, slippage, 3),
+                amountInMax: utils.math.computeSlippage(this.amountOut, slippage),
                 path: this.path.reverse().encodePacked(),
             },
         }

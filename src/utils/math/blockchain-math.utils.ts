@@ -8,14 +8,15 @@ import {
 export const computeRedenomination = (
     amount: bigint,
     decimals: number,
-    round: number
+    round?: number
 ): number => {
+    round = round ?? 5
     try {
         const divisor = computeExponent(decimals)
         const result =
       Number((amount * BigInt(computeExponent(round))) / BigInt(divisor)) /
       computeExponent(round)
- 
+
         return result
     } catch (error) {
         console.error(error)
@@ -25,10 +26,15 @@ export const computeRedenomination = (
 
 export const computeDeRedenomination = (
     amount: number,
-    decimals: number
+    decimals: number,
+    precision?: number
 ): bigint => {
+    precision = precision ?? 5
     try {
-        const result = BigInt(amount) * BigInt(computeExponent(decimals))
+        const result =
+      (BigInt(computeRound(amount * computeExponent(precision), 0)) *
+        BigInt(computeExponent(decimals))) /
+      BigInt(computeExponent(precision))
         if (isNaN(Number(result))) throw new Error()
         return result
     } catch (error) {
@@ -46,9 +52,10 @@ export const computeDivideX96 = (value: bigint): number =>
 export const computeSlippage = (
     amount: bigint,
     slippage: number,
-    round: number,
-    exactInput?: boolean
+    exactInput?: boolean,
+    round?: number
 ) => {
+    round = round ?? 5
     const exponent = computeExponent(round)
     const percentageMultipleExponent = BigInt(
         computeRound(slippage * exponent, 0)

@@ -12,7 +12,7 @@ interface LPTokenDistributionChartProps {
   
 const LPTokenDistributionChart = (props: LPTokenDistributionChartProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return 
+    if (poolContext === null) return 
     const { tokenState } = poolContext 
 
     const [period, setPeriod] = useState(ChartTimePeriod._24H)

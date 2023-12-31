@@ -12,7 +12,7 @@ import {
     updateBaselineChartWithOptions,
 } from "@utils"
 import { PoolContract } from "@blockchain"
-import { PoolContext } from "../../../_hooks"
+import {  SwapContext } from "../../_hooks"
 import { PeriodContext } from "."
 
 interface PriceTick {
@@ -21,15 +21,15 @@ interface PriceTick {
 }
 
 const Chart = () => {
-    const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
-    const { tokenState, poolAddress } = poolContext 
+    const swapContrext = useContext(SwapContext)
+    if (swapContrext === null) return
+    const { swapState } = swapContrext 
 
     const periodContext = useContext(PeriodContext)
-    if (periodContext == null) return
+    if (periodContext === null) return
     const { period } = periodContext
 
-    if (tokenState == null) return
+    if (tokenState === null) return
 
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
@@ -53,7 +53,7 @@ const Chart = () => {
             const contract = new PoolContract(chainId, poolAddress)
 
             const _baseTicks = await contract.getAllBaseTicks()
-            if (_baseTicks == null) return
+            if (_baseTicks === null) return
 
             const _priceTicks: PriceTick[] = _baseTicks.map((tick) => {
                 return {
@@ -103,10 +103,10 @@ const Chart = () => {
         if (!tokenState.finishLoadWithoutConnected) return
 
         const chart = chartRef.current
-        if (chart == null) return
+        if (chart === null) return
 
         const container = chartContainerRef.current
-        if (container == null) return
+        if (container === null) return
 
         updateBaselineChartWithOptions(chart, container, darkMode)
     }, [darkMode, tokenState.finishLoadWithoutConnected])
@@ -144,7 +144,7 @@ const Chart = () => {
         }
 
         const series = seriesRef.current
-        if (series == null) return
+        if (series === null) return
 
         series.setData(_priceTicks)
     }, [priceTicks, period, tokenState.finishLoadWithoutConnected])

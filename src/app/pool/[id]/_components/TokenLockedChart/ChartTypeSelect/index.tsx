@@ -30,7 +30,7 @@ const _types = [
 
 const ChartTypeSelect = (props: ChartTypeSelectProps) => {
     const chartTypeContext = useContext(ChartTypeContext)
-    if (chartTypeContext == null) return
+    if (chartTypeContext === null) return
     const { chartType, setChartType } = chartTypeContext
 
     const _size = props.size ?? "md"

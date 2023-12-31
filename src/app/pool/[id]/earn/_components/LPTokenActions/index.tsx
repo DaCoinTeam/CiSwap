@@ -16,10 +16,10 @@ interface LPTokenActionsProps {
 
 const LPTokenActions = (props: LPTokenActionsProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
 
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
@@ -35,21 +35,21 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
 
     const [isProviderRegistered, setIsProviderRegistered] = useState(false)
     useEffect(() => {
-        if (web3 == null || !account) return
+        if (web3 === null || !account) return
         const handleEffect = async () => {
             const contract = new PoolContract(
                 chainId,
                 poolAddress
             )  
             const _isProviderRegistered = await contract.isProviderRegistered(account)
-            if (_isProviderRegistered == null) return
+            if (_isProviderRegistered === null) return
             setIsProviderRegistered(_isProviderRegistered)
         }
         handleEffect()
     }, [account])
 
     const _handleRegisterProvider = async () => {
-        if (web3 == null || !account) return
+        if (web3 === null || !account) return
         const contract = new PoolContract(chainId, poolAddress, web3, account)
         const receipt = await contract.registerProvider()
         console.log(receipt)

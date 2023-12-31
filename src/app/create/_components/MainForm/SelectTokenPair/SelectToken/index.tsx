@@ -35,10 +35,10 @@ interface SelectTokenProps {
 
 const SelectToken = (props: SelectTokenProps) => {
     const formik = useContext(FormikPropsContext)
-    if (formik == null) return
+    if (formik === null) return
 
     const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext == null) return
+    if (finishSelectedPairContext === null) return
 
     const { setFinishSelectedPair } = finishSelectedPairContext
 
@@ -88,11 +88,11 @@ const SelectToken = (props: SelectTokenProps) => {
           const symbol = await contract.symbol(controller)
 
           setFinishFetch(true)
-          if (symbol == null) {
+          if (symbol === null) {
               setError(ErrorType.InvalidTokenAddress)
               return
           }
-          if (tempToken == props.otherToken) {
+          if (tempToken === props.otherToken) {
               setError(ErrorType.Duplicated)
               return
           }
@@ -125,7 +125,7 @@ const SelectToken = (props: SelectTokenProps) => {
   const _message = _invalid && finishFetch ? error : ""
 
   const _click = (token: Address) => {
-      if (tempToken == token) return
+      if (tempToken === token) return
       setTempToken(token)
       setFinishFetch(false)
   }
@@ -170,7 +170,7 @@ const SelectToken = (props: SelectTokenProps) => {
                       <SelectStableToken onClick={_click} />
                   </ModalBody>
                   <ModalFooter className="p-5">
-                      {error == ErrorType.None ? (
+                      {error === ErrorType.None ? (
                           <div className="mx-auto flex gap-4 items-center">
                               <Link
                                   color="foreground"

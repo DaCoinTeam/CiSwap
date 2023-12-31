@@ -9,14 +9,14 @@ import { MetamaskApis } from "@blockchain"
 
 const ConnectWalletButton = () => {
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return
+    if (metamaskContext === null) return
     const { web3State, ethereumState } = metamaskContext
     const { setWeb3 } = web3State
     const { ethereum } = ethereumState
 
     const connectWallet = async (): Promise<void> => {
         try {
-            if (ethereum == null) return 
+            if (ethereum === null) return 
             const metamaskApis = new MetamaskApis(ethereum)
             await metamaskApis.requestAccounts()
             const web3 = new Web3(ethereum)

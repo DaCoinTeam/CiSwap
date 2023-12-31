@@ -56,10 +56,10 @@ const FormikProviders = (props: ContextProps) => {
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    if (swapContext == null) return
+    if (swapContext === null) return
     const { swapState } = swapContext
 
-    if (metamaskContext == null) return
+    if (metamaskContext === null) return
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
@@ -85,7 +85,7 @@ const FormikProviders = (props: ContextProps) => {
                     .required("This field is required"),
             })}
             onSubmit={async (values) => {
-                if (web3 == null || !account) return
+                if (web3 === null || !account) return
 
                 const tokenInContract = new ERC20Contract(
                     chainId,
@@ -97,7 +97,7 @@ const FormikProviders = (props: ContextProps) => {
                 const factory = chainInfos[chainId].factory
                 const allowanceIn = await tokenInContract.allowance(account, factory)
 
-                if (allowanceIn == null) return
+                if (allowanceIn === null) return
 
                 const parsedAmountIn = utils.math.computeDeRedenomination(
                     utils.format.parseNumber(values.amountIn),

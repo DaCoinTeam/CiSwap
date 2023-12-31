@@ -100,7 +100,7 @@ const Navbar = () => {
             <NavbarContent justify="end" className="gap-12">
                 <ConnectedChain />
                 <div>
-                    {account == "" ? <ConnectWalletButton /> : <ConnectedWalletSelect />}
+                    {account === "" ? <ConnectWalletButton /> : <ConnectedWalletSelect />}
                 </div>
             </NavbarContent>
 

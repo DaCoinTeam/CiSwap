@@ -6,7 +6,7 @@ import { Quote } from "./modules"
 import { SmartRouter } from "./modules"
 
 export const smartRouterService = {
-    get: async (
+    findBestQuote: async (
         chainId: ChainId,
         amount: bigint,
         tokenIn: Address,

@@ -1,20 +1,15 @@
-import { PoolContext } from "../../../_hooks"
 import { Skeleton } from "@nextui-org/react"
 import React, { useContext } from "react"
-import {
-    computeInverse,
-    computeRedenomination,
-    computeRound,
-} from "@utils"
+import utils from "@utils"
 
-interface TokenPriceRatioDisplayProps {
+interface TokenPriceDisplayProps {
   className?: string;
   token0ImageUrl?: string;
   token1ImageUrl?: string;
   style?: "style1" | "style2";
 }
 
-const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
+const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
     const poolContext = useContext(PoolContext)
     if (poolContext === null) return
     const { tokenState, isToken0PriceState } = poolContext
@@ -103,4 +98,4 @@ const TokenPriceRatioDisplay = (props: TokenPriceRatioDisplayProps) => {
     return _renderComponent()
 }
 
-export default TokenPriceRatioDisplay
+export default TokenPriceDisplay

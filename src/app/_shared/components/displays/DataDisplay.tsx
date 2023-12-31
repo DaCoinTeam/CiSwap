@@ -2,7 +2,7 @@ import { Skeleton, Spacer } from "@nextui-org/react"
 import React from "react"
 import TitleDisplay from "./TitleDisplay"
 
-interface DataWidgetDisplayProps {
+interface DataDisplayProps {
   className?: string;
   title: string;
   value: number;
@@ -11,7 +11,7 @@ interface DataWidgetDisplayProps {
   finishLoad?: boolean
 }
 
-const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
+const DataDisplay = (props: DataDisplayProps) => {
     let _skeletonHeight : "h-8" | "h-9" | "h-10" | undefined
 
     let _size: "text-2xl" | "text-3xl" | "text-4xl"
@@ -48,4 +48,4 @@ const DataWidgetDisplay = (props: DataWidgetDisplayProps) => {
         </div>
     )
 }
-export default DataWidgetDisplay
+export default DataDisplay

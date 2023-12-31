@@ -39,11 +39,11 @@ const _renderBody = (
 
 const FormikProviders = (props: ContextProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, handlers, poolAddress } = poolContext
 
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return 
+    if (metamaskContext === null) return 
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
@@ -66,7 +66,7 @@ const FormikProviders = (props: ContextProps) => {
             })}
             onSubmit={async (values) => {
                 console.log("called")
-                if (web3 == null || !account) return
+                if (web3 === null || !account) return
 
                 const token1Contract = new ERC20Contract(
                     chainId,
@@ -79,7 +79,7 @@ const FormikProviders = (props: ContextProps) => {
                     account,
                     poolAddress
                 )
-                if (token1Allowance == null) return
+                if (token1Allowance === null) return
 
                 const token1DepositAmountParsed = computeDeRedenomination(
                     parseNumber(values.token1DepositAmount),

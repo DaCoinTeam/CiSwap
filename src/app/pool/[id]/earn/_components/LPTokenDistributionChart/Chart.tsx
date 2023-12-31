@@ -28,7 +28,7 @@ interface RenderLPTokenTick {
 
 const Chart = (props: ChartProps) => {
     const poolContext = useContext(PoolContext)
-    if (poolContext == null) return
+    if (poolContext === null) return
     const { tokenState, poolAddress } = poolContext
     
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
@@ -41,7 +41,7 @@ const Chart = (props: ChartProps) => {
         const handleEffect = async () => {
             const contract = new PoolContract(chainId, poolAddress)
             const _LPTokenTicks = await contract.getAllLPTokenTicks()
-            if (_LPTokenTicks == null) return
+            if (_LPTokenTicks === null) return
             const _renderLPTokenTicks : RenderLPTokenTick[] = _LPTokenTicks.map(
                 tick => {
                     return {

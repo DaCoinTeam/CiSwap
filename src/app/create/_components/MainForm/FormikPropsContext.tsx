@@ -60,7 +60,7 @@ const _renderBody = (
 
 const FormikProviders = (props: ContextProps) => {
     const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext == null) return
+    if (metamaskContext === null) return
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
@@ -88,7 +88,7 @@ const FormikProviders = (props: ContextProps) => {
                 ),
             })}
             onSubmit={async (values) => {
-                if (web3 == null) return
+                if (web3 === null) return
 
                 const tokenAContract = new ERC20Contract(
                     chainId,
@@ -127,7 +127,7 @@ const FormikProviders = (props: ContextProps) => {
                 const maxPriceAX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.maxPriceA))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
-                if (allowanceA == null) return
+                if (allowanceA === null) return
                 if (allowanceA < amountADeRedenominated) {
                     const approveAReceipt = await tokenAContract.approve(
                         factory,
@@ -137,7 +137,7 @@ const FormikProviders = (props: ContextProps) => {
                 }
 
                 const allowanceB = await tokenBContract.allowance(account, factory)
-                if (allowanceB == null) return
+                if (allowanceB === null) return
 
                 if (allowanceB < amountBDeRedenominated) {
                     const approveBReceipt = await tokenBContract.approve(

@@ -1,7 +1,7 @@
 
 import React, { ReactNode } from "react"
 import { Input } from "@nextui-org/react"
-import { sanitizeNumericInput } from "@utils"
+import utils from "@utils"
 
 interface NumberInputProps {
     className?: string,
@@ -31,7 +31,7 @@ const NumberInput = (props: NumberInputProps) => {
     const _handleChange = (
         value: string
     ) => {
-        const sanitizeInput = sanitizeNumericInput(value)
+        const sanitizeInput = utils.format.sanitizeNumericInput(value)
         if (sanitizeInput != null) {
             props.onValueChange(sanitizeInput)
         } 

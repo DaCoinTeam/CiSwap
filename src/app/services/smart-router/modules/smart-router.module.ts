@@ -8,7 +8,7 @@ import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
-import { Quote, QuoteType } from "@api"
+import { Quote } from "@api"
 import {
     bytesToAddress,
     bytesToBigInt,
@@ -198,3 +198,10 @@ class SmartRouter {
     }
 }
 export default SmartRouter
+
+enum QuoteType {
+  ExactInputSingle,
+  ExactInput,
+  ExactOutputSingle,
+  ExactOutput,
+}

@@ -34,7 +34,7 @@ class Quote {
     createPrimaryParams(slippage: number): PrimaryParams {
         const quoteType = this.getQuoteType()
 
-        const quoteTypeToParams: Record<QuoteType, PrimaryParams> = {
+        const quoteTypeToPrimaryParams: Record<QuoteType, PrimaryParams> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 amountIn: this.amountIn,
@@ -65,7 +65,7 @@ class Quote {
             },
         }
 
-        return quoteTypeToParams[quoteType]
+        return quoteTypeToPrimaryParams[quoteType]
     }
 }
 

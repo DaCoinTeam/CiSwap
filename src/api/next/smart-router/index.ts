@@ -1,6 +1,6 @@
 import axios from "axios"
 import { ChainId } from "@config"
-import { Address } from "web3"
+import { Address, Bytes } from "web3"
 
 const ROUTER_URL = "/services/smart-router"
 
@@ -23,3 +23,12 @@ export const smartRouterService = {
 }
 
 export default smartRouterService
+
+
+export type Step = (Address | number)
+
+export interface BestRouteResult {
+    amount: bigint;
+    path: Step[];
+    bytes: Bytes
+  }

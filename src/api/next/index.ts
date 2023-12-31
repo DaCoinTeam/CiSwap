@@ -1,3 +1,4 @@
+export * from "./smart-router"
 import smartRouterService from "./smart-router"
 
 const services = {

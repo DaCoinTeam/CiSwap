@@ -1,10 +1,11 @@
 import web3, { Address, Bytes, Sha3Input } from "web3"
 import Pair from "./pair.module"
 import Pool from "./pool.module"
+import { Step } from "@api"
 
 class Path {
     steps: Step[]
-    constructor(steps?: (Address | number)[]) {
+    constructor(steps?: Step[]) {
         this.steps = steps ?? []
     }
 
@@ -103,7 +104,5 @@ class Path {
         return { pathExactEnds, pathRests }
     }
 }
-
-export type Step = Address | number;
 
 export default Path

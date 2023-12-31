@@ -6,8 +6,9 @@ import {
 } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
-import Path, { Step } from "./path.module"
+import Path from "./path.module"
 import Pool from "./pool.module"
+import { BestRouteResult } from "@api"
 import {
     bytesToAddress,
     bytesToBigInt,
@@ -183,14 +184,8 @@ class SmartRouter {
         return {
             path: paths[index].steps,
             amount: value,
-            bytes: paths[index].encodePacked()
+            bytes: paths[index].encodePacked(),
         }
     }
 }
 export default SmartRouter
-
-export interface BestRouteResult {
-  amount: bigint;
-  path: Step[];
-  bytes: Bytes
-}

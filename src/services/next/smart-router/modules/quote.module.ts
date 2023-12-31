@@ -1,4 +1,4 @@
-import web3, { Address, Bytes, Sha3Input } from "web3"
+import { Address, Bytes } from "web3"
 import utils from "@utils"
 import Path from "./path.module"
 
@@ -31,21 +31,6 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    private encodePacked(): Bytes {
-        const pathCloned = Object.assign([], this.path)
-        if (this.exactInput) {
-            pathCloned.reverse()
-        }
-
-        const inputs: Sha3Input[] = this.path.steps.map((step) => {
-            if (typeof step == "number") {
-                return { type: "uint32", value: step }
-            }
-            return { type: "address", value: step }
-        })
-        return web3.utils.encodePacked(...inputs)
-    }
-
     createPrimaryParams(slippage: number): PrimaryParams {
         const quoteType = this.getQuoteType()
 
@@ -62,7 +47,7 @@ class Quote {
                 quoteType: QuoteType.ExactInput,
                 amountIn: this.amountIn,
                 amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, 3, true),
-                path: this.encodePacked(),
+                path: this.path.encodePacked(),
             },
             [QuoteType.ExactOutputSingle]: {
                 quoteType: QuoteType.ExactOutputSingle,
@@ -76,7 +61,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutput,
                 amountOut: this.amountIn,
                 amountInMax: utils.math.computeSlippage(this.amountOut, slippage, 3),
-                path: this.encodePacked(),
+                path: this.path.reverse().encodePacked(),
             },
         }
 

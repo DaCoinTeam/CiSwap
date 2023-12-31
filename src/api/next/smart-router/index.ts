@@ -19,9 +19,7 @@ export const smartRouterService = {
             params.set("tokenIn", tokenIn)
             params.set("tokenOut", tokenOut)
             params.set("exactInput", exactInput.toString())
-            return (await axios.get(
-                `${ROUTER_URL}?${params.toString()}`
-            )) as Quote
+            return (await axios.get(`${ROUTER_URL}?${params.toString()}`)) as Quote
         } catch (ex) {
             console.log(ex)
             return null
@@ -33,15 +31,8 @@ export default smartRouterService
 
 export type Step = Address | number;
 
-export enum QuoteType {
-  ExactInputSingle,
-  ExactInput,
-  ExactOutputSingle,
-  ExactOutput,
-}
-
 export interface Quote {
   amount: bigint;
   path: Step[];
-  quoteType: QuoteType;
+  exactInput: boolean;
 }

@@ -135,7 +135,7 @@ class SmartRouter {
         if (paths == null) return null
 
         const data: Bytes[] = []
-        const quoteTypes: QuoteType[] = []
+        const exactInputs: boolean[] = []
 
         for (const path of paths) {
             const has3Steps = path.steps.length === 3
@@ -147,7 +147,7 @@ class SmartRouter {
                 ? QuoteType.ExactOutputSingle
                 : QuoteType.ExactOutput
             const quoteType = exactInput ? quoteTypeInput : quoteTypeOutput
-            quoteTypes.push(quoteType)
+            exactInputs.push(exactInput)
 
             const quoteTypeToEncodedFunction: Record<QuoteType, Bytes> = {
                 [QuoteType.ExactInputSingle]: this.quoterContract
@@ -193,7 +193,7 @@ class SmartRouter {
         return {
             path: paths[index].steps,
             amount: value,
-            quoteType: quoteTypes[index],
+            exactInput: exactInputs[index],
         }
     }
 }

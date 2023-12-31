@@ -3,7 +3,7 @@ import { ChainId } from "@config"
 import { Address } from "web3"
 import Quote from "./quote.module"
 
-const ROUTER_URL = "/services/smart-router"
+const ROUTER_URL = "/api/smart-router"
 
 export const smartRouterService = {
     get: async (

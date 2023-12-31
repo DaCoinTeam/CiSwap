@@ -7,7 +7,7 @@ import { FinishSelectedPairContext } from "../index"
 import { FormikPropsContext } from "../FormikPropsContext"
 import { useSelector } from "react-redux"
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline"
-import { parseNumber } from "@utils"
+import utils from "@utils"
 
 interface ChooseTokenPricesProps {
   className?: string;
@@ -17,8 +17,8 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const formik = useContext(FormikPropsContext)
     if (formik == null) return
 
-    const basePriceAParsed = parseNumber(formik.values.basePriceA)
-    const maxPriceAParsed = parseNumber(formik.values.maxPriceA)
+    const basePriceAParsed = utils.format.parseNumber(formik.values.basePriceA)
+    const maxPriceAParsed = utils.format.parseNumber(formik.values.maxPriceA)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 

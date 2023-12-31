@@ -1,5 +1,5 @@
 import { Skeleton } from "@nextui-org/react"
-import React, { useContext } from "react"
+import React from "react"
 import utils from "@utils"
 
 interface TokenPriceDisplayProps {
@@ -8,62 +8,29 @@ interface TokenPriceDisplayProps {
   imageUrlB?: string;
   symbolA: string;
   symbolB: string;
+  price: number;
+  trend: Trend;
   type?: Type;
+  finishLoad?: boolean;
 }
 
 const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
-    const poolContext = useContext(PoolContext)
-    if (poolContext === null) return
-    const { tokenState, isToken0PriceState } = poolContext
-    const { isToken0Price } = isToken0PriceState
+    const type: Type = props.type ?? 0
 
-    let _style = props.style
-    if (_style === undefined) _style = "style1"
+    const _renderTrend = () => <div></div>
 
-    const price = computeRedenomination(tokenState.kLast, 5, 3)
-    const _currentTokenPrice = isToken0Price
-        ? price
-        : computeRound(1 / price, 3)
-    const _firstTokenSymbol = isToken0Price
-        ? tokenState.token0Symbol
-        : tokenState.token1Symbol
-    const _basePrice = isToken0Price ? price : computeInverse(price, 3)
-    const _secondTokenSymbol = isToken0Price
-        ? tokenState.token1Symbol
-        : tokenState.token0Symbol
-
-    const _renderTrend = () => {
-        const _percentage = _currentTokenPrice / _basePrice - 1
-
-        const _up = _percentage >= 0 ? true : false
-
-        return _up ? (
-            <span className="text-teal-500">
-        (+{computeRound(Math.abs(_percentage) * 100, 3)}%)
-            </span>
-        ) : (
-            <span className="text-red-500">
-        (-{computeRound(Math.abs(_percentage) * 100, 3)}%)
-            </span>
-        )
-    }
-
-    const _renderComponent = () => {
-        switch (_style) {
-        case "style1":
-            return (
+    return () => {
+        const typeToReturn: Record<Type, JSX.Element> = {
+            0: (
                 <div className={`${props.className}`}>
-                    {tokenState.finishLoadWithoutConnected ? (
+                    {props.finishLoad ? (
                         <>
                             <div className="gap-2 flex items-end">
                                 <div className="gap-1 flex items-end">
-                                    <span className="text-3xl font-bold">
-                                        {" "}
-                                        {_currentTokenPrice}{" "}
-                                    </span>
+                                    <span className="text-3xl font-bold"> {props.price} </span>
                                     <span>
                                         {" "}
-                                        {_firstTokenSymbol}/{_secondTokenSymbol}{" "}
+                                        {props.symbolA}/{props.symbolB}{" "}
                                     </span>
                                 </div>
                                 <div>{_renderTrend()}</div>
@@ -75,15 +42,13 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
                         </>
                     )}
                 </div>
-            )
-        case "style2":
-            return (
+            ),
+            1: (
                 <div className={`${props.className}`}>
-                    {tokenState.finishLoadWithoutConnected ? (
+                    {props.finishLoad ? (
                         <div className="flex gap-2">
                             <span>
-                  1 {_firstTokenSymbol} = {_currentTokenPrice}{" "}
-                                {_secondTokenSymbol}{" "}
+                1 {props.symbolA} = {props.price} {props.symbolB}{" "}
                             </span>
                             {_renderTrend()}
                         </div>
@@ -93,13 +58,17 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
                         </>
                     )}
                 </div>
-            )
+            ),
         }
+        return typeToReturn[type]
     }
-
-    return _renderComponent()
 }
 
 export default TokenPriceDisplay
 
 type Type = 0 | 1;
+
+interface Trend {
+  up: boolean;
+  percentage: number;
+}

@@ -18,7 +18,7 @@ interface TokenPairDisplayProps {
 }
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
-    props.type = props.type ?? 0
+    const type : Type = props.type ?? 0
 
     const typeToClassNames: Record<Type, ClassNames> = {
         0: {
@@ -37,7 +37,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
         },
     }
 
-    const classNames = typeToClassNames[props.type]
+    const classNames = typeToClassNames[type]
 
     const _handleSwitch = props.callback
     return (

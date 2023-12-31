@@ -14,7 +14,7 @@ import { usePathname, useSearchParams } from "next/navigation"
 import { chainInfos } from "@config"
 import { ERC20Contract } from "@blockchain"
 import { computeRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
-import { getTokenApi } from "@api"
+import { getTokenApi } from "@services"
 import { useRouter } from "next/navigation"
 
 interface SwapContext {

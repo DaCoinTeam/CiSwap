@@ -1,7 +1,7 @@
 import web3, { Address, Bytes, Sha3Input } from "web3"
 import Pair from "./pair.module"
 import Pool from "./pool.module"
-import { Step } from "@api"
+import { Step } from "@services"
 
 class Path {
     steps: Step[]

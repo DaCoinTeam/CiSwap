@@ -8,7 +8,7 @@ import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
-import { Quote, QuoteType } from "@api"
+import { Quote, QuoteType } from "@services"
 import {
     bytesToAddress,
     bytesToBigInt,

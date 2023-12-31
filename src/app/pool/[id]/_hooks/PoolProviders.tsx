@@ -6,7 +6,7 @@ import { TokenState } from "../_hooks"
 import { useParams } from "next/navigation"
 import { computeRedenomination, fetchAndCreateSvgBlobUrl } from "@utils"
 import { ERC20Contract, PoolContract } from "@blockchain"
-import { getTokenApi } from "@api"
+import { getTokenApi } from "@services"
 import usePoolState from "./usePoolState.hook"
 import { ContextProps } from "@app/_shared"
 

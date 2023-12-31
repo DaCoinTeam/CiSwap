@@ -44,8 +44,8 @@
       "@config": [
         "./src/config"
       ],
-      "@api": [
-        "./src/api"
+      "@services": [
+        "./src/services"
       ]
     },
     "forceConsistentCasingInFileNames": true

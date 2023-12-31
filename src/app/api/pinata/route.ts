@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import pinata from "./modules"
-import { PinataRequestType } from "@api"
+import { PinataRequestType } from "@services"
 import { PinataPinOptions, PinataPinResponse } from "@pinata/sdk"
 import { v4 as uuidv4 } from "uuid"
 import { Readable } from "stream"

@@ -14,7 +14,7 @@ interface TokenPairDisplayProps {
   symbolB: string;
   type?: Type;
   finishLoad?: boolean;
-  callback?: () => void;
+  onClick?: () => void;
 }
 
 const TokenPairDisplay = (props: TokenPairDisplayProps) => {
@@ -39,7 +39,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
 
     const classNames = typeToClassNames[type]
 
-    const onClickSwitch = props.callback
+    const onClickReverse = props.onClick
     return (
         <div className={`${props.className}`}>
             {props.finishLoad ? (
@@ -80,7 +80,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                     <Button
                         isIconOnly
                         variant="light"
-                        onPress={onClickSwitch}
+                        onPress={onClickReverse}
                         radius="full"
                         className={`${classNames.button} min-w-0 flex-none`}
                     >

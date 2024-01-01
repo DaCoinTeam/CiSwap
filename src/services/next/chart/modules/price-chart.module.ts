@@ -168,6 +168,7 @@ class PriceChart {
             numberOfSnapshots,
             this.path
         )
+        console.log(this.path)
 
         if (priceX96s === null) return null
 

@@ -18,7 +18,6 @@ import { services } from "@services"
 const MainSection = () => {
     const swapContext = useContext(SwapContext)!
     const { swapState, actions } = swapContext
-    const { doReverse } = actions
 
     const formik = useContext(FormikContext)!
 
@@ -55,11 +54,13 @@ const MainSection = () => {
             )
             setFinishExecuteOut(true)
             if (quote === null) return
-            console.log(  utils.math.computeRedenomination(
-                quote.amountOut,
-                swapState.infoOut.decimals,
-                3
-            ))
+            console.log(
+                utils.math.computeRedenomination(
+                    quote.amountOut,
+                    swapState.infoOut.decimals,
+                    3
+                )
+            )
             console.log(quote.amountOut)
             formik.setFieldValue(
                 "amountOut",
@@ -143,11 +144,15 @@ const MainSection = () => {
         setFinishExecuteIn(false)
     }
 
-    const onClickReverse = async () => {
-        await doReverse()
-        formik.setFieldValue("amountIn", formik.values.amountOut)
-        setFinishExecuteOut(false)
-    }
+    const onClickReverse = actions.doReverse
+
+    useEffect(() => {
+        const handleEffect = async () => {
+            formik.setFieldValue("amountIn", formik.values.amountOut)
+            setFinishExecuteOut(false)
+        }
+        handleEffect()
+    }, [swapState.infoIn])
 
     return (
         <div className="grid gap-6 justify-items-center">

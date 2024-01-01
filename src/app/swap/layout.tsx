@@ -2,8 +2,13 @@
 import React from "react"
 import { SwapProviders } from "./_hooks"
 import { ContextProps } from "@app/_shared"
+import { FormikProviders } from "./_components"
 
 const RootLayout = (props: ContextProps) => {
-    return <SwapProviders>{props.children}</SwapProviders>
+    return (
+        <SwapProviders>
+            <FormikProviders>{props.children}</FormikProviders>
+        </SwapProviders>
+    )
 }
 export default RootLayout

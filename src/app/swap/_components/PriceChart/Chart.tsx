@@ -14,11 +14,11 @@ import { SwapContext } from "../../_hooks"
 import { PeriodContext } from "./index"
 import { PriceChart, services } from "@services"
 import { chainInfos } from "@config"
-import { FormikContext } from "../SwapSection/FormikProviders"
+import { FormikContext } from "../FormikProviders"
 
 const Chart = () => {
-    const swapContrext = useContext(SwapContext)!
-    const { swapState } = swapContrext
+    const { swapState } = useContext(SwapContext)!
+    const { infoIn, infoOut } = swapState
 
     const periodContext = useContext(PeriodContext)!
     const { period } = periodContext
@@ -48,8 +48,9 @@ const Chart = () => {
         const handleEffect = async () => {
             const priceChart = priceChartRef.current
             if (priceChart === null) return
+            
             const path = services.next.smartRouter.encodePacked(
-                formik.values.steps,
+                steps,
                 formik.values.exactInput
             )
             await priceChart.updateTicks(period, path)

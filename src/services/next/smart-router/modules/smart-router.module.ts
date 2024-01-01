@@ -79,11 +79,13 @@ class SmartRouter {
     private async computeAllPaths(
         tokenStart: Address,
         tokenEnd: Address
-    ): Promise<Path[] | null> {
+    ): Promise<Path[]> {
         let pathRests: Path[] = []
         const pathExactEnds: Path[] = []
         const pools = await this.getAllPools()
-        if (pools === null) return null
+        if (pools === null || pools.length === 0) {
+            throw new Error("No valid pools found. Unable to compute paths.")
+        }
 
         for (const pool of pools) {
             const pathCurrent = new Path()
@@ -115,7 +117,10 @@ class SmartRouter {
 
             hopsCount++
         }
-        if (!pathExactEnds.length) throw new Error("No path found")
+
+        if (!pathExactEnds.length) {
+            throw new Error("No valid paths found from start to end tokens.")
+        }
         return pathExactEnds
     }
 
@@ -124,11 +129,13 @@ class SmartRouter {
         tokenIn: Address,
         tokenOut: Address,
         exactInput?: boolean
-    ): Promise<Quote | null> {
+    ): Promise<Quote> {
         exactInput = exactInput ?? false
 
         const paths = await this.computeAllPaths(tokenIn, tokenOut)
-        if (paths === null) return null
+        if (paths === null || paths.length === 0) {
+            throw new Error("No valid paths found for the given token pair.")
+        }
 
         const data: Bytes[] = []
         const exactInputs: boolean[] = []
@@ -177,10 +184,19 @@ class SmartRouter {
             const encodedFunction = quoteTypeToEncodedFunction[quoteType]
             data.push(encodedFunction)
         }
+
         const bytes = await this.multicallContract.multicall(data).call()
-        if (bytes === null) return null
+        if (bytes === null || bytes.length !== paths.length) {
+            throw new Error("Error fetching quotes via multicall.")
+        }
 
         const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
+
+        if (!amountsQuoted.every((amount) => typeof amount === "bigint")) {
+            throw new Error(
+                "Invalid response from multicall. Expected an array of bigints."
+            )
+        }
 
         const { index, value } = exactInput
             ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
@@ -188,7 +204,7 @@ class SmartRouter {
 
         const amountIn = exactInput ? amount : value
         const amountOut = exactInput ? value : amount
-        
+
         return new Quote(amountIn, amountOut, paths[index], exactInputs[index])
     }
 }

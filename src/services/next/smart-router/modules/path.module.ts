@@ -86,7 +86,7 @@ class Path {
             const pair = pool.getPair(tokenStart)
             if (pair === null) continue
 
-            const steps = Object.assign([], this.steps)
+            const steps = this.steps.slice()
             const pathCurrent = new Path(steps)
 
             const pushResult = pathCurrent.pushNextHop(pool.indexPool, pair.tokenEnd)

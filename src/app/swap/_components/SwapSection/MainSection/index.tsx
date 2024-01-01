@@ -7,7 +7,7 @@ import {
 } from "@app/_shared"
 import { Button, Spacer } from "@nextui-org/react"
 import { SwapContext } from "../../../_hooks"
-import { FormikContext } from "../FormikProviders"
+import { FormikContext } from "../../FormikProviders"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"

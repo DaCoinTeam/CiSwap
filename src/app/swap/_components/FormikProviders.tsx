@@ -9,7 +9,7 @@ import {
     setWaitSignModalShow,
     setWaitSignModalTitle,
 } from "@redux"
-import { SwapContext } from "../../_hooks"
+import { SwapContext } from "../_hooks"
 import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"

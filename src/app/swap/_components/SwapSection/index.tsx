@@ -1,6 +1,5 @@
 "use client"
 import React from "react"
-import FormikProviders from "./FormikProviders"
 import {
     Card,
     CardBody,
@@ -24,15 +23,13 @@ const SwapSection = (props: SwapSectionProps) => {
             </CardHeader>
             <Divider />
             <CardBody className="p-5">
-                <FormikProviders>
-                    <MainSection />
-                    <Spacer y={12} />
-                    <AppButton
-                        className="w-full"
-                        content="Swap"
-                        typeSubmit
-                    />
-                </FormikProviders>
+                <MainSection />
+                <Spacer y={12} />
+                <AppButton
+                    className="w-full"
+                    content="Swap"
+                    typeSubmit
+                />
             </CardBody>
         </Card>
 

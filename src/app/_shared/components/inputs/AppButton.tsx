@@ -12,21 +12,17 @@ interface AppButtonProps {
 const AppButton = (props: AppButtonProps) => {
     const attributes: Attributes = props.bordered
         ? {
-            classNames: {
-                borderOrBackgroundColor: "bg-teal-500",
-            },
+            variant: "bordered",
+            classNames: "border-teal-500 text-teal-500",
         }
         : {
-            variant: "bordered",
-            classNames: {
-                borderOrBackgroundColor: "border-teal-500",
-            },
+            classNames: "bg-teal-500",
         }
     return (
         <Button
             type={props.submit ? "submit" : undefined}
             variant={attributes.variant}
-            className={`${attributes.classNames.borderOrBackgroundColor} font-bold
+            className={`${attributes.classNames} font-bold
             } ${props.className}`}
             onPress={props.onClick}
         >
@@ -40,7 +36,5 @@ export default AppButton
 
 interface Attributes {
   variant?: "bordered";
-  classNames: {
-    borderOrBackgroundColor: string;
-  };
+  classNames: string;
 }

@@ -1,22 +1,26 @@
 import utc from "dayjs/plugin/utc"
 import dayjs from "dayjs"
 import { computeRound } from "../math/base-math.util"
+import { UTCTimestamp } from "lightweight-charts"
 dayjs.extend(utc)
 
-const currentMilliseconds = (): number => dayjs().valueOf()
+const currentSeconds = (): number => computeRound(dayjs().valueOf() / 1000)
 
 const formatMillisecondsAsDate = (milliseconds: number): string => {
     return dayjs(milliseconds).format("YYYY-MM-DD")
 }
 
-const timeToLocal = (originalTime: number) => {
-    return computeRound(dayjs(originalTime).utc().valueOf())
-}
+const secondsToUtc = (seconds: number): UTCTimestamp =>
+  computeRound(
+      dayjs(seconds * 1000)
+          .utc(true)
+          .valueOf() / 1000
+  ) as UTCTimestamp
 
 const timeUtils = {
-    currentMilliseconds: currentMilliseconds,
+    currentSeconds: currentSeconds,
     formatMillisecondsAsDate: formatMillisecondsAsDate,
-    timeToLocal: timeToLocal,
+    secondsToUtc: secondsToUtc,
 }
 
 export default timeUtils

@@ -1,9 +1,13 @@
 import {
     BaselineData,
     ColorType,
+    DeepPartial,
     IChartApi,
     ISeriesApi,
+    MouseEventHandler,
+    TickMarkFormatter,
     Time,
+    TimeChartOptions,
     createChart,
 } from "lightweight-charts"
 import { AggregatorContract } from "@blockchain"
@@ -27,27 +31,45 @@ export const CHART_TEXT_COLOR = "black"
 
 class PriceChart {
     chainId: ChainId
-    private defaultPrice: number
-    private container: HTMLDivElement
     private aggregatorContract: AggregatorContract
+
+    private defaultPrice: number
+    private period: Period
+    private path: Bytes
+    private darkMode: boolean
+
+    private container: HTMLDivElement
     chart: IChartApi
     series: ISeriesApi<"Baseline">
 
     constructor(
         chainId: ChainId,
         container: HTMLDivElement,
-        defaultPrice?: number,
-        darkMode?: boolean
+        darkMode: boolean,
+        period: Period,
+        onCrosshairMove?: MouseEventHandler<Time>,
+        defaultPrice?: number
     ) {
         this.chainId = chainId
-        this.defaultPrice = defaultPrice ?? 0
-        this.container = container
+
         this.aggregatorContract = new AggregatorContract(
             this.chainId,
             chainInfos[this.chainId].aggregator
         )
 
+        this.defaultPrice = defaultPrice ?? 0
+
+        this.darkMode = darkMode
+        this.period = period
+        this.path = "0x"
+        this.container = container
+
         this.chart = createChart(container)
+
+        if (onCrosshairMove) {
+            this.chart.subscribeCrosshairMove(onCrosshairMove)
+        }
+
         this.series = this.chart.addBaselineSeries({
             baseValue: { type: "price", price: defaultPrice },
             topLineColor: TOP_LINE_COLOR,
@@ -58,16 +80,37 @@ class PriceChart {
             bottomFillColor2: BOTTOM_FILL_COLOR2,
         })
 
-        this.chart.timeScale().fitContent()
-
-        this.updateChartOptionsForDarkMode(darkMode)
+        this.applyOptions()
     }
 
-    private getOptions(darkMode?: boolean) {
-        return {
+    updateDarkMode(darkMode: boolean) {
+        this.darkMode = darkMode
+        this.applyOptions()
+    }
+
+    async updatePeriod(period: Period) {
+        this.period = period
+        await this.setData()
+    }
+
+    async updatePath(path: Bytes) {
+        this.path = path
+        await this.setData()
+    }
+
+    private applyOptions() {
+        const formatTickMark: TickMarkFormatter = (
+            time,
+            tickMarkType,
+            locale
+        ): string => {
+            return "Cuong"
+        }
+
+        const options: DeepPartial<TimeChartOptions> = {
             layout: {
                 background: { type: ColorType.Solid, color: "transparent" },
-                textColor: darkMode ? LIGHT_COLOR : DARK_COLOR,
+                textColor: this.darkMode ? LIGHT_COLOR : DARK_COLOR,
             },
             rightPriceScale: {
                 borderVisible: false,
@@ -77,19 +120,26 @@ class PriceChart {
             timeScale: {
                 timeVisible: true,
                 borderVisible: false,
+                tickMarkFormatter: formatTickMark,
+            },
+            handleScroll: false,
+            handleScale: false,
+            crosshair: {
+                vertLine: {
+                    labelVisible: false,
+                },
             },
         }
+
+        this.chart.applyOptions(options)
+        this.chart.timeScale().fitContent()
     }
 
-    updateChartOptionsForDarkMode(darkMode?: boolean) {
-        this.chart.applyOptions(this.getOptions(darkMode))
-    }
-
-    async setData(period: Period, path: Bytes) {
+    private async setData() {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
-                secondOffset: 1,
-                numberOfSnapshots: 12,
+                secondOffset: 60,
+                numberOfSnapshots: 24,
             },
             [Period._1W]: {
                 secondOffset: 60 * 60 * 4,
@@ -104,19 +154,20 @@ class PriceChart {
                 numberOfSnapshots: 24,
             },
         }
-        const { numberOfSnapshots, secondOffset } = periodToSnapshotOptions[period]
+        const { numberOfSnapshots, secondOffset } =
+      periodToSnapshotOptions[this.period]
 
         const targets: number[] = []
         for (let i = 0; i < numberOfSnapshots; i++) {
-            targets.push(utils.time.currentMilliseconds() - secondOffset * i)
+            targets.push(utils.time.currentSeconds() - secondOffset * i)
         }
-        console.log(path)
+
         const priceX96s = await this.aggregatorContract.aggregatePriceX96(
             BigInt(secondOffset),
             numberOfSnapshots,
-            path
+            this.path
         )
-        console.log(priceX96s)
+
         if (priceX96s === null) return null
 
         const prices = priceX96s.map((priceX96) =>
@@ -126,18 +177,14 @@ class PriceChart {
 
         for (let i = 0; i < numberOfSnapshots; i++) {
             data.push({
-                time: utils.time.formatMillisecondsAsDate(targets[i]),
+                time: utils.time.secondsToUtc(targets[i]),
                 value: prices[i],
             })
         }
         data.reverse()
-        console.log(data)
 
         this.series.setData(data)
-    }
-
-    render(): HTMLDivElement {
-        return this.container
+        this.chart.timeScale().fitContent()
     }
 }
 

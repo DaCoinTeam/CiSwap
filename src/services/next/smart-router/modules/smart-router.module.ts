@@ -181,7 +181,7 @@ class SmartRouter {
         if (bytes === null) return null
 
         const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
-        console.log(amountsQuoted)
+
         const { index, value } = exactInput
             ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
             : utils.array.findMinBigIntIndexAndValueExceptZero(amountsQuoted)
@@ -190,7 +190,6 @@ class SmartRouter {
         const amountOut = exactInput ? value : amount
         
         return new Quote(amountIn, amountOut, paths[index], exactInputs[index])
-
     }
 }
 export default SmartRouter

@@ -5,23 +5,23 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
 import { PeriodTabs } from "@app/_shared"
-import { TokenPairDisplay, TokenPriceRatioDisplay } from "../../_components"
-import { ChartTimePeriod } from "@utils"
+import { TokenPairDisplay, TokenPriceDisplay } from "../../../_shared"
+import { Period } from "@utils"
 
 interface PriceChartProps {
   className?: string;
 }
 
 interface PeriodContext {
-  period: ChartTimePeriod;
-  setPeriod: React.Dispatch<React.SetStateAction<ChartTimePeriod>>;
+  period: Period;
+  setPeriod: React.Dispatch<React.SetStateAction<Period>>;
 }
 
 export const PeriodContext = createContext<PeriodContext | null>(null)
 
 const PriceChart = (props: PriceChartProps) => {
 
-    const [period, setPeriod] = useState(ChartTimePeriod._24H)
+    const [period, setPeriod] = useState(Period._24H)
 
     return (
         <Card className={`${props.className}`}>
@@ -29,13 +29,12 @@ const PriceChart = (props: PriceChartProps) => {
                 <PeriodContext.Provider value={{ period, setPeriod }}>
                     <div className="grid md:flex justify-between gap-4">
                         <div>
-                            <TokenPairDisplay/>
+                            {/* <TokenPairDisplay /> */}
                             <Spacer y={1} />
-                            <TokenPriceRatioDisplay />
+                            {/* <TokenPriceDisplay /> */}
                         </div>
                         <PeriodTabs tab={period} setTab={setPeriod} />
                     </div>
-
                     <Spacer y={6} />
                     <Chart />
                 </PeriodContext.Provider>

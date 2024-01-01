@@ -1,8 +1,8 @@
 import {
+    computeBigIntMultiplyNumber,
     computeExponent,
     computeLeftShift,
-    computeRightShift,
-    computeRound,
+    computeRightShift
 } from "./base-math.util"
 
 export const computeRedenomination = (
@@ -31,10 +31,12 @@ export const computeDeRedenomination = (
 ): bigint => {
     precision = precision ?? 5
     try {
-        const result =
-      (BigInt(computeRound(amount * computeExponent(precision), 0)) *
-        BigInt(computeExponent(decimals))) /
-      BigInt(computeExponent(precision))
+        const exponent = computeExponent(decimals)
+        const result = computeBigIntMultiplyNumber(
+            BigInt(exponent),
+            amount,
+            precision
+        )
         if (isNaN(Number(result))) throw new Error()
         return result
     } catch (error) {
@@ -57,10 +59,11 @@ export const computeSlippage = (
 ) => {
     round = round ?? 5
     const exponent = computeExponent(round)
-    const percentageMultipleExponent = BigInt(
-        computeRound(slippage * exponent, 0)
+
+    const amountSlippage = computeBigIntMultiplyNumber(
+        amount,
+        slippage * exponent,
+        round
     )
-    const amountSlippage =
-    (amount * percentageMultipleExponent) / BigInt(exponent)
     return exactInput ? amount - amountSlippage : amount + amountSlippage
 }

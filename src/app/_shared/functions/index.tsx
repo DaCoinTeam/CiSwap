@@ -1,6 +1,6 @@
 import { TransactionHash } from "web3"
 import { ViewOnExplorer } from "../uis"
-import { TitleDisplay } from "../displays"
+import { TitleDisplay } from "../components"
 import { toast } from "react-toastify"
 import React from "react"
 

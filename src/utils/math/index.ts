@@ -2,8 +2,10 @@ import {
     computeExponent,
     computeInverse,
     computeLeftShift,
+    computeBigIntMultiplyNumber,
     computeRightShift,
     computeRound,
+    computeBigIntDivideNumber,
 } from "./base-math.util"
 
 import {
@@ -20,6 +22,8 @@ const mathUtils = {
     computeLeftShift: computeLeftShift,
     computeRightShift: computeRightShift,
     computeRound: computeRound,
+    computeBigIntMultiplyNumber: computeBigIntMultiplyNumber,
+    computeBigIntDivideNumber: computeBigIntDivideNumber,
     computeDeRedenomination: computeDeRedenomination,
     computeDivideX96: computeDivideX96,
     computeMultiplyX96: computeMultiplyX96,

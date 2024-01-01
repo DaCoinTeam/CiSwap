@@ -26,11 +26,43 @@ export const computeInverse = (value: number, round: number): number => {
     }
 }
 
-export const computeRound = (value: number | string, round: number): number => {
+export const computeRound = (value: number | string, round?: number): number => {
     try {
         return Number(Number.parseFloat(value.toString()).toFixed(round))
     } catch (error) {
         console.error(error)
         return 0
+    }
+}
+
+export const computeBigIntMultiplyNumber = (
+    bigint: bigint,
+    number: number,
+    precision?: number
+): bigint => {
+    try {
+        precision = precision ?? 5
+        return (
+            (bigint * BigInt(computeRound(number * computeExponent(precision)))) /
+      BigInt(computeExponent(precision))
+        )
+    } catch (error) {
+        console.error(error)
+        return BigInt(0)
+    }
+}
+
+export const computeBigIntDivideNumber = (
+    bigint: bigint,
+    number: number,
+    precision?: number
+): bigint => {
+    try {
+        precision = precision ?? 5
+        return (bigint * BigInt(computeExponent(precision))) /
+      BigInt(computeRound(number * computeExponent(precision)))
+    } catch (error) {
+        console.error(error)
+        return BigInt(0)
     }
 }

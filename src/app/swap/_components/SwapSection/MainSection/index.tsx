@@ -69,7 +69,7 @@ const MainSection = () => {
                 )
             )
             formik.setFieldValue("exactInput", false)
-            formik.setFieldValue("path", quote.path)
+            formik.setFieldValue("steps", quote.path.steps)
 
             setPreventExecutionOut(true)
         }
@@ -120,7 +120,7 @@ const MainSection = () => {
             )
 
             formik.setFieldValue("exactInput", true)
-            formik.setFieldValue("path", quote.path)
+            formik.setFieldValue("steps", quote.path.steps)
 
             setPreventExecutionIn(true)
         }

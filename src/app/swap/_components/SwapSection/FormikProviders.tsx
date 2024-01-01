@@ -19,7 +19,7 @@ import { Step } from "@services"
 interface FormikValues {
   amountIn: string;
   amountOut: string;
-  path: Step[];
+  steps: Step[];
   slippage: number;
   exactInput: boolean;
 }
@@ -27,7 +27,7 @@ interface FormikValues {
 const initialValues: FormikValues = {
     amountIn: "",
     amountOut: "",
-    path: [],
+    steps: [],
     slippage: 0.01,
     exactInput: true,
 }

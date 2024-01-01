@@ -6,7 +6,7 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 import Chart from "./Chart"
 import { PeriodTabs } from "@app/_shared"
 import { TokenPairDisplay, TokenPriceDisplay } from "../../../_shared"
-import { Period } from "@utils"
+import { Period } from "@services"
 
 interface PriceChartProps {
   className?: string;
@@ -20,7 +20,6 @@ interface PeriodContext {
 export const PeriodContext = createContext<PeriodContext | null>(null)
 
 const PriceChart = (props: PriceChartProps) => {
-
     const [period, setPeriod] = useState(Period._24H)
 
     return (

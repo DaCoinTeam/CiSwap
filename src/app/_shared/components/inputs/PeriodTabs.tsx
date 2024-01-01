@@ -1,31 +1,31 @@
 import React from "react"
 import { Tab, Tabs } from "@nextui-org/react"
-import { ChartTimePeriod } from "@utils"
+import { Period } from "@services"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 
 interface PeriodTabsProps {
   className?: string;
   size?: "sm" | "md" | "lg";
-  tab: ChartTimePeriod;
-  setTab: React.Dispatch<React.SetStateAction<ChartTimePeriod>>;
+  tab: Period;
+  setTab: React.Dispatch<React.SetStateAction<Period>>;
 }
 
-const _periods = [
+const periods = [
     {
-        key: ChartTimePeriod._24H,
+        key: Period._24H,
         value: "24H",
     },
     {
-        key: ChartTimePeriod._1W,
+        key: Period._1W,
         value: "1W",
     },
     {
-        key: ChartTimePeriod._1M,
+        key: Period._1M,
         value: "1M",
     },
     {
-        key: ChartTimePeriod._1Y,
+        key: Period._1Y,
         value: "1Y",
     },
 ]
@@ -39,9 +39,9 @@ const PeriodTabs = (props: PeriodTabsProps) => {
         ? "group-data-[selected=true]:text-black"
         : "group-data-[selected=true]:text-white"
     
-    const _selectionChange = (key: React.Key) => {
+    const onChangeSelection = (key: React.Key) => {
         const _key = key.toString()
-        props.setTab(_key as ChartTimePeriod)
+        props.setTab(_key as Period)
     }
 
     return (
@@ -55,10 +55,10 @@ const PeriodTabs = (props: PeriodTabsProps) => {
                 tabContent: `font-bold ${_selected}`,
             }}
             selectedKey={props.tab}
-            onSelectionChange={_selectionChange}
+            onSelectionChange={onChangeSelection}
         >
-            {_periods.map((_period) => (
-                <Tab key={_period.key} title={_period.value} />
+            {periods.map((period) => (
+                <Tab key={period.key} title={period.value} />
             ))}
         </Tabs>
     )

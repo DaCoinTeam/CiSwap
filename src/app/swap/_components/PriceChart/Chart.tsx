@@ -23,7 +23,7 @@ const Chart = () => {
     const periodContext = useContext(PeriodContext)!
     const { period } = periodContext
 
-    const formik = useContext(FormikContext)! 
+    const formik = useContext(FormikContext)!
 
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
@@ -45,7 +45,17 @@ const Chart = () => {
     }, [])
 
     useEffect(() => {
-    }, [])
+        const handleEffect = async () => {
+            const priceChart = priceChartRef.current
+            if (priceChart === null) return
+            const path = services.next.smartRouter.encodePacked(
+                formik.values.steps,
+                formik.values.exactInput
+            )
+            await priceChart.updateTicks(period, path)
+        }
+        handleEffect()
+    }, [period])
 
     return <div ref={chartContainerRef} />
 }

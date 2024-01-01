@@ -34,7 +34,7 @@ class Path {
     private hasEncounteredPair(tokenNext: Address): boolean {
         const length = this.steps.length
         if (length < 3) {
-            throw new Error("Path length must be at least 3")
+            throw new Error("Path length must be at least 3.")
         }
 
         const pairNext = new Pair(this.steps.at(-1) as Address, tokenNext)

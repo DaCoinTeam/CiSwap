@@ -38,7 +38,7 @@ class SmartRouter {
     private async getAllPools(): Promise<Pool[] | null> {
         const poolAddresses = await this.factoryContract.allPools()
         if (poolAddresses === null) return null
-        if (!poolAddresses.length) throw new Error("No pool found")
+        if (!poolAddresses.length) throw new Error("No pool found.")
 
         const pools: Pool[] = []
         const promises: Promise<void>[] = []
@@ -115,7 +115,7 @@ class SmartRouter {
 
             hopsCount++
         }
-        if (!pathExactEnds.length) throw new Error("No path found")
+        if (!pathExactEnds.length) throw new Error("No path found.")
         return pathExactEnds
     }
 

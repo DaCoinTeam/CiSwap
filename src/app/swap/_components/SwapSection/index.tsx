@@ -27,8 +27,8 @@ const SwapSection = (props: SwapSectionProps) => {
                 <Spacer y={12} />
                 <AppButton
                     className="w-full"
-                    content="Swap"
-                    typeSubmit
+                    text="Swap"
+                    submit
                 />
             </CardBody>
         </Card>

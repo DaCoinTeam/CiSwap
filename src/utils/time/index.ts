@@ -1,13 +1,15 @@
 import utc from "dayjs/plugin/utc"
+import LocalizedFormat from "dayjs/plugin/localizedFormat"
 import dayjs from "dayjs"
 import { computeRound } from "../math/base-math.util"
 import { UTCTimestamp } from "lightweight-charts"
 dayjs.extend(utc)
+dayjs.extend(LocalizedFormat)
 
 const currentSeconds = (): number => computeRound(dayjs().valueOf() / 1000)
 
-const formatMillisecondsAsDate = (milliseconds: number): string => {
-    return dayjs(milliseconds).format("YYYY-MM-DD")
+const getHoursFromUtcSeconds = (seconds: number): string => {
+    return dayjs(seconds * 1000).utc().format("LT")
 }
 
 const secondsToUtc = (seconds: number): UTCTimestamp =>
@@ -19,7 +21,7 @@ const secondsToUtc = (seconds: number): UTCTimestamp =>
 
 const timeUtils = {
     currentSeconds: currentSeconds,
-    formatMillisecondsAsDate: formatMillisecondsAsDate,
+    getHoursFromUtcSeconds: getHoursFromUtcSeconds,
     secondsToUtc: secondsToUtc,
 }
 

@@ -58,8 +58,8 @@ const LPTokenActions = (props: LPTokenActionsProps) => {
     const _renderOptions = () => {
         return !isProviderRegistered ? (
             <AppButton
-                content="Register Provider"
-                onPress={_handleRegisterProvider}
+                text="Register Provider"
+                onClick={_handleRegisterProvider}
             />
         ) : (
             <div className="grid grid-cols-2 gap-4">

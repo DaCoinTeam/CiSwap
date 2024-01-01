@@ -1,39 +1,49 @@
 import React from "react"
 import { Button } from "@nextui-org/react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
 
 interface AppButtonProps {
   className?: string;
-  size?: "sm" | "md" | "lg";
-  onPress?: () => void;
-  typeSubmit?: boolean;
-  content: string;
+  type?: Type;
+  submit?: boolean;
+  text?: string;
   bordered?: boolean;
+  onClick?: () => void;
 }
 
 const AppButton = (props: AppButtonProps) => {
-    const darkMode = useSelector((state: RootState) => state.configuration.darkMode) 
-    const _variant = props.bordered ? "bordered" : undefined
-    const _color = props.bordered ? "border-teal-500" : "bg-teal-500"
-    const _size = props.size ?? "md"
-    const _bgDarkMode = darkMode ? "text-black" : "text-white"
-    const _borderDarkMode = "text-teal-500"
-    const _submit = props.typeSubmit ? "submit" : undefined
+    const type: Type = props.type ?? 0
+    const typeToClassNames: Record<Type, ClassNames> = {
+        0: {
+            borderOrBackgroundColor: "bg-teal-500",
+        },
+        1: {
+            size: "lg",
+            borderOrBackgroundColor: "border-teal-500",
+            variant: "bordered",
+        },
+    }
+    const classNames = typeToClassNames[type]
     return (
         <Button
-            size={_size}
-            type={_submit}
-            variant={_variant}
-            className={`${_color} font-bold ${
-                !props.bordered ? _bgDarkMode : _borderDarkMode
+            size={classNames.size}
+            type={props.submit ? "submit" : undefined}
+            variant={classNames.variant}
+            className={`${classNames.borderOrBackgroundColor} font-bold
             } ${props.className}`}
-            onPress={props.onPress}
+            onPress={props.onClick}
         >
             {" "}
-            {props.content}{" "}
+            {props.text}{" "}
         </Button>
     )
 }
 
 export default AppButton
+
+type Type = 0 | 1;
+
+interface ClassNames {
+  size?: "sm" | "lg";
+  variant?: "bordered";
+  borderOrBackgroundColor: string;
+}

@@ -4,7 +4,6 @@ import React, {
     useContext,
     useEffect,
     useRef,
-    useState,
 } from "react"
 
 import { RootState } from "@redux"
@@ -85,6 +84,18 @@ const Chart = () => {
         }
         handleEffect()
     }, [period])
+
+    const darkModeHasMounted = useRef(false)
+    useEffect(() => {
+        if (!darkModeHasMounted.current) {
+            darkModeHasMounted.current = true
+            return
+        }
+        const priceChart = priceChartRef.current
+        if (priceChart === null) return
+
+        priceChart.updateDarkMode(darkMode)
+    }, [darkMode])
 
     return <div ref={chartContainerRef} />
 }

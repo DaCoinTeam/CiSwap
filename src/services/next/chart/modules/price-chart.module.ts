@@ -23,12 +23,10 @@ const BOTTOM_LINE_COLOR = "rgba(239, 68, 68, 1)"
 const BOTTOM_FILL_COLOR1 = "rgba(239, 68, 68, 0.05)"
 const BOTTOM_FILL_COLOR2 = "rgba(239, 68, 68, 0.28)"
 
-export const DARK_COLOR = "rgb(17 24 28)" as const
-export const LIGHT_COLOR = "rgb(236, 237, 238)" as const
+export const DARK_COLOR = "rgb(17 24 28)"
+export const LIGHT_COLOR = "rgb(236, 237, 238)"
 
 export const CHART_LINE_COLOR = "#2962FF"
-export const CHART_TEXT_COLOR = "black"
-
 class PriceChart {
     chainId: ChainId
     private aggregatorContract: AggregatorContract
@@ -99,12 +97,15 @@ class PriceChart {
     }
 
     private applyOptions() {
-        const formatTickMark: TickMarkFormatter = (
-            time,
-            tickMarkType,
-            locale
-        ): string => {
-            return "Cuong"
+        const formatTickMark: TickMarkFormatter = (time): string => {
+            const timeInNumber = Number(time.toString())
+            const periodToReturn: Record<Period, string> = {
+                [Period._24H]: utils.time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1W]: utils.time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1M]: utils.time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1Y]: utils.time.getHoursFromUtcSeconds(timeInNumber),
+            }
+            return periodToReturn[this.period]
         }
 
         const options: DeepPartial<TimeChartOptions> = {

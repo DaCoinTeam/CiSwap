@@ -27,9 +27,9 @@ const Withdraw = (props: WithdrawProps) => {
         <>
             <AppButton
                 className={`${props.className}`}
-                content="Withdraw"
+                text="Withdraw"
                 bordered
-                onPress={_open}
+                onClick={_open}
             />
             <Modal isOpen={isOpen} onClose={_close} size="sm">
                 <ModalContent>

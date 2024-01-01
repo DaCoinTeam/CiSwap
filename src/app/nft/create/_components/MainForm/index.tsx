@@ -27,7 +27,7 @@ const MainForm = () => {
                         <UploadImage />
                         <div className="flex flex-col justify-between gap-6">
                             <InputFields />
-                            <AppButton content="Create" className="w-full" typeSubmit/>
+                            <AppButton className="w-full" submit text="Create" />
                         </div>
 
                     </div>

@@ -27,8 +27,8 @@ const Deposit = (props: DepositProps) => {
         <>
             <AppButton
                 className={`${props.className}`}
-                content="Deposit"
-                onPress={_open}
+                text="Deposit"
+                onClick={_open}
             />
             <Modal isOpen={isOpen} onClose={_close} size="sm">
                 <ModalContent>
@@ -40,8 +40,8 @@ const Deposit = (props: DepositProps) => {
                         </ModalBody>
                         <ModalFooter className="p-5">
                             <AppButton
-                                typeSubmit
-                                content="Deposit"
+                                submit
+                                text="Deposit"
                                 className="w-full"
                             />
                         </ModalFooter>

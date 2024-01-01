@@ -43,7 +43,7 @@ const MainForm = () => {
                             <div className="justify-between flex flex-col">
                                 <ChooseTokenPrices />
                                 <Spacer y={12} />
-                                <AppButton typeSubmit content="Create" />
+                                <AppButton submit text="Create" />
                             </div>
                         </FinishSelectedPairContext.Provider>
                     </div>

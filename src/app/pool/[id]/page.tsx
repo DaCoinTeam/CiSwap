@@ -47,8 +47,8 @@ const Page = () => {
                 </div>
 
                 <div className="flex gap-3 mt-4 sm:mt-0">
-                    <AppButton bordered content="Earn" onPress={_forwardEarn}/>
-                    <AppButton content="Swap" onPress={_forwardSwap}/>
+                    <AppButton bordered text="Earn" onClick={_forwardEarn}/>
+                    <AppButton text="Swap" onClick={_forwardSwap}/>
                 </div>
             </div>
             <Spacer y={12} />

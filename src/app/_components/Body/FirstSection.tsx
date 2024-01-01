@@ -20,7 +20,7 @@ const FirstSection = () => {
                 <Spacer y={2} />
                 <div>Swap, Earn and Exclusive Ownership with STARCI Token!</div>
                 <Spacer y={4} />
-                <AppButton onPress={_pushSwap} content="Swap Now" />
+                <AppButton onClick={_pushSwap} text="Swap Now" />
             </div>
         </div>
     )

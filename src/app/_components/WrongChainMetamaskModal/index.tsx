@@ -67,8 +67,8 @@ const WrongChainMetamaskModal = (props: MetamaskModalProps) => {
                 </ModalBody>
                 <ModalFooter className="p-5">
                     <div className="flex flex-col gap-3 w-full">
-                        <AppButton onPress={_switchChain} content="Switch network in wallet"/>
-                        <AppButton onPress={_disconnectWallet} bordered content="Disconnect wallet"/>
+                        <AppButton onClick={_switchChain} text="Switch network in wallet"/>
+                        <AppButton onClick={_disconnectWallet} bordered text="Disconnect wallet"/>
                     </div>
                 </ModalFooter>
             </ModalContent>

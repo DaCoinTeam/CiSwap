@@ -6,7 +6,7 @@ import {
     TokenDisplay,
 } from "@app/_shared"
 import { PoolContext } from "../../../../../_hooks"
-import { FormikPropsContext } from "../FormikProviders"
+import { FormikContext } from "../FormikProviders"
 import { PoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
@@ -26,7 +26,7 @@ const MainSection = () => {
     const { web3State } = metamaskContext
     const { web3 } = web3State
 
-    const formik = useContext(FormikPropsContext)
+    const formik = useContext(FormikContext)
     if (formik === null) return
 
     const chainId = useSelector(

@@ -9,7 +9,7 @@ import {
 import { Select, SelectItem, Spacer } from "@nextui-org/react"
 import { FinishSelectedPairContext } from "../index"
 import { RootState } from "@redux"
-import { FormikPropsContext } from "../FormikPropsContext"
+import { FormikContext } from "../FormikContext"
 import { useSelector } from "react-redux"
 import { ERC20Contract } from "@blockchain"
 import utils from "@utils"
@@ -19,16 +19,12 @@ interface AddTokensProps {
 }
 
 const DepositTokens = (props: AddTokensProps) => {
-    const formik = useContext(FormikPropsContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext === null) return
-
-    const { finishSelectedPair } = finishSelectedPairContext
+    const { finishSelectedPair } = useContext(FinishSelectedPairContext)!
 
     const _finishSelectedPair = account != null && finishSelectedPair
 

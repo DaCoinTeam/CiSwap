@@ -2,7 +2,7 @@
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 import React, { useContext } from "react"
 import { TitleDisplay } from "@app/_shared"
-import { FormikPropsContext } from "../FormikPropsContext"
+import { FormikContext } from "../FormikContext"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { FinishSelectedPairContext } from "../index"
@@ -41,17 +41,13 @@ const protocolFees: Fee[] = [
 ]
 
 const PickFee = (props: PickFeeProps) => {
-    const formik = useContext(FormikPropsContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
     const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext === null) return
-
-    const { finishSelectedPair } = finishSelectedPairContext
+    const  { finishSelectedPair }  = useContext(FinishSelectedPairContext)!
 
     const onClick = (fee: Fee) => {
         formik.setFieldValue("_feeId", fee.key)

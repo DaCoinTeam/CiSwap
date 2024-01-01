@@ -24,7 +24,7 @@ import { RootState } from "@redux"
 import { TIME_OUT } from "@config"
 import { Address } from "web3"
 import { AppButton, LoadingDisplay } from "@app/_shared"
-import { FormikPropsContext } from "../../FormikPropsContext"
+import { FormikContext } from "../../FormikContext"
 import { FinishSelectedPairContext } from "../../index"
 
 interface SelectTokenProps {
@@ -34,7 +34,7 @@ interface SelectTokenProps {
 }
 
 const SelectToken = (props: SelectTokenProps) => {
-    const formik = useContext(FormikPropsContext)
+    const formik = useContext(FormikContext)
     if (formik === null) return
 
     const finishSelectedPairContext = useContext(FinishSelectedPairContext)
@@ -182,8 +182,8 @@ const SelectToken = (props: SelectTokenProps) => {
                               </Link>
                               <AppButton
                                   size="lg"
-                                  onPress={() => onClickImport(tempToken, tempSymbol)}
-                                  content="Import"
+                                  onClick={() => onClickImport(tempToken, tempSymbol)}
+                                  text="Import"
                               />
                           </div>
                       ) : null}

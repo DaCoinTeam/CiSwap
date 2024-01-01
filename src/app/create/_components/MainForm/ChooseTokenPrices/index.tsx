@@ -4,7 +4,7 @@ import { ErrorDisplay, NumberInput, TitleDisplay } from "@app/_shared"
 import { Button, Card, CardBody, Spacer } from "@nextui-org/react"
 import { RootState } from "@redux"
 import { FinishSelectedPairContext } from "../index"
-import { FormikPropsContext } from "../FormikPropsContext"
+import { FormikContext } from "../FormikContext"
 import { useSelector } from "react-redux"
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline"
 import utils from "@utils"
@@ -14,18 +14,14 @@ interface ChooseTokenPricesProps {
 }
 
 const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
-    const formik = useContext(FormikPropsContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
     const basePriceAParsed = utils.format.parseNumber(formik.values.basePriceA)
     const maxPriceAParsed = utils.format.parseNumber(formik.values.maxPriceA)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext === null) return
-
-    const { finishSelectedPair } = finishSelectedPairContext
+    const { finishSelectedPair } = useContext(FinishSelectedPairContext)!
 
     const _finishSelectedPair = account != null && finishSelectedPair
 

@@ -1,12 +1,12 @@
 "use client"
 import React, { useContext, useEffect, useState } from "react"
-import { FormikPropsContext } from "../FormikProviders"
+import { FormikContext } from "../FormikProviders"
 import { Button, Image } from "@nextui-org/react"
 import { CameraIcon } from "@heroicons/react/24/outline"
 import { createBlobUrlFromImageFile } from "@utils"
 
 const UploadImage = () => {
-    const formik = useContext(FormikPropsContext)
+    const formik = useContext(FormikContext)
     if (formik === null) return
 
     const [imageBlobUrl, setImageBlobUrl] = useState("")

@@ -4,15 +4,14 @@ import React, { useContext } from "react"
 import SelectToken from "./SelectToken"
 import { TitleDisplay } from "@app/_shared"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import { FormikPropsContext } from "../FormikPropsContext"
+import { FormikContext } from "../FormikContext"
 
 interface SelectTokenPairProps {
     className?: string
 }
 
 const SelectTokenPair = (props: SelectTokenPairProps) => {
-    const formik = useContext(FormikPropsContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
     return (
         <div className = {props.className}>

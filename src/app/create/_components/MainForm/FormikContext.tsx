@@ -46,16 +46,16 @@ const initialValues: FormikValues = {
     fee: 0.0025,
 }
 
-export const FormikPropsContext =
+export const FormikContext =
   createContext<FormikProps<FormikValues> | null>(null)
 
 const _renderBody = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => (
-    <FormikPropsContext.Provider value={props}>
+    <FormikContext.Provider value={props}>
         <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
-    </FormikPropsContext.Provider>
+    </FormikContext.Provider>
 )
 
 const FormikProviders = (props: ContextProps) => {

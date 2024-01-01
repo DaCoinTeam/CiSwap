@@ -1,11 +1,11 @@
 "use client"
 import { Button, Chip, Input, Textarea } from "@nextui-org/react"
 import React, { useContext, } from "react"
-import { FormikPropsContext } from "../FormikProviders"
+import { FormikContext } from "../FormikProviders"
 import { NumberInput, TitleDisplay } from "@app/_shared"
 import { PlusIcon } from "@heroicons/react/24/outline"
 const InputFields = () => {
-    const formik = useContext(FormikPropsContext)
+    const formik = useContext(FormikContext)
     if (formik === null) return
 
     const _handleAddButton = () => {

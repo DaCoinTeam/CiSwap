@@ -6,6 +6,7 @@ interface AppButtonProps {
   submit?: boolean;
   text?: string;
   bordered?: boolean;
+  size?: "sm" | "lg"
   onClick?: () => void;
 }
 
@@ -20,6 +21,7 @@ const AppButton = (props: AppButtonProps) => {
         }
     return (
         <Button
+            size={props.size}
             type={props.submit ? "submit" : undefined}
             variant={attributes.variant}
             className={`${attributes.classNames} font-bold

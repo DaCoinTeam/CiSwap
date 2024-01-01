@@ -3,7 +3,6 @@ import { Button } from "@nextui-org/react"
 
 interface AppButtonProps {
   className?: string;
-  type?: Type;
   submit?: boolean;
   text?: string;
   bordered?: boolean;
@@ -11,24 +10,23 @@ interface AppButtonProps {
 }
 
 const AppButton = (props: AppButtonProps) => {
-    const type: Type = props.type ?? 0
-    const typeToClassNames: Record<Type, ClassNames> = {
-        0: {
-            borderOrBackgroundColor: "bg-teal-500",
-        },
-        1: {
-            size: "lg",
-            borderOrBackgroundColor: "border-teal-500",
+    const attributes: Attributes = props.bordered
+        ? {
+            classNames: {
+                borderOrBackgroundColor: "bg-teal-500",
+            },
+        }
+        : {
             variant: "bordered",
-        },
-    }
-    const classNames = typeToClassNames[type]
+            classNames: {
+                borderOrBackgroundColor: "border-teal-500",
+            },
+        }
     return (
         <Button
-            size={classNames.size}
             type={props.submit ? "submit" : undefined}
-            variant={classNames.variant}
-            className={`${classNames.borderOrBackgroundColor} font-bold
+            variant={attributes.variant}
+            className={`${attributes.classNames.borderOrBackgroundColor} font-bold
             } ${props.className}`}
             onPress={props.onClick}
         >
@@ -40,10 +38,9 @@ const AppButton = (props: AppButtonProps) => {
 
 export default AppButton
 
-type Type = 0 | 1;
-
-interface ClassNames {
-  size?: "sm" | "lg";
+interface Attributes {
   variant?: "bordered";
-  borderOrBackgroundColor: string;
+  classNames: {
+    borderOrBackgroundColor: string;
+  };
 }

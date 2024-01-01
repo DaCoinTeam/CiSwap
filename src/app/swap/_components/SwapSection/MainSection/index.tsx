@@ -7,7 +7,7 @@ import {
 } from "@app/_shared"
 import { Button, Spacer } from "@nextui-org/react"
 import { SwapContext } from "../../../_hooks"
-import { FormikPropsContext } from "../FormikProviders"
+import { FormikContext } from "../FormikProviders"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
@@ -16,10 +16,11 @@ import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 import { services } from "@services"
 
 const MainSection = () => {
-    const swapContext = useContext(SwapContext)
+    const swapContext = useContext(SwapContext)!
+    const { swapState, actions } = swapContext
+    const { doReverse } = actions
 
-    const formik = useContext(FormikPropsContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
@@ -141,10 +142,6 @@ const MainSection = () => {
         formik.setFieldValue("amountOut", value)
         setFinishExecuteIn(false)
     }
-
-    if (swapContext === null) return
-    const { swapState, actions } = swapContext
-    const { doReverse } = actions
 
     const onClickReverse = async () => {
         await doReverse()

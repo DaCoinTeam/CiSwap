@@ -48,15 +48,15 @@ const Chart = () => {
         const handleEffect = async () => {
             const priceChart = priceChartRef.current
             if (priceChart === null) return
-            
+
             const path = services.next.smartRouter.encodePacked(
-                steps,
-                formik.values.exactInput
+                formik.values.steps,
+                true
             )
             await priceChart.updateTicks(period, path)
         }
         handleEffect()
-    }, [period])
+    }, [period, formik.values.steps])
 
     return <div ref={chartContainerRef} />
 }

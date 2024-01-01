@@ -127,6 +127,7 @@ const FormikProviders = (props: ContextProps) => {
                 const maxPriceAX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.maxPriceA))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
+                console.log(allowanceA)
                 if (allowanceA === null) return
                 if (allowanceA < amountADeRedenominated) {
                     const approveAReceipt = await tokenAContract.approve(
@@ -154,21 +155,9 @@ const FormikProviders = (props: ContextProps) => {
                     ? amountADeRedenominated
                     : amountBDeRedenominated
                 const _amountB = values._zeroForOne
-                    ? amountADeRedenominated
-                    : amountBDeRedenominated
+                    ? amountBDeRedenominated
+                    : amountADeRedenominated
 
-                console.log({
-                    fee: values.fee * utils.math.computeExponent(5),
-                    config: {
-                        tokenA: _tokenA,
-                        tokenB: _tokenB,
-                        amountA: _amountA,
-                        amountB: _amountB,
-                        basePriceAX96: basePriceAX96,
-                        maxPriceAX96: maxPriceAX96,
-                    },
-                })
-                console.log( chainInfos[chainId].factory)
                 const createPoolReceipt = await factoryContract.createPool({
                     fee: values.fee *  utils.math.computeExponent(5),
                     config: {

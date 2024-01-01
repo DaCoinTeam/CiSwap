@@ -17,10 +17,11 @@ export const smartRouterService = {
             const smartRouter = new SmartRouter(chainId)
             return smartRouter.findBestQuote(amount, tokenIn, tokenOut, exactInput)
         } catch (ex){
+            console.log(ex)
             return null
         }
-
     },
+    
     encodePacked: (steps: Step[], exactInput?: boolean): Bytes => {
         const path = new Path(steps)
         return exactInput ? path.encodePacked() : path.reverse().encodePacked()

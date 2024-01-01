@@ -85,54 +85,54 @@ class PriceChart {
         this.chart.applyOptions(this.getOptions(darkMode))
     }
 
-    async updateTicks(
-        period :Period,
-        path: Bytes
-    ) { 
+    async updateTicks(period: Period, path: Bytes) {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
-                secondOffset: 60 * 60,
-                numberOfSnapshots: 24
+                secondOffset: 1,
+                numberOfSnapshots: 12,
             },
             [Period._1W]: {
                 secondOffset: 60 * 60 * 4,
-                numberOfSnapshots: 7 * 6
+                numberOfSnapshots: 7 * 6,
             },
             [Period._1M]: {
                 secondOffset: 60 * 60 * 24,
-                numberOfSnapshots: 30
+                numberOfSnapshots: 30,
             },
             [Period._1Y]: {
                 secondOffset: 60 * 60 * 24 * 15,
-                numberOfSnapshots: 24
+                numberOfSnapshots: 24,
             },
-        } 
-        const {numberOfSnapshots, secondOffset} = periodToSnapshotOptions[period]
-
+        }
+        const { numberOfSnapshots, secondOffset } = periodToSnapshotOptions[period]
 
         const targets: number[] = []
         for (let i = 0; i < numberOfSnapshots; i++) {
             targets.push(utils.time.currentMilliseconds() - secondOffset * i)
         }
-
+        console.log(path)
         const priceX96s = await this.aggregatorContract.aggregatePriceX96(
             BigInt(secondOffset),
-            utils.math.computeRound(numberOfSnapshots / 1000),
+            numberOfSnapshots,
             path
         )
-
-        if (priceX96s == null) return null
+        console.log(priceX96s)
+        if (priceX96s === null) return null
 
         const prices = priceX96s.map((priceX96) =>
             utils.math.computeDivideX96(priceX96)
         )
         const data: BaselineData<Time>[] = []
+
         for (let i = 0; i < numberOfSnapshots; i++) {
             data.push({
                 time: utils.time.formatMillisecondsAsDate(targets[i]),
                 value: prices[i],
             })
         }
+        data.reverse()
+        console.log(data)
+
         this.series.setData(data)
     }
 
@@ -144,6 +144,6 @@ class PriceChart {
 export default PriceChart
 
 interface SnapshotOptions {
-    secondOffset: number
-    numberOfSnapshots: number
+  secondOffset: number;
+  numberOfSnapshots: number;
 }

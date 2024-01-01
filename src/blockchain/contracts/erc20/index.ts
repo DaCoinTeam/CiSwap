@@ -12,7 +12,12 @@ class ERC20Contract {
     private web3?: Web3
     private sender?: Address
 
-    constructor(chainId: ChainId, ERC20Address: Address, web3?: Web3, sender?: string) {
+    constructor(
+        chainId: ChainId,
+        ERC20Address: Address,
+        web3?: Web3,
+        sender?: string
+    ) {
         this.chainId = chainId
         this.ERC20Address = ERC20Address
         this.web3 = web3
@@ -63,7 +68,7 @@ class ERC20Contract {
         }
     }
 
-    async allowance(owner: Address, spender: Address){
+    async allowance(owner: Address, spender: Address) {
         try {
             const web3 = getHttpWeb3(this.chainId)
             const contract = getERC20Contract(web3, this.ERC20Address)
@@ -74,20 +79,16 @@ class ERC20Contract {
         }
     }
 
-    async approve(spender: string, value: bigint){
-        try{
+    async approve(spender: string, value: bigint) {
+        try {
             if (!this.web3) return null
             const contract = getERC20Contract(this.web3, this.ERC20Address)
-            const data = contract.methods.approve(spender, value).encodeABI()
-            
-            return await this.web3.eth.sendTransaction({
+            return contract.methods.approve(spender, value).send({
                 from: this.sender,
-                to: this.ERC20Address,
-                data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
-        } catch(ex){
+        } catch (ex) {
             console.log(ex)
             return null
         }

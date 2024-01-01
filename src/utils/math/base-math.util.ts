@@ -9,9 +9,16 @@ export const computeLeftShift = (
 
 export const computeRightShift = (
     value: bigint,
-    numberOfBits: number
+    numberOfBits: number,
+    precision?: number
 ): number => {
-    return Number(BigInt(value) >> BigInt(numberOfBits))
+    precision = precision ?? 5
+    return (
+        Number(
+            (BigInt(value) * BigInt(computeExponent(precision))) >>
+        BigInt(numberOfBits)
+        ) / computeExponent(precision)
+    )
 }
 
 export const computeInverse = (value: number, round: number): number => {
@@ -26,7 +33,10 @@ export const computeInverse = (value: number, round: number): number => {
     }
 }
 
-export const computeRound = (value: number | string, round?: number): number => {
+export const computeRound = (
+    value: number | string,
+    round?: number
+): number => {
     try {
         return Number(Number.parseFloat(value.toString()).toFixed(round))
     } catch (error) {
@@ -59,8 +69,10 @@ export const computeBigIntDivideNumber = (
 ): bigint => {
     try {
         precision = precision ?? 5
-        return (bigint * BigInt(computeExponent(precision))) /
+        return (
+            (bigint * BigInt(computeExponent(precision))) /
       BigInt(computeRound(number * computeExponent(precision)))
+        )
     } catch (error) {
         console.error(error)
         return BigInt(0)

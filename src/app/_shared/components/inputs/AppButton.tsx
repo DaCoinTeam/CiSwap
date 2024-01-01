@@ -24,7 +24,7 @@ const AppButton = (props: AppButtonProps) => {
             size={props.size}
             type={props.submit ? "submit" : undefined}
             variant={attributes.variant}
-            className={`${attributes.classNames} font-bold
+            className={`${attributes.classNames}
             } ${props.className}`}
             onPress={props.onClick}
         >

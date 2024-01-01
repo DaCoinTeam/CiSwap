@@ -85,7 +85,7 @@ class PriceChart {
         this.chart.applyOptions(this.getOptions(darkMode))
     }
 
-    async updateTicks(period: Period, path: Bytes) {
+    async setData(period: Period, path: Bytes) {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
                 secondOffset: 1,

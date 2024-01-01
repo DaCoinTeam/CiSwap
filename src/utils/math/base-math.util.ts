@@ -10,14 +10,13 @@ export const computeLeftShift = (
 export const computeRightShift = (
     value: bigint,
     numberOfBits: number,
-    precision?: number
+    round?: number
 ): number => {
-    precision = precision ?? 5
+    round = round ?? 5
     return (
         Number(
-            (BigInt(value) * BigInt(computeExponent(precision))) >>
-        BigInt(numberOfBits)
-        ) / computeExponent(precision)
+            (BigInt(value) * BigInt(computeExponent(round))) >> BigInt(numberOfBits)
+        ) / computeExponent(round)
     )
 }
 

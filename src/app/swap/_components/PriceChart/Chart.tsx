@@ -53,7 +53,7 @@ const Chart = () => {
                 formik.values.steps,
                 true
             )
-            await priceChart.updateTicks(period, path)
+            await priceChart.setData(period, path)
         }
         handleEffect()
     }, [period, formik.values.steps])

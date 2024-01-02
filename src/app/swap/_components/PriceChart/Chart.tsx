@@ -51,10 +51,10 @@ const Chart = () => {
         priceChartRef.current = priceChart
     }, [])
 
-    const stepsHasMounted = useRef(false)
+    const stepshasMountedRef = useRef(false)
     useEffect(() => {
-        if (!stepsHasMounted.current) {
-            stepsHasMounted.current = true
+        if (!stepshasMountedRef.current) {
+            stepshasMountedRef.current = true
             return
         }
         const updatePriceChartPath = async () => {
@@ -70,11 +70,11 @@ const Chart = () => {
         updatePriceChartPath()
     }, [formik.values.steps])
 
-    const periodHasMounted = useRef(false)
+    const periodhasMountedRef = useRef(false)
     useEffect(() => {
         const handleEffect = async () => {
-            if (!periodHasMounted.current) {
-                periodHasMounted.current = true
+            if (!periodhasMountedRef.current) {
+                periodhasMountedRef.current = true
                 return
             }
             const priceChart = priceChartRef.current
@@ -85,10 +85,10 @@ const Chart = () => {
         handleEffect()
     }, [period])
 
-    const darkModeHasMounted = useRef(false)
+    const darkModehasMountedRef = useRef(false)
     useEffect(() => {
-        if (!darkModeHasMounted.current) {
-            darkModeHasMounted.current = true
+        if (!darkModehasMountedRef.current) {
+            darkModehasMountedRef.current = true
             return
         }
         const priceChart = priceChartRef.current

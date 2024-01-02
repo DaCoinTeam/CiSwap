@@ -28,12 +28,12 @@ const MainSection = () => {
     const [preventExecutionOut, setPreventExecutionOut] = useState(false)
     const [preventExecutionIn, setPreventExecutionIn] = useState(false)
 
-    const firstInRef = useRef(true)
+    const amountInHasMounted = useRef(true)
     const [finishExecuteOut, setFinishExecuteOut] = useState(true)
 
     useEffect(() => {
-        if (firstInRef.current) {
-            firstInRef.current = false
+        if (amountInHasMounted.current) {
+            amountInHasMounted.current = false
             return
         }
 
@@ -85,12 +85,12 @@ const MainSection = () => {
         }
     }, [formik.values.amountIn])
 
-    const firstOutRef = useRef(true)
+    const amountOutHasMounted = useRef(true)
     const [finishExecuteIn, setFinishExecuteIn] = useState(true)
 
     useEffect(() => {
-        if (firstOutRef.current) {
-            firstOutRef.current = false
+        if (amountOutHasMounted.current) {
+            amountOutHasMounted.current = false
             return
         }
 

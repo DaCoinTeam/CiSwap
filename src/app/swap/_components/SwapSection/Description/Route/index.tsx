@@ -27,15 +27,23 @@ const Route = () => {
         const handleEffect = async () => {
             try {
                 const elementsUpdated: JSX.Element[] = []
+                let key = 0
                 for (const step of formik.values.steps) {
                     if (typeof step === "string") {
                         const tokenContract = new ERC20Contract(chainId, step)
                         const symbol = await tokenContract.symbol()
                         if (symbol == null) return
-                        elementsUpdated.push(<span className="text-sm">{symbol}</span>)
+                        elementsUpdated.push(
+                            <span key={key++} className="text-sm">
+                                {symbol}
+                            </span>
+                        )
                         continue
                     }
-                    elementsUpdated.push(<ChevronRightIcon className="w-3.5 h-3.5" />)
+
+                    elementsUpdated.push(
+                        <ChevronRightIcon key={key++} className="w-3.5 h-3.5" />
+                    )
                 }
                 setElements(elementsUpdated)
             } finally {

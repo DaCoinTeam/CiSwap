@@ -27,6 +27,9 @@ const MainSection = () => {
     const [preventOut, setPreventOut] = useState(false)
     const [preventIn, setPreventIn] = useState(false)
 
+    const [finishIn, setFinishIn] = useState(true)
+    const [finishOut, setFinishOut] = useState(true)
+
     const amountInHasMounted = useRef(true)
     useEffect(() => {
         if (amountInHasMounted.current) {
@@ -52,7 +55,7 @@ const MainSection = () => {
                     swapState.infoOut.address,
                     true
                 )
-                formik.setFieldValue("finishOut", true)
+                setFinishOut(true)
                 if (quote === null) return
 
                 formik.setFieldValue("amountOutRaw", quote.amountOut)
@@ -104,7 +107,7 @@ const MainSection = () => {
                     swapState.infoOut.address,
                     false
                 )
-                formik.setFieldValue("finishIn", true)
+                setFinishIn(true)
                 if (quote === null) return
                 formik.setFieldValue("amountInRaw", quote.amountIn)
                 formik.setFieldValue(
@@ -155,7 +158,7 @@ const MainSection = () => {
             )
         )
 
-        formik.setFieldValue("finishOut", false)
+        setFinishOut(false)
     }
 
     const onChangeOut = (value: string) => {
@@ -167,7 +170,7 @@ const MainSection = () => {
                 swapState.infoOut.decimals
             )
         )
-        formik.setFieldValue("finishIn", false)
+        setFinishIn(false)
     }
 
     const onClickReverse = actions.handleReverse
@@ -182,7 +185,7 @@ const MainSection = () => {
 
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)
-            formik.setFieldValue("finishOut", false)
+            setFinishOut(false)
         }
         handleEffect()
     }, [swapState.infoIn.address])
@@ -205,10 +208,10 @@ const MainSection = () => {
                     textPosition="right"
                     value={formik.values.amountIn}
                     onValueChange={onChangeIn}
-                    isDisabled={!formik.values.finishIn}
+                    isDisabled={!finishIn}
                 />
                 <LoadingDisplay
-                    finishLoad={formik.values.finishIn}
+                    finishLoad={finishIn}
                     message="Calculating..."
                 />
             </div>
@@ -236,10 +239,10 @@ const MainSection = () => {
                     textPosition="right"
                     value={formik.values.amountOut}
                     onValueChange={onChangeOut}
-                    isDisabled={!formik.values.finishOut}
+                    isDisabled={!finishOut}
                 />
                 <LoadingDisplay
-                    finishLoad={formik.values.finishOut}
+                    finishLoad={finishOut}
                     message="Calculating..."
                 />
             </div>

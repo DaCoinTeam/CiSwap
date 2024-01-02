@@ -58,8 +58,17 @@ export const computePriceImpact = (
     baseRatio: number,
     round?: number
 ): number => {
-    round = round ?? 2
-    return computeRound(computePercentage(actualRatio, baseRatio) - 100, round)
+    try {
+        round = round ?? 2
+        const result = computeRound(computePercentage(actualRatio, baseRatio) - 100, round)
+            
+        if (Number.isNaN(result)) {
+            throw new Error()
+        }
+        return result
+    } catch (ex) {
+        return 0
+    }
 }
 
 export const computeSlippage = (

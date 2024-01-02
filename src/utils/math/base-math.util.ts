@@ -98,7 +98,7 @@ export const computeBigIntDivideBigInt = (
             denominator
         ) / computeExponent(round)
     } catch (ex) {
-        console.error(ex)
+        //console.error(ex)
         return 0
     }
 }

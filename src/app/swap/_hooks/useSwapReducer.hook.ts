@@ -12,9 +12,10 @@ export interface TokenInfo {
 export interface SwapState {
   infoIn: TokenInfo;
   infoOut: TokenInfo;
-  state: {
-    finishUpdateBeforeConnected: boolean;
-    finishUpdateAfterConnected: boolean;
+  status: {
+    finishInitialize: boolean;
+    finishUpdateBefore: boolean;
+    finishUpdateAfter: boolean;
   };
 }
 
@@ -49,7 +50,7 @@ export interface SetDecimalsAction {
 }
 
 export interface SetFinishLoadAction {
-  type: "SET_FINISH_UPDATE_BEFORE_CONNECTED" | "SET_FINISH_UPDATE_AFTER_CONNECTED";
+  type: "SET_FINISH_INITIALIZE" | "SET_FINISH_UPDATE_BEFORE" | "SET_FINISH_UPDATE_AFTER";
   payload: boolean;
 }
 
@@ -78,9 +79,10 @@ export const swapState: SwapState = {
         balance: 0,
         imageUrl: "",
     },
-    state: {
-        finishUpdateBeforeConnected: false,
-        finishUpdateAfterConnected: false,
+    status: {
+        finishInitialize: false,
+        finishUpdateBefore: false,
+        finishUpdateAfter: false,
     },
 }
 
@@ -140,15 +142,20 @@ export const swapReducer = (state: SwapState, action: swapAction) => {
             ...state,
             infoOut: { ...state.infoOut, imageUrl: action.payload },
         }
-    case "SET_FINISH_UPDATE_BEFORE_CONNECTED":
+    case "SET_FINISH_INITIALIZE":
         return {
             ...state,
-            state: { ...state.state, finishUpdateBeforeConnected: action.payload },
+            status: { ...state.status, finishInitialize: action.payload },
         }
-    case "SET_FINISH_UPDATE_AFTER_CONNECTED":
+    case "SET_FINISH_UPDATE_BEFORE":
         return {
             ...state,
-            state: { ...state.state, finishUpdateAfterConnected: action.payload },
+            status: { ...state.status, finishUpdateBefore: action.payload },
+        }
+    case "SET_FINISH_UPDATE_AFTER":
+        return {
+            ...state,
+            status: { ...state.status, finishUpdateAfter: action.payload },
         }
     default:
         return state

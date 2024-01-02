@@ -23,7 +23,6 @@ export const PeriodContext = createContext<PeriodContext | null>(null)
 const PriceChartSection = (props: PriceChartSectionProps) => {
     const [period, setPeriod] = useState(Period._24H)
     const { actions, swapState } = useContext(SwapContext)!
-    const { infoIn, infoOut, state } = swapState
     
     return (
         <Card className={`${props.className}`}>
@@ -32,12 +31,12 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                     <div className="grid md:flex justify-between gap-4">
                         <div>
                             <TokenPairDisplay
-                                tokenA={infoIn.address}
-                                tokenB={infoOut.address}
-                                symbolA={infoIn.symbol}
-                                symbolB={infoOut.symbol}
+                                tokenA={swapState.infoIn.address}
+                                tokenB={swapState.infoOut.address}
+                                symbolA={swapState.infoIn.symbol}
+                                symbolB={swapState.infoOut.symbol}
                                 onClick={actions.handleReverse}
-                                finishLoad = {state.finishUpdateBeforeConnected}      
+                                finishLoad = {swapState.status.finishUpdateBeforeConnected}      
                             />
                             <Spacer y={1} />
                         </div>

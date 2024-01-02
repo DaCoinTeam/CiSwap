@@ -24,8 +24,8 @@ interface SwapContext {
   };
   updaters: {
     initialize: () => void;
-    updateBeforeConnected: () => Promise<void>;
-    updateAfterConnected: () => Promise<void>;
+    updateBefore: () => Promise<void>;
+    updateAfter: () => Promise<void>;
   };
 }
 
@@ -52,7 +52,7 @@ const SwapProviders = (props: ContextProps) => {
             tokenOut,
         }
     }
-
+    console.log(swapState)
     const [preventBefore, setPreventBefore] = useState(false)
 
     const handleReverse = async () => {
@@ -96,14 +96,19 @@ const SwapProviders = (props: ContextProps) => {
             type: "SET_TOKEN_OUT",
             payload: tokenOut,
         })
+
+        swapDispatch({
+            type: "SET_FINISH_INITIALIZE",
+            payload: true,
+        })
+        console.log("hentai")
     }
 
     useEffect(() => {
         initialize()
     }, [])
 
-    const updateBeforeConnected = async () => {
-        console.log("called")
+    const updateBefore = async () => {
         const updateInfoIn = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
@@ -183,7 +188,7 @@ const SwapProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         swapDispatch({
-            type: "SET_FINISH_UPDATE_BEFORE_CONNECTED",
+            type: "SET_FINISH_UPDATE_BEFORE",
             payload: true,
         })
     }
@@ -194,18 +199,18 @@ const SwapProviders = (props: ContextProps) => {
             beforeHasMountedRef.current = false
             return
         }
+        if (!swapState.status.finishInitialize) return
         if (preventBefore) {
             setPreventBefore(false)
             return
         }
-        updateBeforeConnected()
-        console.log("pocess")
-    }, [swapState.infoIn.address, swapState.infoOut.address])
+        updateBefore()
+    }, [swapState.status.finishInitialize])
 
-    const updateAfterConnected = async () => {
+    const updateAfter = async () => {
         if (!account) {
             swapDispatch({
-                type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
+                type: "SET_FINISH_UPDATE_AFTER",
                 payload: false,
             })
             return
@@ -253,7 +258,7 @@ const SwapProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         swapDispatch({
-            type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
+            type: "SET_FINISH_UPDATE_AFTER",
             payload: true,
         })
     }
@@ -264,16 +269,16 @@ const SwapProviders = (props: ContextProps) => {
             afterHasMountedRef.current = false
             return
         }
-        updateAfterConnected()
-    }, [account, swapState.state.finishUpdateAfterConnected])
+        updateAfter()
+    }, [account, swapState.status.finishUpdateAfter])
 
     const updaters = useMemo(() => {
         return {
             initialize,
-            updateBeforeConnected,
-            updateAfterConnected,
+            updateBefore,
+            updateAfter,
         }
-    }, [initialize, updateBeforeConnected, updateAfterConnected])
+    }, [initialize, updateBefore, updateAfter])
     return (
         <SwapContext.Provider value={{ swapState, actions, updaters }}>
             {props.children}

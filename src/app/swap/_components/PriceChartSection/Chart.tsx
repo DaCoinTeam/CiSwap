@@ -8,17 +8,12 @@ import React, {
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import utils from "@utils"
-import { SwapContext } from "../../_hooks"
 import { PeriodContext } from "./index"
 import { PriceChart, services } from "@services"
-import { chainInfos } from "@config"
 import { FormikContext } from "../FormikProviders"
 import { MouseEventParams, Time } from "lightweight-charts"
 
 const Chart = () => {
-    const { swapState } = useContext(SwapContext)!
-    const { infoIn, infoOut } = swapState
 
     const periodContext = useContext(PeriodContext)!
     const { period } = periodContext

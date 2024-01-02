@@ -178,23 +178,25 @@ const MainSection = () => {
             infoInHasMountedRef.current = false
             return
         }
+        if (!swapState.status.finishUpdateBefore) return
+
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)
             formik.setFieldValue("finishOut", false)
         }
         handleEffect()
-    }, [swapState.infoIn])
+    }, [swapState.infoIn.address])
 
     return (
         <div className="grid gap-6 justify-items-center">
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.state.finishUpdateBeforeConnected}
+                        finishLoad={swapState.status.finishUpdateBefore}
                         symbol={swapState.infoIn.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.state.finishUpdateAfterConnected}
+                        finishLoad={swapState.status.finishUpdateAfter}
                         balance={swapState.infoIn.balance}
                     />
                 </div>
@@ -203,6 +205,7 @@ const MainSection = () => {
                     textPosition="right"
                     value={formik.values.amountIn}
                     onValueChange={onChangeIn}
+                    isDisabled={!formik.values.finishIn}
                 />
                 <LoadingDisplay
                     finishLoad={formik.values.finishIn}
@@ -220,11 +223,11 @@ const MainSection = () => {
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.state.finishUpdateBeforeConnected}
+                        finishLoad={swapState.status.finishUpdateBefore}
                         symbol={swapState.infoOut.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.state.finishUpdateAfterConnected}
+                        finishLoad={swapState.status.finishUpdateAfter}
                         balance={swapState.infoOut.balance}
                     />
                 </div>
@@ -233,9 +236,10 @@ const MainSection = () => {
                     textPosition="right"
                     value={formik.values.amountOut}
                     onValueChange={onChangeOut}
+                    isDisabled={!formik.values.finishOut}
                 />
                 <LoadingDisplay
-                    finishLoad={formik.values.finishIn}
+                    finishLoad={formik.values.finishOut}
                     message="Calculating..."
                 />
             </div>

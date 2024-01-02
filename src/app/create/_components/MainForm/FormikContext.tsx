@@ -22,8 +22,8 @@ interface FormikValues {
   balanceB: number;
   decimalsA: number;
   decimalsB: number;
-  basePriceA: string;
-  maxPriceA: string;
+  priceABase: string;
+  priceAMax: string;
   feeId: number;
   fee: number;
 }
@@ -40,8 +40,8 @@ const initialValues: FormikValues = {
     balanceB: 0,
     decimalsA: 0,
     decimalsB: 0,
-    basePriceA: "",
-    maxPriceA: "",
+    priceABase: "",
+    priceAMax: "",
     feeId: 0,
     fee: 0.0025,
 }
@@ -82,8 +82,8 @@ const FormikProviders = (props: ContextProps) => {
                     Yup.ref("balanceB"),
                     "Input must not exceed your available balance"
                 ),
-                basePriceA: Yup.number().max(
-                    Yup.ref("maxPriceA"),
+                priceABase: Yup.number().max(
+                    Yup.ref("priceAMax"),
                     "Base price must be less than or equal to max price"
                 ),
             })}
@@ -121,10 +121,10 @@ const FormikProviders = (props: ContextProps) => {
                     values.decimalsB
                 )
 
-                const basePriceAX96 = utils.math.computeMultiplyX96(
-                    utils.format.parseNumber(values.basePriceA)
+                const priceABaseX96 = utils.math.computeMultiplyX96(
+                    utils.format.parseNumber(values.priceABase)
                 )
-                const maxPriceAX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.maxPriceA))
+                const priceAMaxX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.priceAMax))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
                 console.log(allowanceA)
@@ -165,8 +165,8 @@ const FormikProviders = (props: ContextProps) => {
                         tokenB: _tokenB,
                         amountA: _amountA,
                         amountB: _amountB,
-                        basePriceAX96: basePriceAX96,
-                        maxPriceAX96: maxPriceAX96,
+                        priceABaseX96: priceABaseX96,
+                        priceAMaxX96: priceAMaxX96,
                     },
                 })
                 console.log(createPoolReceipt)

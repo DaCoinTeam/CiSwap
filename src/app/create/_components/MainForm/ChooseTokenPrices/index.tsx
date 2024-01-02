@@ -16,8 +16,8 @@ interface ChooseTokenPricesProps {
 const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const formik = useContext(FormikContext)!
 
-    const basePriceAParsed = utils.format.parseNumber(formik.values.basePriceA)
-    const maxPriceAParsed = utils.format.parseNumber(formik.values.maxPriceA)
+    const priceABaseParsed = utils.format.parseNumber(formik.values.priceABase)
+    const priceAMaxParsed = utils.format.parseNumber(formik.values.priceAMax)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -26,14 +26,14 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const _finishSelectedPair = account != null && finishSelectedPair
 
     const onChangeInput = (value: string, isTokenAMax?: boolean) => {
-        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
+        const priceName = isTokenAMax ? "priceAMax" : "priceABase"
         formik.setFieldValue(priceName, value)
     }
 
     const renderError = (hasError?: boolean, isTokenAMax?: boolean) => {
         const _message = isTokenAMax
-            ? formik.errors.maxPriceA
-            : formik.errors.basePriceA
+            ? formik.errors.priceAMax
+            : formik.errors.priceABase
         return hasError ? <ErrorDisplay message={_message} /> : null
     }
 
@@ -46,7 +46,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
             ? formik.values.symbolB
             : formik.values.symbolA
 
-        const price = isTokenAMax ? maxPriceAParsed : basePriceAParsed
+        const price = isTokenAMax ? priceAMaxParsed : priceABaseParsed
         const _message = `1 ${firstTokenSymbol} = ${price} ${secondTokenSymbol}`
         return _finishSelectedPair ? (
             <div className="font-bold text-center text-sm"> {_message} </div>
@@ -54,17 +54,17 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     }
 
     const onClickIncrease = (isTokenAMax?: boolean) => {
-        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
+        const priceName = isTokenAMax ? "priceAMax" : "priceABase"
 
-        const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
+        const priceValue = isTokenAMax ? priceAMaxParsed : priceABaseParsed
 
         formik.setFieldValue(priceName, priceValue + 1)
     }
 
     const onClickDecrease = (isTokenAMax?: boolean) => {
-        const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
+        const priceName = isTokenAMax ? "priceAMax" : "priceABase"
 
-        const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
+        const priceValue = isTokenAMax ? priceAMaxParsed : priceABaseParsed
 
         formik.setFieldValue(priceName, priceValue < 1 ? 0 : priceValue - 1)
     }
@@ -94,9 +94,9 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <NumberInput
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
-                                    errorMessage={formik.errors.basePriceA}
+                                    errorMessage={formik.errors.priceABase}
                                     onValueChange={onChangeInput}
-                                    value={_finishSelectedPair ? formik.values.basePriceA : ""}
+                                    value={_finishSelectedPair ? formik.values.priceABase : ""}
                                     hideErrorMessage
                                 />
 
@@ -113,7 +113,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {renderDescription()}
                         </CardBody>
                     </Card>
-                    {renderError(!!formik.errors.basePriceA)}
+                    {renderError(!!formik.errors.priceABase)}
                 </div>
                 <div className="grow">
                     <Card>
@@ -134,9 +134,9 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <NumberInput
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
-                                    errorMessage={formik.errors.maxPriceA}
+                                    errorMessage={formik.errors.priceAMax}
                                     onValueChange={(value) => onChangeInput(value, true)}
-                                    value={_finishSelectedPair ? formik.values.maxPriceA : ""}
+                                    value={_finishSelectedPair ? formik.values.priceAMax : ""}
                                 />
                                 <Button
                                     variant="flat"
@@ -151,7 +151,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                             {renderDescription(true)}
                         </CardBody>
                     </Card>
-                    {renderError(!!formik.errors.maxPriceA, true)}
+                    {renderError(!!formik.errors.priceAMax, true)}
                 </div>
             </div>
         </div>

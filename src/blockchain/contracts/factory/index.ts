@@ -34,8 +34,8 @@ class FactoryCountract {
       tokenB: string;
       amountA: bigint;
       amountB: bigint;
-      basePriceAX96: bigint;
-      maxPriceAX96: bigint;
+      priceABaseX96: bigint;
+      priceAMaxX96: bigint;
     };
   }) {
         try {

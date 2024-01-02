@@ -188,10 +188,10 @@ const SwapProviders = (props: ContextProps) => {
         })
     }
 
-    const beforeHasMountedRef = useRef(false)
+    const beforeHasMountedRef = useRef(true)
     useEffect(() => {
-        if (!beforeHasMountedRef.current) {
-            beforeHasMountedRef.current = true
+        if (beforeHasMountedRef.current) {
+            beforeHasMountedRef.current = false
             return
         }
         if (preventBefore) {
@@ -258,10 +258,10 @@ const SwapProviders = (props: ContextProps) => {
         })
     }
 
-    const afterHasMountedRef = useRef(false)
+    const afterHasMountedRef = useRef(true)
     useEffect(() => {
         if (!afterHasMountedRef.current) {
-            afterHasMountedRef.current = true
+            afterHasMountedRef.current = false
             return
         }
         updateAfterConnected()

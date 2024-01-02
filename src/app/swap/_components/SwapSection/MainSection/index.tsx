@@ -24,55 +24,50 @@ const MainSection = () => {
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
-    const [preventExecutionOut, setPreventExecutionOut] = useState(false)
-    const [preventExecutionIn, setPreventExecutionIn] = useState(false)
+    const [preventOut, setPreventOut] = useState(false)
+    const [preventIn, setPreventIn] = useState(false)
 
     const amountInHasMounted = useRef(true)
-
     useEffect(() => {
         if (amountInHasMounted.current) {
             amountInHasMounted.current = false
             return
         }
 
-        if (preventExecutionIn) {
-            setPreventExecutionIn(false)
+        if (preventIn) {
+            setPreventIn(false)
             return
         }
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.findBestQuote(
-                chainId,
-                utils.math.computeRaw(
-                    utils.format.parseStringToNumber(formik.values.amountIn),
-                    swapState.infoIn.decimals
-                ),
-                swapState.infoIn.address,
-                swapState.infoOut.address,
-                true
-            )
-            formik.setFieldValue("finishExecuteOut", true)
-            if (quote === null) return
-            console.log(
-                utils.math.computeRedenomination(
-                    quote.amountOut,
-                    swapState.infoOut.decimals,
-                    3
+            try {
+                const quote = await services.next.smartRouter.findBestQuote(
+                    chainId,
+                    utils.math.computeRaw(
+                        utils.format.parseStringToNumber(formik.values.amountIn),
+                        swapState.infoIn.decimals
+                    ),
+                    swapState.infoIn.address,
+                    swapState.infoOut.address,
+                    true
                 )
-            )
-            formik.setFieldValue("amountOutRaw", quote.amountOut)
-            formik.setFieldValue(
-                "amountOut",
-                utils.math.computeRedenomination(
-                    quote.amountOut,
-                    swapState.infoOut.decimals
-                )
-            )
-            formik.setFieldValue("exactInput", false)
-            formik.setFieldValue("steps", quote.path.steps)
+                formik.setFieldValue("finishOut", true)
+                if (quote === null) return
 
-            setPreventExecutionOut(true)
+                formik.setFieldValue("amountOutRaw", quote.amountOut)
+                formik.setFieldValue(
+                    "amountOut",
+                    utils.math.computeRedenomination(
+                        quote.amountOut,
+                        swapState.infoOut.decimals
+                    )
+                )
+                formik.setFieldValue("exactInput", false)
+                formik.setFieldValue("steps", quote.path.steps)
+            } finally {
+                setPreventOut(true)
+            }
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -91,38 +86,39 @@ const MainSection = () => {
             return
         }
 
-        if (preventExecutionOut) {
-            setPreventExecutionOut(false)
+        if (preventOut) {
+            setPreventOut(false)
             return
         }
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.findBestQuote(
-                chainId,
-                utils.math.computeRaw(
-                    utils.format.parseStringToNumber(formik.values.amountOut),
-                    swapState.infoIn.decimals
-                ),
-                swapState.infoIn.address,
-                swapState.infoOut.address,
-                false
-            )
-            formik.setFieldValue("finishExecuteIn", true)
-            if (quote === null) return
-            formik.setFieldValue("amountInRaw", quote.amountIn)
-            formik.setFieldValue(
-                "amountIn",
-                utils.math.computeRedenomination(
-                    quote.amountIn,
-                    swapState.infoIn.decimals
+            try {
+                const quote = await services.next.smartRouter.findBestQuote(
+                    chainId,
+                    utils.math.computeRaw(
+                        utils.format.parseStringToNumber(formik.values.amountOut),
+                        swapState.infoIn.decimals
+                    ),
+                    swapState.infoIn.address,
+                    swapState.infoOut.address,
+                    false
                 )
-            )
-
-            formik.setFieldValue("exactInput", true)
-            formik.setFieldValue("steps", quote.path.steps)
-
-            setPreventExecutionIn(true)
+                formik.setFieldValue("finishIn", true)
+                if (quote === null) return
+                formik.setFieldValue("amountInRaw", quote.amountIn)
+                formik.setFieldValue(
+                    "amountIn",
+                    utils.math.computeRedenomination(
+                        quote.amountIn,
+                        swapState.infoIn.decimals
+                    )
+                )
+                formik.setFieldValue("exactInput", true)
+                formik.setFieldValue("steps", quote.path.steps)
+            } catch {
+                setPreventIn(true)
+            }
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -159,7 +155,7 @@ const MainSection = () => {
             )
         )
 
-        formik.setFieldValue("finishExecuteOut", false)
+        formik.setFieldValue("finishOut", false)
     }
 
     const onChangeOut = (value: string) => {
@@ -171,15 +167,20 @@ const MainSection = () => {
                 swapState.infoOut.decimals
             )
         )
-        formik.setFieldValue("finishExecuteIn", false)
+        formik.setFieldValue("finishIn", false)
     }
 
     const onClickReverse = actions.handleReverse
 
+    const infoInHasMountedRef = useRef(true)
     useEffect(() => {
+        if (infoInHasMountedRef.current) {
+            infoInHasMountedRef.current = false
+            return
+        }
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)
-            formik.setFieldValue("finishExecuteOut", false)
+            formik.setFieldValue("finishOut", false)
         }
         handleEffect()
     }, [swapState.infoIn])
@@ -203,7 +204,10 @@ const MainSection = () => {
                     value={formik.values.amountIn}
                     onValueChange={onChangeIn}
                 />
-                <LoadingDisplay finishLoad={formik.values.finishExecuteIn} message="Calculating..." />
+                <LoadingDisplay
+                    finishLoad={formik.values.finishIn}
+                    message="Calculating..."
+                />
             </div>
 
             <Button
@@ -231,7 +235,7 @@ const MainSection = () => {
                     onValueChange={onChangeOut}
                 />
                 <LoadingDisplay
-                    finishLoad={formik.values.finishExecuteOut}
+                    finishLoad={formik.values.finishIn}
                     message="Calculating..."
                 />
             </div>

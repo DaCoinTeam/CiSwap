@@ -24,8 +24,8 @@ interface FormikValues {
   steps: Step[];
   exactInput: boolean;
   price: number;
-  finishExecuteIn: boolean;
-  finishExecuteOut: boolean;
+  finishIn: boolean;
+  finishOut: boolean;
   slippageKey: number;
   slippage: string;
   txDeadline: string
@@ -39,8 +39,8 @@ const initialValues: FormikValues = {
     steps: [],
     exactInput: true,
     price: 0,
-    finishExecuteIn: true,
-    finishExecuteOut: true,
+    finishIn: true,
+    finishOut: true,
     slippageKey: 0,
     slippage: "",
     txDeadline: ""

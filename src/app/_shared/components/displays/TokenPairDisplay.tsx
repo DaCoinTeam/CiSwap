@@ -86,7 +86,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
                     >
                         <ArrowsRightLeftIcon className={`${classNames.icon}`} />
                     </Button>
-                </div>
+                </div>  
             ) : (
                 <Skeleton className={`${classNames.skeleton} rounded`} />
             )}

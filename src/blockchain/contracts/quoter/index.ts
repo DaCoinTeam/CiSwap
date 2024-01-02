@@ -77,5 +77,16 @@ class QuoterContract {
             return null
         }
     }
+
+    async quotePriceX96(path: Bytes) {
+        try {
+            const web3 = getHttpWeb3(this.chainId)
+            const contract = getQuoterContract(web3, this.address)
+            return contract.methods.quotePriceX96(path).call<bigint>()
+        } catch (ex) {
+            console.log(ex)
+            return null
+        }
+    }
 }
 export default QuoterContract

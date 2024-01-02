@@ -8,6 +8,7 @@ import TokenTooltipDisplay from "./TokenTooltipDisplay"
 import BreadcrumbsDisplay from "./BreadcrumbsDisplay"
 import TokenPairDisplay from "./TokenPairDisplay"
 import TokenPriceDisplay from "./TokenPriceDisplay"
+import LabelWithTooltipDisplay from "./LabelWithTooltipDisplay"
 
 export {
     BalanceDisplay,
@@ -19,5 +20,6 @@ export {
     ErrorDisplay,
     BreadcrumbsDisplay,
     TokenPairDisplay,
-    TokenPriceDisplay
+    TokenPriceDisplay,
+    LabelWithTooltipDisplay
 }

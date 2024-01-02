@@ -2,7 +2,9 @@ import {
     computeBigIntMultiplyNumber,
     computeExponent,
     computeLeftShift,
-    computeRightShift
+    computePercentage,
+    computeRightShift,
+    computeRound,
 } from "./base-math.util"
 
 export const computeRedenomination = (
@@ -51,6 +53,15 @@ export const computeMultiplyX96 = (value: number): bigint =>
 export const computeDivideX96 = (value: bigint): number =>
     computeRightShift(value, 96)
 
+export const computePriceImpact = (
+    actualRatio: number,
+    baseRatio: number,
+    round?: number
+): number => {
+    round = round ?? 2
+    return computeRound(computePercentage(actualRatio, baseRatio) - 100, round)
+}
+
 export const computeSlippage = (
     amount: bigint,
     slippage: number,
@@ -58,12 +69,11 @@ export const computeSlippage = (
     round?: number
 ) => {
     round = round ?? 5
-    const exponent = computeExponent(round)
 
-    const amountSlippage = computeBigIntMultiplyNumber(
+    const amountSlippaged = computeBigIntMultiplyNumber(
         amount,
-        slippage * exponent,
+        slippage,
         round
     )
-    return exactInput ? amount - amountSlippage : amount + amountSlippage
+    return exactInput ? amount - amountSlippaged : amount + amountSlippaged
 }

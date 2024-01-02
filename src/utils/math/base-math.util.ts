@@ -26,8 +26,8 @@ export const computeInverse = (value: number, round: number): number => {
         const result = Number.parseFloat((1 / value).toFixed(round))
 
         return result
-    } catch (error) {
-        console.error(error)
+    } catch (ex) {
+        console.error(ex)
         return 0
     }
 }
@@ -38,8 +38,8 @@ export const computeRound = (
 ): number => {
     try {
         return Number(Number.parseFloat(value.toString()).toFixed(round))
-    } catch (error) {
-        console.error(error)
+    } catch (ex) {
+        console.error(ex)
         return 0
     }
 }
@@ -55,8 +55,8 @@ export const computeBigIntMultiplyNumber = (
             (bigint * BigInt(computeRound(number * computeExponent(precision)))) /
       BigInt(computeExponent(precision))
         )
-    } catch (error) {
-        console.error(error)
+    } catch (ex) {
+        console.error(ex)
         return BigInt(0)
     }
 }
@@ -64,16 +64,41 @@ export const computeBigIntMultiplyNumber = (
 export const computeBigIntDivideNumber = (
     bigint: bigint,
     number: number,
-    precision?: number
+    round?: number
 ): bigint => {
     try {
-        precision = precision ?? 5
+        round = round ?? 5
         return (
-            (bigint * BigInt(computeExponent(precision))) /
-      BigInt(computeRound(number * computeExponent(precision)))
+            (bigint * BigInt(computeExponent(round))) /
+      BigInt(computeRound(number * computeExponent(round)))
         )
-    } catch (error) {
-        console.error(error)
+    } catch (ex) {
+        console.error(ex)
         return BigInt(0)
+    }
+}
+
+export const computePercentage = (
+    numerator: number,
+    denominator: number,
+    round: number = 2
+) => {
+    return computeRound((numerator / denominator) * 100, round)
+}
+
+export const computeBigIntDivideBigInt = (
+    numerator: bigint,
+    denominator: bigint,
+    round?: number
+): number => {
+    try {
+        round = round ?? 5
+        return Number(
+            (numerator * BigInt(computeExponent(round))) /
+            denominator
+        ) / computeExponent(round)
+    } catch (ex) {
+        console.error(ex)
+        return 0
     }
 }

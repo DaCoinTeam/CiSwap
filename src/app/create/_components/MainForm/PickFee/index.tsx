@@ -50,12 +50,12 @@ const PickFee = (props: PickFeeProps) => {
     const  { finishSelectedPair }  = useContext(FinishSelectedPairContext)!
 
     const onClick = (fee: Fee) => {
-        formik.setFieldValue("_feeId", fee.key)
+        formik.setFieldValue("feeId", fee.key)
         formik.setFieldValue("fee", fee.value)
     }
 
     const renderSelected = (key: number) => {
-        if (formik.values._feeId === key){
+        if (formik.values.feeId === key){
             return `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
         } else {
             return ""

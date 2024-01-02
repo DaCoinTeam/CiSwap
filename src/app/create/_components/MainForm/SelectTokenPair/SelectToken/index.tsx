@@ -136,7 +136,7 @@ const SelectToken = (props: SelectTokenProps) => {
 
       const _token = props.isTokenBSelected ? "tokenB" : "tokenA"
       formik.setFieldValue(_token, token)
-      const _symbol = props.isTokenBSelected ? "_symbolB" : "_symbolA"
+      const _symbol = props.isTokenBSelected ? "symbolB" : "symbolA"
       formik.setFieldValue(_symbol, symbol)
   }
 

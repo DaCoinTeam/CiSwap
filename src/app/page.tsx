@@ -3,7 +3,7 @@ import { Body } from "./_components"
 
 export default function Home() {
     return (
-        <div className="max-w-[1024px] m-auto py-12 px-6">
+        <div className="max-w-[1280px] m-auto py-12 px-6">
             <Body />
         </div>
 

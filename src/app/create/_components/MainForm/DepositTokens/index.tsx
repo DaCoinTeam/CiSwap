@@ -32,11 +32,11 @@ const DepositTokens = (props: AddTokensProps) => {
         ? [
             {
                 address: formik.values.tokenA,
-                symbol: formik.values._symbolA,
+                symbol: formik.values.symbolA,
             },
             {
                 address: formik.values.tokenB,
-                symbol: formik.values._symbolB,
+                symbol: formik.values.symbolB,
             },
         ]
         : []
@@ -44,13 +44,13 @@ const DepositTokens = (props: AddTokensProps) => {
     const selectedKey = () => {
         if (!_finishSelectedPair) return undefined
         console.log(formik.values.tokenA)
-        if (formik.values._zeroForOne) return [formik.values.tokenA]
+        if (formik.values.zeroForOne) return [formik.values.tokenA]
         return [formik.values.tokenB]
     }
 
     const onChangeSelect = (event: ChangeEvent<HTMLSelectElement>) => {
         formik.setFieldValue(
-            "_zeroForOne",
+            "zeroForOne",
             event.target.value === formik.values.tokenA
         )
     }
@@ -66,13 +66,13 @@ const DepositTokens = (props: AddTokensProps) => {
 
             const decimalsA = await tokenAContract.decimals()
             if (decimalsA === null) return
-            formik.setFieldValue("_decimalsA", decimalsA)
+            formik.setFieldValue("decimalsA", decimalsA)
 
             const balanceA = await tokenAContract.balanceOf(account)
             if (balanceA === null) return
 
             formik.setFieldValue(
-                "_balanceA",
+                "balanceA",
                 utils.math.computeRedenomination(balanceA, decimalsA)
             )
 
@@ -80,12 +80,12 @@ const DepositTokens = (props: AddTokensProps) => {
 
             const decimalsB = await tokenBContract.decimals()
             if (decimalsB === null) return
-            formik.setFieldValue("_decimalsB", decimalsB)
+            formik.setFieldValue("decimalsB", decimalsB)
 
             const balanceB = await tokenBContract.balanceOf(account)
             if (balanceB === null) return
             formik.setFieldValue(
-                "_balanceB",
+                "balanceB",
                 utils.math.computeRedenomination(balanceB, decimalsB)
             )
         }
@@ -116,11 +116,11 @@ const DepositTokens = (props: AddTokensProps) => {
                 <div>
                     <div className="flex justify-between items-center  mb-1">
                         <TokenDisplay
-                            symbol={formik.values._symbolA}
+                            symbol={formik.values.symbolA}
                             finishLoad={_finishSelectedPair}
                         />
                         <BalanceDisplay
-                            balance={formik.values._balanceA}
+                            balance={formik.values.balanceA}
                             finishLoad={_finishSelectedPair}
                         />
                     </div>
@@ -135,11 +135,11 @@ const DepositTokens = (props: AddTokensProps) => {
                 <div>
                     <div className="flex justify-between items-center mb-1">
                         <TokenDisplay
-                            symbol={formik.values._symbolB}
+                            symbol={formik.values.symbolB}
                             finishLoad={_finishSelectedPair}
                         />
                         <BalanceDisplay
-                            balance={formik.values._balanceB}
+                            balance={formik.values.balanceB}
                             finishLoad={_finishSelectedPair}
                         />
                     </div>

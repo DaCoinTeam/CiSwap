@@ -1,5 +1,4 @@
 import { Address, Bytes } from "web3"
-import utils from "@utils"
 import Path from "./path.module"
 
 class Quote {
@@ -31,14 +30,13 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    createBaseParams(slippage: number): BaseParams {
+    createBaseParams(): BaseParams {
         const quoteType = this.getQuoteType()
 
         const quoteTypeToBaseParams: Record<QuoteType, BaseParams> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 amountIn: this.amountIn,
-                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, true),
                 tokenIn: this.path.steps[0] as Address,
                 tokenOut: this.path.steps[2] as Address,
                 indexPool: this.path.steps[1] as number,
@@ -46,13 +44,11 @@ class Quote {
             [QuoteType.ExactInput]: {
                 quoteType: QuoteType.ExactInput,
                 amountIn: this.amountIn,
-                amountOutMin: utils.math.computeSlippage(this.amountOut, slippage, true),
                 path: this.path.encodePacked(),
             },
             [QuoteType.ExactOutputSingle]: {
                 quoteType: QuoteType.ExactOutputSingle,
                 amountOut: this.amountIn,
-                amountInMax: utils.math.computeSlippage(this.amountOut, slippage),
                 tokenIn: this.path.steps[0] as Address,
                 tokenOut: this.path.steps[2] as Address,
                 indexPool: this.path.steps[1] as number,
@@ -60,7 +56,6 @@ class Quote {
             [QuoteType.ExactOutput]: {
                 quoteType: QuoteType.ExactOutput,
                 amountOut: this.amountIn,
-                amountInMax: utils.math.computeSlippage(this.amountOut, slippage),
                 path: this.path.reverse().encodePacked(),
             },
         }
@@ -82,7 +77,6 @@ export enum QuoteType {
 export interface ExactInputSingleBaseParams {
   quoteType: QuoteType.ExactInputSingle;
   amountIn: bigint;
-  amountOutMin: bigint;
   tokenIn: Address;
   tokenOut: Address;
   indexPool: number;
@@ -91,21 +85,18 @@ export interface ExactInputSingleBaseParams {
 export interface ExactInputBaseParams {
   quoteType: QuoteType.ExactInput;
   amountIn: bigint;
-  amountOutMin: bigint;
   path: Bytes;
 }
 
 export interface ExactOutputBaseParams {
   quoteType: QuoteType.ExactOutput;
   amountOut: bigint;
-  amountInMax: bigint;
   path: Bytes;
 }
 
 export interface ExactOutputSingleBaseParams {
   quoteType: QuoteType.ExactOutputSingle;
   amountOut: bigint;
-  amountInMax: bigint;
   tokenIn: Address;
   tokenOut: Address;
   indexPool: number;

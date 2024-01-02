@@ -17,7 +17,7 @@ const Page = () => {
         }
     ]
     return (
-        <div className="max-w-[1024px] m-auto px-6 py-12">
+        <div className="max-w-[1280px] m-auto px-6 py-12">
             <BreadcrumbsDisplay items={breadcrumbItems}/>
             <Spacer y={12}/>
             <MainForm />

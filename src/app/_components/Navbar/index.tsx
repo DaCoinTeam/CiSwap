@@ -39,6 +39,13 @@ const Navbar = () => {
             shouldHideOnScroll
             isBordered
             onMenuOpenChange={setIsMenuOpen}
+            maxWidth="full"
+            classNames={
+                {
+                    wrapper: "max-w-[1280px]"
+                }
+            }
+
         >
             <NavbarContent className="gap-12">
                 <div>

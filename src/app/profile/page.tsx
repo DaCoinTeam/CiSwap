@@ -7,7 +7,7 @@ const Page = () => {
     return (
         <>
             <CoverPhoto />
-            <div className="max-w-[1024px] m-auto px-6">
+            <div className="max-w-[1280px] m-auto px-6">
                 <UserAvatar className="-mt-32"/>
                 <div className="pt-12">
                     <UserInformation />

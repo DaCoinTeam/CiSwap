@@ -19,49 +19,49 @@ import { Step } from "@services"
 interface FormikValues {
   amountIn: string;
   amountOut: string;
+  amountInRaw: bigint;
+  amountOutRaw: bigint;
   steps: Step[];
   slippage: number;
   exactInput: boolean;
+  price: number;
 }
 
 const initialValues: FormikValues = {
     amountIn: "",
     amountOut: "",
+    amountInRaw: BigInt(0),
+    amountOutRaw: BigInt(0),
     steps: [],
     slippage: 0.01,
     exactInput: true,
+    price: 0,
 }
 
-export const FormikContext =
-  createContext<FormikProps<FormikValues> | null>(null)
+export const FormikContext = createContext<FormikProps<FormikValues> | null>(
+    null
+)
 
 const _renderBody = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
-) => (
-    <FormikContext.Provider value={props}>
-        <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
-    </FormikContext.Provider>
-)
-
+) => {
+    return (
+        <FormikContext.Provider value={props}>
+            <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
+        </FormikContext.Provider>
+    )
+}
 const FormikProviders = (props: ContextProps) => {
-    const swapContext = useContext(SwapContext)
-    const metamaskContext = useContext(MetamaskContext)
-
-    console.log(swapContext?.swapState)
+    const { swapState } = useContext(SwapContext)!
+    const { web3State } = useContext(MetamaskContext)!
+    const { web3 } = web3State
 
     const dispatch: AppDispatch = useDispatch()
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
-
-    if (swapContext === null) return
-    const { swapState } = swapContext
-
-    if (metamaskContext === null) return
-    const { web3State } = metamaskContext
-    const { web3 } = web3State
 
     return (
         <Formik

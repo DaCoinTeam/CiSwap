@@ -48,7 +48,7 @@ const Footer = () => {
 
     return (
         <footer>
-            <div className="max-w-[1024px] m-auto px-6">
+            <div className="max-w-[1280px] m-auto px-6">
                 <div className="flex gap-6 py-6">
                     {socials.map((social) => (
                         <Link color="foreground" key={social.key} href={social.url}>

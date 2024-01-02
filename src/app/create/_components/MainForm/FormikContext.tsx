@@ -13,36 +13,36 @@ import { ContextProps } from "@app/_shared"
 interface FormikValues {
   tokenA: Address;
   tokenB: Address;
-  _symbolA: string;
-  _symbolB: string;
-  _zeroForOne: boolean;
+  symbolA: string;
+  symbolB: string;
+  zeroForOne: boolean;
   amountA: string;
   amountB: string;
-  _balanceA: number;
-  _balanceB: number;
-  _decimalsA: number;
-  _decimalsB: number;
+  balanceA: number;
+  balanceB: number;
+  decimalsA: number;
+  decimalsB: number;
   basePriceA: string;
   maxPriceA: string;
-  _feeId: number;
+  feeId: number;
   fee: number;
 }
 
 const initialValues: FormikValues = {
     tokenA: "",
     tokenB: "",
-    _symbolA: "",
-    _symbolB: "",
-    _zeroForOne: true,
+    symbolA: "",
+    symbolB: "",
+    zeroForOne: true,
     amountA: "",
     amountB: "",
-    _balanceA: 0,
-    _balanceB: 0,
-    _decimalsA: 0,
-    _decimalsB: 0,
+    balanceA: 0,
+    balanceB: 0,
+    decimalsA: 0,
+    decimalsB: 0,
     basePriceA: "",
     maxPriceA: "",
-    _feeId: 0,
+    feeId: 0,
     fee: 0.0025,
 }
 
@@ -75,11 +75,11 @@ const FormikProviders = (props: ContextProps) => {
                 tokenB: Yup.string().required(),
                 isToken0Sell: Yup.boolean(),
                 amountA: Yup.number().max(
-                    Yup.ref("_balanceA"),
+                    Yup.ref("balanceA"),
                     "Input must not exceed your available balance"
                 ),
                 amountB: Yup.number().max(
-                    Yup.ref("_balanceB"),
+                    Yup.ref("balanceB"),
                     "Input must not exceed your available balance"
                 ),
                 basePriceA: Yup.number().max(
@@ -111,14 +111,14 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                const amountADeRedenominated = utils.math.computeDeRedenomination(
+                const amountARaw = utils.math.computeDeRedenomination(
                     utils.format.parseNumber(values.amountA),
-                    values._decimalsA
+                    values.decimalsA
                 )
 
-                const amountBDeRedenominated = utils.math.computeDeRedenomination(
+                const amountBRaw = utils.math.computeDeRedenomination(
                     utils.format.parseNumber(values.amountB),
-                    values._decimalsB
+                    values.decimalsB
                 )
 
                 const basePriceAX96 = utils.math.computeMultiplyX96(
@@ -129,10 +129,10 @@ const FormikProviders = (props: ContextProps) => {
                 const allowanceA = await tokenAContract.allowance(account, factory)
                 console.log(allowanceA)
                 if (allowanceA === null) return
-                if (allowanceA < amountADeRedenominated) {
+                if (allowanceA < amountARaw) {
                     const approveAReceipt = await tokenAContract.approve(
                         factory,
-                        amountADeRedenominated - allowanceA
+                        amountARaw - allowanceA
                     )
                     if (!approveAReceipt) return
                 }
@@ -140,23 +140,23 @@ const FormikProviders = (props: ContextProps) => {
                 const allowanceB = await tokenBContract.allowance(account, factory)
                 if (allowanceB === null) return
 
-                if (allowanceB < amountBDeRedenominated) {
+                if (allowanceB < amountBRaw) {
                     const approveBReceipt = await tokenBContract.approve(
                         factory,
-                        amountBDeRedenominated - allowanceB
+                        amountBRaw - allowanceB
                     )
                     if (!approveBReceipt) return
                 }
 
-                const _tokenA = values._zeroForOne ? values.tokenA : values.tokenB
-                const _tokenB = values._zeroForOne ? values.tokenB : values.tokenA
+                const _tokenA = values.zeroForOne ? values.tokenA : values.tokenB
+                const _tokenB = values.zeroForOne ? values.tokenB : values.tokenA
 
-                const _amountA = values._zeroForOne
-                    ? amountADeRedenominated
-                    : amountBDeRedenominated
-                const _amountB = values._zeroForOne
-                    ? amountBDeRedenominated
-                    : amountADeRedenominated
+                const _amountA = values.zeroForOne
+                    ? amountARaw
+                    : amountBRaw
+                const _amountB = values.zeroForOne
+                    ? amountBRaw
+                    : amountARaw
 
                 const createPoolReceipt = await factoryContract.createPool({
                     fee: values.fee *  utils.math.computeExponent(5),

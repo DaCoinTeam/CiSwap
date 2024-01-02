@@ -43,5 +43,12 @@ const abi = [
         stateMutability: "nonpayable",
         type: "function",
     },
+    {
+        inputs: [{ internalType: "bytes", name: "path", type: "bytes" }],
+        name: "quotePriceX96",
+        outputs: [{ internalType: "uint256", name: "priceX96", type: "uint256" }],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
 ] as const
 export default abi

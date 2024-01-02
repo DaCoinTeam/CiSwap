@@ -38,13 +38,13 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     }
 
     const renderDescription = (isTokenAMax?: boolean) => {
-        const firstTokenSymbol = formik.values._zeroForOne
-            ? formik.values._symbolA
-            : formik.values._symbolB
+        const firstTokenSymbol = formik.values.zeroForOne
+            ? formik.values.symbolA
+            : formik.values.symbolB
 
-        const secondTokenSymbol = formik.values._zeroForOne
-            ? formik.values._symbolB
-            : formik.values._symbolA
+        const secondTokenSymbol = formik.values.zeroForOne
+            ? formik.values.symbolB
+            : formik.values.symbolA
 
         const price = isTokenAMax ? maxPriceAParsed : basePriceAParsed
         const _message = `1 ${firstTokenSymbol} = ${price} ${secondTokenSymbol}`

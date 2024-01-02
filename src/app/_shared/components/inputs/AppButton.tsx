@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react"
 interface AppButtonProps {
   className?: string;
   submit?: boolean;
-  text?: string;
+  text: string;
   bordered?: boolean;
   size?: "sm" | "lg";
   onClick?: () => void;
@@ -20,7 +20,7 @@ const AppButton = (props: AppButtonProps) => {
             type={props.submit ? "submit" : undefined}
             variant={props.bordered ? "bordered" : undefined}
             className={`${className}
-            } ${props.className}`}
+            ${props.className} font-bold`}
             onPress={props.onClick}
         >
             {" "}

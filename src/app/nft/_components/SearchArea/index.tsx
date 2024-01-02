@@ -10,7 +10,7 @@ interface SearchAreaProps {
 const SearchArea = (props: SearchAreaProps) => {
     return (
         <nav className="sticky">
-            <div className="max-w-[1024px] m-auto px-6 py-4">
+            <div className="max-w-[1280px] m-auto px-6 py-4">
                 <SearchBar/>
             </div>
         </nav>

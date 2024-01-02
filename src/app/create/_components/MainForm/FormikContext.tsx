@@ -111,12 +111,12 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                const amountARaw = utils.math.computeDeRedenomination(
+                const amountARaw = utils.math.computeRaw(
                     utils.format.parseNumber(values.amountA),
                     values.decimalsA
                 )
 
-                const amountBRaw = utils.math.computeDeRedenomination(
+                const amountBRaw = utils.math.computeRaw(
                     utils.format.parseNumber(values.amountB),
                     values.decimalsB
                 )

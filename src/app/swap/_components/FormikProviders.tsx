@@ -99,7 +99,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 if (allowanceIn === null) return
 
-                const parsedAmountIn = utils.math.computeDeRedenomination(
+                const parsedAmountIn = utils.math.computeRaw(
                     utils.format.parseNumber(values.amountIn),
                     swapState.infoIn.decimals
                 )

@@ -26,7 +26,7 @@ export const computeRedenomination = (
     }
 }
 
-export const computeDeRedenomination = (
+export const computeRaw = (
     amount: number,
     decimals: number,
     precision?: number

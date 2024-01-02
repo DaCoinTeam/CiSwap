@@ -46,7 +46,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const quote = await services.next.smartRouter.findBestQuote(
                 chainId,
-                utils.math.computeDeRedenomination(
+                utils.math.computeRaw(
                     utils.format.parseNumber(formik.values.amountIn),
                     swapState.infoIn.decimals
                 ),
@@ -103,7 +103,7 @@ const MainSection = () => {
         const handleEffect = async () => {
             const quote = await services.next.smartRouter.findBestQuote(
                 chainId,
-                utils.math.computeDeRedenomination(
+                utils.math.computeRaw(
                     utils.format.parseNumber(formik.values.amountOut),
                     swapState.infoIn.decimals
                 ),
@@ -156,7 +156,7 @@ const MainSection = () => {
         formik.setFieldValue("amountIn", value)
         formik.setFieldValue(
             "amountInRaw",
-            utils.math.computeDeRedenomination(
+            utils.math.computeRaw(
                 utils.format.parseNumber(value),
                 swapState.infoIn.decimals
             )
@@ -168,7 +168,7 @@ const MainSection = () => {
         formik.setFieldValue("amountOut", value)
         formik.setFieldValue(
             "amountOutRaw",
-            utils.math.computeDeRedenomination(
+            utils.math.computeRaw(
                 utils.format.parseNumber(value),
                 swapState.infoOut.decimals
             )

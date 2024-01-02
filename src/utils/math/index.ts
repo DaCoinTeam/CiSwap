@@ -11,7 +11,7 @@ import {
 } from "./base-math.util"
 
 import {
-    computeDeRedenomination,
+    computeRaw,
     computeDivideX96,
     computeMultiplyX96,
     computePriceImpact,
@@ -29,7 +29,7 @@ const mathUtils = {
     computeBigIntDivideNumber: computeBigIntDivideNumber,
     computeBigIntDivideBigInt: computeBigIntDivideBigInt,
     computePercentage: computePercentage,
-    computeDeRedenomination: computeDeRedenomination,
+    computeRaw: computeRaw,
     computeDivideX96: computeDivideX96,
     computeMultiplyX96: computeMultiplyX96,
     computeRedenomination: computeRedenomination,

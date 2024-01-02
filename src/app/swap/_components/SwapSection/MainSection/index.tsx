@@ -44,33 +44,31 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            try {
-                const quote = await services.next.smartRouter.findBestQuote(
-                    chainId,
-                    utils.math.computeRaw(
-                        utils.format.parseStringToNumber(formik.values.amountIn),
-                        swapState.infoIn.decimals
-                    ),
-                    swapState.infoIn.address,
-                    swapState.infoOut.address,
-                    true
-                )
-                setFinishOut(true)
-                if (quote === null) return
+            const quote = await services.next.smartRouter.findBestQuote(
+                chainId,
+                utils.math.computeRaw(
+                    utils.format.parseStringToNumber(formik.values.amountIn),
+                    swapState.infoIn.decimals
+                ),
+                swapState.infoIn.address,
+                swapState.infoOut.address,
+                true
+            )
+            setFinishOut(true)
+            if (quote === null) return
 
-                formik.setFieldValue("amountOutRaw", quote.amountOut)
-                formik.setFieldValue(
-                    "amountOut",
-                    utils.math.computeRedenomination(
-                        quote.amountOut,
-                        swapState.infoOut.decimals
-                    )
+            formik.setFieldValue("amountOutRaw", quote.amountOut)
+            formik.setFieldValue(
+                "amountOut",
+                utils.math.computeRedenomination(
+                    quote.amountOut,
+                    swapState.infoOut.decimals
                 )
-                formik.setFieldValue("exactInput", false)
-                formik.setFieldValue("steps", quote.path.steps)
-            } finally {
-                setPreventOut(true)
-            }
+            )
+            formik.setFieldValue("exactInput", false)
+            formik.setFieldValue("steps", quote.path.steps)
+
+            setPreventOut(true)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -96,32 +94,30 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            try {
-                const quote = await services.next.smartRouter.findBestQuote(
-                    chainId,
-                    utils.math.computeRaw(
-                        utils.format.parseStringToNumber(formik.values.amountOut),
-                        swapState.infoIn.decimals
-                    ),
-                    swapState.infoIn.address,
-                    swapState.infoOut.address,
-                    false
+            const quote = await services.next.smartRouter.findBestQuote(
+                chainId,
+                utils.math.computeRaw(
+                    utils.format.parseStringToNumber(formik.values.amountOut),
+                    swapState.infoIn.decimals
+                ),
+                swapState.infoIn.address,
+                swapState.infoOut.address,
+                false
+            )
+            setFinishIn(true)
+            if (quote === null) return
+            formik.setFieldValue("amountInRaw", quote.amountIn)
+            formik.setFieldValue(
+                "amountIn",
+                utils.math.computeRedenomination(
+                    quote.amountIn,
+                    swapState.infoIn.decimals
                 )
-                setFinishIn(true)
-                if (quote === null) return
-                formik.setFieldValue("amountInRaw", quote.amountIn)
-                formik.setFieldValue(
-                    "amountIn",
-                    utils.math.computeRedenomination(
-                        quote.amountIn,
-                        swapState.infoIn.decimals
-                    )
-                )
-                formik.setFieldValue("exactInput", true)
-                formik.setFieldValue("steps", quote.path.steps)
-            } catch {
-                setPreventIn(true)
-            }
+            )
+            formik.setFieldValue("exactInput", true)
+            formik.setFieldValue("steps", quote.path.steps)
+
+            setPreventIn(true)
         }
 
         const delayedEffectWithBounce = setTimeout(handleEffect, TIME_OUT)
@@ -210,10 +206,7 @@ const MainSection = () => {
                     onValueChange={onChangeIn}
                     isDisabled={!finishIn}
                 />
-                <LoadingDisplay
-                    finishLoad={finishIn}
-                    message="Calculating..."
-                />
+                <LoadingDisplay finishLoad={finishIn} message="Calculating..." />
             </div>
 
             <Button
@@ -241,10 +234,7 @@ const MainSection = () => {
                     onValueChange={onChangeOut}
                     isDisabled={!finishOut}
                 />
-                <LoadingDisplay
-                    finishLoad={finishOut}
-                    message="Calculating..."
-                />
+                <LoadingDisplay finishLoad={finishOut} message="Calculating..." />
             </div>
         </div>
     )

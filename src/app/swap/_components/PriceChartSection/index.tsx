@@ -9,7 +9,7 @@ import { TokenPairDisplay, TokenPriceDisplay } from "../../../_shared"
 import { Period } from "@services"
 import { SwapContext } from "../../_hooks"
 
-interface PriceChartProps {
+interface PriceChartSectionProps {
   className?: string;
 }
 
@@ -20,7 +20,7 @@ interface PeriodContext {
 
 export const PeriodContext = createContext<PeriodContext | null>(null)
 
-const PriceChart = (props: PriceChartProps) => {
+const PriceChartSection = (props: PriceChartSectionProps) => {
     const [period, setPeriod] = useState(Period._24H)
     const { actions, swapState } = useContext(SwapContext)!
     const { infoIn, infoOut, state } = swapState
@@ -51,4 +51,4 @@ const PriceChart = (props: PriceChartProps) => {
     )
 }
 
-export default PriceChart
+export default PriceChartSection

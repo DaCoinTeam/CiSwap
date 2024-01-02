@@ -53,7 +53,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
         ) : null
     }
 
-    const onClickPlus = (isTokenAMax?: boolean) => {
+    const onClickIncrease = (isTokenAMax?: boolean) => {
         const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
         const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
@@ -61,7 +61,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
         formik.setFieldValue(priceName, priceValue + 1)
     }
 
-    const onClickMinus = (isTokenAMax?: boolean) => {
+    const onClickDecrease = (isTokenAMax?: boolean) => {
         const priceName = isTokenAMax ? "maxPriceA" : "basePriceA"
 
         const priceValue = isTokenAMax ? maxPriceAParsed : basePriceAParsed
@@ -85,7 +85,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => onClickMinus()}
+                                    onPress={() => onClickDecrease()}
                                     endContent={<MinusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none grow hidden sm:inline-flex"
                                     radius="full"
@@ -103,7 +103,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => onClickPlus()}
+                                    onPress={() => onClickIncrease()}
                                     endContent={<PlusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none grow hidden sm:inline-flex"
                                     radius="full"
@@ -126,7 +126,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => onClickMinus(true)}
+                                    onPress={() => onClickDecrease(true)}
                                     endContent={<MinusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none hidden sm:inline-flex"
                                     radius="full"
@@ -141,7 +141,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                 <Button
                                     variant="flat"
                                     isIconOnly
-                                    onPress={() => onClickPlus(true)}
+                                    onPress={() => onClickIncrease(true)}
                                     endContent={<PlusIcon height={12} width={12} />}
                                     className="w-5 h-5 min-w-0 flex-none hidden sm:inline-flex"
                                     radius="full"

@@ -124,7 +124,7 @@ const SelectToken = (props: SelectTokenProps) => {
     error != ErrorType.Undefined && error != ErrorType.None && finishFetch
   const _message = _invalid && finishFetch ? error : ""
 
-  const onClickStableToken = (token: Address) => {
+  const onClickSelectStableToken = (token: Address) => {
       if (tempToken === token) return
       setTempToken(token)
       setFinishFetch(false)
@@ -167,7 +167,7 @@ const SelectToken = (props: SelectTokenProps) => {
                           />
                           <LoadingDisplay finishLoad={finishFetch} message="Checking" />
                       </div>
-                      <SelectStableToken callback={onClickStableToken} />
+                      <SelectStableToken callback={onClickSelectStableToken} />
                   </ModalBody>
                   <ModalFooter className="p-5">
                       {error === ErrorType.None ? (

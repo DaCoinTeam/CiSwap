@@ -25,7 +25,7 @@ interface SwapContext {
   updaters: {
     initialize: () => void;
     updateBeforeConnected: () => Promise<void>;
-    upateAfterConnected: () => Promise<void>;
+    updateAfterConnected: () => Promise<void>;
   };
 }
 
@@ -53,7 +53,7 @@ const SwapProviders = (props: ContextProps) => {
         }
     }
 
-    const [preventExecution, setPreventExecution] = useState(false)
+    const [preventBefore, setPreventBefore] = useState(false)
 
     const handleReverse = async () => {
         const { tokenIn, tokenOut } = getTokenPair()
@@ -74,14 +74,12 @@ const SwapProviders = (props: ContextProps) => {
             payload: infoOut,
         })
 
-        setPreventExecution(true)
+        setPreventBefore(true)
     }
 
     const actions = useMemo(() => {
         return { handleReverse }
     }, [handleReverse])
-
-    const finishInitializeRef = useRef(false)
 
     const initialize = () => {
         const tokenIn =
@@ -98,8 +96,6 @@ const SwapProviders = (props: ContextProps) => {
             type: "SET_TOKEN_OUT",
             payload: tokenOut,
         })
-
-        finishInitializeRef.current = true
     }
 
     useEffect(() => {
@@ -107,6 +103,7 @@ const SwapProviders = (props: ContextProps) => {
     }, [])
 
     const updateBeforeConnected = async () => {
+        console.log("called")
         const updateInfoIn = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
@@ -191,20 +188,21 @@ const SwapProviders = (props: ContextProps) => {
         })
     }
 
+    const beforeHasMountedRef = useRef(false)
     useEffect(() => {
-        if (!finishInitializeRef.current) return
-        if (preventExecution) {
-            setPreventExecution(false)
+        if (!beforeHasMountedRef.current) {
+            beforeHasMountedRef.current = true
+            return
+        }
+        if (preventBefore) {
+            setPreventBefore(false)
             return
         }
         updateBeforeConnected()
-    }, [
-        finishInitializeRef.current,
-        swapState.infoIn.address,
-        swapState.infoOut.address,
-    ])
+        console.log("pocess")
+    }, [swapState.infoIn.address, swapState.infoOut.address])
 
-    const upateAfterConnected = async () => {
+    const updateAfterConnected = async () => {
         if (!account) {
             swapDispatch({
                 type: "SET_FINISH_UPDATE_AFTER_CONNECTED",
@@ -260,17 +258,22 @@ const SwapProviders = (props: ContextProps) => {
         })
     }
 
+    const afterHasMountedRef = useRef(false)
     useEffect(() => {
-        upateAfterConnected()
+        if (!afterHasMountedRef.current) {
+            afterHasMountedRef.current = true
+            return
+        }
+        updateAfterConnected()
     }, [account, swapState.state.finishUpdateAfterConnected])
 
     const updaters = useMemo(() => {
         return {
             initialize,
             updateBeforeConnected,
-            upateAfterConnected,
+            updateAfterConnected,
         }
-    }, [initialize, updateBeforeConnected, upateAfterConnected])
+    }, [initialize, updateBeforeConnected, updateAfterConnected])
     return (
         <SwapContext.Provider value={{ swapState, actions, updaters }}>
             {props.children}

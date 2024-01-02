@@ -12,10 +12,10 @@ const Description = () => {
     const [receivedMin, setReceivedMin] = useState(0)
     const [priceImpact, setPriceImpact] = useState(0)
 
-    const executeHasMountRef = useRef(false)
+    const executeHasMountedRef = useRef(false)
     useEffect(() => {
-        if (!executeHasMountRef.current) {
-            executeHasMountRef.current = true
+        if (!executeHasMountedRef.current) {
+            executeHasMountedRef.current = true
         }
 
         if (!formik.values.finishExecuteIn || !formik.values.finishExecuteOut)

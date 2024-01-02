@@ -192,12 +192,6 @@ class SmartRouter {
 
         const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
 
-        if (!amountsQuoted.every((amount) => typeof amount === "bigint")) {
-            throw new Error(
-                "Invalid response from multicall. Expected an array of bigints."
-            )
-        }
-
         const { index, value } = exactInput
             ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
             : utils.array.findMinBigIntIndexAndValueExceptZero(amountsQuoted)

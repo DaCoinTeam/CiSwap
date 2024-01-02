@@ -1,5 +1,5 @@
 import { NumberInput, TitleDisplay } from "@app/_shared"
-import { Card, CardBody } from "@nextui-org/react"
+import { Button } from "@nextui-org/react"
 import { RootState } from "@redux"
 import { FormikContext } from "../../../../../_components/FormikProviders"
 import React, { useContext } from "react"
@@ -24,19 +24,16 @@ const SlippageTolerance = () => {
             key: 0,
             label: "0.1%",
             value: 0.001,
-            isPressable: true,
         },
         {
             key: 1,
             label: "0.5%",
             value: 0.005,
-            isPressable: true,
         },
         {
             key: 2,
             label: "1%",
             value: 0.01,
-            isPressable: true,
         },
         {
             key: 3,
@@ -65,42 +62,46 @@ const SlippageTolerance = () => {
     return (
         <div className="flex flex-col gap-6">
             <TitleDisplay text="Slippage tolerance" tooltipText="AAA" />
-            <div className={`grid grid-cols-${items.length} gap-4`}>
-                {items.map((item) => (
-                    <Card
-                        shadow="sm"
-                        key={item.key}
-                        isPressable={item.isPressable}
-                        className={`${renderSelected(item.key)} glow`}
-                        onPress={() => onClick(item)}
-                    >
-                        <CardBody className="p-0">
-                            {item.isPressable ? (
+            <div className={"flex gap-4"}>
+                {items.map((item) => {
+                    if (item.key != items.length - 1)
+                        return (
+                            <Button
+                                key={item.key}
+                                variant="flat"
+                                className={`${renderSelected(item.key)} glow w-[4rem]`}
+                                onPress={() => onClick(item)}
+                            >
                                 <div
                                     className={`h-full grid place-items-center 
                                     font-bold 
                                     ${
-                                item.key === formik.values.slippageKey
-                                    ? textColor
-                                    : null
-                                }`}
+                            item.key === formik.values.slippageKey
+                                ? textColor
+                                : null
+                            }`}
                                 >
                                     {item.label}
                                 </div>
-                            ) : (
-                                <NumberInput
-                                    value={utils.format.parseStringToNumberMultiply(
-                                        formik.values.slippage,
-                                        100
-                                    )}
-                                    onChange={onChange}
-                                    endContent="%"
-                                    placeholder={"2.0"}
-                                />
+                            </Button>
+                        )
+
+                    return (
+                        <NumberInput
+                            key={item.key}
+                            value={utils.format.parseStringToNumberMultiply(
+                                formik.values.slippage,
+                                100
                             )}
-                        </CardBody>
-                    </Card>
-                ))}
+                            variant="bordered"
+                            radius="md"
+                            className="w-[5rem]"
+                            onChange={onChange}
+                            endContent="%"
+                            placeholder={"2.0"}
+                        />
+                    )
+                })}
             </div>
         </div>
     )

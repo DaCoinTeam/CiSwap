@@ -15,6 +15,8 @@ interface NumberInputProps {
   hideErrorMessage?: boolean;
   endContent?: ReactNode;
   placeholder?: string;
+  radius?: "sm" | "md" | "lg";
+  variant?: "bordered" | "underlined" | "flat";
 }
 
 const NumberInput = (props: NumberInputProps) => {
@@ -40,11 +42,12 @@ const NumberInput = (props: NumberInputProps) => {
                 input: `${textPositionClassName}`,
             }}
             size={props.size}
-            radius="sm"
+            radius={props.radius}
             isDisabled={props.isDisabled}
             placeholder={props.placeholder ?? "0.0"}
             className={`${props.className}`}
             value={props.value}
+            variant={props.variant}
             onValueChange={onChange}
             isInvalid={!!props.errorMessage}
             errorMessage={!props.hideErrorMessage ? props.errorMessage : ""}

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import {
     ChevronRightIcon,
-    MagnifyingGlassCircleIcon,
+    MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline"
 import { Button, Skeleton } from "@nextui-org/react"
 
@@ -60,7 +60,7 @@ const Route = () => {
                         radius="full"
                         className="min-w-0 flex-none w-5 h-5"
                     >
-                        <MagnifyingGlassCircleIcon className="w-3.5 h-3.5" />
+                        <MagnifyingGlassIcon className="w-3.5 h-3.5" />
                     </Button>
                 </div>
             ) : (

@@ -1,9 +1,18 @@
 "use client"
 import React from "react"
-import { Card, CardBody, CardHeader, Divider, Spacer } from "@nextui-org/react"
+import {
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    Divider,
+    Spacer,
+} from "@nextui-org/react"
 import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import Options from "./Options"
+import Description from "./Description"
+import Route from "./Description/Route"
 
 interface SwapSectionProps {
   className?: string;
@@ -24,6 +33,10 @@ const SwapSection = (props: SwapSectionProps) => {
                 <Spacer y={12} />
                 <AppButton className="w-full" text="Swap" submit />
             </CardBody>
+            <Divider />
+            <CardFooter className="p-5">
+                <Description />
+            </CardFooter>
         </Card>
     )
 }

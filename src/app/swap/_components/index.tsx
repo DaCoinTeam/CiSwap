@@ -1,5 +1,5 @@
 import SwapSection from "./SwapSection"
-import PriceChart from "./PriceChartSection"
+import PriceChartSection from "./PriceChartSection"
 import FormikProviders from "./FormikProviders"
 
-export { SwapSection, PriceChart, FormikProviders }
+export { SwapSection, PriceChartSection, FormikProviders }

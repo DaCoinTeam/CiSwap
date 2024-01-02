@@ -46,6 +46,9 @@ const initialValues: FormikValues = {
     txDeadline: ""
 }
 
+export const SLIPPAGE_DEFAULT = 0.001
+export const TX_DEADLINE_DEFAULT = 30
+
 export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
 )

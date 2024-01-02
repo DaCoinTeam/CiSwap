@@ -22,11 +22,12 @@ const parseStringToNumber = (string: string, defaultValue?: number): number => {
 
 const parseNumberToString = (number: number): string => number !== 0 ? number.toString() : ""
 
-const getParsedNumberMultiply = (
-    stringNumber: string,
-    multiply: number
+const parseStringToNumberMultiply = (
+    string: string,
+    multiply: number,
+    defaultValue?: number
 ): string => {
-    let parsedNumber = parseStringToNumber(stringNumber)
+    let parsedNumber = parseStringToNumber(string, defaultValue)
     parsedNumber *= multiply
     return parseNumberToString(parsedNumber)
 }
@@ -36,7 +37,7 @@ const formatUtils = {
     shortenAddress: shortenAddress,
     parseStringToNumber: parseStringToNumber,
     parseNumberToString: parseNumberToString,
-    getParsedNumberMultiply: getParsedNumberMultiply
+    parseStringToNumberMultiply: parseStringToNumberMultiply
 }
 
 export default formatUtils

@@ -14,7 +14,6 @@ import { useSelector } from "react-redux"
 import utils from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 import { services } from "@services"
-import Description from "./Description"
 import { QuoterContract } from "@blockchain"
 
 const MainSection = () => {
@@ -236,7 +235,6 @@ const MainSection = () => {
                     message="Calculating..."
                 />
             </div>
-            <Description />
         </div>
     )
 }

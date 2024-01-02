@@ -1,8 +1,9 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
-import { FormikContext } from "../../../../_components/FormikProviders"
+import { FormikContext } from "../../FormikProviders"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
-import { SwapContext } from "../../../../_hooks"
+import { SwapContext } from "../../../_hooks"
+import Route from "./Route"
 
 const Description = () => {
     const { swapState } = useContext(SwapContext)!
@@ -43,6 +44,21 @@ const Description = () => {
 
     return (
         <div className="w-full flex flex-col gap-1">
+            {/* <div className="flex justify-between items-center">
+                <LabelWithTooltipDisplay
+                    text="Slippage tolerance"
+                    tooltipContent="AAA"
+                />
+                <div className="text-sm">
+                    {" "}
+                    {utils.format.parseStringToNumberMultiply(
+                        formik.values.slippage,
+                        100,
+                        SLIPPAGE_DEFAULT
+                    )}
+          %{" "}
+                </div>
+            </div> */}
             <div className="flex justify-between items-center">
                 <LabelWithTooltipDisplay text="Minimun received" tooltipContent="AAA" />
                 <div className="text-sm"> {receivedMin} </div>
@@ -51,6 +67,7 @@ const Description = () => {
                 <LabelWithTooltipDisplay text="Price impact" tooltipContent="AAA" />
                 <div className="text-sm text-danger"> {priceImpact}% </div>
             </div>
+            <Route />
         </div>
     )
 }

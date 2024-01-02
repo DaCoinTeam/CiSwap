@@ -56,7 +56,7 @@ const SlippageTolerance = () => {
     const onChange = (valueMul100: string) => {
         formik.setFieldValue(
             "slippage",
-            utils.format.getParsedNumberMultiply(valueMul100, 1 / 100)
+            utils.format.parseStringToNumberMultiply(valueMul100, 1 / 100)
         )
     }
 
@@ -78,11 +78,6 @@ const SlippageTolerance = () => {
                             {item.isPressable ? (
                                 <div
                                     className={`h-full grid place-items-center 
-                                    ${
-                                item.key !== formik.values.slippageKey
-                                    ? "text-teal-500"
-                                    : null
-                                }
                                     font-bold 
                                     ${
                                 item.key === formik.values.slippageKey
@@ -94,7 +89,7 @@ const SlippageTolerance = () => {
                                 </div>
                             ) : (
                                 <NumberInput
-                                    value={utils.format.getParsedNumberMultiply(
+                                    value={utils.format.parseStringToNumberMultiply(
                                         formik.values.slippage,
                                         100
                                     )}

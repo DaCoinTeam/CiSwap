@@ -8,7 +8,7 @@ const TxDeadline = () => {
     const onChange = (valueMul100: string) => {
         formik.setFieldValue(
             "txDeadline",
-            utils.format.getParsedNumberMultiply(valueMul100, 1 / 30)
+            utils.format.parseStringToNumberMultiply(valueMul100, 1 / 30)
         )
     }
 
@@ -17,7 +17,7 @@ const TxDeadline = () => {
             <TitleDisplay className="col-span-3" text="Tx deadline (mins)" tooltipText="AAA" />
             <Card shadow="sm" className="col-span-1">
                 <NumberInput
-                    value={utils.format.getParsedNumberMultiply(
+                    value={utils.format.parseStringToNumberMultiply(
                         formik.values.txDeadline,
                         30
                     )}

@@ -154,11 +154,25 @@ const MainSection = () => {
 
     const onChangeIn = (value: string) => {
         formik.setFieldValue("amountIn", value)
+        formik.setFieldValue(
+            "amountInRaw",
+            utils.math.computeDeRedenomination(
+                utils.format.parseNumber(value),
+                swapState.infoIn.decimals
+            )
+        )
         setFinishExecuteOut(false)
     }
 
     const onChangeOut = (value: string) => {
         formik.setFieldValue("amountOut", value)
+        formik.setFieldValue(
+            "amountOutRaw",
+            utils.math.computeDeRedenomination(
+                utils.format.parseNumber(value),
+                swapState.infoOut.decimals
+            )
+        )
         setFinishExecuteIn(false)
     }
 

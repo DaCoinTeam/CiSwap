@@ -12,7 +12,6 @@ import { AppButton } from "@app/_shared"
 import MainSection from "./MainSection"
 import Options from "./Options"
 import Description from "./Description"
-import Route from "./Description/Route"
 
 interface SwapSectionProps {
   className?: string;
@@ -20,7 +19,7 @@ interface SwapSectionProps {
 
 const SwapSection = (props: SwapSectionProps) => {
     return (
-        <Card className={`${props.className}`}>
+        <Card className={`${props.className}`} >
             <CardHeader className="p-5">
                 <div className="flex flex-col gap-6">
                     <div className="font-bold text-lg">Swap</div>

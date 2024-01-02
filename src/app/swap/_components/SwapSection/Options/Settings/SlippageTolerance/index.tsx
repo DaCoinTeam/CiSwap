@@ -69,7 +69,7 @@ const SlippageTolerance = () => {
                             <Button
                                 key={item.key}
                                 variant="flat"
-                                className={`${renderSelected(item.key)} glow w-[4rem]`}
+                                className={`${renderSelected(item.key)} glow w-[5rem]`}
                                 onPress={() => onClick(item)}
                             >
                                 <div

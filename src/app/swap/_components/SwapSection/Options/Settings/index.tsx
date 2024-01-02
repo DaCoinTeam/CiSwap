@@ -23,7 +23,7 @@ const Settings = () => {
                 <Cog6ToothIcon className="w-6 h-6 text-teal-500" />
             </Button>
 
-            <Modal isOpen={isOpen} onClose={onClickClose}>
+            <Modal isOpen={isOpen} size="lg" onClose={onClickClose}>
                 <ModalContent>
                     <ModalHeader className="p-5">Settings</ModalHeader>
                     <Divider />

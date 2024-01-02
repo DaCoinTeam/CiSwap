@@ -25,6 +25,8 @@ interface FormikValues {
   slippage: number;
   exactInput: boolean;
   price: number;
+  finishExecuteIn: boolean;
+  finishExecuteOut: boolean;
 }
 
 const initialValues: FormikValues = {
@@ -36,6 +38,8 @@ const initialValues: FormikValues = {
     slippage: 0.01,
     exactInput: true,
     price: 0,
+    finishExecuteIn: true,
+    finishExecuteOut: true,
 }
 
 export const FormikContext = createContext<FormikProps<FormikValues> | null>(

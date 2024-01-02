@@ -1,6 +1,6 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
 import { FormikContext } from "../../../../_components/FormikProviders"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
 import { SwapContext } from "../../../../_hooks"
 
@@ -8,26 +8,17 @@ const Description = () => {
     const { swapState } = useContext(SwapContext)!
     const formik = useContext(FormikContext)!
 
-    const [amountInRawTemp, setAmountInRawTemp] = useState(BigInt(0))
-    const [amountOutRawTemp, setAmountOutRawTemp] = useState(BigInt(0))
-
     const [receivedMin, setReceivedMin] = useState(0)
     const [priceImpact, setPriceImpact] = useState(0)
 
+    const executeHasMountRef = useRef(false)
     useEffect(() => {
-        setAmountInRawTemp(formik.values.amountInRaw)
-        setAmountOutRawTemp(formik.values.amountOutRaw)
-    }, [])
+        if (!executeHasMountRef.current) {
+            executeHasMountRef.current = true
+        }
 
-    useEffect(() => {
-        if (
-            formik.values.amountInRaw == amountInRawTemp ||
-      formik.values.amountOutRaw == amountOutRawTemp
-        )
+        if (!formik.values.finishExecuteIn || !formik.values.finishExecuteOut)
             return
-        
-        setAmountInRawTemp(formik.values.amountInRaw)
-        setAmountOutRawTemp(formik.values.amountOutRaw)
 
         const amountSlippaged = utils.math.computeSlippage(
             formik.values.amountOutRaw,
@@ -35,7 +26,10 @@ const Description = () => {
             true
         )
         setReceivedMin(
-            utils.math.computeRedenomination(amountSlippaged, swapState.infoOut.decimals)
+            utils.math.computeRedenomination(
+                amountSlippaged,
+                swapState.infoOut.decimals
+            )
         )
 
         const actualRatio = utils.math.computeBigIntDivideBigInt(
@@ -45,9 +39,7 @@ const Description = () => {
 
         const baseRatio = formik.values.price
         setPriceImpact(utils.math.computePriceImpact(actualRatio, baseRatio))
-    
-    }, [formik.values.amountInRaw, formik.values.amountOutRaw])
-  
+    }, [formik.values.finishExecuteIn, formik.values.finishExecuteOut])
 
     return (
         <div className="w-full flex flex-col gap-1">

@@ -29,7 +29,6 @@ const MainSection = () => {
     const [preventExecutionIn, setPreventExecutionIn] = useState(false)
 
     const amountInHasMounted = useRef(true)
-    const [finishExecuteOut, setFinishExecuteOut] = useState(true)
 
     useEffect(() => {
         if (amountInHasMounted.current) {
@@ -54,7 +53,7 @@ const MainSection = () => {
                 swapState.infoOut.address,
                 true
             )
-            setFinishExecuteOut(true)
+            formik.setFieldValue("finishExecuteOut", true)
             if (quote === null) return
             console.log(
                 utils.math.computeRedenomination(
@@ -86,7 +85,6 @@ const MainSection = () => {
     }, [formik.values.amountIn])
 
     const amountOutHasMounted = useRef(true)
-    const [finishExecuteIn, setFinishExecuteIn] = useState(true)
 
     useEffect(() => {
         if (amountOutHasMounted.current) {
@@ -111,7 +109,7 @@ const MainSection = () => {
                 swapState.infoOut.address,
                 false
             )
-            setFinishExecuteIn(true)
+            formik.setFieldValue("finishExecuteIn", true)
             if (quote === null) return
             formik.setFieldValue("amountInRaw", quote.amountIn)
             formik.setFieldValue(
@@ -161,7 +159,8 @@ const MainSection = () => {
                 swapState.infoIn.decimals
             )
         )
-        setFinishExecuteOut(false)
+
+        formik.setFieldValue("finishExecuteOut", false)
     }
 
     const onChangeOut = (value: string) => {
@@ -173,7 +172,7 @@ const MainSection = () => {
                 swapState.infoOut.decimals
             )
         )
-        setFinishExecuteIn(false)
+        formik.setFieldValue("finishExecuteIn", false)
     }
 
     const onClickReverse = actions.handleReverse
@@ -181,7 +180,7 @@ const MainSection = () => {
     useEffect(() => {
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)
-            setFinishExecuteOut(false)
+            formik.setFieldValue("finishExecuteOut", false)
         }
         handleEffect()
     }, [swapState.infoIn])
@@ -205,7 +204,7 @@ const MainSection = () => {
                     value={formik.values.amountIn}
                     onValueChange={onChangeIn}
                 />
-                <LoadingDisplay finishLoad={finishExecuteIn} message="Calculating..." />
+                <LoadingDisplay finishLoad={formik.values.finishExecuteIn} message="Calculating..." />
             </div>
 
             <Button
@@ -233,7 +232,7 @@ const MainSection = () => {
                     onValueChange={onChangeOut}
                 />
                 <LoadingDisplay
-                    finishLoad={finishExecuteOut}
+                    finishLoad={formik.values.finishExecuteOut}
                     message="Calculating..."
                 />
             </div>

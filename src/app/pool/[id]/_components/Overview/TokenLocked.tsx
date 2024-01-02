@@ -16,7 +16,7 @@ const TokenLocked = (props: TokenLockedProps) => {
     const { tokenState } = poolContext
     return (
         <div className = {`${props.clasName}`}>
-            <TitleDisplay title="Total Tokens Locked"/>
+            <TitleDisplay text="Total Tokens Locked"/>
             <Spacer y={2}/>
             <Card>
                 <CardBody className="p-3">

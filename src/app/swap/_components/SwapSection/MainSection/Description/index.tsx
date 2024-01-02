@@ -22,7 +22,7 @@ const Description = () => {
 
         const amountSlippaged = utils.math.computeSlippage(
             formik.values.amountOutRaw,
-            formik.values.slippage,
+            utils.format.parseStringToNumber(formik.values.slippage, 0.02),
             true
         )
         setReceivedMin(

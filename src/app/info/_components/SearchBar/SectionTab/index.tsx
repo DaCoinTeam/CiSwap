@@ -6,7 +6,7 @@ const SectionTab = () => {
     return (
         <Tabs items={options}>
             {option => (
-                <Tab key={option.key} title={option.label} />
+                <Tab key={option.key} content={option.label} />
             )}
         </Tabs>
     )

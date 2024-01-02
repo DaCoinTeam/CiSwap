@@ -17,7 +17,7 @@ const ProviderList = (props: ProviderListProps) => {
             <Card className="grow">
                 <CardBody className="p-5">
                     <div className="flex flex-col gap-4">
-                        <TitleDisplay title="Providers" size="lg" />
+                        <TitleDisplay text="Providers" size="lg" />
                         <ProviderTable/>
                     </div>    
                 </CardBody>

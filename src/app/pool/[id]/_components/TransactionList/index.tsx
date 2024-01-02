@@ -14,7 +14,7 @@ const TransactionList = (props: TransactionListProps) => {
         <Card className={`${props.className}`}>
             <CardBody className="p-5">
                 <div className="flex flex-col gap-4">
-                    <TitleDisplay title="Transactions" size="lg" />
+                    <TitleDisplay text="Transactions" size="lg" />
                     <TransactionTable />
                 </div>      
             </CardBody>

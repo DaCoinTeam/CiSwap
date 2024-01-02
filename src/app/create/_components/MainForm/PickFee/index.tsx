@@ -11,13 +11,13 @@ interface PickFeeProps {
   className?: string;
 }
 
-interface Fee {
+interface Item {
   key: number;
   label: string;
   value: number;
 }
 
-const protocolFees: Fee[] = [
+const items: Item[] = [
     {
         key: 0,
         label: "0.25%",
@@ -43,41 +43,40 @@ const protocolFees: Fee[] = [
 const PickFee = (props: PickFeeProps) => {
     const formik = useContext(FormikContext)!
 
-    const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
+    const darkMode = useSelector(
+        (state: RootState) => state.configuration.darkMode
+    )
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
-    const  { finishSelectedPair }  = useContext(FinishSelectedPairContext)!
+    const { finishSelectedPair } = useContext(FinishSelectedPairContext)!
 
-    const onClick = (fee: Fee) => {
-        formik.setFieldValue("feeId", fee.key)
-        formik.setFieldValue("fee", fee.value)
+    const onClick = (item: Item) => {
+        formik.setFieldValue("feeKey", item.key)
+        formik.setFieldValue("fee", item.value)
     }
 
-    const renderSelected = (key: number) => {
-        if (formik.values.feeId === key){
-            return `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
-        } else {
-            return ""
-        }
-    }
+    const renderSelected = (key: number) =>
+        formik.values.feeKey === key
+            ? `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
+            : null
 
     const _finishSelectedPair = account != null && finishSelectedPair
 
     return (
         <div className={props.className}>
-            <TitleDisplay title="Pick Fee" />
+            <TitleDisplay text="Pick Fee" />
             <Spacer y={4} />
-            <div className="grid grid-cols-4 gap-4">
-                {protocolFees.map((fee) => (
+            <div className={`grid grid-cols-${items.length} gap-4`}>
+                {items.map((item) => (
                     <Card
-                        key={fee.key}
-                        onPress={() => onClick(fee)}
-                        isPressable = {_finishSelectedPair}
-                        className={`${renderSelected(fee.key)} glow`}
+                        key={item.key}
+                        onPress={() => onClick(item)}
+                        isPressable={_finishSelectedPair}
+                        className={`${renderSelected(item.key)} glow`}
                     >
                         <CardBody className="p-5">
-                            <span className="font-bold text-center">{fee.label}</span>
+                            <span className="font-bold text-center">{item.label}</span>
                         </CardBody>
                     </Card>
                 ))}

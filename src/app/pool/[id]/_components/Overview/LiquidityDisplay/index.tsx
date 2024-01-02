@@ -28,7 +28,7 @@ const LiquidityDisplay = (props: LiquidityDisplayProps) => {
     return (
         <div className={`${props.className}`}>
             <div className="flex gap-2 items-center">
-                <TitleDisplay title={"Liquidity"} size="md" />
+                <TitleDisplay text={"Liquidity"} size="md" />
                 <Tooltip showArrow={true} content={"AAAA"} >
                     <QuestionMarkCircleIcon className="text-teal-500" height={16} width={16} />
                 </Tooltip>

@@ -84,7 +84,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
 
   return (
       <div className={`${props.className}`}>
-          <TitleDisplay title="Stable Tokens" />
+          <TitleDisplay text="Stable Tokens" />
           <Spacer y={4} />
           <div className="flex gap-4">
               {finishLoad

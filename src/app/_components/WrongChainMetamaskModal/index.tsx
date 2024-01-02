@@ -56,7 +56,7 @@ const WrongChainMetamaskModal = (props: MetamaskModalProps) => {
                     <TitleDisplay
                         className="w-full text-center"
                         size="lg"
-                        title={"You are in wrong network"}
+                        text={"You are in wrong network"}
                     />{" "}
                 </ModalHeader>
                 <ModalBody className="p-5">

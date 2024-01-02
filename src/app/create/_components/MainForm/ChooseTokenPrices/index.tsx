@@ -16,8 +16,8 @@ interface ChooseTokenPricesProps {
 const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
     const formik = useContext(FormikContext)!
 
-    const priceABaseParsed = utils.format.parseNumber(formik.values.priceABase)
-    const priceAMaxParsed = utils.format.parseNumber(formik.values.priceAMax)
+    const priceABaseParsed = utils.format.parseStringToNumber(formik.values.priceABase)
+    const priceAMaxParsed = utils.format.parseStringToNumber(formik.values.priceAMax)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -71,7 +71,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
 
     return (
         <div className={`${props.className}`}>
-            <TitleDisplay title="Choose Token Prices" />
+            <TitleDisplay text="Choose Token Prices" />
             <Spacer y={4} />
             <div className="grid grid-cols-2 gap-4">
                 <div className="grow">

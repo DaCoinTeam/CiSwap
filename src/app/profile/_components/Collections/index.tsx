@@ -33,7 +33,7 @@ const Collections = () => {
                     tabs.map(tab => (
                         <Tab
                             key={tab.key}
-                            title={
+                            text={
                                 <div className="flex font-bold items-center space-x-2 px-4">
                                     {tab.text}
                                 </div>

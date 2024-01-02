@@ -33,7 +33,7 @@ const DataDisplay = (props: DataDisplayProps) => {
 
     return (
         <div className={`${props.className}`}>
-            <TitleDisplay title={props.title} />
+            <TitleDisplay text={props.title} />
             <Spacer y={1} />
             {props.finishLoad 
                 ?

@@ -17,7 +17,7 @@ const LPRewards = (props: LPRewardLogsProps) => {
             <Card className="grow">
                 <CardBody className="p-5">
                     <div className="flex flex-col gap-4">
-                        <TitleDisplay size="lg" title="Rewards" />
+                        <TitleDisplay size="lg" text="Rewards" />
                         <LPRewardTable/>
                     </div>         
                 </CardBody>

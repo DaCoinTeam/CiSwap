@@ -7,7 +7,7 @@ import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } f
 import {
     computeRaw,
     computeMultiplyBigIntAndNumber,
-    parseNumber,
+    parseStringToNumber,
 } from "@utils"
 import { PoolContext } from "../../../../_hooks"
 import { MetamaskContext } from "@app/_hooks"
@@ -82,7 +82,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (token1Allowance === null) return
 
                 const token1DepositAmountParsed = computeRaw(
-                    parseNumber(values.token1DepositAmount),
+                    parseStringToNumber(values.token1DepositAmount),
                     tokenState.token1Decimals
                 )
 

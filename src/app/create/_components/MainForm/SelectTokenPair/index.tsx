@@ -15,7 +15,7 @@ const SelectTokenPair = (props: SelectTokenPairProps) => {
 
     return (
         <div className = {props.className}>
-            <TitleDisplay title="Select Token" />
+            <TitleDisplay text="Select Token" />
             <Spacer y={4} />
             <div className="flex items-center gap-4">
                 <SelectToken otherToken={formik.values.tokenB} className="flex-1" />

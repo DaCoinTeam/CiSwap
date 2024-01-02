@@ -12,18 +12,31 @@ const sanitizeNumericInput = (input: string): string | null => {
 const shortenAddress = (account: Address) =>
     `${account.slice(0, 4)}...${account.slice(-2)}`
 
-const parseNumber = (string: string): number => {
+const parseStringToNumber = (string: string, defaultValue?: number): number => {
     const parseValue = Number.parseFloat(string)
     if (Number.isNaN(parseValue) || !Number.isFinite(parseValue)) {
-        return 0
+        return defaultValue ?? 0
     }
     return parseValue
 }
 
+const parseNumberToString = (number: number): string => number !== 0 ? number.toString() : ""
+
+const getParsedNumberMultiply = (
+    stringNumber: string,
+    multiply: number
+): string => {
+    let parsedNumber = parseStringToNumber(stringNumber)
+    parsedNumber *= multiply
+    return parseNumberToString(parsedNumber)
+}
+
 const formatUtils = {
-    sanitizeNumericInput : sanitizeNumericInput,
-    shortenAddress : shortenAddress,
-    parseNumber : parseNumber
+    sanitizeNumericInput: sanitizeNumericInput,
+    shortenAddress: shortenAddress,
+    parseStringToNumber: parseStringToNumber,
+    parseNumberToString: parseNumberToString,
+    getParsedNumberMultiply: getParsedNumberMultiply
 }
 
 export default formatUtils

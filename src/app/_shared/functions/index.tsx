@@ -7,7 +7,7 @@ import React from "react"
 export const notify = (txHash: TransactionHash) =>
     toast(
         <div>
-            <TitleDisplay title="Transaction receipt" />
+            <TitleDisplay text="Transaction receipt" />
             <div className="flex gap-1">
                 <span className="text-sm">View on explorer:</span>
                 <ViewOnExplorer hexString={txHash} isTransaction showShorten />

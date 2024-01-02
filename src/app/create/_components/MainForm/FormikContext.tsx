@@ -24,7 +24,7 @@ interface FormikValues {
   decimalsB: number;
   priceABase: string;
   priceAMax: string;
-  feeId: number;
+  feeKey: number;
   fee: number;
 }
 
@@ -42,7 +42,7 @@ const initialValues: FormikValues = {
     decimalsB: 0,
     priceABase: "",
     priceAMax: "",
-    feeId: 0,
+    feeKey: 0,
     fee: 0.0025,
 }
 
@@ -112,19 +112,19 @@ const FormikProviders = (props: ContextProps) => {
                 )
 
                 const amountARaw = utils.math.computeRaw(
-                    utils.format.parseNumber(values.amountA),
+                    utils.format.parseStringToNumber(values.amountA),
                     values.decimalsA
                 )
 
                 const amountBRaw = utils.math.computeRaw(
-                    utils.format.parseNumber(values.amountB),
+                    utils.format.parseStringToNumber(values.amountB),
                     values.decimalsB
                 )
 
                 const priceABaseX96 = utils.math.computeMultiplyX96(
-                    utils.format.parseNumber(values.priceABase)
+                    utils.format.parseStringToNumber(values.priceABase)
                 )
-                const priceAMaxX96 = utils.math.computeMultiplyX96(utils.format.parseNumber(values.priceAMax))
+                const priceAMaxX96 = utils.math.computeMultiplyX96(utils.format.parseStringToNumber(values.priceAMax))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
                 console.log(allowanceA)

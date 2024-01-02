@@ -45,13 +45,11 @@ const SelectToken = (props: SelectTokenProps) => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
-
-    console.log(formik.values)
-
+    
     const [isOpen, setIsOpen] = useState(false)
 
-    const _open = () => setIsOpen(true)
-    const _close = () => {
+    const onClickOpen = () => setIsOpen(true)
+    const onClickClose = () => {
         setIsOpen(false)
         setTempToken("")
         setError(ErrorType.Undefined)
@@ -109,11 +107,11 @@ const SelectToken = (props: SelectTokenProps) => {
   }, [tempToken])
 
   const onChangeTempToken = (event: ChangeEvent<HTMLInputElement>) => {
-      const _token = event.target.value
+      const token = event.target.value
 
-      setTempToken(_token)
+      setTempToken(token)
 
-      if (!_token) {
+      if (!token) {
           setError(ErrorType.Required)
           return
       }
@@ -149,10 +147,10 @@ const SelectToken = (props: SelectTokenProps) => {
 
   return (
       <>
-          <Button className={`${props.className}`} variant="flat" onPress={_open}>
+          <Button className={`${props.className}`} variant="flat" onPress={onClickOpen}>
               {symbol || "Select Token"}
           </Button>
-          <Modal isOpen={isOpen} onClose={_close}>
+          <Modal isOpen={isOpen} onClose={onClickClose}>
               <ModalContent>
                   <ModalHeader className="p-5">Select Token</ModalHeader>
                   <Divider />

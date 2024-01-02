@@ -22,7 +22,7 @@ const InputFields = () => {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-                <TitleDisplay title="Name"/>
+                <TitleDisplay text="Name"/>
                 <Input
                     id="name"
                     radius="sm"
@@ -38,7 +38,7 @@ const InputFields = () => {
             
             <div className="grid grid-cols-2 gap-6">
                 <div className="flex flex-col gap-1">
-                    <TitleDisplay title="Collection"/>
+                    <TitleDisplay text="Collection"/>
                     <Input
                         id="collection"
                         radius="sm"
@@ -52,7 +52,7 @@ const InputFields = () => {
                     />
                 </div>
                 <div className="flex flex-col gap-1">
-                    <TitleDisplay title="External URL"/>
+                    <TitleDisplay text="External URL"/>
                     <Input
                         id="externalUrl"
                         radius="sm"
@@ -68,7 +68,7 @@ const InputFields = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-                <TitleDisplay title="Floor"/>
+                <TitleDisplay text="Floor"/>
                 <NumberInput
                     onValueChange={_handleFloorChange}
                     value={formik.values.floor}
@@ -79,7 +79,7 @@ const InputFields = () => {
             </div>
            
             <div className="flex flex-col gap-1">
-                <TitleDisplay title="Description"/>
+                <TitleDisplay text="Description"/>
                 <Textarea
                     id="description"
                     radius="sm"
@@ -100,7 +100,7 @@ const InputFields = () => {
             </div>
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <TitleDisplay title="Tags"/>
+                    <TitleDisplay text="Tags"/>
                     <div className="flex gap-4">
                         <Input
                             id="_tagInput"

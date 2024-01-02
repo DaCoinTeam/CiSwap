@@ -94,7 +94,7 @@ const DepositTokens = (props: AddTokensProps) => {
 
     return (
         <div className={props.className}>
-            <TitleDisplay title="Deposit Tokens" />
+            <TitleDisplay text="Deposit Tokens" />
             <Spacer y={4} />
             <Select
                 label="Sell Token"
@@ -125,7 +125,7 @@ const DepositTokens = (props: AddTokensProps) => {
                         />
                     </div>
                     <NumberInput
-                        onValueChange={onChangeInput}
+                        onChange={onChangeInput}
                         className="grow"
                         errorMessage={formik.errors.amountA}
                         isDisabled={!_finishSelectedPair}
@@ -144,7 +144,7 @@ const DepositTokens = (props: AddTokensProps) => {
                         />
                     </div>
                     <NumberInput
-                        onValueChange={(value) => onChangeInput(value, true)}
+                        onChange={(value) => onChangeInput(value, true)}
                         className="grow"
                         errorMessage={formik.errors.amountB}
                         isDisabled={!_finishSelectedPair}

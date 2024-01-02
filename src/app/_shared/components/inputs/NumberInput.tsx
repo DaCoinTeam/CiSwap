@@ -1,55 +1,51 @@
-
 import React, { ReactNode } from "react"
 import { Input } from "@nextui-org/react"
 import utils from "@utils"
 
+type TextPosition = "center" | "left" | "right";
+
 interface NumberInputProps {
-    className?: string,
-    size?: "sm" | "md" | "lg",
-    onValueChange: (value: string) => void,
-    value: string,
-    errorMessage? : string,
-    textPosition?: "center" | "left" | "right",
-    isDisabled?: boolean,
-    hideErrorMessage?: boolean,
-    endContent?: ReactNode
+  className?: string;
+  size?: "sm" | "md" | "lg";
+  onChange: (value: string) => void;
+  value: string;
+  errorMessage?: string;
+  textPosition?: TextPosition;
+  isDisabled?: boolean;
+  hideErrorMessage?: boolean;
+  endContent?: ReactNode;
+  placeholder?: string;
 }
 
 const NumberInput = (props: NumberInputProps) => {
-    const _textPosition = props.textPosition ?? "left"
-
-    let _textPositionClassName = ""
-    switch (_textPosition){
-    case "center": _textPositionClassName = "text-center"
-        break
-    case "left": _textPositionClassName = "text-left"
-        break
-    case "right": _textPositionClassName = "text-right"
-        break
+    const textPositionToClassName: Record<TextPosition, string> = {
+        left: "text-left",
+        center: "text-center",
+        right: "text-right",
     }
+    const textPositionClassName =
+    textPositionToClassName[props.textPosition ?? "left"]
 
-    const _handleChange = (
-        value: string
-    ) => {
+    const onChange = (value: string) => {
         const sanitizeInput = utils.format.sanitizeNumericInput(value)
         if (sanitizeInput != null) {
-            props.onValueChange(sanitizeInput)
-        } 
+            props.onChange(sanitizeInput)
+        }
     }
 
     return (
-        <Input 
+        <Input
             labelPlacement="outside"
             classNames={{
-                input: _textPositionClassName
+                input: `${textPositionClassName}`,
             }}
             size={props.size}
             radius="sm"
-            isDisabled = {props.isDisabled}
-            placeholder="0.0"
-            className={`${props.className}`} 
-            value={props.value} 
-            onValueChange={_handleChange}
+            isDisabled={props.isDisabled}
+            placeholder={props.placeholder ?? "0.0"}
+            className={`${props.className}`}
+            value={props.value}
+            onValueChange={onChange}
             isInvalid={!!props.errorMessage}
             errorMessage={!props.hideErrorMessage ? props.errorMessage : ""}
             endContent={props.endContent}
@@ -58,4 +54,3 @@ const NumberInput = (props: NumberInputProps) => {
 }
 
 export default NumberInput
-

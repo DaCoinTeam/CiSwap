@@ -22,11 +22,13 @@ interface FormikValues {
   amountInRaw: bigint;
   amountOutRaw: bigint;
   steps: Step[];
-  slippage: number;
   exactInput: boolean;
   price: number;
   finishExecuteIn: boolean;
   finishExecuteOut: boolean;
+  slippageKey: number;
+  slippage: string;
+  txDeadline: string
 }
 
 const initialValues: FormikValues = {
@@ -35,11 +37,13 @@ const initialValues: FormikValues = {
     amountInRaw: BigInt(0),
     amountOutRaw: BigInt(0),
     steps: [],
-    slippage: 0.01,
     exactInput: true,
     price: 0,
     finishExecuteIn: true,
     finishExecuteOut: true,
+    slippageKey: 0,
+    slippage: "",
+    txDeadline: ""
 }
 
 export const FormikContext = createContext<FormikProps<FormikValues> | null>(
@@ -104,7 +108,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (allowanceIn === null) return
 
                 const parsedAmountIn = utils.math.computeRaw(
-                    utils.format.parseNumber(values.amountIn),
+                    utils.format.parseStringToNumber(values.amountIn),
                     swapState.infoIn.decimals
                 )
 

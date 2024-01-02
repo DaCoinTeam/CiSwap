@@ -11,7 +11,7 @@ import { PoolContract } from "@blockchain"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { computeRedenomination, parseNumber, computeRaw } from "@utils"
+import { computeRedenomination, parseStringToNumber, computeRaw } from "@utils"
 import { ArrowDownIcon } from "@heroicons/react/24/outline"
 import { Spacer } from "@nextui-org/react"
 import { MetamaskContext } from "@app/_hooks"
@@ -52,7 +52,7 @@ const MainSection = () => {
             const LPTokenAmountIn = formik.values.LPTokenAmountIn
             const contract = new PoolContract(chainId, poolAddress, web3, account)
             const token0AmountOut = await contract.token0AmountOutWithLPTokensIn(
-                computeRaw(parseNumber(LPTokenAmountIn),
+                computeRaw(parseStringToNumber(LPTokenAmountIn),
                     tokenState.LPTokenDecimals),
                 controller
             )

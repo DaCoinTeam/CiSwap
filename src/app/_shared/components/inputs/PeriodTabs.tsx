@@ -34,8 +34,7 @@ const PeriodTabs = (props: PeriodTabsProps) => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )
-    const _size = props.size ?? "md"
-    const _selected = darkMode
+    const selected = darkMode
         ? "group-data-[selected=true]:text-black"
         : "group-data-[selected=true]:text-white"
     
@@ -47,12 +46,12 @@ const PeriodTabs = (props: PeriodTabsProps) => {
     return (
         <Tabs
             className={`${props.className}`}
-            size={_size}
+            size={props.size}
             radius="sm"
             aria-label="Tabs variants"
             classNames={{
                 cursor: "!bg-teal-500",
-                tabContent: `font-bold ${_selected}`,
+                tabContent: `font-bold ${selected}`,
             }}
             selectedKey={props.tab}
             onSelectionChange={onChangeSelection}

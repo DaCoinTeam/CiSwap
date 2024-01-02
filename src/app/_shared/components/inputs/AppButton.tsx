@@ -6,25 +6,20 @@ interface AppButtonProps {
   submit?: boolean;
   text?: string;
   bordered?: boolean;
-  size?: "sm" | "lg"
+  size?: "sm" | "lg";
   onClick?: () => void;
 }
 
 const AppButton = (props: AppButtonProps) => {
-    const attributes: Attributes = props.bordered
-        ? {
-            variant: "bordered",
-            classNames: "border-teal-500 text-teal-500",
-        }
-        : {
-            classNames: "bg-teal-500",
-        }
+    const className = props.bordered
+        ? "border-teal-500 text-teal-500"
+        : "bg-teal-500"
     return (
         <Button
             size={props.size}
             type={props.submit ? "submit" : undefined}
-            variant={attributes.variant}
-            className={`${attributes.classNames}
+            variant={props.bordered ? "bordered" : undefined}
+            className={`${className}
             } ${props.className}`}
             onPress={props.onClick}
         >
@@ -35,8 +30,3 @@ const AppButton = (props: AppButtonProps) => {
 }
 
 export default AppButton
-
-interface Attributes {
-  variant?: "bordered";
-  classNames: string;
-}

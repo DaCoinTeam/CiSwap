@@ -36,7 +36,7 @@ const PriceChart = (props: PriceChartProps) => {
                                 tokenB={infoOut.address}
                                 symbolA={infoIn.symbol}
                                 symbolB={infoOut.symbol}
-                                onClick={actions.doReverse}
+                                onClick={actions.handleReverse}
                                 finishLoad = {state.finishUpdateBeforeConnected}      
                             />
                             <Spacer y={1} />

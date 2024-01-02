@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation"
 interface SwapContext {
   swapState: SwapState;
   actions: {
-    doReverse: () => Promise<void>;
+    handleReverse: () => Promise<void>;
   };
   updaters: {
     initialize: () => void;
@@ -55,7 +55,7 @@ const SwapProviders = (props: ContextProps) => {
 
     const [preventExecution, setPreventExecution] = useState(false)
 
-    const doReverse = async () => {
+    const handleReverse = async () => {
         const { tokenIn, tokenOut } = getTokenPair()
         const params = new URLSearchParams(searchParams)
         params.set("tokenIn", tokenOut)
@@ -78,8 +78,8 @@ const SwapProviders = (props: ContextProps) => {
     }
 
     const actions = useMemo(() => {
-        return { doReverse }
-    }, [doReverse])
+        return { handleReverse }
+    }, [handleReverse])
 
     const finishInitializeRef = useRef(false)
 

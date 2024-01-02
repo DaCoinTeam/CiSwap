@@ -144,7 +144,7 @@ const MainSection = () => {
         setFinishExecuteIn(false)
     }
 
-    const onClickReverse = actions.doReverse
+    const onClickReverse = actions.handleReverse
 
     useEffect(() => {
         const handleEffect = async () => {

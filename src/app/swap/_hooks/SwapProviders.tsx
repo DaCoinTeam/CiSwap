@@ -24,8 +24,8 @@ interface SwapContext {
   };
   updaters: {
     initialize: () => void;
-    updateBefore: () => Promise<void>;
-    updateAfter: () => Promise<void>;
+    loadBeforeConnectWallet: () => Promise<void>;
+    loadAfterConnectWallet: () => Promise<void>;
   };
 }
 
@@ -108,7 +108,7 @@ const SwapProviders = (props: ContextProps) => {
         initialize()
     }, [])
 
-    const updateBefore = async () => {
+    const loadBeforeConnectWallet = async () => {
         const updateInfoIn = async () => {
             const tokenInContract = new ERC20Contract(
                 chainId,
@@ -188,7 +188,7 @@ const SwapProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         swapDispatch({
-            type: "SET_FINISH_UPDATE_BEFORE",
+            type: "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET",
             payload: true,
         })
     }
@@ -204,13 +204,13 @@ const SwapProviders = (props: ContextProps) => {
             setPreventBefore(false)
             return
         }
-        updateBefore()
+        loadBeforeConnectWallet()
     }, [swapState.status.finishInitialize])
 
-    const updateAfter = async () => {
+    const loadAfterConnectWallet = async () => {
         if (!account) {
             swapDispatch({
-                type: "SET_FINISH_UPDATE_AFTER",
+                type: "SET_FINISH_LOAD_AFTER_CONNECT_WALLET",
                 payload: false,
             })
             return
@@ -258,7 +258,7 @@ const SwapProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         swapDispatch({
-            type: "SET_FINISH_UPDATE_AFTER",
+            type: "SET_FINISH_LOAD_AFTER_CONNECT_WALLET",
             payload: true,
         })
     }
@@ -269,16 +269,16 @@ const SwapProviders = (props: ContextProps) => {
             afterHasMountedRef.current = false
             return
         }
-        updateAfter()
-    }, [account, swapState.status.finishUpdateAfter])
+        loadAfterConnectWallet()
+    }, [account, swapState.status.finishLoadAfterConnectWallet])
 
     const updaters = useMemo(() => {
         return {
             initialize,
-            updateBefore,
-            updateAfter,
+            loadBeforeConnectWallet,
+            loadAfterConnectWallet,
         }
-    }, [initialize, updateBefore, updateAfter])
+    }, [initialize, loadBeforeConnectWallet, loadAfterConnectWallet])
     return (
         <SwapContext.Provider value={{ swapState, actions, updaters }}>
             {props.children}

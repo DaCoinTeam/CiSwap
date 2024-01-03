@@ -72,7 +72,7 @@ export interface SetTokenConstantAction {
 }
 
 export interface SetFinishLoad {
-    type: "SET_FINISH_UPDATE_BEFORE" | "SET_FINISH_UPDATE_AFTER"
+    type: "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET" | "SET_FINISH_LOAD_AFTER_CONNECT_WALLET"
     payload: boolean
 }
 
@@ -218,12 +218,12 @@ export const tokenReducer = (
             ...state,
             LPTokenAmountLocked: action.payload
         }
-    case "SET_FINISH_UPDATE_BEFORE":
+    case "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET":
         return {
             ...state,
             finishLoadWithoutConnected: action.payload
         }
-    case "SET_FINISH_UPDATE_AFTER":
+    case "SET_FINISH_LOAD_AFTER_CONNECT_WALLET":
         return {
             ...state,
             finishLoadWithConnected: action.payload

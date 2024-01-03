@@ -24,7 +24,7 @@ const MinimunReceived = () => {
             receivedMinHasMountedRef.current = true
         }
 
-        if (!swapState.status.finishUpdateBefore) return
+        if (!swapState.status.finishLoadBeforeConnectWallet) return
 
         if (
             formik.values.amountInRaw === amountInRawTemp ||
@@ -50,7 +50,7 @@ const MinimunReceived = () => {
     }, [
         formik.values.amountInRaw,
         formik.values.amountOutRaw,
-        swapState.status.finishUpdateBefore
+        swapState.status.finishLoadBeforeConnectWallet
     ])
 
     return (

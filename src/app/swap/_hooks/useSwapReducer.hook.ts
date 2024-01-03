@@ -14,8 +14,8 @@ export interface SwapState {
   infoOut: TokenInfo;
   status: {
     finishInitialize: boolean;
-    finishUpdateBefore: boolean;
-    finishUpdateAfter: boolean;
+    finishLoadBeforeConnectWallet: boolean;
+    finishLoadAfterConnectWallet: boolean;
   };
 }
 
@@ -50,7 +50,7 @@ export interface SetDecimalsAction {
 }
 
 export interface SetFinishLoadAction {
-  type: "SET_FINISH_INITIALIZE" | "SET_FINISH_UPDATE_BEFORE" | "SET_FINISH_UPDATE_AFTER";
+  type: "SET_FINISH_INITIALIZE" | "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET" | "SET_FINISH_LOAD_AFTER_CONNECT_WALLET";
   payload: boolean;
 }
 
@@ -81,8 +81,8 @@ export const swapState: SwapState = {
     },
     status: {
         finishInitialize: false,
-        finishUpdateBefore: false,
-        finishUpdateAfter: false,
+        finishLoadBeforeConnectWallet: false,
+        finishLoadAfterConnectWallet: false,
     },
 }
 
@@ -147,15 +147,15 @@ export const swapReducer = (state: SwapState, action: swapAction) => {
             ...state,
             status: { ...state.status, finishInitialize: action.payload },
         }
-    case "SET_FINISH_UPDATE_BEFORE":
+    case "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET":
         return {
             ...state,
-            status: { ...state.status, finishUpdateBefore: action.payload },
+            status: { ...state.status, finishLoadBeforeConnectWallet: action.payload },
         }
-    case "SET_FINISH_UPDATE_AFTER":
+    case "SET_FINISH_LOAD_AFTER_CONNECT_WALLET":
         return {
             ...state,
-            status: { ...state.status, finishUpdateAfter: action.payload },
+            status: { ...state.status, finishLoadAfterConnectWallet: action.payload },
         }
     default:
         return state

@@ -177,7 +177,7 @@ const MainSection = () => {
             infoInHasMountedRef.current = false
             return
         }
-        if (!swapState.status.finishUpdateBefore) return
+        if (!swapState.status.finishLoadBeforeConnectWallet) return
 
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)
@@ -191,11 +191,11 @@ const MainSection = () => {
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.status.finishUpdateBefore}
+                        finishLoad={swapState.status.finishLoadBeforeConnectWallet}
                         symbol={swapState.infoIn.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.status.finishUpdateAfter}
+                        finishLoad={swapState.status.finishLoadAfterConnectWallet}
                         balance={swapState.infoIn.balance}
                     />
                 </div>
@@ -219,11 +219,11 @@ const MainSection = () => {
             <div className="w-full">
                 <div className="justify-between flex">
                     <TokenDisplay
-                        finishLoad={swapState.status.finishUpdateBefore}
+                        finishLoad={swapState.status.finishLoadBeforeConnectWallet}
                         symbol={swapState.infoOut.symbol}
                     />
                     <BalanceDisplay
-                        finishLoad={swapState.status.finishUpdateAfter}
+                        finishLoad={swapState.status.finishLoadAfterConnectWallet}
                         balance={swapState.infoOut.balance}
                     />
                 </div>

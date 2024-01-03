@@ -212,7 +212,7 @@ const PoolProviders = (props: ContextProps) => {
         await Promise.all(promises)
 
         tokenDispatch({
-            type: "SET_FINISH_UPDATE_BEFORE",
+            type: "SET_FINISH_LOAD_BEFORE_CONNECT_WALLET",
             payload: true,
         })
     }
@@ -239,7 +239,7 @@ const PoolProviders = (props: ContextProps) => {
             })
 
             tokenDispatch({
-                type: "SET_FINISH_UPDATE_AFTER",
+                type: "SET_FINISH_LOAD_AFTER_CONNECT_WALLET",
                 payload: false,
             })
             return
@@ -290,7 +290,7 @@ const PoolProviders = (props: ContextProps) => {
                     3
                 ),
             })
-            tokenDispatch({ type: "SET_FINISH_UPDATE_AFTER", payload: true })
+            tokenDispatch({ type: "SET_FINISH_LOAD_AFTER_CONNECT_WALLET", payload: true })
         }
         promises.push(handleLPTokenBalance())
 

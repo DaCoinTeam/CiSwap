@@ -36,7 +36,7 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                                 symbolA={swapState.infoIn.symbol}
                                 symbolB={swapState.infoOut.symbol}
                                 onClick={actions.handleReverse}
-                                finishLoad = {swapState.status.finishUpdateBefore}      
+                                finishLoad = {swapState.status.finishLoadBeforeConnectWallet}      
                             />
                             <Spacer y={1} />
                         </div>

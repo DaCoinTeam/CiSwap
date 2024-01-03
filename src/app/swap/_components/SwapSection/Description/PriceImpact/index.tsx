@@ -24,7 +24,7 @@ const PriceImpact = () => {
             receivedMinHasMountedRef.current = true
         }
 
-        if (!swapState.status.finishUpdateBefore) return
+        if (!swapState.status.finishLoadBeforeConnectWallet) return
 
         if (!formik.values.price) return
 
@@ -51,7 +51,7 @@ const PriceImpact = () => {
     }, [
         formik.values.amountInRaw,
         formik.values.amountOutRaw,
-        swapState.status.finishUpdateBefore,
+        swapState.status.finishLoadBeforeConnectWallet,
         formik.values.price
     ])
 

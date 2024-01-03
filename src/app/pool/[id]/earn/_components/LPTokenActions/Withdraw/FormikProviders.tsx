@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
+import { AppDispatch, RootState, setSignatureConfirmationModalShow, setSignatureConfirmationModalTitle } from "@redux"
 import { computeRaw } from "@utils"
 import { PoolContext } from "../../../../_hooks"
 import { MetamaskContext } from "@app/_hooks"
@@ -69,8 +69,8 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                dispatch(setWaitSignModalShow(true))
-                dispatch(setWaitSignModalTitle("Withdraw"))
+                dispatch(setSignatureConfirmationModalShow(true))
+                dispatch(setSignatureConfirmationModalTitle("Withdraw"))
                 
                 const withdrawReceipt = await poolFactory.withdraw(
                     computeRaw(
@@ -80,11 +80,11 @@ const FormikProviders = (props: ContextProps) => {
                 )
                 
                 if (!withdrawReceipt){
-                    dispatch(setWaitSignModalShow(false))
+                    dispatch(setSignatureConfirmationModalShow(false))
                     return
                 }
 
-                dispatch(setWaitSignModalShow(false))
+                dispatch(setSignatureConfirmationModalShow(false))
                 notify(withdrawReceipt.transactionHash.toString())
                 await handlers._handleWithConnected()
             }}

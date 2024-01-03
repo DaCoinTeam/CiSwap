@@ -3,7 +3,7 @@ import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
 import { ERC20Contract, PoolContract } from "@blockchain"
 import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setWaitSignModalShow, setWaitSignModalTitle } from "@redux"
+import { AppDispatch, RootState, setSignatureConfirmationModalShow, setSignatureConfirmationModalTitle } from "@redux"
 import {
     computeRaw,
     computeMultiplyBigIntAndNumber,
@@ -87,14 +87,14 @@ const FormikProviders = (props: ContextProps) => {
                 )
 
                 if (token1Allowance < token1DepositAmountParsed) {
-                    dispatch(setWaitSignModalShow(true))
-                    dispatch(setWaitSignModalTitle("Approve"))
+                    dispatch(setSignatureConfirmationModalShow(true))
+                    dispatch(setSignatureConfirmationModalTitle("Approve"))
                     const token1ApproveReceipt = await token1Contract.approve(
                         poolAddress,
                         token1DepositAmountParsed - token1Allowance
                     )
                     if (!token1ApproveReceipt) {
-                        dispatch(setWaitSignModalShow(false))
+                        dispatch(setSignatureConfirmationModalShow(false))
                         return
                     }
                     notify(token1ApproveReceipt.transactionHash.toString())
@@ -107,7 +107,7 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                dispatch(setWaitSignModalTitle("Deposit"))
+                dispatch(setSignatureConfirmationModalTitle("Deposit"))
                 const depositReceipt = await poolFactory.deposit(
                     token1DepositAmountParsed,
                     token1DepositAmountParsed -
@@ -119,11 +119,11 @@ const FormikProviders = (props: ContextProps) => {
                 )
 
                 if (!depositReceipt) {
-                    dispatch(setWaitSignModalShow(false))
+                    dispatch(setSignatureConfirmationModalShow(false))
                     return
                 }
 
-                dispatch(setWaitSignModalShow(false))
+                dispatch(setSignatureConfirmationModalShow(false))
                 notify(depositReceipt.transactionHash.toString())
                 await handlers._handleWithConnected()
             }}

@@ -21,6 +21,7 @@ const MainSection = () => {
     const { swapState, actions } = swapContext
 
     const formik = useContext(FormikContext)!
+    console.log(formik.errors)
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 

@@ -1,7 +1,7 @@
 "use client"
 import { Open_Sans } from "next/font/google"
 import React, { useContext, useEffect } from "react"
-import { Navbar, Footer, WaitSignModal, WrongChainMetamaskModal } from "./_components"
+import { Navbar, Footer, SignatureConfirmationModal, WrongChainMetamaskModal } from "./_components"
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "@redux"
 import { NextUIProvider } from "@nextui-org/react"
@@ -53,7 +53,7 @@ const WrappedRootLayout = (props: ContextProps) => {
                                 {props.children}
                             </section>
                             <Footer />
-                            <WaitSignModal />
+                            <SignatureConfirmationModal />
                             <WrongChainMetamaskModal />
                             <ToastContainer
                                 position="top-right"

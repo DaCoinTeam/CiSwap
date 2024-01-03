@@ -6,15 +6,16 @@ import { useDispatch, useSelector } from "react-redux"
 import {
     AppDispatch,
     RootState,
-    setWaitSignModalShow,
-    setWaitSignModalTitle,
+    TransactionType,
+    setSignatureConfirmationModalInfo,
+    setSignatureConfirmationModalToClosed,
 } from "@redux"
 import { SwapContext } from "../_hooks"
 import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
-import { Step } from "@services"
+import { Step, services } from "@services"
 
 interface FormikValues {
   amountIn: string;
@@ -26,7 +27,7 @@ interface FormikValues {
   price: number;
   slippageKey: number;
   slippage: string;
-  txDeadline: string
+  txDeadline: string;
 }
 
 const initialValues: FormikValues = {
@@ -39,7 +40,7 @@ const initialValues: FormikValues = {
     price: 0,
     slippageKey: 0,
     slippage: "",
-    txDeadline: ""
+    txDeadline: "",
 }
 
 export const SLIPPAGE_DEFAULT = 0.001
@@ -105,28 +106,57 @@ const FormikProviders = (props: ContextProps) => {
                 const allowanceIn = await tokenInContract.allowance(account, factory)
 
                 if (allowanceIn === null) return
-
-                const parsedAmountIn = utils.math.computeRaw(
-                    utils.format.parseStringToNumber(values.amountIn),
-                    swapState.infoIn.decimals
-                )
-
-                if (allowanceIn < parsedAmountIn) {
-                    dispatch(setWaitSignModalShow(true))
-                    dispatch(setWaitSignModalTitle("Approve"))
+                if (allowanceIn < values.amountInRaw) {
+                    const amountInToApprove = values.amountInRaw - allowanceIn
+                    dispatch(
+                        setSignatureConfirmationModalInfo({
+                            type: TransactionType.Approve,
+                            token: {
+                                address: swapState.infoIn.address,
+                                amount: utils.math.computeRedenomination(
+                                    amountInToApprove,
+                                    swapState.infoIn.decimals
+                                ),
+                            },
+                        })
+                    )
 
                     const approveInReceipt = await tokenInContract.approve(
                         factory,
-                        parsedAmountIn - allowanceIn
+                        amountInToApprove
                     )
                     if (!approveInReceipt) {
-                        dispatch(setWaitSignModalShow(false))
+                        dispatch(setSignatureConfirmationModalToClosed())
                         return
                     }
                     notify(approveInReceipt.transactionHash.toString())
                 }
 
-                dispatch(setWaitSignModalTitle("Swap"))
+                dispatch(
+                    setSignatureConfirmationModalInfo({
+                        type: TransactionType.Swap,
+                        tokenIn: {
+                            address: swapState.infoIn.address,
+                            amount: utils.format.parseStringToNumber(values.amountIn),
+                        },
+                        tokenOut: {
+                            address: swapState.infoIn.address,
+                            amount: utils.format.parseStringToNumber(values.amountIn),
+                        },
+                    })
+                )
+
+                const params = services.next.smartRouter.createBaseParams(
+                    values.amountInRaw,
+                    values.amountOutRaw,
+                    values.steps,
+                    values.exactInput
+                )
+                console.log(params)
+                
+                dispatch(
+                    setSignatureConfirmationModalToClosed()
+                )
             }}
         >
             {(_props) => _renderBody(_props, props.children)}

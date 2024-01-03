@@ -13,17 +13,28 @@ export const smartRouterService = {
         tokenOut: Address,
         exactInput: boolean
     ): Promise<Quote | null> => {
-        try{
+        try {
             const smartRouter = new SmartRouter(chainId)
             return smartRouter.findBestQuote(amount, tokenIn, tokenOut, exactInput)
-        } catch (ex){
+        } catch (ex) {
             console.log(ex)
             return null
         }
     },
-    
+
     encodePacked: (steps: Step[], exactInput?: boolean): Bytes => {
         const path = new Path(steps)
         return exactInput ? path.encodePacked() : path.reverse().encodePacked()
+    },
+
+    createBaseParams: (
+        amountIn?: bigint,
+        amountOut?: bigint,
+        steps?: Step[],
+        exactInput?: boolean
+    ) => {
+        const path = new Path(steps)
+        const quote = new Quote(amountIn, amountOut, path, exactInput)
+        return quote.createBaseParams()
     },
 }

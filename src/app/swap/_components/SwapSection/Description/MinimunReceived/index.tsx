@@ -1,5 +1,5 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
-import { FormikContext } from "../../../FormikProviders"
+import { FormikContext, SLIPPAGE_DEFAULT } from "../../../FormikProviders"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
 import { SwapContext } from "../../../../_hooks"
@@ -31,10 +31,10 @@ const MinimunReceived = () => {
       formik.values.amountOutRaw === amountOutRawTemp
         )
             return
-
+            
         const receivedMinRaw = utils.math.computeSlippage(
             formik.values.amountOutRaw,
-            utils.format.parseStringToNumber(formik.values.slippage, 0.02),
+            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
             true
         )
 
@@ -53,6 +53,7 @@ const MinimunReceived = () => {
         swapState.status.finishLoadBeforeConnectWallet
     ])
 
+    console.log(formik.values)
     return (
         <div className="flex justify-between items-center">
             <LabelWithTooltipDisplay text="Minimun received" tooltipContent="AAA" />

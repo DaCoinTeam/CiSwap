@@ -21,7 +21,6 @@ const MainSection = () => {
     const { swapState, actions } = swapContext
 
     const formik = useContext(FormikContext)!
-    console.log(formik.errors)
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
@@ -58,11 +57,11 @@ const MainSection = () => {
             setFinishOut(true)
             if (quote === null) return
 
-            formik.setFieldValue("amountOutRaw", quote.amountOut)
+            formik.setFieldValue("amountOutRaw", quote.amountOutRaw)
             formik.setFieldValue(
                 "amountOut",
                 utils.math.computeRedenomination(
-                    quote.amountOut,
+                    quote.amountOutRaw,
                     swapState.infoOut.decimals
                 )
             )
@@ -107,11 +106,11 @@ const MainSection = () => {
             )
             setFinishIn(true)
             if (quote === null) return
-            formik.setFieldValue("amountInRaw", quote.amountIn)
+            formik.setFieldValue("amountInRaw", quote.amountInRaw)
             formik.setFieldValue(
                 "amountIn",
                 utils.math.computeRedenomination(
-                    quote.amountIn,
+                    quote.amountInRaw,
                     swapState.infoIn.decimals
                 )
             )

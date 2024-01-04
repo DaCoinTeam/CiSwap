@@ -1,4 +1,11 @@
-import { ERC20Contract } from "@blockchain"
+import {
+    ERC20Contract,
+    ExactInputParams,
+    ExactInputSingleParams,
+    ExactOutputParams,
+    ExactOutputSingleParams,
+    RouterContract,
+} from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
 import React, { ReactNode, createContext, useContext } from "react"
 import * as Yup from "yup"
@@ -16,6 +23,8 @@ import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
 import { Step, services } from "@services"
+import { QuoteType } from "../../../services/next/smart-router/modules/quote.module"
+import { TransactionReceipt } from "web3"
 
 interface FormikValues {
   amountIn: string;
@@ -27,7 +36,7 @@ interface FormikValues {
   price: number;
   slippageKey: number;
   slippage: string;
-  txDeadline: string;
+  deadline: string;
 }
 
 const initialValues: FormikValues = {
@@ -40,11 +49,11 @@ const initialValues: FormikValues = {
     price: 0,
     slippageKey: 0,
     slippage: "",
-    txDeadline: "",
+    deadline: "",
 }
 
 export const SLIPPAGE_DEFAULT = 0.001
-export const TX_DEADLINE_DEFAULT = 30
+export const DEADLINE_DEFAULT = 30
 
 export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
@@ -132,6 +141,7 @@ const FormikProviders = (props: ContextProps) => {
                     notify(approveInReceipt.transactionHash.toString())
                 }
 
+                const routerContract = new RouterContract(chainId, web3, account)
                 dispatch(
                     setSignatureConfirmationModalInfo({
                         type: TransactionType.Swap,
@@ -146,17 +156,45 @@ const FormikProviders = (props: ContextProps) => {
                     })
                 )
 
-                const params = services.next.smartRouter.createBaseParams(
+                const scenario = services.next.smartRouter.getScenario(
+                    utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
+                    // temp me
+                    account,
+                    utils.format.parseStringToNumber(values.deadline, DEADLINE_DEFAULT),
                     values.amountInRaw,
                     values.amountOutRaw,
                     values.steps,
                     values.exactInput
                 )
-                console.log(params)
-                
-                dispatch(
-                    setSignatureConfirmationModalToClosed()
-                )
+
+                let params: TradeParams
+                let tradeReceipt: TransactionReceipt | null
+                switch (scenario.quoteType) {
+                case QuoteType.ExactInputSingle:
+                    params = scenario.params
+                    tradeReceipt = await routerContract.exactInputSingle(params)
+                    break
+                case QuoteType.ExactInput:
+                    params = scenario.params
+                    tradeReceipt = await routerContract.exactInput(params)
+                    break
+                case QuoteType.ExactOutputSingle:
+                    params = scenario.params
+                    tradeReceipt = await routerContract.exactOutputSingle(params)
+                    break
+                case QuoteType.ExactOutput:
+                    params = scenario.params
+                    tradeReceipt = await routerContract.exactOutput(params)
+                    break
+                }
+
+                if (!tradeReceipt) {
+                    dispatch(setSignatureConfirmationModalToClosed())
+                }
+        
+                console.log(tradeReceipt)
+
+                dispatch(setSignatureConfirmationModalToClosed())
             }}
         >
             {(_props) => _renderBody(_props, props.children)}
@@ -165,3 +203,9 @@ const FormikProviders = (props: ContextProps) => {
 }
 
 export default FormikProviders
+
+type TradeParams =
+  | ExactInputSingleParams
+  | ExactInputParams
+  | ExactOutputSingleParams
+  | ExactOutputParams;

@@ -7,7 +7,7 @@ const TxDeadline = () => {
     const formik = useContext(FormikContext)!
     const onChange = (valueMul100: string) => {
         formik.setFieldValue(
-            "txDeadline",
+            "deadline",
             utils.format.parseStringToNumberMultiply(valueMul100, 1 / 30)
         )
     }
@@ -17,7 +17,7 @@ const TxDeadline = () => {
             <TitleDisplay text="Tx deadline (mins)" tooltipText="AAA" />
             <NumberInput
                 value={utils.format.parseStringToNumberMultiply(
-                    formik.values.txDeadline,
+                    formik.values.deadline,
                     30
                 )}
                 className="w-[3rem]"

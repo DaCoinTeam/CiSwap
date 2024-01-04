@@ -27,14 +27,17 @@ export const smartRouterService = {
         return exactInput ? path.encodePacked() : path.reverse().encodePacked()
     },
 
-    createBaseParams: (
-        amountIn?: bigint,
-        amountOut?: bigint,
-        steps?: Step[],
+    getScenario: (
+        slippage: number,
+        recipient: Address,
+        deadline: number,
+        amountInRaw: bigint,
+        amountOutRaw: bigint,
+        steps: Step[],
         exactInput?: boolean
     ) => {
         const path = new Path(steps)
-        const quote = new Quote(amountIn, amountOut, path, exactInput)
-        return quote.createBaseParams()
+        const quote = new Quote(amountInRaw, amountOutRaw, path, exactInput)
+        return quote.getScenario(slippage, recipient, deadline)
     },
 }

@@ -1,20 +1,27 @@
-import { Address, Bytes } from "web3"
+import { Address } from "web3"
 import Path from "./path.module"
+import utils from "@utils"
+import {
+    ExactInputParams,
+    ExactInputSingleParams,
+    ExactOutputParams,
+    ExactOutputSingleParams,
+} from "@blockchain"
 
 class Quote {
-    amountIn: bigint
-    amountOut: bigint
+    amountInRaw: bigint
+    amountOutRaw: bigint
     path: Path
     exactInput: boolean
 
     constructor(
-        amountIn?: bigint,
-        amountOut?: bigint,
+        amountInRaw?: bigint,
+        amountOutRaw?: bigint,
         path?: Path,
         exactInput?: boolean
     ) {
-        this.amountIn = amountIn ?? BigInt(0)
-        this.amountOut = amountOut ?? BigInt(0)
+        this.amountInRaw = amountInRaw ?? BigInt(0)
+        this.amountOutRaw = amountOutRaw ?? BigInt(0)
         this.path = path ?? new Path()
         this.exactInput = exactInput ?? true
     }
@@ -30,42 +37,72 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    createBaseParams(): BaseParams {
+    getScenario(
+        slippage: number,
+        recipient: Address,
+        deadline: number
+    ): Scenario {
         const quoteType = this.getQuoteType()
 
-        const quoteTypeToBaseParams: Record<QuoteType, BaseParams> = {
+        const quoteTypeToScenario: Record<QuoteType, Scenario> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
-                amountIn: this.amountIn,
-                tokenIn: this.path.steps[0] as Address,
-                tokenOut: this.path.steps[2] as Address,
-                indexPool: this.path.steps[1] as number,
+                params: {
+                    amountIn: this.amountInRaw,
+                    amountOutMin: utils.math.computeSlippage(
+                        this.amountOutRaw,
+                        slippage,
+                        true
+                    ),
+                    recipient: recipient,
+                    tokenIn: this.path.steps[0] as Address,
+                    tokenOut: this.path.steps[2] as Address,
+                    indexPool: this.path.steps[1] as number,
+                    deadline: deadline,
+                },
             },
             [QuoteType.ExactInput]: {
                 quoteType: QuoteType.ExactInput,
-                amountIn: this.amountIn,
-                path: this.path.encodePacked(),
+                params: {
+                    amountIn: this.amountInRaw,
+                    amountOutMin: utils.math.computeSlippage(
+                        this.amountOutRaw,
+                        slippage,
+                        true
+                    ),
+                    recipient: recipient,
+                    path: this.path.encodePacked(),
+                    deadline: deadline,
+                },
             },
             [QuoteType.ExactOutputSingle]: {
                 quoteType: QuoteType.ExactOutputSingle,
-                amountOut: this.amountIn,
-                tokenIn: this.path.steps[0] as Address,
-                tokenOut: this.path.steps[2] as Address,
-                indexPool: this.path.steps[1] as number,
+                params: {
+                    amountOut: this.amountOutRaw,
+                    amountInMax: utils.math.computeSlippage(this.amountOutRaw, slippage),
+                    recipient: recipient,
+                    tokenIn: this.path.steps[0] as Address,
+                    tokenOut: this.path.steps[2] as Address,
+                    indexPool: this.path.steps[1] as number,
+                    deadline: deadline,
+                },
             },
             [QuoteType.ExactOutput]: {
                 quoteType: QuoteType.ExactOutput,
-                amountOut: this.amountIn,
-                path: this.path.reverse().encodePacked(),
+                params: {
+                    amountOut: this.amountOutRaw,
+                    amountInMax: utils.math.computeSlippage(this.amountOutRaw, slippage),
+                    recipient: recipient,
+                    path: this.path.reverse().encodePacked(),
+                    deadline: deadline,
+                },
             },
         }
-
-        return quoteTypeToBaseParams[quoteType]
+        return quoteTypeToScenario[quoteType]
     }
 }
 
 export default Quote
-
 
 export enum QuoteType {
   ExactInputSingle,
@@ -74,36 +111,28 @@ export enum QuoteType {
   ExactOutput,
 }
 
-export interface ExactInputSingleBaseParams {
+interface ExactInputSingleScenario {
   quoteType: QuoteType.ExactInputSingle;
-  amountIn: bigint;
-  tokenIn: Address;
-  tokenOut: Address;
-  indexPool: number;
+  params: ExactInputSingleParams;
 }
 
-export interface ExactInputBaseParams {
+interface ExactInputScenario {
   quoteType: QuoteType.ExactInput;
-  amountIn: bigint;
-  path: Bytes;
+  params: ExactInputParams;
 }
 
-export interface ExactOutputBaseParams {
-  quoteType: QuoteType.ExactOutput;
-  amountOut: bigint;
-  path: Bytes;
-}
-
-export interface ExactOutputSingleBaseParams {
+interface ExactOutputSingleScenario {
   quoteType: QuoteType.ExactOutputSingle;
-  amountOut: bigint;
-  tokenIn: Address;
-  tokenOut: Address;
-  indexPool: number;
+  params: ExactOutputSingleParams;
 }
 
-export type BaseParams =
-  | ExactInputBaseParams
-  | ExactInputSingleBaseParams
-  | ExactOutputSingleBaseParams
-  | ExactOutputBaseParams;
+interface ExactOutputScenario {
+  quoteType: QuoteType.ExactOutput;
+  params: ExactOutputParams;
+}
+
+export type Scenario =
+  | ExactInputSingleScenario
+  | ExactInputScenario
+  | ExactOutputSingleScenario
+  | ExactOutputScenario;

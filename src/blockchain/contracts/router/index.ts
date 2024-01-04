@@ -13,20 +13,13 @@ class RouterContract {
 
     constructor(chainId: ChainId, web3?: Web3, sender?: Address) {
         this.chainId = chainId;
-        (this.router = chainInfos[chainId].router),
-        (this.web3 = web3)
+        (this.router = chainInfos[chainId].router), (this.web3 = web3)
         this.sender = sender
     }
 
-    async exactInput(params: {
-    amountIn: bigint;
-    amountOutMin: bigint;
-    recipient: Address;
-    path: Bytes;
-    deadline: bigint;
-  }) {
+    async exactInput(params: ExactInputParams) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const data = contract.methods.exactInput(params).encodeABI()
@@ -44,17 +37,9 @@ class RouterContract {
         }
     }
 
-    async exactInputSingle(params: {
-    amountIn: bigint;
-    amountOutMin: bigint;
-    recipient: Address;
-    tokenIn: Address;
-    tokenOut: Address;
-    indexPool: bigint;
-    deadline: bigint;
-  }) {
+    async exactInputSingle(params: ExactInputSingleParams) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const data = contract.methods.exactInputSingle(params).encodeABI()
@@ -72,15 +57,9 @@ class RouterContract {
         }
     }
 
-    async exactOutput(params: {
-    amountOut: bigint;
-    amountInMax: bigint;
-    recipient: Address;
-    path: Bytes;
-    deadline: bigint;
-  }) {
+    async exactOutput(params: ExactOutputParams) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const data = contract.methods.exactOutput(params).encodeABI()
@@ -98,17 +77,9 @@ class RouterContract {
         }
     }
 
-    async exactOutputSingle(params: {
-    amountOut: bigint;
-    amountInMax: bigint;
-    recipient: Address;
-    tokenIn: Address;
-    tokenOut: Address;
-    indexPool: bigint;
-    deadline: bigint;
-  }) {
+    async exactOutputSingle(params: ExactOutputSingleParams) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const data = contract.methods.exactOutputSingle(params).encodeABI()
@@ -128,7 +99,7 @@ class RouterContract {
 
     async multicall(data: Bytes[]) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const _data = contract.methods.multicall(data).encodeABI()
@@ -149,7 +120,7 @@ class RouterContract {
 
     async multicall2(data: Bytes[]) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
 
             const contract = getRouterContract(this.web3, this.chainId)
             const _data = contract.methods.multicall2(data).encodeABI()
@@ -170,3 +141,39 @@ class RouterContract {
 }
 
 export default RouterContract
+
+export interface ExactInputSingleParams {
+  amountIn: bigint;
+  amountOutMin: bigint;
+  recipient: Address;
+  tokenIn: Address;
+  tokenOut: Address;
+  indexPool: number;
+  deadline: number;
+}
+
+export interface ExactInputParams {
+  amountIn: bigint;
+  amountOutMin: bigint;
+  recipient: Address;
+  path: Bytes;
+  deadline: number;
+}
+
+export interface ExactOutputParams {
+  amountOut: bigint;
+  amountInMax: bigint;
+  recipient: Address;
+  path: Bytes;
+  deadline: number;
+}
+
+export interface ExactOutputSingleParams {
+  amountOut: bigint;
+  amountInMax: bigint;
+  recipient: Address;
+  tokenIn: Address;
+  tokenOut: Address;
+  indexPool: number;
+  deadline: number;
+}

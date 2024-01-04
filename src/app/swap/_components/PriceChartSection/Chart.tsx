@@ -38,7 +38,7 @@ const Chart = () => {
 
         tickAtCrosshair.set({
             price: value,
-            time: time
+            time: Number(time)
         })
     }
 

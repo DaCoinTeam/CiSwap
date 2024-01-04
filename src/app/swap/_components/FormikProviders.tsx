@@ -4,6 +4,7 @@ import {
     ExactInputSingleParams,
     ExactOutputParams,
     ExactOutputSingleParams,
+    QuoterContract,
     RouterContract,
 } from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
@@ -66,25 +67,42 @@ const _renderBody = (
 ) => {
     const { swapState } = useContext(SwapContext)!
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
-    
+
+    const _props = props!
+  
     useEffect(() => {
         if (!swapState.status.finishLoadBeforeConnectWallet) return
-        if (props == null) return 
 
         const handleEffect = async () => {
-            if (props.values.steps.length) return 
+            if (_props.values.steps.length) return
             const quote = await services.next.smartRouter.findBestQuote(
                 chainId,
                 AMOUNT_DEFAULT,
                 swapState.infoIn.address,
                 swapState.infoOut.address,
-                props.values.exactInput
+                _props.values.exactInput
             )
             if (quote === null) return
-            props.setFieldValue("steps", quote.path.steps)
+            _props.setFieldValue("steps", quote.path.steps)
         }
         handleEffect()
     }, [swapState.status.finishLoadBeforeConnectWallet])
+
+    useEffect(() => {
+        const handleEffect = async () => {
+            if (!_props.values.steps.length) return
+            const path = services.next.smartRouter.encodePacked(_props.values.steps)
+            const quoterContract = new QuoterContract(
+                chainId,
+                chainInfos[chainId].quoter
+            )
+            const priceX96 = await quoterContract.quotePriceX96(path)
+            if (priceX96 == null) return null
+            const price = utils.math.computeDivideX96(priceX96)
+            _props.setFieldValue("price", price)
+        }
+        handleEffect()
+    }, [_props.values.steps])
 
     return (
         <FormikContext.Provider value={props}>

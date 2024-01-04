@@ -6,11 +6,10 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 import Chart from "./Chart"
 import { PeriodTabs } from "@app/_shared"
 import { TokenPairDisplay, TokenPriceDisplay } from "@app/_shared"
-import { Period, services } from "@services"
+import { Period } from "@services"
 import { SwapContext } from "../../_hooks"
 import { FormikContext } from "../FormikProviders"
 import utils from "@utils"
-import { QuoterContract } from "@blockchain"
 
 interface PriceChartSectionProps {
   className?: string;
@@ -46,22 +45,6 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
     const [tickAtCrosshair, setTickAtCrosshair] = useState<TickAtCrosshair>(
         defaultTickAtCrosshair
     )
-
-    useEffect(() => {
-        const handleEffect = async () => {
-            if (!formik.values.steps.length) return
-            const path = services.next.smartRouter.encodePacked(formik.values.steps)
-            const quoterContract = new QuoterContract(
-                chainId,
-                chainInfos[chainId].quoter
-            )
-            const priceX96 = await quoterContract.quotePriceX96(path)
-            if (priceX96 == null) return null
-            const price = utils.math.computeDivideX96(priceX96)
-            formik.setFieldValue("price", price)
-        }
-        handleEffect()
-    }, [formik.values.steps])
 
     useEffect(() => {
         if (!formik.values.price) return 

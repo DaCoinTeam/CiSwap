@@ -37,13 +37,15 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    getParamsScenario(
+    getSwapScenario(
         slippage: number,
         recipient: Address,
-        deadline: number
+        txDeadline: number
     ): ParamsScenario {
         const quoteType = this.getQuoteType()
-
+        
+        const deadline = utils.time.currentSeconds() + txDeadline * 60
+        
         const quoteTypeToScenario: Record<QuoteType, ParamsScenario> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
@@ -58,7 +60,7 @@ class Quote {
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
                     indexPool: this.path.steps[1] as number,
-                    deadline: utils.time.currentSeconds() + deadline * 60,
+                    deadline: deadline,
                 },
             },
             [QuoteType.ExactInput]: {
@@ -79,7 +81,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutputSingle,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountOutRaw, slippage),
+                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage),
                     recipient: recipient,
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
@@ -91,7 +93,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutput,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountOutRaw, slippage),
+                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage),
                     recipient: recipient,
                     path: this.path.reverse().encodePacked(),
                     deadline: deadline,

@@ -27,10 +27,10 @@ export const smartRouterService = {
         return exactInput ? path.encodePacked() : path.reverse().encodePacked()
     },
 
-    getParamsScenario: (
+    getSwapScenario: (
         slippage: number,
         recipient: Address,
-        deadline: number,
+        txDeadline: number,
         amountInRaw: bigint,
         amountOutRaw: bigint,
         steps: Step[],
@@ -38,6 +38,6 @@ export const smartRouterService = {
     ) => {
         const path = new Path(steps)
         const quote = new Quote(amountInRaw, amountOutRaw, path, exactInput)
-        return quote.getParamsScenario(slippage, recipient, deadline)
+        return quote.getSwapScenario(slippage, recipient, txDeadline)
     },
 }

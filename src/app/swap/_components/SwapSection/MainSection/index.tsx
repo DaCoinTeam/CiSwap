@@ -65,7 +65,7 @@ const MainSection = () => {
                     swapState.infoOut.decimals
                 )
             )
-            formik.setFieldValue("exactInput", false)
+            formik.setFieldValue("exactInput", true)
             formik.setFieldValue("steps", quote.path.steps)
 
             setPreventOut(true)
@@ -114,7 +114,7 @@ const MainSection = () => {
                     swapState.infoIn.decimals
                 )
             )
-            formik.setFieldValue("exactInput", true)
+            formik.setFieldValue("exactInput", false)
             formik.setFieldValue("steps", quote.path.steps)
 
             setPreventIn(true)

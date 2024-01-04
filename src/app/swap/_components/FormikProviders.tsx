@@ -36,7 +36,7 @@ interface FormikValues {
   price: number;
   slippageKey: number;
   slippage: string;
-  deadline: string;
+  txDeadline: string;
 }
 
 const initialValues: FormikValues = {
@@ -49,7 +49,7 @@ const initialValues: FormikValues = {
     price: 0,
     slippageKey: 0,
     slippage: "",
-    deadline: "",
+    txDeadline: "",
 }
 
 export const SLIPPAGE_DEFAULT = 0.001
@@ -111,9 +111,9 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                const factory = chainInfos[chainId].factory
-                const allowanceIn = await tokenInContract.allowance(account, factory)
-
+                const router = chainInfos[chainId].router
+                const allowanceIn = await tokenInContract.allowance(account, router)
+   
                 if (allowanceIn === null) return
                 if (allowanceIn < values.amountInRaw) {
                     const amountInToApprove = values.amountInRaw - allowanceIn
@@ -131,7 +131,7 @@ const FormikProviders = (props: ContextProps) => {
                     )
 
                     const approveInReceipt = await tokenInContract.approve(
-                        factory,
+                        router,
                         amountInToApprove
                     )
                     if (!approveInReceipt) {
@@ -141,7 +141,7 @@ const FormikProviders = (props: ContextProps) => {
                     notify(approveInReceipt.transactionHash.toString())
                 }
 
-                const routerContract = new RouterContract(chainId, web3, account)
+                const routerContract = new RouterContract(chainId, web3, router)
                 dispatch(
                     setSignatureConfirmationModalInfo({
                         type: TransactionType.Swap,
@@ -155,35 +155,38 @@ const FormikProviders = (props: ContextProps) => {
                         },
                     })
                 )
-
-                const paramsScenario = services.next.smartRouter.getParamsScenario(
+                
+                const swapScenario = services.next.smartRouter.getSwapScenario(
                     utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
                     // temp me
                     account,
-                    utils.format.parseStringToNumber(values.deadline, DEADLINE_DEFAULT),
+                    utils.format.parseStringToNumber(values.txDeadline, DEADLINE_DEFAULT),
                     values.amountInRaw,
                     values.amountOutRaw,
                     values.steps,
                     values.exactInput
                 )
+                console.log("Scen")
+                console.log(swapScenario)
 
                 let params: SwapParams
                 let swapReceipt: TransactionReceipt | null
-                switch (paramsScenario.quoteType) {
+
+                switch (swapScenario.quoteType) {
                 case QuoteType.ExactInputSingle:
-                    params = paramsScenario.params
+                    params = swapScenario.params
                     swapReceipt = await routerContract.exactInputSingle(params)
                     break
                 case QuoteType.ExactInput:
-                    params = paramsScenario.params
+                    params = swapScenario.params
                     swapReceipt = await routerContract.exactInput(params)
                     break
                 case QuoteType.ExactOutputSingle:
-                    params = paramsScenario.params
+                    params = swapScenario.params
                     swapReceipt = await routerContract.exactOutputSingle(params)
                     break
                 case QuoteType.ExactOutput:
-                    params = paramsScenario.params
+                    params = swapScenario.params
                     swapReceipt = await routerContract.exactOutput(params)
                     break
                 }

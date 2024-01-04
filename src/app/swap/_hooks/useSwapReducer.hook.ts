@@ -54,7 +54,7 @@ export interface SetFinishLoadAction {
   payload: boolean;
 }
 
-export type swapAction =
+export type SwapAction =
   | SetTokenInfoAction
   | SetTokenAction
   | SetTokenAction
@@ -86,7 +86,7 @@ export const swapState: SwapState = {
     },
 }
 
-export const swapReducer = (state: SwapState, action: swapAction) => {
+export const swapReducer = (state: SwapState, action: SwapAction) => {
     switch (action.type) {
     case "SET_INFO_IN":
         return { ...state, infoIn: action.payload }

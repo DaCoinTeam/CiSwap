@@ -24,7 +24,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
         0: {
             imageUrl: "w-5 h-5",
             text: "text-sm",
-            skeleton: "h-6 w-30",
+            skeleton: "h-6 w-24",
             button: "h-6 w-6",
             icon: "h-4 h-4",
         },

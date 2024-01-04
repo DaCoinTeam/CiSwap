@@ -19,7 +19,7 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
 
     const renderTrend = () => <div></div>
 
-    return () => {
+    const renderReturn = () => {
         const typeToReturn: Record<Type, JSX.Element> = {
             0: (
                 <div className={`${props.className}`}>
@@ -62,6 +62,7 @@ const TokenPriceDisplay = (props: TokenPriceDisplayProps) => {
         }
         return typeToReturn[type]
     }
+    return renderReturn()
 }
 
 export default TokenPriceDisplay

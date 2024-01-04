@@ -8,13 +8,12 @@ import {
 import { Button, Spacer } from "@nextui-org/react"
 import { SwapContext } from "../../../_hooks"
 import { FormikContext } from "../../FormikProviders"
-import { TIME_OUT, chainInfos } from "@config"
+import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import utils from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 import { services } from "@services"
-import { QuoterContract } from "@blockchain"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)!
@@ -127,22 +126,6 @@ const MainSection = () => {
             clearTimeout(delayedEffectWithBounce)
         }
     }, [formik.values.amountOut])
-
-    useEffect(() => {
-        const handleEffect = async () => {
-            if (!formik.values.steps.length) return
-            const path = services.next.smartRouter.encodePacked(formik.values.steps)
-            const quoterContract = new QuoterContract(
-                chainId,
-                chainInfos[chainId].quoter
-            )
-            const priceX96 = await quoterContract.quotePriceX96(path)
-            if (priceX96 == null) return null
-            const price = utils.math.computeDivideX96(priceX96)
-            formik.setFieldValue("price", price)
-        }
-        handleEffect()
-    }, [formik.values.steps])
 
     const onChangeIn = (value: string) => {
         formik.setFieldValue("amountIn", value)

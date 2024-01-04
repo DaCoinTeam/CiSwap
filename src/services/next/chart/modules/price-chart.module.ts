@@ -145,7 +145,7 @@ class PriceChart {
     private async setData() {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
-                secondOffset: 60,
+                secondOffset: 60 * 5,
                 numberOfSnapshots: 24,
             },
             [Period._1W]: {

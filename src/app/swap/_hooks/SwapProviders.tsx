@@ -8,7 +8,7 @@ import React, {
     useRef,
     useState,
 } from "react"
-import useSwapReducer, { SwapState } from "./useSwapReducer.hook"
+import useSwapReducer, { SwapAction, SwapState } from "./useSwapReducer.hook"
 import { useSelector } from "react-redux"
 import { usePathname, useSearchParams } from "next/navigation"
 import { chainInfos } from "@config"
@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation"
 
 interface SwapContext {
   swapState: SwapState;
+  swapDispatch: React.Dispatch<SwapAction>;
   actions: {
     handleReverse: () => Promise<void>;
   };
@@ -204,6 +205,7 @@ const SwapProviders = (props: ContextProps) => {
             setPreventBefore(false)
             return
         }
+
         loadBeforeConnectWallet()
     }, [swapState.status.finishInitialize])
 
@@ -280,7 +282,9 @@ const SwapProviders = (props: ContextProps) => {
         }
     }, [initialize, loadBeforeConnectWallet, loadAfterConnectWallet])
     return (
-        <SwapContext.Provider value={{ swapState, actions, updaters }}>
+        <SwapContext.Provider
+            value={{ swapState, swapDispatch, actions, updaters }}
+        >
             {props.children}
         </SwapContext.Provider>
     )

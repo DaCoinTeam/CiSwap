@@ -3,14 +3,17 @@ import React, { MutableRefObject, useContext, useEffect, useRef } from "react"
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { PeriodContext } from "./index"
+import { PriceChartContext } from "./index"
 import { PriceChart, services } from "@services"
 import { FormikContext } from "../FormikProviders"
-import { MouseEventParams, Time } from "lightweight-charts"
+import { LineData, MouseEventParams, Time } from "lightweight-charts"
+import { SwapContext } from "@app/swap/_hooks"
+import { CircularProgress } from "@nextui-org/react"
 
 const Chart = () => {
-    const periodContext = useContext(PeriodContext)!
-    const { period } = periodContext
+    const { period, tickAtCrosshair } = useContext(PriceChartContext)!
+
+    const { swapState } = useContext(SwapContext)!
 
     const formik = useContext(FormikContext)!
 
@@ -26,15 +29,27 @@ const Chart = () => {
     const priceChartRef = useRef<PriceChart | null>(null)
 
     const onCrosshairMove = (params: MouseEventParams<Time>) => {
-        console.log(params)
+        const priceChart = priceChartRef.current
+        if (priceChart == null) return 
+        const { series } = priceChart
+        const data = params.seriesData.get(series) as LineData<Time>
+        if (!data) return
+        const {time, value } = data 
+
+        tickAtCrosshair.set({
+            price: value,
+            time: time
+        })
     }
 
     useEffect(() => {
+        if (!swapState.status.finishLoadBeforeConnectWallet) return
+
         const priceChart = services.next.chart.createPriceChart(
             chainId,
             chartContainerRef.current,
             darkMode,
-            period,
+            period.value,
             onCrosshairMove
         )
         priceChartRef.current = priceChart
@@ -48,7 +63,7 @@ const Chart = () => {
                 priceChart.applyOptions()
             })
         }
-    }, [])
+    }, [swapState.status.finishLoadBeforeConnectWallet])
 
     const stepsHasMountedRef = useRef(false)
     useEffect(() => {
@@ -56,6 +71,7 @@ const Chart = () => {
             stepsHasMountedRef.current = true
             return
         }
+
         const updatePriceChartPath = async () => {
             const priceChart = priceChartRef.current
             if (priceChart === null) return
@@ -79,7 +95,7 @@ const Chart = () => {
             const priceChart = priceChartRef.current
             if (priceChart === null) return
 
-            await priceChart.updatePath(period)
+            await priceChart.updatePath(period.value)
         }
         handleEffect()
     }, [period])
@@ -96,7 +112,21 @@ const Chart = () => {
         priceChart.updateDarkMode(darkMode)
     }, [darkMode])
 
-    return <div className="w-full aspect-video" ref={chartContainerRef} />
+    return (
+        <>
+            {swapState.status.finishLoadBeforeConnectWallet ? (
+                <div className="w-full aspect-video" ref={chartContainerRef} />
+            ) : (
+                <div className="w-full aspect-video grid place-content-center">
+                    <CircularProgress classNames={
+                        {
+                            indicator: "text-teal-500",
+                        }
+                    } label="Loading..." />
+                </div>
+            )}
+        </>
+    )
 }
 
 export default Chart

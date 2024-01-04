@@ -7,7 +7,7 @@ import {
     RouterContract,
 } from "@blockchain"
 import { Form, Formik, FormikProps } from "formik"
-import React, { ReactNode, createContext, useContext } from "react"
+import React, { ReactNode, createContext, useContext, useEffect } from "react"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
 import {
@@ -54,6 +54,7 @@ const initialValues: FormikValues = {
 
 export const SLIPPAGE_DEFAULT = 0.001
 export const DEADLINE_DEFAULT = 30
+export const AMOUNT_DEFAULT = BigInt(100000)
 
 export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
@@ -63,6 +64,28 @@ const _renderBody = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => {
+    const { swapState } = useContext(SwapContext)!
+    const chainId = useSelector((state: RootState) => state.blockchain.chainId)
+    
+    useEffect(() => {
+        if (!swapState.status.finishLoadBeforeConnectWallet) return
+        if (props == null) return 
+
+        const handleEffect = async () => {
+            if (props.values.steps.length) return 
+            const quote = await services.next.smartRouter.findBestQuote(
+                chainId,
+                AMOUNT_DEFAULT,
+                swapState.infoIn.address,
+                swapState.infoOut.address,
+                props.values.exactInput
+            )
+            if (quote === null) return
+            props.setFieldValue("steps", quote.path.steps)
+        }
+        handleEffect()
+    }, [swapState.status.finishLoadBeforeConnectWallet])
+
     return (
         <FormikContext.Provider value={props}>
             <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
@@ -113,7 +136,7 @@ const FormikProviders = (props: ContextProps) => {
 
                 const router = chainInfos[chainId].router
                 const allowanceIn = await tokenInContract.allowance(account, router)
-   
+
                 if (allowanceIn === null) return
                 if (allowanceIn < values.amountInRaw) {
                     const amountInToApprove = values.amountInRaw - allowanceIn
@@ -141,10 +164,12 @@ const FormikProviders = (props: ContextProps) => {
                     notify(approveInReceipt.transactionHash.toString())
                 }
 
-                const routerContract = new RouterContract(chainId,
+                const routerContract = new RouterContract(
+                    chainId,
                     router,
                     web3,
-                    account)
+                    account
+                )
                 dispatch(
                     setSignatureConfirmationModalInfo({
                         type: TransactionType.Swap,
@@ -158,7 +183,7 @@ const FormikProviders = (props: ContextProps) => {
                         },
                     })
                 )
-                
+
                 const swapScenario = services.next.smartRouter.getSwapScenario(
                     utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
                     // temp me
@@ -197,8 +222,6 @@ const FormikProviders = (props: ContextProps) => {
                 if (!swapReceipt) {
                     dispatch(setSignatureConfirmationModalToClosed())
                 }
-        
-                console.log(swapReceipt)
 
                 dispatch(setSignatureConfirmationModalToClosed())
             }}

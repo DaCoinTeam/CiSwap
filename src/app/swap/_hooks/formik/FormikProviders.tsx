@@ -18,13 +18,13 @@ import {
     setSignatureConfirmationModalInfo,
     setSignatureConfirmationModalToClosed,
 } from "@redux"
-import { SwapContext } from "../_hooks"
+import { SwapContext } from ".."
 import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
 import { Step, services } from "@services"
-import { QuoteType } from "../../../services/next/smart-router/modules/quote.module"
+import { QuoteType } from "../../../../services/next/smart-router/modules/quote.module"
 import { TransactionReceipt } from "web3"
 
 interface FormikValues {
@@ -69,7 +69,7 @@ const _renderBody = (
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const _props = props!
-  
+
     useEffect(() => {
         if (!swapState.status.finishLoadBeforeConnectWallet) return
 
@@ -86,12 +86,13 @@ const _renderBody = (
             _props.setFieldValue("steps", quote.path.steps)
         }
         handleEffect()
-    }, [swapState.status.finishLoadBeforeConnectWallet])
+    }, [swapState.status.finishLoadBeforeConnectWallet, swapState.infoIn.address])
 
     useEffect(() => {
         const handleEffect = async () => {
             if (!_props.values.steps.length) return
-            const path = services.next.smartRouter.encodePacked(_props.values.steps)
+            const path = services.next.smartRouter.encodePacked(_props.values.steps, _props.values.exactInput)
+            console.log(path)
             const quoterContract = new QuoterContract(
                 chainId,
                 chainInfos[chainId].quoter
@@ -102,7 +103,7 @@ const _renderBody = (
             _props.setFieldValue("price", price)
         }
         handleEffect()
-    }, [_props.values.steps])
+    }, [_props.values.steps, swapState.infoIn.address])
 
     return (
         <FormikContext.Provider value={props}>

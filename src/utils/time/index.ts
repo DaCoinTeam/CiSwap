@@ -19,10 +19,15 @@ const secondsToUtc = (seconds: number): UTCTimestamp =>
           .valueOf() / 1000
   ) as UTCTimestamp
 
+const formatDate = (seconds: number) : string => {
+    return dayjs(seconds * 1000).utc(false).format("LLL")
+}
+
 const timeUtils = {
     currentSeconds: currentSeconds,
     getHoursFromUtcSeconds: getHoursFromUtcSeconds,
     secondsToUtc: secondsToUtc,
+    formatDate: formatDate
 }
 
 export default timeUtils

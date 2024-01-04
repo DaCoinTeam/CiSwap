@@ -1,8 +1,7 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
-import { FormikContext } from "../../../FormikProviders"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
-import { SwapContext } from "../../../../_hooks"
+import { SwapContext , FormikContext} from "../../../../_hooks"
 
 const PriceImpact = () => {
     const { swapState } = useContext(SwapContext)!

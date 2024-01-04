@@ -5,10 +5,12 @@ import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
 import { PeriodTabs } from "@app/_shared"
-import { TokenPairDisplay, TokenPriceDisplay } from "@app/_shared"
+import { TokenPairDisplay } from "@app/_shared"
+import TickInfo from "./TickInfo"
+
 import { Period } from "@services"
-import { SwapContext } from "../../_hooks"
-import { FormikContext } from "../FormikProviders"
+import { SwapContext, FormikContext } from "../../_hooks"
+
 import utils from "@utils"
 
 interface PriceChartSectionProps {
@@ -81,15 +83,12 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                                 finishLoad={swapState.status.finishLoadBeforeConnectWallet}
                             />
                             <Spacer y={1} />
-                            <TokenPriceDisplay
-                                price={tickAtCrosshair.price}
+                            <TickInfo
+                                tickAtCrosshair={tickAtCrosshair}     
                                 trend={{
                                     percentage: 50,
                                     up: true,
                                 }}
-                                symbolA={swapState.infoIn.symbol}
-                                symbolB={swapState.infoOut.symbol}
-                                finishLoad={swapState.status.finishLoadBeforeConnectWallet}
                             />
                         </div>
                         <PeriodTabs tab={period} setTab={setPeriod} />

@@ -3,11 +3,10 @@ import React, { MutableRefObject, useContext, useEffect, useRef } from "react"
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import { PriceChartContext } from "./index"
+import { PriceChartContext } from "../index"
 import { PriceChart, services } from "@services"
-import { FormikContext } from "../FormikProviders"
+import { FormikContext , SwapContext} from "../../../_hooks"
 import { LineData, MouseEventParams, Time } from "lightweight-charts"
-import { SwapContext } from "@app/swap/_hooks"
 import { CircularProgress } from "@nextui-org/react"
 
 const Chart = () => {
@@ -30,15 +29,15 @@ const Chart = () => {
 
     const onCrosshairMove = (params: MouseEventParams<Time>) => {
         const priceChart = priceChartRef.current
-        if (priceChart == null) return 
+        if (priceChart == null) return
         const { series } = priceChart
         const data = params.seriesData.get(series) as LineData<Time>
         if (!data) return
-        const {time, value } = data 
+        const { time, value } = data
 
         tickAtCrosshair.set({
             price: value,
-            time: Number(time)
+            time: Number(time),
         })
     }
 
@@ -118,11 +117,12 @@ const Chart = () => {
                 <div className="w-full aspect-video" ref={chartContainerRef} />
             ) : (
                 <div className="w-full aspect-video grid place-content-center">
-                    <CircularProgress classNames={
-                        {
+                    <CircularProgress
+                        classNames={{
                             indicator: "text-teal-500",
-                        }
-                    } label="Loading..." />
+                        }}
+                        label="Loading..."
+                    />
                 </div>
             )}
         </>

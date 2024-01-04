@@ -6,8 +6,7 @@ import {
     TokenDisplay,
 } from "@app/_shared"
 import { Button, Spacer } from "@nextui-org/react"
-import { SwapContext } from "../../../_hooks"
-import { FormikContext } from "../../FormikProviders"
+import { SwapContext, FormikContext } from "../../../_hooks"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
@@ -161,6 +160,8 @@ const MainSection = () => {
             return
         }
         if (!swapState.status.finishLoadBeforeConnectWallet) return
+
+        if (formik.values.amountInRaw === formik.values.amountOutRaw) return
 
         const handleEffect = async () => {
             formik.setFieldValue("amountIn", formik.values.amountOut)

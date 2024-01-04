@@ -1,8 +1,7 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
-import { FormikContext, SLIPPAGE_DEFAULT } from "../../../FormikProviders"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
-import { SwapContext } from "../../../../_hooks"
+import { SwapContext, FormikContext, SLIPPAGE_DEFAULT } from "../../../../_hooks"
 
 const MinimunReceived = () => {
     const { swapState } = useContext(SwapContext)!

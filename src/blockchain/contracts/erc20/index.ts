@@ -3,23 +3,23 @@ import { getHttpWeb3 } from "../provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
 
-const getERC20Contract = (web3: Web3, ERC20Address: Address) =>
-    new web3.eth.Contract(abi, ERC20Address, web3)
+const getERC20Contract = (web3: Web3, address: Address) =>
+    new web3.eth.Contract(abi, address, web3)
 
 class ERC20Contract {
     private chainId: ChainId
-    private ERC20Address: Address
+    private address: Address
     private web3?: Web3
     private sender?: Address
 
     constructor(
         chainId: ChainId,
-        ERC20Address: Address,
+        address: Address,
         web3?: Web3,
         sender?: string
     ) {
         this.chainId = chainId
-        this.ERC20Address = ERC20Address
+        this.address = address
         this.web3 = web3
         this.sender = sender
     }
@@ -27,7 +27,7 @@ class ERC20Contract {
     async name() {
         try {
             const web3 = getHttpWeb3(this.chainId)
-            const contract = getERC20Contract(web3, this.ERC20Address)
+            const contract = getERC20Contract(web3, this.address)
             return await contract.methods.name().call()
         } catch (ex) {
             console.log(ex)
@@ -38,7 +38,7 @@ class ERC20Contract {
     async symbol(controller?: AbortController) {
         try {
             const web3 = getHttpWeb3(this.chainId, controller)
-            const contract = getERC20Contract(web3, this.ERC20Address)
+            const contract = getERC20Contract(web3, this.address)
             return await contract.methods.symbol().call()
         } catch (ex) {
             console.log(ex)
@@ -49,7 +49,7 @@ class ERC20Contract {
     async decimals() {
         try {
             const web3 = getHttpWeb3(this.chainId)
-            const contract = getERC20Contract(web3, this.ERC20Address)
+            const contract = getERC20Contract(web3, this.address)
             return Number(await contract.methods.decimals().call())
         } catch (ex) {
             console.log(ex)
@@ -60,7 +60,7 @@ class ERC20Contract {
     async balanceOf(owner: Address) {
         try {
             const web3 = getHttpWeb3(this.chainId)
-            const contract = getERC20Contract(web3, this.ERC20Address)
+            const contract = getERC20Contract(web3, this.address)
             return await contract.methods.balanceOf(owner).call<bigint>()
         } catch (ex) {
             console.log(ex)
@@ -71,7 +71,7 @@ class ERC20Contract {
     async allowance(owner: Address, spender: Address) {
         try {
             const web3 = getHttpWeb3(this.chainId)
-            const contract = getERC20Contract(web3, this.ERC20Address)
+            const contract = getERC20Contract(web3, this.address)
             return await contract.methods.allowance(owner, spender).call<bigint>()
         } catch (ex) {
             console.log(ex)
@@ -82,7 +82,7 @@ class ERC20Contract {
     async approve(spender: string, value: bigint) {
         try {
             if (!this.web3) return null
-            const contract = getERC20Contract(this.web3, this.ERC20Address)
+            const contract = getERC20Contract(this.web3, this.address)
             return contract.methods.approve(spender, value).send({
                 from: this.sender,
                 gas: GAS_LIMIT,

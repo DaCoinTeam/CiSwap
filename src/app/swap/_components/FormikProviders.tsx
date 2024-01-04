@@ -141,7 +141,10 @@ const FormikProviders = (props: ContextProps) => {
                     notify(approveInReceipt.transactionHash.toString())
                 }
 
-                const routerContract = new RouterContract(chainId, web3, router)
+                const routerContract = new RouterContract(chainId,
+                    router,
+                    web3,
+                    account)
                 dispatch(
                     setSignatureConfirmationModalInfo({
                         type: TransactionType.Swap,
@@ -167,7 +170,7 @@ const FormikProviders = (props: ContextProps) => {
                     values.exactInput
                 )
                 console.log("Scen")
-                console.log(swapScenario)
+                console.log(account)
 
                 let params: SwapParams
                 let swapReceipt: TransactionReceipt | null

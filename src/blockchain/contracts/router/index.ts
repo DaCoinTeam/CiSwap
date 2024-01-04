@@ -1,19 +1,25 @@
-import { ChainId, GAS_LIMIT, GAS_PRICE, chainInfos } from "@config"
+import { ChainId, GAS_LIMIT, GAS_PRICE } from "@config"
 import Web3, { Address, Bytes } from "web3"
 import abi from "./abi"
 
-const getRouterContract = (web3: Web3, chainId: ChainId) =>
-    new web3.eth.Contract(abi, chainInfos[chainId].router)
+const getRouterContract = (web3: Web3, address: Address) =>
+    new web3.eth.Contract(abi, address)
 
 class RouterContract {
     private chainId: ChainId
-    private router: Address
+    private address: Address
     private sender?: Address
     private web3?: Web3
 
-    constructor(chainId: ChainId, web3?: Web3, sender?: Address) {
-        this.chainId = chainId;
-        (this.router = chainInfos[chainId].router), (this.web3 = web3)
+    constructor(
+        chainId: ChainId,
+        address: Address,
+        web3?: Web3,
+        sender?: Address
+    ) {
+        this.chainId = chainId
+        this.address = address
+        this.web3 = web3
         this.sender = sender
     }
 
@@ -21,14 +27,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const data = contract.methods.exactInput(params).encodeABI()
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return await contract.methods.exactInput(params).send({
                 from: this.sender,
-                to: this.router,
-                data: data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {
@@ -41,14 +43,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const data = contract.methods.exactInputSingle(params).encodeABI()
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return await contract.methods.exactInputSingle(params).send({
                 from: this.sender,
-                to: this.router,
-                data: data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {
@@ -61,14 +59,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const data = contract.methods.exactOutput(params).encodeABI()
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return await contract.methods.exactOutput(params).send({
                 from: this.sender,
-                to: this.router,
-                data: data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {
@@ -81,14 +75,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const data = contract.methods.exactOutputSingle(params).encodeABI()
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return await contract.methods.exactOutputSingle(params).send({
                 from: this.sender,
-                to: this.router,
-                data: data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {
@@ -101,15 +91,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const _data = contract.methods.multicall(data).encodeABI()
-            console.log(data)
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return contract.methods.multicall(data).send({
                 from: this.sender,
-                to: this.router,
-                data: _data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {
@@ -122,15 +107,10 @@ class RouterContract {
         try {
             if (!this.web3) return null
 
-            const contract = getRouterContract(this.web3, this.chainId)
-            const _data = contract.methods.multicall2(data).encodeABI()
-            console.log(data)
-
-            return await this.web3.eth.sendTransaction({
+            const contract = getRouterContract(this.web3, this.address)
+            return await contract.methods.multicall2(data).send({
                 from: this.sender,
-                to: this.router,
-                data: _data,
-                gasLimit: GAS_LIMIT,
+                gas: GAS_LIMIT,
                 gasPrice: GAS_PRICE,
             })
         } catch (ex) {

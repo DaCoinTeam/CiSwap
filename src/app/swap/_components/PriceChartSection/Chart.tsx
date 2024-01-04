@@ -1,10 +1,5 @@
 "use client"
-import React, {
-    MutableRefObject,
-    useContext,
-    useEffect,
-    useRef,
-} from "react"
+import React, { MutableRefObject, useContext, useEffect, useRef } from "react"
 
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
@@ -14,7 +9,6 @@ import { FormikContext } from "../FormikProviders"
 import { MouseEventParams, Time } from "lightweight-charts"
 
 const Chart = () => {
-
     const periodContext = useContext(PeriodContext)!
     const { period } = periodContext
 
@@ -44,6 +38,16 @@ const Chart = () => {
             onCrosshairMove
         )
         priceChartRef.current = priceChart
+
+        window.addEventListener("resize", () => {
+            priceChart.applyOptions()
+        })
+
+        return () => {
+            window.removeEventListener("resize", () => {
+                priceChart.applyOptions()
+            })
+        }
     }, [])
 
     const stepsHasMountedRef = useRef(false)
@@ -92,7 +96,7 @@ const Chart = () => {
         priceChart.updateDarkMode(darkMode)
     }, [darkMode])
 
-    return <div ref={chartContainerRef} />
+    return <div className="w-full aspect-video" ref={chartContainerRef} />
 }
 
 export default Chart

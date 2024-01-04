@@ -1,13 +1,14 @@
 import {
     BaselineData,
+    ChartOptions,
     ColorType,
     DeepPartial,
     IChartApi,
     ISeriesApi,
     MouseEventHandler,
+    PriceFormatterFn,
     TickMarkFormatter,
     Time,
-    TimeChartOptions,
     createChart,
 } from "lightweight-charts"
 import { AggregatorContract } from "@blockchain"
@@ -96,7 +97,7 @@ class PriceChart {
         await this.setData()
     }
 
-    private applyOptions() {
+    applyOptions() {
         const formatTickMark: TickMarkFormatter = (time): string => {
             const timeInNumber = Number(time.toString())
             const periodToReturn: Record<Period, string> = {
@@ -108,7 +109,9 @@ class PriceChart {
             return periodToReturn[this.period]
         }
 
-        const options: DeepPartial<TimeChartOptions> = {
+        const formatPrice: PriceFormatterFn = p => p.toFixed(5)
+
+        const options : DeepPartial<ChartOptions> = {
             layout: {
                 background: { type: ColorType.Solid, color: "transparent" },
                 textColor: this.darkMode ? LIGHT_COLOR : DARK_COLOR,
@@ -116,8 +119,11 @@ class PriceChart {
             rightPriceScale: {
                 borderVisible: false,
             },
+            localization: {
+                priceFormatter: formatPrice
+            },
             width: this.container.clientWidth,
-            height: 400,
+            height: this.container.clientHeight,
             timeScale: {
                 timeVisible: true,
                 borderVisible: false,
@@ -184,7 +190,6 @@ class PriceChart {
             })
         }
         data.reverse()
-
         this.series.setData(data)
         this.chart.timeScale().fitContent()
     }

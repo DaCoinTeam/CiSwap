@@ -156,7 +156,7 @@ const FormikProviders = (props: ContextProps) => {
                     })
                 )
 
-                const scenario = services.next.smartRouter.getScenario(
+                const paramsScenario = services.next.smartRouter.getParamsScenario(
                     utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
                     // temp me
                     account,
@@ -167,32 +167,32 @@ const FormikProviders = (props: ContextProps) => {
                     values.exactInput
                 )
 
-                let params: TradeParams
-                let tradeReceipt: TransactionReceipt | null
-                switch (scenario.quoteType) {
+                let params: SwapParams
+                let swapReceipt: TransactionReceipt | null
+                switch (paramsScenario.quoteType) {
                 case QuoteType.ExactInputSingle:
-                    params = scenario.params
-                    tradeReceipt = await routerContract.exactInputSingle(params)
+                    params = paramsScenario.params
+                    swapReceipt = await routerContract.exactInputSingle(params)
                     break
                 case QuoteType.ExactInput:
-                    params = scenario.params
-                    tradeReceipt = await routerContract.exactInput(params)
+                    params = paramsScenario.params
+                    swapReceipt = await routerContract.exactInput(params)
                     break
                 case QuoteType.ExactOutputSingle:
-                    params = scenario.params
-                    tradeReceipt = await routerContract.exactOutputSingle(params)
+                    params = paramsScenario.params
+                    swapReceipt = await routerContract.exactOutputSingle(params)
                     break
                 case QuoteType.ExactOutput:
-                    params = scenario.params
-                    tradeReceipt = await routerContract.exactOutput(params)
+                    params = paramsScenario.params
+                    swapReceipt = await routerContract.exactOutput(params)
                     break
                 }
 
-                if (!tradeReceipt) {
+                if (!swapReceipt) {
                     dispatch(setSignatureConfirmationModalToClosed())
                 }
         
-                console.log(tradeReceipt)
+                console.log(swapReceipt)
 
                 dispatch(setSignatureConfirmationModalToClosed())
             }}
@@ -204,7 +204,7 @@ const FormikProviders = (props: ContextProps) => {
 
 export default FormikProviders
 
-type TradeParams =
+type SwapParams =
   | ExactInputSingleParams
   | ExactInputParams
   | ExactOutputSingleParams

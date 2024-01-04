@@ -72,7 +72,7 @@ export const computePriceImpact = (
 }
 
 export const computeSlippage = (
-    amount: bigint,
+    amountRaw: bigint,
     slippage: number,
     exactInput?: boolean,
     round?: number
@@ -80,9 +80,9 @@ export const computeSlippage = (
     round = round ?? 5
 
     const amountSlippaged = computeBigIntMultiplyNumber(
-        amount,
+        amountRaw,
         slippage,
         round
     )
-    return exactInput ? amount - amountSlippaged : amount + amountSlippaged
+    return exactInput ? amountRaw - amountSlippaged : amountRaw + amountSlippaged
 }

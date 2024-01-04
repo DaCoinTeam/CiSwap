@@ -37,14 +37,14 @@ class Quote {
         return this.exactInput ? quoteTypeInput : quoteTypeOutput
     }
 
-    getScenario(
+    getParamsScenario(
         slippage: number,
         recipient: Address,
         deadline: number
-    ): Scenario {
+    ): ParamsScenario {
         const quoteType = this.getQuoteType()
 
-        const quoteTypeToScenario: Record<QuoteType, Scenario> = {
+        const quoteTypeToScenario: Record<QuoteType, ParamsScenario> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 params: {
@@ -58,7 +58,7 @@ class Quote {
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
                     indexPool: this.path.steps[1] as number,
-                    deadline: deadline,
+                    deadline: utils.time.currentSeconds() + deadline * 60,
                 },
             },
             [QuoteType.ExactInput]: {
@@ -131,7 +131,7 @@ interface ExactOutputScenario {
   params: ExactOutputParams;
 }
 
-export type Scenario =
+export type ParamsScenario =
   | ExactInputSingleScenario
   | ExactInputScenario
   | ExactOutputSingleScenario

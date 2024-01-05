@@ -32,7 +32,7 @@ const Chart = () => {
     const onCrosshairMove = (params: MouseEventParams<Time>) => {
         const priceChart = priceChartRef.current
         if (priceChart == null) return
-        
+
         const { series } = priceChart
         if (!series) return
         const data = params.seriesData.get(series) as LineData<Time>
@@ -40,41 +40,6 @@ const Chart = () => {
         if (!data) return
         tickAtCrosshair.set(data)
     }
-
-    useEffect(() => {
-        if (!formik.values.steps.length) return
-
-        let priceChart: PriceChart
-
-        const handleEffect = async () => {
-            const path = services.next.smartRouter.encodePacked(
-                formik.values.steps,
-                true
-            )
-    
-            priceChart = await services.next.chart.createPriceChart(
-                chainId,
-                chartContainerRef.current,
-                darkMode,
-                period.value,
-                path,
-                onCrosshairMove
-            )
-            priceChartRef.current = priceChart
-
-            window.addEventListener("resize", () => {
-                priceChart.applyOptions()
-            })
-        }
-      
-        handleEffect()
-
-        return () => {
-            window.removeEventListener("resize", () => {
-                priceChart.applyOptions()
-            })
-        }
-    }, [formik.values.steps])
 
     const updateTicksBoundary = (ticksBoundary: TicksBoundary | null) => {
         if (ticksBoundary === null) return
@@ -84,25 +49,56 @@ const Chart = () => {
         tickAtCrosshair.set(last)
     }
 
-    const stepsHasMountedRef = useRef(false)
     useEffect(() => {
-        if (!stepsHasMountedRef.current) {
-            stepsHasMountedRef.current = true
-            return
-        }
+        if (!formik.values.steps.length) return
 
-        const updatePriceChartPath = async () => {
-            const priceChart = priceChartRef.current
-            if (priceChart === null) return
+        let priceChart : PriceChart
 
-            const encodedPath = services.next.smartRouter.encodePacked(
+        const handleEffect = async () => {
+            const path = services.next.smartRouter.encodePacked(
                 formik.values.steps,
                 true
             )
-            const ticksBoundary = await priceChart.updatePath(encodedPath)
+
+            let ticksBoundary: TicksBoundary | null
+
+            const priceChartStored = priceChartRef.current 
+
+            if (priceChartStored) {
+                priceChart = priceChartStored
+                const path = services.next.smartRouter.encodePacked(
+                    formik.values.steps,
+                    true
+                )
+                ticksBoundary = await priceChart.updatePath(path)
+            } else {
+                priceChart = await services.next.chart.createPriceChart(
+                    chainId,
+                    chartContainerRef.current,
+                    darkMode,
+                    period.value,
+                    path,
+                    onCrosshairMove
+                )
+                
+                priceChartRef.current = priceChart
+                
+                ticksBoundary = await priceChart.setData()
+            
+            }
             updateTicksBoundary(ticksBoundary)
         }
-        updatePriceChartPath()
+         
+        handleEffect()
+        
+        window.addEventListener("resize", () => {
+            priceChart.applyOptions()
+        })
+        return () => {
+            window.removeEventListener("resize", () => {
+                priceChart.applyOptions()
+            })
+        }
     }, [formik.values.steps])
 
     const periodHasMountedRef = useRef(false)

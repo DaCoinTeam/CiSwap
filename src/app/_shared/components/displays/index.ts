@@ -7,7 +7,6 @@ import ErrorDisplay from "./ErrorDisplay"
 import TokenTooltipDisplay from "./TokenTooltipDisplay"
 import BreadcrumbsDisplay from "./BreadcrumbsDisplay"
 import TokenPairDisplay from "./TokenPairDisplay"
-import TokenPriceDisplay from "./TokenPriceDisplay"
 import LabelWithTooltipDisplay from "./LabelWithTooltipDisplay"
 
 export {
@@ -20,6 +19,5 @@ export {
     ErrorDisplay,
     BreadcrumbsDisplay,
     TokenPairDisplay,
-    TokenPriceDisplay,
     LabelWithTooltipDisplay
 }

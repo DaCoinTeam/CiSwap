@@ -1,7 +1,7 @@
 export * from "./modules"
 
 import { ChainId } from "@config"
-import { Period, PriceChart } from "./modules"
+import { Period, PriceChart, TicksBoundary } from "./modules"
 import { MouseEventHandler, Time } from "lightweight-charts"
 import { Bytes } from "web3"
 
@@ -13,7 +13,7 @@ export const chartService = {
         period: Period,
         path: Bytes,
         onCrosshairMove?: MouseEventHandler<Time>
-    ) => {
+    ) : Promise<[PriceChart, TicksBoundary] | null> => {
         const priceChart = new PriceChart(
             chainId,
             container,
@@ -23,6 +23,10 @@ export const chartService = {
             onCrosshairMove
         )
         await priceChart.updateSeries()
-        return priceChart
+
+        const ticksBoundary = await priceChart.setData() 
+        if (!ticksBoundary) return null 
+        
+        return [priceChart, ticksBoundary]
     },
 }

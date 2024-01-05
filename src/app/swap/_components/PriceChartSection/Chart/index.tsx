@@ -72,7 +72,7 @@ const Chart = () => {
                 )
                 ticksBoundary = await priceChart.updatePath(path)
             } else {
-                priceChart = await services.next.chart.createPriceChart(
+                const createPriceChartTuple = await services.next.chart.createPriceChart(
                     chainId,
                     chartContainerRef.current,
                     darkMode,
@@ -80,17 +80,21 @@ const Chart = () => {
                     path,
                     onCrosshairMove
                 )
+
+                if (!createPriceChartTuple) return
+
+                const [_priceChart, _ticksBoundary] = createPriceChartTuple
                 
-                priceChartRef.current = priceChart
+                priceChartRef.current = _priceChart
+                ticksBoundary = _ticksBoundary
                 
-                ticksBoundary = await priceChart.setData()
-            
+                ticksBoundary = await _priceChart.setData()  
             }
             updateTicksBoundary(ticksBoundary)
         }
          
         handleEffect()
-        
+
         window.addEventListener("resize", () => {
             priceChart.applyOptions()
         })

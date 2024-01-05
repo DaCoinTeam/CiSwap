@@ -6,7 +6,7 @@ import { useSelector } from "react-redux"
 import { PriceChartContext } from "../index"
 import { PriceChart, services } from "@services"
 import { FormikContext, SwapContext } from "../../../_hooks"
-import { LineData, MouseEventParams, Time } from "lightweight-charts"
+import { BaselineData, MouseEventParams, Time } from "lightweight-charts"
 import { CircularProgress } from "@nextui-org/react"
 import { TicksBoundary } from "@services"
 
@@ -35,7 +35,7 @@ const Chart = () => {
 
         const { series } = priceChart
         if (!series) return
-        const data = params.seriesData.get(series) as LineData<Time>
+        const data = params.seriesData.get(series) as BaselineData<Time>
 
         if (!data) return
         tickAtCrosshair.set(data)

@@ -56,9 +56,9 @@ const TickInfo = (props: TickInfoProps) => {
                 </div>
             ) : (
                 <div>
-                    <Skeleton className="h-9 w-48 rounded" />
+                    <Skeleton className="h-9 w-72 rounded" />
                     <Spacer y={1} />
-                    <Skeleton className="h-6 w-36 rounded" />
+                    <Skeleton className="h-6 w-48 rounded" />
                 </div>
             )}
         </div>

@@ -51,53 +51,51 @@ const Chart = () => {
 
     useEffect(() => {
         if (!formik.values.steps.length) return
+        const priceChartStored = priceChartRef.current
+        const existed = priceChartStored !== null
 
-        let priceChart : PriceChart
+        let priceChart: PriceChart
+      
+        const path = services.next.smartRouter.encodePacked(
+            formik.values.steps,
+            true
+        )
 
-        const handleEffect = async () => {
-            const path = services.next.smartRouter.encodePacked(
-                formik.values.steps,
-                true
+        if (existed) {
+            priceChart = priceChartStored
+        } else {
+            priceChart = services.next.chart.createPriceChart(
+                chainId,
+                chartContainerRef.current,
+                darkMode,
+                period.value,
+                path,
+                onCrosshairMove
             )
-
-            let ticksBoundary: TicksBoundary | null
-
-            const priceChartStored = priceChartRef.current 
-
-            if (priceChartStored) {
-                priceChart = priceChartStored
-                const path = services.next.smartRouter.encodePacked(
-                    formik.values.steps,
-                    true
-                )
-                ticksBoundary = await priceChart.updatePath(path)
-            } else {
-                const createPriceChartTuple = await services.next.chart.createPriceChart(
-                    chainId,
-                    chartContainerRef.current,
-                    darkMode,
-                    period.value,
-                    path,
-                    onCrosshairMove
-                )
-
-                if (!createPriceChartTuple) return
-
-                const [_priceChart, _ticksBoundary] = createPriceChartTuple
-                
-                priceChartRef.current = _priceChart
-                ticksBoundary = _ticksBoundary
-                
-                ticksBoundary = await _priceChart.setData()  
-            }
-            updateTicksBoundary(ticksBoundary)
+            priceChartRef.current = priceChart
         }
-         
-        handleEffect()
 
         window.addEventListener("resize", () => {
             priceChart.applyOptions()
         })
+
+        const handleEffect = async () => {
+            let ticksBoundary: TicksBoundary | null
+
+            if (existed) {
+                priceChartRef.current = priceChart
+                ticksBoundary = await priceChart.updatePath(path)     
+            } else {
+                await priceChart.updateSeries()
+                ticksBoundary = await priceChart.setData()
+            }
+
+            if (!ticksBoundary) return null
+            updateTicksBoundary(ticksBoundary)
+        }
+
+        handleEffect()
+
         return () => {
             window.removeEventListener("resize", () => {
                 priceChart.applyOptions()

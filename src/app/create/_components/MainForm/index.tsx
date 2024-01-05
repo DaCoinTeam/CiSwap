@@ -24,7 +24,7 @@ const MainForm = () => {
     }, [finishSelectedPair, setFinishSelectedPair])
     
     return (
-        <Card>
+        <Card className="max-w-[900px] m-auto">
             <CardHeader className="p-5">
                 <div className="font-bold text-lg">Create Pool</div>
             </CardHeader>

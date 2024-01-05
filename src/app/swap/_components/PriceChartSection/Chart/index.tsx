@@ -5,7 +5,7 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PriceChartContext } from "../index"
 import { PriceChart, services } from "@services"
-import { FormikContext, SwapContext } from "../../../_hooks"
+import { FormikContext } from "../../../_hooks"
 import { BaselineData, MouseEventParams, Time } from "lightweight-charts"
 import { CircularProgress } from "@nextui-org/react"
 import { TicksBoundary } from "@services"
@@ -13,8 +13,6 @@ import { TicksBoundary } from "@services"
 const Chart = () => {
     const { period, tickAtCrosshair, tickAtFirst } =
     useContext(PriceChartContext)!
-
-    const { swapState } = useContext(SwapContext)!
 
     const formik = useContext(FormikContext)!
 
@@ -133,7 +131,7 @@ const Chart = () => {
 
     return (
         <>
-            {swapState.status.finishLoadBeforeConnectWallet ? (
+            {formik.values.steps.length ? (
                 <div className="w-full aspect-video" ref={chartContainerRef} />
             ) : (
                 <div className="w-full aspect-video grid place-content-center">

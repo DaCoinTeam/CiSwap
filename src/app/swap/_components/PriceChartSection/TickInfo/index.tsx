@@ -36,7 +36,7 @@ const TickInfo = (props: TickInfoProps) => {
 
     return (
         <div className={`${props.className}`}>
-            {swapState.status.finishLoadBeforeConnectWallet ? (
+            {tickAtCrosshair.value.value > 0 ? (
                 <div>
                     <div className="gap-2 flex items-end">
                         <div className="gap-1 flex items-end">
@@ -51,13 +51,15 @@ const TickInfo = (props: TickInfoProps) => {
                         </div>
                         <div>{renderTrend()}</div>
                     </div>
-                    <Spacer y={0.5} />
+                    <Spacer y={1} />
                     <div>{formatedDate()}</div>
                 </div>
             ) : (
-                <>
+                <div>
                     <Skeleton className="h-9 w-48 rounded" />
-                </>
+                    <Spacer y={1} />
+                    <Skeleton className="h-6 w-36 rounded" />
+                </div>
             )}
         </div>
     )

@@ -32,34 +32,49 @@ const Chart = () => {
     const onCrosshairMove = (params: MouseEventParams<Time>) => {
         const priceChart = priceChartRef.current
         if (priceChart == null) return
+        
         const { series } = priceChart
+        if (!series) return
         const data = params.seriesData.get(series) as LineData<Time>
+
         if (!data) return
         tickAtCrosshair.set(data)
     }
 
     useEffect(() => {
-        if (!swapState.status.finishLoadBeforeConnectWallet) return
+        if (!formik.values.steps.length) return
 
-        const priceChart = services.next.chart.createPriceChart(
-            chainId,
-            chartContainerRef.current,
-            darkMode,
-            period.value,
-            onCrosshairMove
-        )
-        priceChartRef.current = priceChart
+        let priceChart: PriceChart
 
-        window.addEventListener("resize", () => {
-            priceChart.applyOptions()
-        })
+        const handleEffect = async () => {
+            const path = services.next.smartRouter.encodePacked(
+                formik.values.steps,
+                true
+            )
+    
+            priceChart = await services.next.chart.createPriceChart(
+                chainId,
+                chartContainerRef.current,
+                darkMode,
+                period.value,
+                path,
+                onCrosshairMove
+            )
+            priceChartRef.current = priceChart
+
+            window.addEventListener("resize", () => {
+                priceChart.applyOptions()
+            })
+        }
+      
+        handleEffect()
 
         return () => {
             window.removeEventListener("resize", () => {
                 priceChart.applyOptions()
             })
         }
-    }, [swapState.status.finishLoadBeforeConnectWallet])
+    }, [formik.values.steps])
 
     const updateTicksBoundary = (ticksBoundary: TicksBoundary | null) => {
         if (ticksBoundary === null) return

@@ -32,22 +32,21 @@ class PriceChart {
     chainId: ChainId
     private aggregatorContract: AggregatorContract
 
-    private defaultPrice: number
     private period: Period
     private path: Bytes
     private darkMode: boolean
 
     private container: HTMLDivElement
     chart: IChartApi
-    series: ISeriesApi<"Baseline">
+    series: ISeriesApi<"Baseline"> | null = null
 
     constructor(
         chainId: ChainId,
         container: HTMLDivElement,
         darkMode: boolean,
         period: Period,
-        onCrosshairMove?: MouseEventHandler<Time>,
-        defaultPrice?: number
+        path: Bytes,
+        onCrosshairMove?: MouseEventHandler<Time>
     ) {
         this.chainId = chainId
 
@@ -56,11 +55,9 @@ class PriceChart {
             chainInfos[this.chainId].aggregator
         )
 
-        this.defaultPrice = defaultPrice ?? 0
-
         this.darkMode = darkMode
         this.period = period
-        this.path = "0x"
+        this.path = path
         this.container = container
 
         this.chart = createChart(container)
@@ -69,8 +66,14 @@ class PriceChart {
             this.chart.subscribeCrosshairMove(onCrosshairMove)
         }
 
+        this.applyOptions()
+    }
+
+    async updateSeries() {
+        const data = await this.getData()
+        if (data === null) return
         this.series = this.chart.addBaselineSeries({
-            baseValue: { type: "price", price: defaultPrice },
+            baseValue: { type: "price", price: data[0].value },
             topLineColor: TOP_LINE_COLOR,
             topFillColor1: TOP_FILL_COLOR1,
             topFillColor2: TOP_FILL_COLOR2,
@@ -78,8 +81,6 @@ class PriceChart {
             bottomFillColor1: BOTTOM_FILL_COLOR1,
             bottomFillColor2: BOTTOM_FILL_COLOR2,
         })
-
-        this.applyOptions()
     }
 
     updateDarkMode(darkMode: boolean) {
@@ -142,10 +143,10 @@ class PriceChart {
         this.chart.timeScale().fitContent()
     }
 
-    private async setData(): Promise<TicksBoundary | null> {
+    private async getData(): Promise<BaselineData<Time>[] | null> {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
-                secondOffset: 60 * 10,
+                secondOffset: 60 * 20,
                 numberOfSnapshots: 24,
             },
             [Period._1W]: {
@@ -175,7 +176,6 @@ class PriceChart {
             numberOfSnapshots,
             this.path
         )
-        console.log(this.path)
 
         if (priceX96s === null) return null
 
@@ -191,6 +191,20 @@ class PriceChart {
             })
         }
         data.reverse()
+
+        return data
+    }
+
+    async setData(
+        data: BaselineData<Time>[] | null = null
+    ): Promise<TicksBoundary | null> {
+        if (!data) {
+            data = await this.getData()
+        }
+        if (!data) return null
+
+        if (this.series === null) return null 
+        
         this.series.setData(data)
         this.chart.timeScale().fitContent()
 

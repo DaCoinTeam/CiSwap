@@ -33,8 +33,7 @@ const MinimunReceived = () => {
             
         const receivedMinRaw = utils.math.computeSlippage(
             formik.values.amountOutRaw,
-            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
-            true
+            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT)
         )
 
         setReceivedMin(

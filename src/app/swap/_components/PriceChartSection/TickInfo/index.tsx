@@ -1,20 +1,38 @@
 import { Skeleton, Spacer } from "@nextui-org/react"
 import React, { useContext } from "react"
 import utils from "@utils"
-import { TickAtCrosshair } from "../index"
+import { PriceChartContext } from "../index"
 import { SwapContext } from "../../../../swap/_hooks"
 
 interface TickInfoProps {
   className?: string;
-  imageUrlA?: string;
-  imageUrlB?: string;
-  tickAtCrosshair: TickAtCrosshair;
-  trend: Trend;
 }
 
 const TickInfo = (props: TickInfoProps) => {
+    const { tickAtCrosshair, tickAtFirst } = useContext(PriceChartContext)!
     const { swapState } = useContext(SwapContext)!
-    const renderTrend = () => <div></div>
+
+    const renderTrend = (): JSX.Element | null => {
+        const priceImpact = utils.math.computePriceImpact(
+            tickAtCrosshair.value.value,
+            tickAtFirst.value.value
+        )
+        if (priceImpact === null) return null
+        const { up, percentage } = priceImpact
+
+        return (
+            <div>
+                {up ? (
+                    <span className="text-teal-500"> (+{percentage}%) </span>
+                ) : (
+                    <span className="text-danger"> (-{percentage}%) </span>
+                )}
+            </div>
+        )
+    }
+
+    const formatedDate = () =>
+        utils.time.formatDate(tickAtCrosshair.value.time as number)
 
     return (
         <div className={`${props.className}`}>
@@ -24,7 +42,7 @@ const TickInfo = (props: TickInfoProps) => {
                         <div className="gap-1 flex items-end">
                             <span className="text-3xl font-bold">
                                 {" "}
-                                {props.tickAtCrosshair.price}{" "}
+                                {tickAtCrosshair.value.value}{" "}
                             </span>
                             <span>
                                 {" "}
@@ -34,7 +52,7 @@ const TickInfo = (props: TickInfoProps) => {
                         <div>{renderTrend()}</div>
                     </div>
                     <Spacer y={0.5} />
-                    <div>{utils.time.formatDate(props.tickAtCrosshair.time)}</div>
+                    <div>{formatedDate()}</div>
                 </div>
             ) : (
                 <>
@@ -46,8 +64,3 @@ const TickInfo = (props: TickInfoProps) => {
 }
 
 export default TickInfo
-
-interface Trend {
-  up: boolean;
-  percentage: number;
-}

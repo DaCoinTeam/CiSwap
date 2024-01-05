@@ -87,14 +87,14 @@ class PriceChart {
         this.applyOptions()
     }
 
-    async updatePeriod(period: Period) {
+    async updatePeriod(period: Period): Promise<TicksBoundary | null> {
         this.period = period
-        await this.setData()
+        return await this.setData()
     }
 
-    async updatePath(path: Bytes) {
+    async updatePath(path: Bytes): Promise<TicksBoundary | null> {
         this.path = path
-        await this.setData()
+        return await this.setData()
     }
 
     applyOptions() {
@@ -109,9 +109,9 @@ class PriceChart {
             return periodToReturn[this.period]
         }
 
-        const formatPrice: PriceFormatterFn = p => p.toFixed(5)
+        const formatPrice: PriceFormatterFn = (p) => p.toFixed(5)
 
-        const options : DeepPartial<ChartOptions> = {
+        const options: DeepPartial<ChartOptions> = {
             layout: {
                 background: { type: ColorType.Solid, color: "transparent" },
                 textColor: this.darkMode ? LIGHT_COLOR : DARK_COLOR,
@@ -120,7 +120,7 @@ class PriceChart {
                 borderVisible: false,
             },
             localization: {
-                priceFormatter: formatPrice
+                priceFormatter: formatPrice,
             },
             width: this.container.clientWidth,
             height: this.container.clientHeight,
@@ -142,7 +142,7 @@ class PriceChart {
         this.chart.timeScale().fitContent()
     }
 
-    private async setData() {
+    private async setData(): Promise<TicksBoundary | null> {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
                 secondOffset: 60 * 10,
@@ -161,6 +161,7 @@ class PriceChart {
                 numberOfSnapshots: 24,
             },
         }
+
         const { numberOfSnapshots, secondOffset } =
       periodToSnapshotOptions[this.period]
 
@@ -192,6 +193,17 @@ class PriceChart {
         data.reverse()
         this.series.setData(data)
         this.chart.timeScale().fitContent()
+
+        const first = data[0]
+        if (!first) return null
+
+        const last = data.at(-1)
+        if (!last) return null
+
+        return {
+            first,
+            last,
+        }
     }
 }
 
@@ -200,4 +212,9 @@ export default PriceChart
 interface SnapshotOptions {
   secondOffset: number;
   numberOfSnapshots: number;
+}
+
+export interface TicksBoundary {
+  first: BaselineData<Time>;
+  last: BaselineData<Time>;
 }

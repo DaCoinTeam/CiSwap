@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useState } from "react"
 
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 
@@ -9,9 +9,9 @@ import { TokenPairDisplay } from "@app/_shared"
 import TickInfo from "./TickInfo"
 
 import { Period } from "@services"
-import { SwapContext, FormikContext } from "../../_hooks"
+import { SwapContext } from "../../_hooks"
 
-import utils from "@utils"
+import { BaselineData, Time } from "lightweight-charts"
 
 interface PriceChartSectionProps {
   className?: string;
@@ -23,39 +23,31 @@ interface PriceChartContext {
     set: React.Dispatch<React.SetStateAction<Period>>;
   };
   tickAtCrosshair: {
-    value: TickAtCrosshair;
-    set: React.Dispatch<React.SetStateAction<TickAtCrosshair>>;
+    value: BaselineData<Time>;
+    set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
+  };
+  tickAtFirst: {
+    value: BaselineData<Time>;
+    set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
   };
 }
 
 export const PriceChartContext = createContext<PriceChartContext | null>(null)
 
-export const TickAtCrosshairContext = createContext<TickAtCrosshair | null>(
-    null
-)
-
 const PriceChartSection = (props: PriceChartSectionProps) => {
     const { actions, swapState } = useContext(SwapContext)!
-    const formik = useContext(FormikContext)!
 
     const [period, setPeriod] = useState(Period._24H)
 
-    const defaultTickAtCrosshair = {
-        price: 0,
-        time: 0,
+    const initialTick: BaselineData<Time> = {
+        time: 0 as Time,
+        value: 0,
     }
-    const [tickAtCrosshair, setTickAtCrosshair] = useState<TickAtCrosshair>(
-        defaultTickAtCrosshair
-    )
+    const [tickAtCrosshair, setTickAtCrosshair] =
+    useState<BaselineData<Time>>(initialTick)
 
-    useEffect(() => {
-        if (!formik.values.price) return 
-        setTickAtCrosshair({
-            price: formik.values.price,
-            time: utils.time.currentSeconds()
-        })
-    }, [formik.values.price])
-
+    const [tickAtFirst, setTickAtFirst] =
+    useState<BaselineData<Time>>(initialTick)
 
     return (
         <Card className={`${props.className}`}>
@@ -70,6 +62,10 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                             value: tickAtCrosshair,
                             set: setTickAtCrosshair,
                         },
+                        tickAtFirst: {
+                            value: tickAtFirst,
+                            set: setTickAtFirst,
+                        },
                     }}
                 >
                     <div className="grid md:flex justify-between gap-4">
@@ -83,13 +79,7 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                                 finishLoad={swapState.status.finishLoadBeforeConnectWallet}
                             />
                             <Spacer y={1} />
-                            <TickInfo
-                                tickAtCrosshair={tickAtCrosshair}     
-                                trend={{
-                                    percentage: 50,
-                                    up: true,
-                                }}
-                            />
+                            <TickInfo />
                         </div>
                         <PeriodTabs tab={period} setTab={setPeriod} />
                     </div>
@@ -102,8 +92,3 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
 }
 
 export default PriceChartSection
-
-export interface TickAtCrosshair {
-  price: number;
-  time: number;
-}

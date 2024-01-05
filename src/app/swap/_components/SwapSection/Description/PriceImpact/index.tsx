@@ -1,7 +1,7 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
-import { SwapContext , FormikContext} from "../../../../_hooks"
+import { SwapContext, FormikContext } from "../../../../_hooks"
 
 const PriceImpact = () => {
     const { swapState } = useContext(SwapContext)!
@@ -33,17 +33,18 @@ const PriceImpact = () => {
         )
             return
 
-        const actualRatio = utils.math.computeBigIntDivideBigInt(
+        const priceAfter = utils.math.computeBigIntDivideBigInt(
             formik.values.amountInRaw,
             formik.values.amountOutRaw
         )
-    
-        const baseRatio = formik.values.price
+
+        const priceBefore = formik.values.price
 
         console.log(formik.values.amountInRaw, formik.values.amountOutRaw)
-        console.log(baseRatio)
 
-        setPriceImpact(utils.math.computePriceImpact(actualRatio, baseRatio))
+        const priceImpact = utils.math.computePriceImpact(priceAfter, priceBefore)
+        if (!priceImpact) return
+        setPriceImpact(priceImpact.percentage)
 
         setAmountInRawTemp(formik.values.amountInRaw)
         setAmountOutRawTemp(formik.values.amountOutRaw)
@@ -51,7 +52,7 @@ const PriceImpact = () => {
         formik.values.amountInRaw,
         formik.values.amountOutRaw,
         swapState.status.finishLoadBeforeConnectWallet,
-        formik.values.price
+        formik.values.price,
     ])
 
     return (

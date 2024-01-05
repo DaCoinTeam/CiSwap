@@ -53,8 +53,7 @@ class Quote {
                     amountIn: this.amountInRaw,
                     amountOutMin: utils.math.computeSlippage(
                         this.amountOutRaw,
-                        slippage,
-                        true
+                        slippage
                     ),
                     recipient: recipient,
                     tokenIn: this.path.steps[0] as Address,
@@ -69,8 +68,7 @@ class Quote {
                     amountIn: this.amountInRaw,
                     amountOutMin: utils.math.computeSlippage(
                         this.amountOutRaw,
-                        slippage,
-                        true
+                        slippage
                     ),
                     recipient: recipient,
                     path: this.path.encodePacked(),
@@ -81,7 +79,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutputSingle,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage),
+                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
@@ -93,7 +91,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutput,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage),
+                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     path: this.path.reverse().encodePacked(),
                     deadline: deadline,

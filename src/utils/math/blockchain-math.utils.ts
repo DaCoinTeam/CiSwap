@@ -53,32 +53,42 @@ export const computeMultiplyX96 = (value: number): bigint =>
 export const computeDivideX96 = (value: bigint): number =>
     computeRightShift(value, 96)
 
+export interface PriceImpact {
+  up: boolean;
+  percentage: number;
+}
+
 export const computePriceImpact = (
-    actualRatio: number,
-    baseRatio: number,
-    round?: number
-): number => {
+    priceAfter: number,
+    priceBefore: number,
+    round: number = 2
+): PriceImpact | null => {
     try {
-        round = round ?? 2
-        const result = computeRound(computePercentage(actualRatio, baseRatio) - 100, round)
-            
-        if (Number.isNaN(result)) {
-            throw new Error()
+        const up = priceAfter >= priceBefore
+        const percentage = Math.abs(
+            computeRound(computePercentage(priceAfter, priceBefore) - 100, round)
+        )
+
+        if (Number.isNaN(percentage)) {
+            throw new Error("Price impact calculation resulted in NaN.")
         }
-        return result
+
+        return {
+            up,
+            percentage,
+        }
     } catch (ex) {
-        return 0
+        console.log(ex)
+        return null
     }
 }
 
 export const computeSlippage = (
     amountRaw: bigint,
     slippage: number,
-    exactInput?: boolean,
-    round?: number
+    exactInput: boolean = true,
+    round: number = 5
 ) => {
-    round = round ?? 5
-
     const amountSlippaged = computeBigIntMultiplyNumber(
         amountRaw,
         slippage,

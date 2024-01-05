@@ -5,12 +5,14 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PriceChartContext } from "../index"
 import { PriceChart, services } from "@services"
-import { FormikContext , SwapContext} from "../../../_hooks"
+import { FormikContext, SwapContext } from "../../../_hooks"
 import { LineData, MouseEventParams, Time } from "lightweight-charts"
 import { CircularProgress } from "@nextui-org/react"
+import { TicksBoundary } from "@services"
 
 const Chart = () => {
-    const { period, tickAtCrosshair } = useContext(PriceChartContext)!
+    const { period, tickAtCrosshair, tickAtFirst } =
+    useContext(PriceChartContext)!
 
     const { swapState } = useContext(SwapContext)!
 
@@ -33,12 +35,7 @@ const Chart = () => {
         const { series } = priceChart
         const data = params.seriesData.get(series) as LineData<Time>
         if (!data) return
-        const { time, value } = data
-
-        tickAtCrosshair.set({
-            price: value,
-            time: Number(time),
-        })
+        tickAtCrosshair.set(data)
     }
 
     useEffect(() => {
@@ -64,6 +61,14 @@ const Chart = () => {
         }
     }, [swapState.status.finishLoadBeforeConnectWallet])
 
+    const updateTicksBoundary = (ticksBoundary: TicksBoundary | null) => {
+        if (ticksBoundary === null) return
+        const { first, last } = ticksBoundary
+
+        tickAtFirst.set(first)
+        tickAtCrosshair.set(last)
+    }
+
     const stepsHasMountedRef = useRef(false)
     useEffect(() => {
         if (!stepsHasMountedRef.current) {
@@ -79,7 +84,8 @@ const Chart = () => {
                 formik.values.steps,
                 true
             )
-            await priceChart.updatePath(encodedPath)
+            const ticksBoundary = await priceChart.updatePath(encodedPath)
+            updateTicksBoundary(ticksBoundary)
         }
         updatePriceChartPath()
     }, [formik.values.steps])
@@ -94,7 +100,8 @@ const Chart = () => {
             const priceChart = priceChartRef.current
             if (priceChart === null) return
 
-            await priceChart.updatePath(period.value)
+            const ticksBoundary = await priceChart.updatePath(period.value)
+            updateTicksBoundary(ticksBoundary)
         }
         handleEffect()
     }, [period])

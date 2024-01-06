@@ -1,5 +1,6 @@
 import {
     BaselineData,
+    BaselineStyleOptions,
     ChartOptions,
     ColorType,
     DeepPartial,
@@ -7,6 +8,7 @@ import {
     ISeriesApi,
     MouseEventHandler,
     PriceFormatterFn,
+    SeriesOptionsCommon,
     TickMarkFormatter,
     Time,
     createChart,
@@ -33,9 +35,8 @@ class PriceChart {
     private aggregatorContract: AggregatorContract
 
     private period: Period
-    private path: Bytes
     private darkMode: boolean
-
+    private path: Bytes = "0x"
     private container: HTMLDivElement
     chart: IChartApi
     series: ISeriesApi<"Baseline"> | null = null
@@ -45,7 +46,6 @@ class PriceChart {
         container: HTMLDivElement,
         darkMode: boolean,
         period: Period,
-        path: Bytes,
         onCrosshairMove?: MouseEventHandler<Time>
     ) {
         this.chainId = chainId
@@ -57,35 +57,20 @@ class PriceChart {
 
         this.darkMode = darkMode
         this.period = period
-        this.path = path
+
         this.container = container
 
         this.chart = createChart(container)
+        this.series = this.chart.addBaselineSeries()
 
         if (onCrosshairMove) {
             this.chart.subscribeCrosshairMove(onCrosshairMove)
         }
-
-        this.applyOptions()
-    }
-
-    async updateSeries() {
-        const data = await this.getData()
-        if (data === null) return
-        this.series = this.chart.addBaselineSeries({
-            baseValue: { type: "price", price: data[0].value },
-            topLineColor: TOP_LINE_COLOR,
-            topFillColor1: TOP_FILL_COLOR1,
-            topFillColor2: TOP_FILL_COLOR2,
-            bottomLineColor: BOTTOM_LINE_COLOR,
-            bottomFillColor1: BOTTOM_FILL_COLOR1,
-            bottomFillColor2: BOTTOM_FILL_COLOR2,
-        })
     }
 
     updateDarkMode(darkMode: boolean) {
         this.darkMode = darkMode
-        this.applyOptions()
+        this.applyOptionsToChart()
     }
 
     async updatePeriod(period: Period): Promise<TicksBoundary | null> {
@@ -98,7 +83,7 @@ class PriceChart {
         return await this.setData()
     }
 
-    applyOptions() {
+    applyOptionsToChart() {
         const formatTickMark: TickMarkFormatter = (time): string => {
             const timeInNumber = Number(time.toString())
             const periodToReturn: Record<Period, string> = {
@@ -143,10 +128,23 @@ class PriceChart {
         this.chart.timeScale().fitContent()
     }
 
+    applyOptionsToSeries(price: number) {
+        const options: DeepPartial<BaselineStyleOptions & SeriesOptionsCommon> = {
+            baseValue: { type: "price", price },
+            topLineColor: TOP_LINE_COLOR,
+            topFillColor1: TOP_FILL_COLOR1,
+            topFillColor2: TOP_FILL_COLOR2,
+            bottomLineColor: BOTTOM_LINE_COLOR,
+            bottomFillColor1: BOTTOM_FILL_COLOR1,
+            bottomFillColor2: BOTTOM_FILL_COLOR2,
+        }
+        this.series?.applyOptions(options)
+    }
+
     private async getData(): Promise<BaselineData<Time>[] | null> {
         const periodToSnapshotOptions: Record<Period, SnapshotOptions> = {
             [Period._24H]: {
-                secondOffset: 60 * 20,
+                secondOffset: 60 * 60,
                 numberOfSnapshots: 24,
             },
             [Period._1W]: {
@@ -176,7 +174,7 @@ class PriceChart {
             numberOfSnapshots,
             this.path
         )
-
+        
         if (priceX96s === null) return null
 
         const prices = priceX96s.map((priceX96) =>
@@ -203,8 +201,8 @@ class PriceChart {
         }
         if (!data) return null
 
-        if (this.series === null) return null 
-        
+        if (this.series === null) return null
+
         this.series.setData(data)
         this.chart.timeScale().fitContent()
 

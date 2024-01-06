@@ -3,7 +3,6 @@ export * from "./modules"
 import { ChainId } from "@config"
 import { Period, PriceChart } from "./modules"
 import { MouseEventHandler, Time } from "lightweight-charts"
-import { Bytes } from "web3"
 
 export const chartService = {
     createPriceChart: (
@@ -11,7 +10,6 @@ export const chartService = {
         container: HTMLDivElement,
         darkMode: boolean,
         period: Period,
-        path: Bytes,
         onCrosshairMove?: MouseEventHandler<Time>
     ) : PriceChart => {
         const priceChart = new PriceChart(
@@ -19,7 +17,6 @@ export const chartService = {
             container,
             darkMode,
             period,
-            path,
             onCrosshairMove
         )
         return priceChart

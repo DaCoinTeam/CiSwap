@@ -53,7 +53,7 @@ const SwapProviders = (props: ContextProps) => {
             tokenOut,
         }
     }
-    console.log(swapState)
+
     const [preventBefore, setPreventBefore] = useState(false)
 
     const handleReverse = async () => {

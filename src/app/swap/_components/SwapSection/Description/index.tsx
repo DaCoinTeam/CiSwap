@@ -1,12 +1,12 @@
 import React from "react"
 import Route from "./Route"
-import MinimunReceived from "./MinimunReceived"
+import LimitAmountCalculated from "./LimitAmountCalculated"
 import PriceImpact from "./PriceImpact"
 
 const Description = () => {
     return (
         <div className="w-full flex flex-col gap-1">
-            <MinimunReceived />
+            <LimitAmountCalculated />
             <PriceImpact />
             <Route />
         </div>

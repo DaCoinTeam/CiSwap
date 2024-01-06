@@ -40,7 +40,7 @@ const Chart = () => {
     }
 
     const updateTicksBoundary = (ticksBoundary: TicksBoundary | null) => {
-        if (ticksBoundary === null) return
+        if (!ticksBoundary) return
         const { first, last } = ticksBoundary
 
         tickAtFirst.set(first)
@@ -56,7 +56,7 @@ const Chart = () => {
       
         const path = services.next.smartRouter.encodePacked(
             formik.values.steps,
-            true
+            formik.values.exactInput
         )
 
         if (existed) {
@@ -67,55 +67,49 @@ const Chart = () => {
                 chartContainerRef.current,
                 darkMode,
                 period.value,
-                path,
                 onCrosshairMove
             )
             priceChartRef.current = priceChart
+            priceChart.applyOptionsToChart()
         }
 
         window.addEventListener("resize", () => {
-            priceChart.applyOptions()
+            priceChart.applyOptionsToChart()
         })
 
         const handleEffect = async () => {
-            let ticksBoundary: TicksBoundary | null
-
-            if (existed) {
-                priceChartRef.current = priceChart
-                ticksBoundary = await priceChart.updatePath(path)     
-            } else {
-                await priceChart.updateSeries()
-                ticksBoundary = await priceChart.setData()
-            }
-
+            const ticksBoundary = await priceChart.updatePath(path)
             if (!ticksBoundary) return null
             updateTicksBoundary(ticksBoundary)
+
+            priceChart.applyOptionsToSeries(ticksBoundary.first.value)
         }
 
         handleEffect()
 
         return () => {
             window.removeEventListener("resize", () => {
-                priceChart.applyOptions()
+                priceChart.applyOptionsToChart()
             })
         }
     }, [formik.values.steps])
 
-    const periodHasMountedRef = useRef(false)
-    useEffect(() => {
-        const handleEffect = async () => {
-            if (!periodHasMountedRef.current) {
-                periodHasMountedRef.current = true
-                return
-            }
-            const priceChart = priceChartRef.current
-            if (priceChart === null) return
+    // const periodHasMountedRef = useRef(false)
+    // useEffect(() => {
+    //     if (!formik.values.steps.length) return
+    //     const handleEffect = async () => {
+    //         if (!periodHasMountedRef.current) {
+    //             periodHasMountedRef.current = true
+    //             return
+    //         }
+    //         const priceChart = priceChartRef.current
+    //         if (priceChart === null) return
 
-            const ticksBoundary = await priceChart.updatePath(period.value)
-            updateTicksBoundary(ticksBoundary)
-        }
-        handleEffect()
-    }, [period])
+    //         const ticksBoundary = await priceChart.updatePeriod(period.value)
+    //         updateTicksBoundary(ticksBoundary)
+    //     }
+    //     handleEffect()
+    // }, [period])
 
     const darkModeHasMountedRef = useRef(false)
     useEffect(() => {

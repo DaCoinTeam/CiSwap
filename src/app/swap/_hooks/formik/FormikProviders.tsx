@@ -86,20 +86,28 @@ const _renderBody = (
             _props.setFieldValue("steps", quote.path.steps)
         }
         handleEffect()
-    }, [swapState.status.finishLoadBeforeConnectWallet, swapState.infoIn.address])
+    }, [
+        swapState.status.finishLoadBeforeConnectWallet,
+        swapState.infoIn.address,
+    ])
 
     useEffect(() => {
         const handleEffect = async () => {
             if (!_props.values.steps.length) return
-            const path = services.next.smartRouter.encodePacked(_props.values.steps, _props.values.exactInput)
-            console.log(path)
+
+            const path = services.next.smartRouter.encodePacked(
+                _props.values.steps
+            )
+
             const quoterContract = new QuoterContract(
                 chainId,
                 chainInfos[chainId].quoter
             )
+
             const priceX96 = await quoterContract.quotePriceX96(path)
-            if (priceX96 == null) return null
+            if (priceX96 == null) return
             const price = utils.math.computeDivideX96(priceX96)
+
             _props.setFieldValue("price", price)
         }
         handleEffect()
@@ -240,9 +248,11 @@ const FormikProviders = (props: ContextProps) => {
 
                 if (!swapReceipt) {
                     dispatch(setSignatureConfirmationModalToClosed())
+                    return
                 }
 
                 dispatch(setSignatureConfirmationModalToClosed())
+                notify(swapReceipt.transactionHash.toString())
             }}
         >
             {(_props) => _renderBody(_props, props.children)}

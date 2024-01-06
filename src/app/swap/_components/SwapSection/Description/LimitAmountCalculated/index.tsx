@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import utils from "@utils"
 import { SwapContext, FormikContext, SLIPPAGE_DEFAULT } from "../../../../_hooks"
 
-const MinimunReceived = () => {
+const LimitAmountCalculated = () => {
     const { swapState } = useContext(SwapContext)!
     const formik = useContext(FormikContext)!
 
@@ -15,12 +15,12 @@ const MinimunReceived = () => {
         setAmountOutRawTemp(formik.values.amountOutRaw)
     }, [])
 
-    const [receivedMin, setReceivedMin] = useState(0)
+    const [limitAmountCalculated, setLimitAmountCalculated] = useState(0)
 
-    const receivedMinHasMountedRef = useRef(false)
+    const limitAmountCalculatedHasMountedRef = useRef(false)
     useEffect(() => {
-        if (!receivedMinHasMountedRef.current) {
-            receivedMinHasMountedRef.current = true
+        if (!limitAmountCalculatedHasMountedRef.current) {
+            limitAmountCalculatedHasMountedRef.current = true
         }
 
         if (!swapState.status.finishLoadBeforeConnectWallet) return
@@ -30,15 +30,19 @@ const MinimunReceived = () => {
       formik.values.amountOutRaw === amountOutRawTemp
         )
             return
-            
-        const receivedMinRaw = utils.math.computeSlippage(
-            formik.values.amountOutRaw,
-            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT)
+        
+        const amount = formik.values.exactInput ?  formik.values.amountOutRaw : formik.values.amountInRaw
+
+        const limitAmountCalculated = utils.math.computeSlippage(
+            amount,
+            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
+            formik.values.exactInput
         )
 
-        setReceivedMin(
+
+        setLimitAmountCalculated(
             utils.math.computeRedenomination(
-                receivedMinRaw,
+                limitAmountCalculated,
                 swapState.infoOut.decimals
             )
         )
@@ -51,13 +55,17 @@ const MinimunReceived = () => {
         swapState.status.finishLoadBeforeConnectWallet
     ])
 
-    console.log(formik.values)
     return (
         <div className="flex justify-between items-center">
-            <LabelWithTooltipDisplay text="Minimun received" tooltipContent="AAA" />
-            <div className="text-sm"> {receivedMin} </div>
+            { formik.values.exactInput 
+                ?
+                <LabelWithTooltipDisplay text="Minimun received" tooltipContent="AAA" />
+                :    <LabelWithTooltipDisplay text="Maximun spend" tooltipContent="AAA" />
+            }
+         
+            <div className="text-sm"> {limitAmountCalculated} </div>
         </div>
     )
 }
 
-export default MinimunReceived
+export default LimitAmountCalculated

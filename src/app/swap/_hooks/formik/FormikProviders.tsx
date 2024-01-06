@@ -61,7 +61,7 @@ export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
 )
 
-const _renderBody = (
+const renderBody = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => {
@@ -255,7 +255,7 @@ const FormikProviders = (props: ContextProps) => {
                 notify(swapReceipt.transactionHash.toString())
             }}
         >
-            {(_props) => _renderBody(_props, props.children)}
+            {(_props) => renderBody(_props, props.children)}
         </Formik>
     )
 }

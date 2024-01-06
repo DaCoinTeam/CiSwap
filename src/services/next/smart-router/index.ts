@@ -22,7 +22,7 @@ export const smartRouterService = {
         }
     },
 
-    encodePacked: (steps: Step[], exactInput?: boolean): Bytes => {
+    encodePacked: (steps: Step[], exactInput: boolean = true): Bytes => {
         const path = new Path(steps)
         return exactInput ? path.encodePacked() : path.reverse().encodePacked()
     },

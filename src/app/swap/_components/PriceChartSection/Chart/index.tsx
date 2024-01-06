@@ -55,8 +55,7 @@ const Chart = () => {
         let priceChart: PriceChart
       
         const path = services.next.smartRouter.encodePacked(
-            formik.values.steps,
-            formik.values.exactInput
+            formik.values.steps
         )
 
         if (existed) {
@@ -118,7 +117,7 @@ const Chart = () => {
             return
         }
         const priceChart = priceChartRef.current
-        if (priceChart === null) return
+        if (!priceChart) return
 
         priceChart.updateDarkMode(darkMode)
     }, [darkMode])

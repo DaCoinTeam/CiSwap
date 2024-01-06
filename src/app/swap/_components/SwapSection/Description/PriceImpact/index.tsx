@@ -37,8 +37,8 @@ const PriceImpact = () => {
         console.log("bf" + priceBefore)
 
         const priceAfter = utils.math.computeBigIntDivideBigInt(
-            formik.values.amountInRaw,
-            formik.values.amountOutRaw
+            formik.values.amountOutRaw,
+            formik.values.amountInRaw
         )
         console.log("af" + priceAfter)
 

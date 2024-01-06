@@ -19,15 +19,15 @@ interface PriceChartSectionProps {
 
 interface PriceChartContext {
   period: {
-    value: Period;
+    data: Period;
     set: React.Dispatch<React.SetStateAction<Period>>;
   };
   tickAtCrosshair: {
-    value: BaselineData<Time>;
+    data: BaselineData<Time>;
     set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
   };
   tickAtFirst: {
-    value: BaselineData<Time>;
+    data: BaselineData<Time>;
     set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
   };
 }
@@ -55,15 +55,15 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                 <PriceChartContext.Provider
                     value={{
                         period: {
-                            value: period,
+                            data: period,
                             set: setPeriod,
                         },
                         tickAtCrosshair: {
-                            value: tickAtCrosshair,
+                            data: tickAtCrosshair,
                             set: setTickAtCrosshair,
                         },
                         tickAtFirst: {
-                            value: tickAtFirst,
+                            data: tickAtFirst,
                             set: setTickAtFirst,
                         },
                     }}

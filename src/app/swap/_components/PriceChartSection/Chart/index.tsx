@@ -65,7 +65,7 @@ const Chart = () => {
                 chainId,
                 chartContainerRef.current,
                 darkMode,
-                period.value,
+                period.data,
                 onCrosshairMove
             )
             priceChartRef.current = priceChart

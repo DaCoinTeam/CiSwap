@@ -14,8 +14,8 @@ const TickInfo = (props: TickInfoProps) => {
 
     const renderTrend = (): JSX.Element | null => {
         const priceImpact = utils.math.computePriceImpact(
-            tickAtCrosshair.value.value,
-            tickAtFirst.value.value
+            tickAtCrosshair.data.value,
+            tickAtFirst.data.value
         )
         if (priceImpact === null) return null
         const { up, percentage } = priceImpact
@@ -32,17 +32,17 @@ const TickInfo = (props: TickInfoProps) => {
     }
 
     const formatedDate = () =>
-        utils.time.formatDate(tickAtCrosshair.value.time as number)
+        utils.time.formatDate(tickAtCrosshair.data.time as number)
 
     return (
         <div className={`${props.className}`}>
-            {tickAtCrosshair.value.value > 0 ? (
+            {tickAtCrosshair.data.value > 0 ? (
                 <div>
                     <div className="gap-2 flex items-end">
                         <div className="gap-1 flex items-end">
                             <span className="text-3xl font-bold">
                                 {" "}
-                                {tickAtCrosshair.value.value}{" "}
+                                {tickAtCrosshair.data.value}{" "}
                             </span>
                             <span>
                                 {" "}

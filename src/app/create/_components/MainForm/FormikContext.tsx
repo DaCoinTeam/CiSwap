@@ -127,12 +127,12 @@ const FormikProviders = (props: ContextProps) => {
                 const priceAMaxX96 = utils.math.computeMultiplyX96(utils.format.parseStringToNumber(values.priceAMax))
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
-                console.log(allowanceA)
+
                 if (allowanceA === null) return
                 if (allowanceA < amountARaw) {
                     const approveAReceipt = await tokenAContract.approve(
                         factory,
-                        amountARaw - allowanceA
+                        amountARaw
                     )
                     if (!approveAReceipt) return
                 }
@@ -143,7 +143,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (allowanceB < amountBRaw) {
                     const approveBReceipt = await tokenBContract.approve(
                         factory,
-                        amountBRaw - allowanceB
+                        amountBRaw
                     )
                     if (!approveBReceipt) return
                 }

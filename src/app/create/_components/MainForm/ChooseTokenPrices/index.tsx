@@ -95,7 +95,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
                                     errorMessage={formik.errors.priceABase}
-                                    onValueChange={onChangeInput}
+                                    onChange={onChangeInput}
                                     value={_finishSelectedPair ? formik.values.priceABase : ""}
                                     hideErrorMessage
                                 />
@@ -135,7 +135,7 @@ const ChooseTokenPrices = (props: ChooseTokenPricesProps) => {
                                     isDisabled={!_finishSelectedPair}
                                     textPosition="center"
                                     errorMessage={formik.errors.priceAMax}
-                                    onValueChange={(value) => onChangeInput(value, true)}
+                                    onChange={(value) => onChangeInput(value, true)}
                                     value={_finishSelectedPair ? formik.values.priceAMax : ""}
                                 />
                                 <Button

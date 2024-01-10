@@ -5,20 +5,18 @@ import { MetamaskIcon } from "./MetamaskIcon"
 import { Button } from "@nextui-org/button"
 import Web3 from "web3"
 import { MetamaskContext } from "@app/_hooks"
-import { MetamaskApis } from "@blockchain"
+import { MetamaskManager } from "@blockchain"
 
 const ConnectWalletButton = () => {
-    const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext === null) return
-    const { web3State, ethereumState } = metamaskContext
+    const { web3State, ethereumState } =  useContext(MetamaskContext)!
     const { setWeb3 } = web3State
     const { ethereum } = ethereumState
 
     const connectWallet = async (): Promise<void> => {
         try {
             if (ethereum === null) return 
-            const metamaskApis = new MetamaskApis(ethereum)
-            await metamaskApis.requestAccounts()
+            const manager = new MetamaskManager(ethereum)
+            await manager.requestAccounts()
             const web3 = new Web3(ethereum)
             setWeb3(web3)
 

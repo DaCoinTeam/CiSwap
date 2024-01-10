@@ -59,9 +59,7 @@ const render = (
 )
 
 const FormikProviders = (props: ContextProps) => {
-    const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext === null) return
-    const { web3State } = metamaskContext
+    const { web3State } = useContext(MetamaskContext)!
     const { web3 } = web3State
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)

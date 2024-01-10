@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useState } from "react"
 import {
     Navbar as NextUINavbar,
     NavbarBrand,
@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation"
 import ConnectedChain from "./ConnectedChain"
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const account = useSelector((state: RootState) => state.blockchain.account)
     const defaultPool = useSelector(
         (state: RootState) => state.blockchain.defaultPool

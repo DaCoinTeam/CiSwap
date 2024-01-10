@@ -16,9 +16,7 @@ import { MetamaskContext } from "@app/_hooks"
 
 const ConnectedWalletSelect = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
-    const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext === null) return
-    const { web3State } = metamaskContext
+    const { web3State } = useContext(MetamaskContext)!
     const { setWeb3 } = web3State
 
     const router = useRouter()

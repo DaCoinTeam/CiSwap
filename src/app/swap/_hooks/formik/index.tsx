@@ -67,7 +67,7 @@ const FormikWrapper = (props: {
     const { swapState } = useContext(SwapContext)!
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
-    const formik = props.formik!
+    const formik = props.formik as FormikProps<FormikValues> 
 
     useEffect(() => {
         if (!swapState.status.finishLoadBeforeConnectWallet) return

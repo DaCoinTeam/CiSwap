@@ -1,4 +1,4 @@
 import SignatureConfirmationModal from "./SignatureConfirmationModal"
-import WrongChainMetamaskModal from "./WrongChainMetamaskModal"
+import WrongChainMetamaskModal from "./MetamaskWrongChainModal"
 
 export { SignatureConfirmationModal, WrongChainMetamaskModal }

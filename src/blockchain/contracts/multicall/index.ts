@@ -31,15 +31,11 @@ class MulticallContract {
                     if (!this.web3) return
 
                     const contract = getMulticallContract(this.web3, this.address)
-                    const _data = contract.methods.multicall(data).encodeABI()
-                    console.log(data)
-
-                    return await this.web3.eth.sendTransaction({
+                    return contract.methods.multicall(data).send({     
                         from: this.sender,
-                        to: this.address,
-                        data: _data,
-                        gasLimit: GAS_LIMIT,
+                        gas: GAS_LIMIT,
                         gasPrice: GAS_PRICE,
+                        
                     })
                 } catch (ex) {
                     console.log(ex)

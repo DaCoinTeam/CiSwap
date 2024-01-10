@@ -1,30 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Address } from "web3"
+import { ChainId } from "@config"
 
 export interface ModalSlice {
   signatureConfirmationModal: SignatureConfirmationModal;
+  metamaskWrongChainModal: MetamaskWrongChainModal;
 }
 
 const initialState: ModalSlice = {
     signatureConfirmationModal: false,
+    metamaskWrongChainModal: false,
 }
 
 export const modalSlice = createSlice({
     name: "modal",
     initialState,
     reducers: {
-        setSignatureConfirmationModalInfo(state, action: { payload: TransactionInfo }) {
+        setSignatureConfirmationModal(
+            state,
+            action: { payload: false | TransactionInfo }
+        ) {
             state.signatureConfirmationModal = action.payload
         },
-        setSignatureConfirmationModalToClosed(state) {
-            state.signatureConfirmationModal = false
+        setMetamaskWrongChainModal(state, action: { payload: false | ChainId }) {
+            state.metamaskWrongChainModal = action.payload
         },
     },
 })
 
 export const {
-    setSignatureConfirmationModalInfo,
-    setSignatureConfirmationModalToClosed,
+    setSignatureConfirmationModal,
+    setMetamaskWrongChainModal,
 } = modalSlice.actions
 
 export const modalReducer = modalSlice.reducer
@@ -60,3 +66,5 @@ interface SwapInfo {
 }
 
 export type TransactionInfo = ApproveInfo | SwapInfo;
+
+export type MetamaskWrongChainModal = false | ChainId;

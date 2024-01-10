@@ -1,7 +1,7 @@
 import { ChainId } from "@config"
 import Web3, { Address, HexString } from "web3"
 import abi from "./abi"
-import { getHttpWeb3 } from "../provider"
+import { getHttpWeb3 } from "../../providers/public-node.provider"
 import { uniqueArray } from "@utils"
 
 const getPoolContract = (web3: Web3, address: Address) =>

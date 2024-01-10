@@ -3,7 +3,7 @@ import { ChainId, chainInfos } from "@config"
 import web3 from "web3"
 import { Maybe } from "@metamask/providers/dist/utils"
 
-class MetamaskApis {
+class MetamaskManager {
     private ethereum: SDKProvider
 
     constructor(ethereum: SDKProvider) {
@@ -58,7 +58,7 @@ class MetamaskApis {
     }
 }
 
-export default MetamaskApis
+export default MetamaskManager
 
 export interface ErrorResponse {
   code: number;

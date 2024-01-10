@@ -10,8 +10,7 @@
 // } from "./contracts"
 
 export * from "./contracts"
-export * from "./query"
-export * from "./metamask"
+export * from "./providers"
 
 // export const blockchain = {
 //     contracts: {

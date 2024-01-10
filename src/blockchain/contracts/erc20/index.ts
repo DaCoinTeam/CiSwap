@@ -1,5 +1,5 @@
 import { ChainId, GAS_LIMIT, GAS_PRICE } from "@config"
-import { getHttpWeb3 } from "../provider"
+import { getHttpWeb3 } from "../../providers/public-node.provider"
 import Web3, { Address } from "web3"
 import abi from "./abi"
 

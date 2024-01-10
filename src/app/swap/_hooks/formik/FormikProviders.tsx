@@ -15,8 +15,7 @@ import {
     AppDispatch,
     RootState,
     TransactionType,
-    setSignatureConfirmationModalInfo,
-    setSignatureConfirmationModalToClosed,
+    setSignatureConfirmationModal,
 } from "@redux"
 import { SwapContext } from ".."
 import utils from "@utils"
@@ -61,7 +60,7 @@ export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
 )
 
-const renderBody = (
+const render = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => {
@@ -168,7 +167,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (allowanceIn < values.amountInRaw) {
                     const amountInToApprove = values.amountInRaw - allowanceIn
                     dispatch(
-                        setSignatureConfirmationModalInfo({
+                        setSignatureConfirmationModal({
                             type: TransactionType.Approve,
                             token: {
                                 address: swapState.infoIn.address,
@@ -185,7 +184,7 @@ const FormikProviders = (props: ContextProps) => {
                         amountInToApprove
                     )
                     if (!approveInReceipt) {
-                        dispatch(setSignatureConfirmationModalToClosed())
+                        dispatch(setSignatureConfirmationModal(false))
                         return
                     }
                     notify(approveInReceipt.transactionHash.toString())
@@ -198,7 +197,7 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
                 dispatch(
-                    setSignatureConfirmationModalInfo({
+                    setSignatureConfirmationModal({
                         type: TransactionType.Swap,
                         tokenIn: {
                             address: swapState.infoIn.address,
@@ -247,15 +246,15 @@ const FormikProviders = (props: ContextProps) => {
                 }
 
                 if (!swapReceipt) {
-                    dispatch(setSignatureConfirmationModalToClosed())
+                    dispatch(setSignatureConfirmationModal(false))
                     return
                 }
 
-                dispatch(setSignatureConfirmationModalToClosed())
+                dispatch(setSignatureConfirmationModal(false))
                 notify(swapReceipt.transactionHash.toString())
             }}
         >
-            {(_props) => renderBody(_props, props.children)}
+            {(_props) => render(_props, props.children)}
         </Formik>
     )
 }

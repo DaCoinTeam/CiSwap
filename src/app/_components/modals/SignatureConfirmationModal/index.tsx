@@ -53,7 +53,7 @@ Please process in your wallet{" "}
         )
     }
 
-    const renderBody = () => {
+    const render = () => {
         if (!signatureConfirmationModal) return null 
         const typeToRender = {
             [TransactionType.Approve]: renderApprove,
@@ -73,7 +73,7 @@ Please process in your wallet{" "}
             isDismissable
             isKeyboardDismissDisabled
         >
-            {renderBody()}
+            {render()}
         </Modal>
     )
 }

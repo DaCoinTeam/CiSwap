@@ -1,29 +1,35 @@
-import {
-    AppDispatch,
-    setAccount,
-    setChainId,
-    setMetamaskWrongChainModal,
-} from "@redux"
-
-import { useDispatch } from "react-redux"
-import { utils } from "web3"
+"use client"
+import MetaMaskSDK, { MetaMaskSDKOptions, SDKProvider } from "@metamask/sdk"
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react"
+import Web3, { utils } from "web3"
+import { RegisteredSubscription } from "web3-eth"
+import { ContextProps } from "@app/_shared"
+import React from "react"
 import { chainInfos, defaultChainId } from "@config"
-import MetaMaskSDK, { MetaMaskSDKOptions } from "@metamask/sdk"
-import { MetamaskManager } from "../../../blockchain/providers"
-import { useContext, useEffect } from "react"
-import { MetamaskContext } from "."
+import { AppDispatch, setAccount, setChainId, setMetamaskWrongChainModal } from "@redux"
+import { useDispatch } from "react-redux"
+import { MetamaskManager } from "@blockchain"
 
+export interface MetamaskContextProps {
+  ethereumState: {
+    ethereum: SDKProvider | null;
+    setEthereum: Dispatch<SetStateAction<SDKProvider | null>>;
+  };
+  web3State: {
+    web3: Web3<RegisteredSubscription> | null;
+    setWeb3: Dispatch<SetStateAction<Web3<RegisteredSubscription> | null>>;
+  };
+}
 
+export const MetamaskContext = createContext<MetamaskContextProps | null>(null)
 
-const useMetamask = () => {
-    const { ethereumState, web3State } = useContext(MetamaskContext)!
+const MetamaskProviders = (props: ContextProps) => {
+    const [ethereum, setEthereum] = useState<SDKProvider | null>(null)
+    const [web3, setWeb3] = useState<Web3<RegisteredSubscription> | null>(null)
 
     const dispatch: AppDispatch = useDispatch()
 
     useEffect(() => {
-        const ethereum = ethereumState.ethereum 
-        const web3 = web3State.web3
-
         if (ethereum === null) return
         if (web3 === null) return
 
@@ -41,7 +47,7 @@ const useMetamask = () => {
         return () => {
             ethereum.removeAllListeners()
         }
-    }, [ethereumState.ethereum])
+    }, [ethereum])
 
     useEffect(() => {
         const handleEffect = async () => {
@@ -55,15 +61,12 @@ const useMetamask = () => {
             const MMSDK = new MetaMaskSDK(options)
             await MMSDK.init()
             const _ethereum = MMSDK.getProvider()
-            ethereumState.setEthereum(_ethereum)
+            setEthereum(_ethereum)
         }
         handleEffect()
     }, [])
 
     useEffect(() => {
-        const ethereum = ethereumState.ethereum
-        const web3 = web3State.web3
-
         if (ethereum === null) return
         if (web3 === null) return
 
@@ -83,6 +86,24 @@ const useMetamask = () => {
             dispatch(setChainId(chainId))
         }
         handleEffect()
-    }, [web3State.web3])
+    }, [web3])
+
+    return (
+        <MetamaskContext.Provider
+            value={{
+                ethereumState: {
+                    ethereum,
+                    setEthereum,
+                },
+                web3State: {
+                    web3,
+                    setWeb3,
+                },
+            }}
+        >
+            {props.children}
+        </MetamaskContext.Provider>
+    )
 }
-export default useMetamask
+
+export default MetamaskProviders

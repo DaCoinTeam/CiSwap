@@ -13,14 +13,12 @@ import {
     DropdownTrigger,
 } from "@nextui-org/react"
 import { MetamaskContext } from "@app/_hooks"
-import { MetamaskApis } from "@blockchain"
+import { MetamaskManager } from "@blockchain"
 
 const ConnectedChain = () => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     
-    const metamaskContext = useContext(MetamaskContext)
-    if (metamaskContext === null) return
-    const { ethereumState } = metamaskContext
+    const { ethereumState} = useContext(MetamaskContext)!
     const { ethereum } = ethereumState
 
     const connectedchainInfos = [
@@ -56,36 +54,32 @@ const ConnectedChain = () => {
         },
     ]
 
-    const _imageUrl = connectedchainInfos.find(chain => chain.chainId === chainId)?.imageUrl
-    const _text = connectedchainInfos.find(chain => chain.chainId === chainId)?.text
+    const imageUrl = connectedchainInfos.find(chain => chain.chainId === chainId)?.imageUrl
+    const text = connectedchainInfos.find(chain => chain.chainId === chainId)?.text
 
     return (
         <Dropdown>
             <DropdownTrigger>
                 <Button
                     variant="light"
-                    startContent={<Image radius="none" src={_imageUrl} className="w-5 h-5" />}
+                    startContent={<Image radius="none" src={imageUrl} className="w-5 h-5" />}
                 >
-                    {_text}
+                    {text}
                 </Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
                 {connectedchainInfos.map(chain => {
-                    const _handleSwitch = async () => {
+                    const onClick = async () => {
                         if (ethereum === null) return
-                        const metamaskApis = new MetamaskApis(ethereum)
-                        const response = await metamaskApis.switchEthereumChain(chain.chainId)
-                        console.log(response)
+                        const manager = new MetamaskManager(ethereum)
+                        const response = await manager.switchEthereumChain(chain.chainId)
                         if (!response) return 
                         const code = response.code
                         if (!code) return 
-                        console.log(1)
                         if (code != 4902) return
-                        console.log(2)
-                        const _res = await metamaskApis.addEthereumChain(chain.chainId)
-                        console.log(_res)
+                        await manager.addEthereumChain(chain.chainId)
                     }
-                    return <DropdownItem onPress={_handleSwitch} startContent={<Image radius="none" src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
+                    return <DropdownItem onPress={onClick} startContent={<Image radius="none" src={chain.imageUrl} className="w-5 h-5" />} key={chain.chainId}> {chain.text} </DropdownItem>
                 })}
                 
             </DropdownMenu>

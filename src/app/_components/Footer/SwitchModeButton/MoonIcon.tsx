@@ -4,7 +4,6 @@ const MoonIcon = () => (
         aria-hidden="true"
         focusable="false"
         height="1em"
-        role="presentation"
         viewBox="0 0 24 24"
         width="1em"
         color="black"

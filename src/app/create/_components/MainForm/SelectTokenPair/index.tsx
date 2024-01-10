@@ -4,7 +4,7 @@ import React, { useContext } from "react"
 import SelectToken from "./SelectToken"
 import { TitleDisplay } from "@app/_shared"
 import { PlusIcon } from "@heroicons/react/24/outline"
-import { FormikContext } from "../FormikContext"
+import { FormikContext } from "../../../_hooks"
 
 interface SelectTokenPairProps {
     className?: string

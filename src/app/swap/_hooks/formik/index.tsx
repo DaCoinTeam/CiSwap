@@ -60,29 +60,29 @@ export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
 )
 
-const useForm = (
-    props: FormikProps<FormikValues> | null,
-    chidren: ReactNode
-) => {
+const FormikWrapper = (props: {
+  formik: FormikProps<FormikValues> | null;
+  children: ReactNode;
+}) => {
     const { swapState } = useContext(SwapContext)!
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
-    const _props = props as FormikProps<FormikValues>
+    const formik = props.formik!
 
     useEffect(() => {
         if (!swapState.status.finishLoadBeforeConnectWallet) return
 
         const handleEffect = async () => {
-            if (_props.values.steps.length) return
+            if (formik.values.steps.length) return
             const quote = await next.smartRouter.findBestQuote(
                 chainId,
                 AMOUNT_DEFAULT,
                 swapState.infoIn.address,
                 swapState.infoOut.address,
-                _props.values.exactInput
+                formik.values.exactInput
             )
             if (quote === null) return
-            _props.setFieldValue("steps", quote.path.steps)
+            formik.setFieldValue("steps", quote.path.steps)
         }
         handleEffect()
     }, [
@@ -92,11 +92,9 @@ const useForm = (
 
     useEffect(() => {
         const handleEffect = async () => {
-            if (!_props.values.steps.length) return
+            if (!formik.values.steps.length) return
 
-            const path = next.smartRouter.encodePacked(
-                _props.values.steps
-            )
+            const path = next.smartRouter.encodePacked(formik.values.steps)
 
             const quoterContract = new QuoterContract(
                 chainId,
@@ -107,14 +105,14 @@ const useForm = (
             if (priceX96 == null) return
             const price = utils.math.computeDivideX96(priceX96)
 
-            _props.setFieldValue("price", price)
+            formik.setFieldValue("price", price)
         }
         handleEffect()
-    }, [_props.values.steps, swapState.infoIn.address])
+    }, [formik.values.steps, swapState.infoIn.address])
 
     return (
-        <FormikContext.Provider value={props}>
-            <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
+        <FormikContext.Provider value={props.formik}>
+            <Form onSubmit={props.formik?.handleSubmit}>{props.children}</Form>
         </FormikContext.Provider>
     )
 }
@@ -254,7 +252,9 @@ const FormikProviders = (props: ContextProps) => {
                 notify(swapReceipt.transactionHash.toString())
             }}
         >
-            {(_props) => useForm(_props, props.children)}
+            {(_props) => (
+                <FormikWrapper formik={_props}>{props.children}</FormikWrapper>
+            )}
         </Formik>
     )
 }

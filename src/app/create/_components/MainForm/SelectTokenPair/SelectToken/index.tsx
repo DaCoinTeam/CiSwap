@@ -24,7 +24,7 @@ import { RootState } from "@redux"
 import { TIME_OUT } from "@config"
 import { Address } from "web3"
 import { AppButton, LoadingDisplay } from "@app/_shared"
-import { FormikContext } from "../../FormikContext"
+import { FormikContext } from "../../../../_hooks"
 import { FinishSelectedPairContext } from "../../index"
 
 interface SelectTokenProps {

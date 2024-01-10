@@ -46,15 +46,16 @@ const initialValues: FormikValues = {
     fee: 0.0025,
 }
 
-export const FormikContext =
-  createContext<FormikProps<FormikValues> | null>(null)
+export const FormikContext = createContext<FormikProps<FormikValues> | null>(
+    null
+)
 
-const useForm = (
-    props: FormikProps<FormikValues> | null,
-    chidren: ReactNode
-) => (
-    <FormikContext.Provider value={props}>
-        <Form onSubmit={props?.handleSubmit}>{chidren}</Form>
+const FormikWrapper = (props: {
+  formik: FormikProps<FormikValues> | null;
+  children: ReactNode;
+}) => (
+    <FormikContext.Provider value={props.formik}>
+        <Form onSubmit={props.formik?.handleSubmit}>{props.children}</Form>
     </FormikContext.Provider>
 )
 
@@ -100,7 +101,7 @@ const FormikProviders = (props: ContextProps) => {
                     web3,
                     account
                 )
-                
+
                 const factory = chainInfos[chainId].factory
                 const factoryContract = new FactoryContract(
                     chainId,
@@ -122,7 +123,9 @@ const FormikProviders = (props: ContextProps) => {
                 const priceABaseX96 = utils.math.computeMultiplyX96(
                     utils.format.parseStringToNumber(values.priceABase)
                 )
-                const priceAMaxX96 = utils.math.computeMultiplyX96(utils.format.parseStringToNumber(values.priceAMax))
+                const priceAMaxX96 = utils.math.computeMultiplyX96(
+                    utils.format.parseStringToNumber(values.priceAMax)
+                )
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
 
@@ -149,14 +152,10 @@ const FormikProviders = (props: ContextProps) => {
                 const _tokenA = values.zeroForOne ? values.tokenA : values.tokenB
                 const _tokenB = values.zeroForOne ? values.tokenB : values.tokenA
 
-                const _amountA = values.zeroForOne
-                    ? amountARaw
-                    : amountBRaw
-                const _amountB = values.zeroForOne
-                    ? amountBRaw
-                    : amountARaw
+                const _amountA = values.zeroForOne ? amountARaw : amountBRaw
+                const _amountB = values.zeroForOne ? amountBRaw : amountARaw
                 console.log({
-                    fee: values.fee *  utils.math.computeExponent(5),
+                    fee: values.fee * utils.math.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,
@@ -164,10 +163,10 @@ const FormikProviders = (props: ContextProps) => {
                         amountB: _amountB,
                         priceABaseX96: priceABaseX96,
                         priceAMaxX96: priceAMaxX96,
-                    }
+                    },
                 })
                 const createPoolReceipt = await factoryContract.createPool({
-                    fee: values.fee *  utils.math.computeExponent(5),
+                    fee: values.fee * utils.math.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,
@@ -180,7 +179,9 @@ const FormikProviders = (props: ContextProps) => {
                 console.log(createPoolReceipt)
             }}
         >
-            {(_props) => useForm(_props, props.children)}
+            {(_props) => (
+                <FormikWrapper formik={_props}> {props.children}</FormikWrapper>
+            )}
         </Formik>
     )
 }

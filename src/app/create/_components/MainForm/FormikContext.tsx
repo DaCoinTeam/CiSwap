@@ -49,7 +49,7 @@ const initialValues: FormikValues = {
 export const FormikContext =
   createContext<FormikProps<FormikValues> | null>(null)
 
-const render = (
+const useForm = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => (
@@ -180,7 +180,7 @@ const FormikProviders = (props: ContextProps) => {
                 console.log(createPoolReceipt)
             }}
         >
-            {(_props) => render(_props, props.children)}
+            {(_props) => useForm(_props, props.children)}
         </Formik>
     )
 }

@@ -60,7 +60,7 @@ export const FormikContext = createContext<FormikProps<FormikValues> | null>(
     null
 )
 
-const render = (
+const useForm = (
     props: FormikProps<FormikValues> | null,
     chidren: ReactNode
 ) => {
@@ -254,7 +254,7 @@ const FormikProviders = (props: ContextProps) => {
                 notify(swapReceipt.transactionHash.toString())
             }}
         >
-            {(_props) => render(_props, props.children)}
+            {(_props) => useForm(_props, props.children)}
         </Formik>
     )
 }

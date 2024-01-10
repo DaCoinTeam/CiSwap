@@ -5,7 +5,7 @@ import { Address, Bytes } from "web3"
 import { Path, Quote, Step } from "./modules"
 import { SmartRouter } from "./modules"
 
-export const smartRouterService = {
+const smartRouter = {
     findBestQuote: async (
         chainId: ChainId,
         amount: bigint,
@@ -41,3 +41,5 @@ export const smartRouterService = {
         return quote.getSwapScenario(slippage, recipient, txDeadline)
     },
 }
+
+export default smartRouter

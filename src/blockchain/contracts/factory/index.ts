@@ -39,9 +39,8 @@ class FactoryCountract {
     };
   }) {
         try {
-            if (!this.web3) return
+            if (!this.web3) return null
             const contract = getFactoryContract(this.web3, this.address)
-            console.log(params)
             return await contract.methods.createPool(params).send({
                 from: this.sender,
                 gas: GAS_LIMIT,

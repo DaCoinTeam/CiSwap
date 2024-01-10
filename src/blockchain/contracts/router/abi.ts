@@ -1,47 +1,6 @@
 const abi = [
     {
         inputs: [
-            { internalType: "address", name: "_factory", type: "address" },
-            { internalType: "address", name: "_WETH10", type: "address" },
-        ],
-        stateMutability: "nonpayable",
-        type: "constructor",
-    },
-    {
-        inputs: [{ internalType: "address", name: "target", type: "address" }],
-        name: "AddressEmptyCode",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "AddressInsufficientBalance",
-        type: "error",
-    },
-    { inputs: [], name: "FailedInnerCall", type: "error" },
-    {
-        inputs: [{ internalType: "int256", name: "value", type: "int256" }],
-        name: "SafeCastOverflowedIntToUint",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "uint256", name: "value", type: "uint256" }],
-        name: "SafeCastOverflowedUintToInt",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "address", name: "token", type: "address" }],
-        name: "SafeERC20FailedOperation",
-        type: "error",
-    },
-    {
-        inputs: [],
-        name: "WETH10",
-        outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
             {
                 components: [
                     { internalType: "address", name: "tokenA", type: "address" },
@@ -148,34 +107,6 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [],
-        name: "factory",
-        outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [{ internalType: "bytes[]", name: "data", type: "bytes[]" }],
-        name: "multicall",
-        outputs: [{ internalType: "bytes[]", name: "results", type: "bytes[]" }],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [{ internalType: "bytes[]", name: "data", type: "bytes[]" }],
-        name: "multicall2",
-        outputs: [{ internalType: "bytes[]", name: "results", type: "bytes[]" }],
-        stateMutability: "payable",
-        type: "function",
-    },
-    {
-        inputs: [],
-        name: "refundETH",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-    },
-    {
         inputs: [
             {
                 components: [
@@ -201,27 +132,5 @@ const abi = [
         stateMutability: "payable",
         type: "function",
     },
-    {
-        inputs: [
-            { internalType: "int256", name: "amount0Delta", type: "int256" },
-            { internalType: "int256", name: "amount1Delta", type: "int256" },
-            { internalType: "bytes", name: "callback", type: "bytes" },
-        ],
-        name: "swapCall",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [
-            { internalType: "uint256", name: "amountMinimum", type: "uint256" },
-            { internalType: "address", name: "recipient", type: "address" },
-        ],
-        name: "unwrapWETH10",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-    },
-    { stateMutability: "payable", type: "receive" },
 ] as const
 export default abi

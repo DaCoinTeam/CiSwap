@@ -23,7 +23,7 @@ import utils from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ContextProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
-import { Step, services } from "@services"
+import { Step, next } from "@services"
 import { QuoteType } from "../../../../services/next/smart-router/modules/quote.module"
 import { TransactionReceipt } from "web3"
 
@@ -75,7 +75,7 @@ const renderBody = (
 
         const handleEffect = async () => {
             if (_props.values.steps.length) return
-            const quote = await services.next.smartRouter.findBestQuote(
+            const quote = await next.smartRouter.findBestQuote(
                 chainId,
                 AMOUNT_DEFAULT,
                 swapState.infoIn.address,
@@ -95,7 +95,7 @@ const renderBody = (
         const handleEffect = async () => {
             if (!_props.values.steps.length) return
 
-            const path = services.next.smartRouter.encodePacked(
+            const path = next.smartRouter.encodePacked(
                 _props.values.steps
             )
 
@@ -211,7 +211,7 @@ const FormikProviders = (props: ContextProps) => {
                     })
                 )
 
-                const swapScenario = services.next.smartRouter.getSwapScenario(
+                const swapScenario = next.smartRouter.getSwapScenario(
                     utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
                     // temp me
                     account,

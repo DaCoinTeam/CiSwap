@@ -1,64 +1,10 @@
 const abi = [
-    { inputs: [], stateMutability: "nonpayable", type: "constructor" },
-    {
-        inputs: [{ internalType: "address", name: "target", type: "address" }],
-        name: "AddressEmptyCode",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "AddressInsufficientBalance",
-        type: "error",
-    },
-    { inputs: [], name: "FailedInnerCall", type: "error" },
-    {
-        inputs: [{ internalType: "address", name: "owner", type: "address" }],
-        name: "OwnableInvalidOwner",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "OwnableUnauthorizedAccount",
-        type: "error",
-    },
-    {
-        inputs: [
-            { internalType: "uint8", name: "bits", type: "uint8" },
-            { internalType: "uint256", name: "value", type: "uint256" },
-        ],
-        name: "SafeCastOverflowedUintDowncast",
-        type: "error",
-    },
-    {
-        inputs: [{ internalType: "address", name: "token", type: "address" }],
-        name: "SafeERC20FailedOperation",
-        type: "error",
-    },
     {
         anonymous: false,
         inputs: [
             { indexed: true, internalType: "uint24", name: "fee", type: "uint24" },
         ],
         name: "FeeAmountEnabled",
-        type: "event",
-    },
-    {
-        anonymous: false,
-        inputs: [
-            {
-                indexed: true,
-                internalType: "address",
-                name: "previousOwner",
-                type: "address",
-            },
-            {
-                indexed: true,
-                internalType: "address",
-                name: "newOwner",
-                type: "address",
-            },
-        ],
-        name: "OwnershipTransferred",
         type: "event",
     },
     {
@@ -140,46 +86,23 @@ const abi = [
     },
     {
         inputs: [],
-        name: "deployParams",
-        outputs: [
-            { internalType: "address", name: "factory", type: "address" },
-            { internalType: "uint24", name: "fee", type: "uint24" },
-            {
-                components: [
-                    { internalType: "address", name: "tokenA", type: "address" },
-                    { internalType: "address", name: "tokenB", type: "address" },
-                    { internalType: "uint256", name: "amountA", type: "uint256" },
-                    { internalType: "uint256", name: "amountB", type: "uint256" },
-                    { internalType: "uint256", name: "priceABaseX96", type: "uint256" },
-                    { internalType: "uint256", name: "priceAMaxX96", type: "uint256" },
-                ],
-                internalType: "struct IPoolDeployer.BootstrapConfig",
-                name: "config",
-                type: "tuple",
-            },
-        ],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [],
         name: "feeTo",
         outputs: [{ internalType: "address", name: "", type: "address" }],
         stateMutability: "view",
         type: "function",
     },
     {
-        inputs: [{ internalType: "uint24", name: "", type: "uint24" }],
+        inputs: [{ internalType: "uint24", name: "fee", type: "uint24" }],
         name: "getFeeAmountEnabled",
         outputs: [{ internalType: "bool", name: "", type: "bool" }],
-        stateMutability: "view",
+        stateMutability: "nonpayable",
         type: "function",
     },
     {
         inputs: [
-            { internalType: "address", name: "", type: "address" },
-            { internalType: "address", name: "", type: "address" },
-            { internalType: "uint256", name: "", type: "uint256" },
+            { internalType: "address", name: "tokenA", type: "address" },
+            { internalType: "address", name: "tokenB", type: "address" },
+            { internalType: "uint256", name: "index", type: "uint256" },
         ],
         name: "getPool",
         outputs: [{ internalType: "address", name: "", type: "address" }],
@@ -187,36 +110,15 @@ const abi = [
         type: "function",
     },
     {
-        inputs: [],
-        name: "owner",
-        outputs: [{ internalType: "address", name: "", type: "address" }],
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
         name: "pools",
         outputs: [{ internalType: "address", name: "", type: "address" }],
         stateMutability: "view",
         type: "function",
     },
     {
-        inputs: [],
-        name: "renounceOwnership",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
         inputs: [{ internalType: "address", name: "account", type: "address" }],
         name: "setFeeTo",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-    {
-        inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
-        name: "transferOwnership",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",

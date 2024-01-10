@@ -12,7 +12,7 @@ import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import utils from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
-import { services } from "@services"
+import { next } from "@services"
 
 const MainSection = () => {
     const swapContext = useContext(SwapContext)!
@@ -42,7 +42,7 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.findBestQuote(
+            const quote = await next.smartRouter.findBestQuote(
                 chainId,
                 utils.math.computeRaw(
                     utils.format.parseStringToNumber(formik.values.amountIn),
@@ -92,7 +92,7 @@ const MainSection = () => {
 
         const controller = new AbortController()
         const handleEffect = async () => {
-            const quote = await services.next.smartRouter.findBestQuote(
+            const quote = await next.smartRouter.findBestQuote(
                 chainId,
                 utils.math.computeRaw(
                     utils.format.parseStringToNumber(formik.values.amountOut),

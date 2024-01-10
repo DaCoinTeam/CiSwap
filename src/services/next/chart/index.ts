@@ -4,7 +4,7 @@ import { ChainId } from "@config"
 import { Period, PriceChart } from "./modules"
 import { MouseEventHandler, Time } from "lightweight-charts"
 
-export const chartService = {
+const chart = {
     createPriceChart: (
         chainId: ChainId,
         container: HTMLDivElement,
@@ -22,3 +22,5 @@ export const chartService = {
         return priceChart
     },
 }
+
+export default chart

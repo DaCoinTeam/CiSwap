@@ -132,7 +132,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (allowanceA < amountARaw) {
                     const approveAReceipt = await tokenAContract.approve(
                         factory,
-                        amountARaw
+                        amountARaw - allowanceA
                     )
                     if (!approveAReceipt) return
                 }
@@ -143,7 +143,7 @@ const FormikProviders = (props: ContextProps) => {
                 if (allowanceB < amountBRaw) {
                     const approveBReceipt = await tokenBContract.approve(
                         factory,
-                        amountBRaw
+                        amountBRaw - allowanceB
                     )
                     if (!approveBReceipt) return
                 }
@@ -157,7 +157,17 @@ const FormikProviders = (props: ContextProps) => {
                 const _amountB = values.zeroForOne
                     ? amountBRaw
                     : amountARaw
-
+                console.log({
+                    fee: values.fee *  utils.math.computeExponent(5),
+                    config: {
+                        tokenA: _tokenA,
+                        tokenB: _tokenB,
+                        amountA: _amountA,
+                        amountB: _amountB,
+                        priceABaseX96: priceABaseX96,
+                        priceAMaxX96: priceAMaxX96,
+                    }
+                })
                 const createPoolReceipt = await factoryContract.createPool({
                     fee: values.fee *  utils.math.computeExponent(5),
                     config: {

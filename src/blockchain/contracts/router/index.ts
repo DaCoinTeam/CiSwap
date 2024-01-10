@@ -86,38 +86,6 @@ class RouterContract {
             return null
         }
     }
-
-    async multicall(data: Bytes[]) {
-        try {
-            if (!this.web3) return null
-
-            const contract = getRouterContract(this.web3, this.address)
-            return contract.methods.multicall(data).send({
-                from: this.sender,
-                gas: GAS_LIMIT,
-                gasPrice: GAS_PRICE,
-            })
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
-
-    async multicall2(data: Bytes[]) {
-        try {
-            if (!this.web3) return null
-
-            const contract = getRouterContract(this.web3, this.address)
-            return await contract.methods.multicall2(data).send({
-                from: this.sender,
-                gas: GAS_LIMIT,
-                gasPrice: GAS_PRICE,
-            })
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
-    }
 }
 
 export default RouterContract

@@ -1,7 +1,7 @@
 import { Address } from "web3"
 
 const sanitizeNumericInput = (input: string): string | null => {
-    const regex = /^\d*[.,]?\d*$/
+    const regex = new RegExp(/^\d*[.,]?\d*$/)
     if (!regex.test(input)) {
         return null
     }

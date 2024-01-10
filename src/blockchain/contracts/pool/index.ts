@@ -1,8 +1,7 @@
 import { ChainId } from "@config"
-import Web3, { Address, HexString } from "web3"
+import Web3, { Address } from "web3"
 import abi from "./abi"
-import { getHttpWeb3 } from "../../providers/public-node.provider"
-import { uniqueArray } from "@utils"
+import { getHttpWeb3 } from "../../providers"
 
 const getPoolContract = (web3: Web3, address: Address) =>
     new web3.eth.Contract(abi, address, web3)
@@ -28,27 +27,6 @@ class PoolContract {
     getInstance() {
         const web3 = getHttpWeb3(this.chainId)
         return getPoolContract(web3, this.address)
-    }
-
-    async getTransactionHashs() {
-        try {
-            const transactions: HexString[] = []
-            const web3 = getHttpWeb3(this.chainId)
-            const logs = await web3.eth.getPastLogs({
-                address: this.address,
-                fromBlock: 0,
-                toBlock: "latest",
-            })
-
-            for (const log of logs) {
-                if (typeof log === "string") return null
-                transactions.push(log.transactionHash as HexString)
-            }
-            return uniqueArray(transactions)
-        } catch (ex) {
-            console.log(ex)
-            return null
-        }
     }
 
     async token0() {

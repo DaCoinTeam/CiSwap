@@ -1,7 +1,7 @@
 import { ChainId, GAS_LIMIT, GAS_PRICE } from "@config"
 import Web3, { Address, Bytes } from "web3"
 import abi from "./abi"
-import { getHttpWeb3 } from ".."
+import { getHttpWeb3 } from "../../providers"
 
 const getMulticallContract = (web3: Web3, address: Address) =>
     new web3.eth.Contract(abi, address, web3)

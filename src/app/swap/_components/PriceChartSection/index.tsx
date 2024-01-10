@@ -22,7 +22,9 @@ interface PriceChartContext {
   };
   tickAtCrosshairState: {
     tickAtCrosshair: BaselineData<Time>;
-    setTickAtCrosshair: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
+    setTickAtCrosshair: React.Dispatch<
+      React.SetStateAction<BaselineData<Time>>
+    >;
   };
   tickAtFirstState: {
     tickAtFirst: BaselineData<Time>;
@@ -47,7 +49,7 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
     const [tickAtFirst, setTickAtFirst] =
     useState<BaselineData<Time>>(initialTick)
 
-    const priceChartContext : PriceChartContext = useMemo(() =>{
+    const priceChartContext: PriceChartContext = useMemo(() => {
         return {
             periodState: {
                 period,
@@ -62,13 +64,19 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                 setTickAtCrosshair,
             },
         }
-    }, [period, tickAtFirst, tickAtCrosshair])
-    
+    }, [
+        period,
+        setPeriod,
+        tickAtFirst,
+        setTickAtFirst,
+        tickAtCrosshair,
+        setTickAtCrosshair,
+    ])
+
     return (
         <Card className={`${props.className}`}>
             <CardBody className="p-5">
-                <PriceChartContext.Provider
-                    value={priceChartContext}>
+                <PriceChartContext.Provider value={priceChartContext}>
                     <div className="grid md:flex justify-between gap-4">
                         <div>
                             <TokenPairDisplay

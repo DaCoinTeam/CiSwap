@@ -11,7 +11,8 @@ class AggregatorContract {
     private address: Address
 
     constructor(chainId: ChainId, address: Address) {
-        (this.chainId = chainId), (this.address = address)
+        this.chainId = chainId
+        this.address = address
     }
 
     async aggregatePriceX96(

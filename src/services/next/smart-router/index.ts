@@ -2,8 +2,7 @@ export * from "./modules"
 
 import { ChainId } from "@config"
 import { Address, Bytes } from "web3"
-import { Path, Quote, Step } from "./modules"
-import { SmartRouter } from "./modules"
+import { Path, Quote, Step, SmartRouter } from "./modules"
 
 const smartRouter = {
     findBestQuote: async (

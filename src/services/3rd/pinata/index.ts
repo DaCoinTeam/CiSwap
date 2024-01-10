@@ -2,9 +2,7 @@ import { PinataPinResponse } from "@pinata/sdk"
 import axios from "axios"
 
 const PINATA_URL = "/services/pinata"
-export const pinataGET = async () => {
 
-}
 export const pinataPOSTFile = async (file: File) : Promise<PinataPinResponse|null> => {
     const searchParams = new URLSearchParams()
     searchParams.append("type", PinataRequestType.File)

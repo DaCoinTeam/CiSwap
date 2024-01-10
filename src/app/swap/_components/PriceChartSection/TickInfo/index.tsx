@@ -9,13 +9,16 @@ interface TickInfoProps {
 }
 
 const TickInfo = (props: TickInfoProps) => {
-    const { tickAtCrosshair, tickAtFirst } = useContext(PriceChartContext)!
+    const { tickAtFirstState, tickAtCrosshairState } =
+    useContext(PriceChartContext)!
+    const { tickAtFirst } = tickAtFirstState
+    const { tickAtCrosshair } = tickAtCrosshairState
     const { swapState } = useContext(SwapContext)!
 
     const renderTrend = (): JSX.Element | null => {
         const priceImpact = utils.math.computePriceImpact(
-            tickAtCrosshair.data.value,
-            tickAtFirst.data.value
+            tickAtCrosshairState.tickAtCrosshair.value,
+            tickAtFirst.value
         )
         if (priceImpact === null) return null
         const { up, percentage } = priceImpact
@@ -32,17 +35,17 @@ const TickInfo = (props: TickInfoProps) => {
     }
 
     const formatedDate = () =>
-        utils.time.formatDate(tickAtCrosshair.data.time as number)
+        utils.time.formatDate(tickAtCrosshair.time as number)
 
     return (
         <div className={`${props.className}`}>
-            {tickAtCrosshair.data.value > 0 ? (
+            {tickAtCrosshair.value > 0 ? (
                 <div>
                     <div className="gap-2 flex items-end">
                         <div className="gap-1 flex items-end">
                             <span className="text-3xl font-bold">
                                 {" "}
-                                {tickAtCrosshair.data.value}{" "}
+                                {tickAtCrosshair.value}{" "}
                             </span>
                             <span>
                                 {" "}

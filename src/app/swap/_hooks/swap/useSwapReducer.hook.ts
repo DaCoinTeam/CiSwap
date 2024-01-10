@@ -57,7 +57,6 @@ export interface SetFinishLoadAction {
 export type SwapAction =
   | SetTokenInfoAction
   | SetTokenAction
-  | SetTokenAction
   | SetBalanceAction
   | SetSymbolAction
   | SetDecimalsAction

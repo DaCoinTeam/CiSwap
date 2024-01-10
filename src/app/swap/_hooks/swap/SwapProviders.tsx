@@ -116,7 +116,7 @@ const SwapProviders = (props: ContextProps) => {
             )
 
             const decimalsIn = await tokenInContract.decimals()
-            if (!decimalsIn) return
+            if (decimalsIn === null) return
             swapDispatch({ type: "SET_DECIMALS_IN", payload: decimalsIn })
 
             const promises: Promise<void>[] = []
@@ -160,7 +160,7 @@ const SwapProviders = (props: ContextProps) => {
                     swapState.infoIn.address,
                     chainId
                 )
-                if (!additionalOut) return
+                if (additionalOut === null) return
             }
             promises.push(additionalOutPromise())
 
@@ -272,10 +272,17 @@ const SwapProviders = (props: ContextProps) => {
             loadAfterConnectWallet,
         }
     }, [initialize, loadBeforeConnectWallet, loadAfterConnectWallet])
+
+    const swapContext = useMemo(() => {
+        return {
+            swapState,
+            swapDispatch,
+            actions,
+            updaters,
+        }
+    }, [swapState, swapDispatch, actions, updaters])
     return (
-        <SwapContext.Provider
-            value={{ swapState, swapDispatch, actions, updaters }}
-        >
+        <SwapContext.Provider value={swapContext}>
             {props.children}
         </SwapContext.Provider>
     )

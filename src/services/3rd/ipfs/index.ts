@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const getIpfsJson = async (cid: string) : Promise<unknown|null> => {
+export const getIpfsJson = async (cid: string) : Promise<object|null> => {
     const response = await axios.get(buildIpfsUrl(cid))
     return response.data
 }

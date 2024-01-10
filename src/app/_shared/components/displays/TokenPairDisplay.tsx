@@ -2,12 +2,9 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
 import React from "react"
-import { Address } from "web3"
 
 interface TokenPairDisplayProps {
   className?: string;
-  tokenA: Address;
-  tokenB: Address;
   imageUrlA?: string;
   imageUrlB?: string;
   symbolA: string;

@@ -6,6 +6,8 @@ import next from "./next"
 
 export { next }
 
-export const services = {
+const services = {
     next,
 }
+
+export default services

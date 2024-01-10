@@ -67,7 +67,7 @@ const render = (
     const { swapState } = useContext(SwapContext)!
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
-    const _props = props!
+    const _props = props as FormikProps<FormikValues>
 
     useEffect(() => {
         if (!swapState.status.finishLoadBeforeConnectWallet) return

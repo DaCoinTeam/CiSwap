@@ -1,6 +1,6 @@
 "use client"
 import { Open_Sans } from "next/font/google"
-import React from "react"
+import React, { useMemo } from "react"
 import {
     Navbar,
     Footer,
@@ -22,11 +22,15 @@ const WrappedRootLayout = (props: ContextProps) => {
         (state: RootState) => state.configuration.darkMode
     )
 
+    const iconContext = useMemo(() => {
+        return { className: "w-5 h-5" }
+    }, [])
+
     return (
         <html lang="en" className={darkMode ? "dark" : "light"}>
             <body className={font.className}>
                 <NextUIProvider>
-                    <IconContext.Provider value={{ className: "w-5 h-5" }}>
+                    <IconContext.Provider value={iconContext}>
                         <main className="flex flex-col min-h-screen">
                             <Navbar />
                             <section className="flex-1">{props.children}</section>

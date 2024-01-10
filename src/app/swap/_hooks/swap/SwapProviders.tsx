@@ -10,12 +10,11 @@ import React, {
 } from "react"
 import useSwapReducer, { SwapAction, SwapState } from "./useSwapReducer.hook"
 import { useSelector } from "react-redux"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import { chainInfos } from "@config"
 import { ERC20Contract } from "@blockchain"
 import utils from "@utils"
 import { getTokenApi } from "@services"
-import { useRouter } from "next/navigation"
 
 interface SwapContext {
   swapState: SwapState;
@@ -117,7 +116,7 @@ const SwapProviders = (props: ContextProps) => {
             )
 
             const decimalsIn = await tokenInContract.decimals()
-            if (decimalsIn === null) return
+            if (!decimalsIn) return
             swapDispatch({ type: "SET_DECIMALS_IN", payload: decimalsIn })
 
             const promises: Promise<void>[] = []
@@ -127,17 +126,13 @@ const SwapProviders = (props: ContextProps) => {
                     swapState.infoIn.address,
                     chainId
                 )
-                if (additionalIn != null) {
-                    // const blobUrl = await fetchAndCreateSvgBlobUrl(additionalIn.imageUrlUrl)
-                    // if (blobUrl === null) return
-                    // swapDispatch({ type: "SET_IMAGE_URL_IN", payload: blobUrl })
-                }
+                if (additionalIn === null) return
             }
             promises.push(additionalInPromise())
 
             const symbolInPromise = async () => {
                 const symbolIn = await tokenInContract.symbol()
-                if (symbolIn === null) return
+                if (!symbolIn) return
                 swapDispatch({ type: "SET_SYMBOL_IN", payload: symbolIn })
             }
             promises.push(symbolInPromise())
@@ -165,11 +160,7 @@ const SwapProviders = (props: ContextProps) => {
                     swapState.infoIn.address,
                     chainId
                 )
-                if (additionalOut != null) {
-                    // const blobUrl = await fetchAndCreateSvgBlobUrl(additionalOut.imageUrlUrl)
-                    // if (blobUrl === null) return
-                    // swapDispatch({ type: "SET_IMAGE_URL_OUT", payload: blobUrl })
-                }
+                if (!additionalOut) return
             }
             promises.push(additionalOutPromise())
 

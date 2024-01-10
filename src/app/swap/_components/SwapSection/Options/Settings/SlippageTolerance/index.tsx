@@ -41,9 +41,13 @@ const SlippageTolerance = () => {
     ]
 
     const renderSelected = (key: number) =>
-        formik.values.slippageKey === key
-            ? `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
+    {   
+        const textColor = darkMode ? "text-black" : "text-white"
+        return formik.values.slippageKey === key
+            ? `bg-teal-500 ${textColor}`
             : null
+    }
+
 
     const onClick = (item: Item) => {
         formik.setFieldValue("slippageKey", item.key)

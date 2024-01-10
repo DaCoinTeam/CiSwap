@@ -91,7 +91,7 @@ class SmartRouter {
             const pathCurrent = new Path()
 
             const createResult = pathCurrent.create(pool, tokenStart)
-            if (!createResult) continue
+            if (createResult === null) continue
 
             if (pathCurrent.getLast() === tokenEnd) {
                 pathExactEnds.push(pathCurrent)

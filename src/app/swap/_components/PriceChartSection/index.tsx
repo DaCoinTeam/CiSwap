@@ -1,16 +1,14 @@
 "use client"
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useMemo, useState } from "react"
 
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
-import { PeriodTabs } from "@app/_shared"
-import { TokenPairDisplay } from "@app/_shared"
+import { PeriodTabs, TokenPairDisplay } from "@app/_shared"
 import TickInfo from "./TickInfo"
 
 import { Period } from "@services"
 import { SwapContext } from "../../_hooks"
-
 import { BaselineData, Time } from "lightweight-charts"
 
 interface PriceChartSectionProps {
@@ -18,17 +16,17 @@ interface PriceChartSectionProps {
 }
 
 interface PriceChartContext {
-  period: {
-    data: Period;
-    set: React.Dispatch<React.SetStateAction<Period>>;
+  periodState: {
+    period: Period;
+    setPeriod: React.Dispatch<React.SetStateAction<Period>>;
   };
-  tickAtCrosshair: {
-    data: BaselineData<Time>;
-    set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
+  tickAtCrosshairState: {
+    tickAtCrosshair: BaselineData<Time>;
+    setTickAtCrosshair: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
   };
-  tickAtFirst: {
-    data: BaselineData<Time>;
-    set: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
+  tickAtFirstState: {
+    tickAtFirst: BaselineData<Time>;
+    setTickAtFirst: React.Dispatch<React.SetStateAction<BaselineData<Time>>>;
   };
 }
 
@@ -49,30 +47,31 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
     const [tickAtFirst, setTickAtFirst] =
     useState<BaselineData<Time>>(initialTick)
 
+    const priceChartContext : PriceChartContext = useMemo(() =>{
+        return {
+            periodState: {
+                period,
+                setPeriod,
+            },
+            tickAtFirstState: {
+                tickAtFirst,
+                setTickAtFirst,
+            },
+            tickAtCrosshairState: {
+                tickAtCrosshair,
+                setTickAtCrosshair,
+            },
+        }
+    }, [period, tickAtFirst, tickAtCrosshair])
+    
     return (
         <Card className={`${props.className}`}>
             <CardBody className="p-5">
                 <PriceChartContext.Provider
-                    value={{
-                        period: {
-                            data: period,
-                            set: setPeriod,
-                        },
-                        tickAtCrosshair: {
-                            data: tickAtCrosshair,
-                            set: setTickAtCrosshair,
-                        },
-                        tickAtFirst: {
-                            data: tickAtFirst,
-                            set: setTickAtFirst,
-                        },
-                    }}
-                >
+                    value={priceChartContext}>
                     <div className="grid md:flex justify-between gap-4">
                         <div>
                             <TokenPairDisplay
-                                tokenA={swapState.infoIn.address}
-                                tokenB={swapState.infoOut.address}
                                 symbolA={swapState.infoIn.symbol}
                                 symbolB={swapState.infoOut.symbol}
                                 onClick={actions.handleReverse}

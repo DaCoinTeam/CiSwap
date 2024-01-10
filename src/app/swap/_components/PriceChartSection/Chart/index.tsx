@@ -4,15 +4,18 @@ import React, { MutableRefObject, useContext, useEffect, useRef } from "react"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
 import { PriceChartContext } from "../index"
-import { PriceChart, services } from "@services"
 import { FormikContext } from "../../../_hooks"
 import { BaselineData, MouseEventParams, Time } from "lightweight-charts"
 import { CircularProgress } from "@nextui-org/react"
-import { TicksBoundary } from "@services"
+import { TicksBoundary, PriceChart, next } from "@services"
 
 const Chart = () => {
-    const { period, tickAtCrosshair, tickAtFirst } =
+    const { periodState, tickAtCrosshairState, tickAtFirstState } =
     useContext(PriceChartContext)!
+
+    const { setTickAtCrosshair} = tickAtCrosshairState
+    const { setTickAtFirst } = tickAtFirstState
+    const { period } = periodState
 
     const formik = useContext(FormikContext)!
 
@@ -36,15 +39,15 @@ const Chart = () => {
         const data = params.seriesData.get(series) as BaselineData<Time>
 
         if (!data) return
-        tickAtCrosshair.set(data)
+        tickAtCrosshairState.setTickAtCrosshair(data)
     }
 
     const updateTicksBoundary = (ticksBoundary: TicksBoundary | null) => {
         if (!ticksBoundary) return
         const { first, last } = ticksBoundary
 
-        tickAtFirst.set(first)
-        tickAtCrosshair.set(last)
+        setTickAtFirst(first)
+        setTickAtCrosshair(last)
     }
 
     useEffect(() => {
@@ -54,18 +57,18 @@ const Chart = () => {
 
         let priceChart: PriceChart
       
-        const path = services.next.smartRouter.encodePacked(
+        const path = next.smartRouter.encodePacked(
             formik.values.steps
         )
 
         if (existed) {
             priceChart = priceChartStored
         } else {
-            priceChart = services.next.chart.createPriceChart(
+            priceChart = next.chart.createPriceChart(
                 chainId,
                 chartContainerRef.current,
                 darkMode,
-                period.data,
+                period,
                 onCrosshairMove
             )
             priceChartRef.current = priceChart

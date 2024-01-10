@@ -57,10 +57,13 @@ const PickFee = (props: PickFeeProps) => {
     }
 
     const renderSelected = (key: number) =>
+    {   
+        const textColor = darkMode ? "text-black" : "text-white"
         formik.values.feeKey === key
-            ? `bg-teal-500 ${darkMode ? "text-black" : "text-white"}`
+            ? `bg-teal-500 ${textColor}`
             : null
-
+    }
+  
     const _finishSelectedPair = account != null && finishSelectedPair
 
     return (

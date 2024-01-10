@@ -11,7 +11,7 @@ interface TokenTooltipDisplayProps {
 }
 
 const TokenTooltipDisplay = (props : TokenTooltipDisplayProps) => 
-    <>
+    <div className={`${props.className}`}>
         {props.finishLoad ?
             <div className="flex items-end gap-1">
                 <span className="text-4xl font-bold">
@@ -27,5 +27,5 @@ const TokenTooltipDisplay = (props : TokenTooltipDisplayProps) =>
                     </Tooltip>
                 </div>
             </div> : <Skeleton className="h-10 w-48 rounded"/>}
-    </>
+    </div>
 export default TokenTooltipDisplay

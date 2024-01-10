@@ -34,18 +34,14 @@ interface SelectTokenProps {
 }
 
 const SelectToken = (props: SelectTokenProps) => {
-    const formik = useContext(FormikContext)
-    if (formik === null) return
+    const formik = useContext(FormikContext)!
 
-    const finishSelectedPairContext = useContext(FinishSelectedPairContext)
-    if (finishSelectedPairContext === null) return
-
-    const { setFinishSelectedPair } = finishSelectedPairContext
+    const { setFinishSelectedPair } = useContext(FinishSelectedPairContext)!
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
     const account = useSelector((state: RootState) => state.blockchain.account)
-    
+
     const [isOpen, setIsOpen] = useState(false)
 
     const onClickOpen = () => setIsOpen(true)
@@ -57,7 +53,7 @@ const SelectToken = (props: SelectTokenProps) => {
     const [tempToken, setTempToken] = useState("")
     const [tempSymbol, setTempSymbol] = useState("")
 
-    const [symbol, setTokenSymbol] = useState("")
+    const [symbol, setSymbol] = useState("")
 
   enum ErrorType {
     Undefined = "Undefined",
@@ -129,7 +125,7 @@ const SelectToken = (props: SelectTokenProps) => {
   }
 
   const onClickImport = (token: Address, symbol: Address) => {
-      setTokenSymbol(symbol)
+      setSymbol(symbol)
       setIsOpen(false)
 
       const _token = props.isTokenBSelected ? "tokenB" : "tokenA"
@@ -147,7 +143,11 @@ const SelectToken = (props: SelectTokenProps) => {
 
   return (
       <>
-          <Button className={`${props.className}`} variant="flat" onPress={onClickOpen}>
+          <Button
+              className={`${props.className}`}
+              variant="flat"
+              onPress={onClickOpen}
+          >
               {symbol || "Select Token"}
           </Button>
           <Modal isOpen={isOpen} onClose={onClickClose}>

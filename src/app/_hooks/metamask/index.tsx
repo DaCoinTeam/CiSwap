@@ -1,12 +1,23 @@
 "use client"
 import MetaMaskSDK, { MetaMaskSDKOptions, SDKProvider } from "@metamask/sdk"
-import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react"
+import React, {
+    Dispatch,
+    SetStateAction,
+    createContext,
+    useEffect,
+    useMemo,
+    useState,
+} from "react"
 import Web3, { utils } from "web3"
 import { RegisteredSubscription } from "web3-eth"
 import { ContextProps } from "@app/_shared"
-import React from "react"
 import { chainInfos, defaultChainId } from "@config"
-import { AppDispatch, setAccount, setChainId, setMetamaskWrongChainModal } from "@redux"
+import {
+    AppDispatch,
+    setAccount,
+    setChainId,
+    setMetamaskWrongChainModal,
+} from "@redux"
 import { useDispatch } from "react-redux"
 import { MetamaskManager } from "@blockchain"
 
@@ -88,19 +99,21 @@ const MetamaskProviders = (props: ContextProps) => {
         handleEffect()
     }, [web3])
 
+    const metamaskContext = useMemo(() => {
+        return {
+            ethereumState: {
+                ethereum,
+                setEthereum,
+            },
+            web3State: {
+                web3,
+                setWeb3,
+            },
+        }
+    }, [ethereum, web3])
+
     return (
-        <MetamaskContext.Provider
-            value={{
-                ethereumState: {
-                    ethereum,
-                    setEthereum,
-                },
-                web3State: {
-                    web3,
-                    setWeb3,
-                },
-            }}
-        >
+        <MetamaskContext.Provider value={metamaskContext}>
             {props.children}
         </MetamaskContext.Provider>
     )

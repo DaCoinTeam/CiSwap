@@ -83,7 +83,7 @@ export const computePriceImpact = (
     }
 }
 
-export const computeSlippaged = (
+export const computeAmountSlippaged = (
     amountRaw: bigint,
     slippage: number,
     exactInput: boolean = true,
@@ -102,7 +102,7 @@ const blockchain = {
     computeDivideX96,
     computeMultiplyX96,
     computeRedenomination,
-    computeSlippaged,
+    computeAmountSlippaged,
     computePriceImpact
 }
 

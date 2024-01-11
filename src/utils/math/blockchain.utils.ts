@@ -26,27 +26,6 @@ export const computeRedenomination = (
     }
 }
 
-export const computeLiquidity = (
-    liquidityRaw: bigint,
-    decimals0: number,
-    decimals1: number,
-    round?: number
-): number => {
-    round = round ?? 5
-    try {
-        const average = computeRound((decimals0 + decimals1) / 2)
-        const divisor = computeExponent(average)
-        const result =
-      Number((liquidityRaw * BigInt(computeExponent(round))) / BigInt(divisor)) /
-      computeExponent(round)
-
-        return result
-    } catch (error) {
-        console.error(error)
-        return 0
-    }
-}
-
 export const computeRaw = (
     amount: number,
     decimals: number,
@@ -74,36 +53,6 @@ export const computeMultiplyX96 = (value: number): bigint =>
 export const computeDivideX96 = (value: bigint): number =>
     computeRightShift(value, 96)
 
-export interface PriceImpact {
-  up: boolean;
-  percentage: number;
-}
-
-export const computePriceImpact = (
-    priceAfter: number,
-    priceBefore: number,
-    round: number = 2
-): PriceImpact | null => {
-    try {
-        const up = priceAfter >= priceBefore
-        const percentage = Math.abs(
-            computeRound(computePercentage(priceAfter, priceBefore) - 100, round)
-        )
-
-        if (Number.isNaN(percentage)) {
-            throw new Error("Price impact calculation resulted in NaN.")
-        }
-
-        return {
-            up,
-            percentage,
-        }
-    } catch (ex) {
-        console.log(ex)
-        return null
-    }
-}
-
 export const computeSlippaged = (
     amountRaw: bigint,
     slippage: number,
@@ -116,6 +65,57 @@ export const computeSlippaged = (
         round
     )
     return exactInput ? amountRaw - amountSlippaged : amountRaw + amountSlippaged
+}
+
+export interface PriceImpact {
+    up: boolean;
+    percentage: number;
+  }
+  
+export const computePriceImpact = (
+    priceAfter: number,
+    priceBefore: number,
+    round: number = 2
+): PriceImpact | null => {
+    try {
+        const up = priceAfter >= priceBefore
+        const percentage = Math.abs(
+            computeRound(computePercentage(priceAfter, priceBefore) - 100, round)
+        )
+  
+        if (Number.isNaN(percentage)) {
+            throw new Error("Price impact calculation resulted in NaN.")
+        }
+  
+        return {
+            up,
+            percentage,
+        }
+    } catch (ex) {
+        console.log(ex)
+        return null
+    }
+}
+  
+export const computeLiquidity = (
+    liquidityRaw: bigint,
+    decimals0: number,
+    decimals1: number,
+    round?: number
+): number => {
+    round = round ?? 5
+    try {
+        const average = computeRound((decimals0 + decimals1) / 2)
+        const divisor = computeExponent(average)
+        const result =
+      Number((liquidityRaw * BigInt(computeExponent(round))) / BigInt(divisor)) /
+      computeExponent(round)
+
+        return result
+    } catch (error) {
+        console.error(error)
+        return 0
+    }
 }
 
 const blockchain = {

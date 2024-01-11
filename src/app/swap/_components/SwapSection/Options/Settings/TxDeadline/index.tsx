@@ -1,14 +1,14 @@
 import { NumberInput, TitleDisplay } from "@app/_shared"
 import { FormikContext } from "../../../../../_hooks"
-import utils from "@utils"
 import React, { useContext } from "react"
+import { format } from "@utils"
 
 const TxDeadline = () => {
     const formik = useContext(FormikContext)!
     const onChange = (valueMul100: string) => {
         formik.setFieldValue(
             "txDeadline",
-            utils.format.parseStringToNumberMultiply(valueMul100, 1 / 30)
+            format.parseStringToNumberMultiply(valueMul100, 1 / 30)
         )
     }
 
@@ -16,7 +16,7 @@ const TxDeadline = () => {
         <div className="flex justify-between items-center">
             <TitleDisplay text="Tx txDeadline (mins)" tooltipText="AAA" />
             <NumberInput
-                value={utils.format.parseStringToNumberMultiply(
+                value={format.parseStringToNumberMultiply(
                     formik.values.txDeadline,
                     30
                 )}

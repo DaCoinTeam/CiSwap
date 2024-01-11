@@ -10,7 +10,7 @@ import { SwapContext, FormikContext } from "../../../_hooks"
 import { TIME_OUT } from "@config"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import utils from "@utils"
+import { format, math } from "@utils"
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline"
 import { next } from "@services"
 
@@ -44,8 +44,8 @@ const MainSection = () => {
         const handleEffect = async () => {
             const quote = await next.smartRouter.findBestQuote(
                 chainId,
-                utils.math.computeRaw(
-                    utils.format.parseStringToNumber(formik.values.amountIn),
+                math.blockchain.computeRaw(
+                    format.parseStringToNumber(formik.values.amountIn),
                     swapState.infoIn.decimals
                 ),
                 swapState.infoIn.address,
@@ -58,7 +58,7 @@ const MainSection = () => {
             formik.setFieldValue("amountOutRaw", quote.amountOutRaw)
             formik.setFieldValue(
                 "amountOut",
-                utils.math.computeRedenomination(
+                math.blockchain.computeRedenomination(
                     quote.amountOutRaw,
                     swapState.infoOut.decimals
                 )
@@ -94,8 +94,8 @@ const MainSection = () => {
         const handleEffect = async () => {
             const quote = await next.smartRouter.findBestQuote(
                 chainId,
-                utils.math.computeRaw(
-                    utils.format.parseStringToNumber(formik.values.amountOut),
+                math.blockchain.computeRaw(
+                    format.parseStringToNumber(formik.values.amountOut),
                     swapState.infoIn.decimals
                 ),
                 swapState.infoIn.address,
@@ -107,7 +107,7 @@ const MainSection = () => {
             formik.setFieldValue("amountInRaw", quote.amountInRaw)
             formik.setFieldValue(
                 "amountIn",
-                utils.math.computeRedenomination(
+                math.blockchain.computeRedenomination(
                     quote.amountInRaw,
                     swapState.infoIn.decimals
                 )
@@ -130,8 +130,8 @@ const MainSection = () => {
         formik.setFieldValue("amountIn", value)
         formik.setFieldValue(
             "amountInRaw",
-            utils.math.computeRaw(
-                utils.format.parseStringToNumber(value),
+            math.blockchain.computeRaw(
+                format.parseStringToNumber(value),
                 swapState.infoIn.decimals
             )
         )
@@ -143,8 +143,8 @@ const MainSection = () => {
         formik.setFieldValue("amountOut", value)
         formik.setFieldValue(
             "amountOutRaw",
-            utils.math.computeRaw(
-                utils.format.parseStringToNumber(value),
+            math.blockchain.computeRaw(
+                format.parseStringToNumber(value),
                 swapState.infoOut.decimals
             )
         )

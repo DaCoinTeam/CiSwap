@@ -3,10 +3,10 @@ import "./globals.css"
 import React from "react"
 import { ReduxProviders } from "@redux"
 import WrappedRootLayout from "./_layout"
-import { ContextProps } from "./_shared"
+import { ProvidersProps } from "./_shared"
 import { MetamaskProviders } from "./_hooks"
 
-const RootLayout = (props: ContextProps) => {
+const RootLayout = (props : ProvidersProps) => {
     return (
         <ReduxProviders> 
             <MetamaskProviders>

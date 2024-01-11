@@ -1,6 +1,6 @@
 export * from "./swap"
-export * from "./formik"
+export * from "./formik/FormikProviders"
 
-import FormikProviders from "./formik"
+import FormikProviders from "./formik/FormikProviders"
 
 export { FormikProviders }

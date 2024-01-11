@@ -1,2 +1,2 @@
-export * from "./public-node.provider"
+export * from "./public.provider"
 export * from "./metamask"

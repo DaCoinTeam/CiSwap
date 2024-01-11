@@ -6,9 +6,9 @@ import { ERC20Contract, FactoryContract } from "@blockchain"
 import { chainInfos } from "@config"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
-import utils from "@utils"
+import { format, math } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
-import { ContextProps } from "@app/_shared"
+import { ProvidersProps } from "@app/_shared"
 
 interface FormikValues {
   tokenA: Address;
@@ -59,7 +59,7 @@ const FormikWrapper = (props: {
     </FormikContext.Provider>
 )
 
-const FormikProviders = (props: ContextProps) => {
+const FormikProviders = (props: ProvidersProps) => {
     const { web3State } = useContext(MetamaskContext)!
     const { web3 } = web3State
 
@@ -110,21 +110,21 @@ const FormikProviders = (props: ContextProps) => {
                     account
                 )
 
-                const amountARaw = utils.math.computeRaw(
-                    utils.format.parseStringToNumber(values.amountA),
+                const amountARaw = math.blockchain.computeRaw(
+                    format.parseStringToNumber(values.amountA),
                     values.decimalsA
                 )
 
-                const amountBRaw = utils.math.computeRaw(
-                    utils.format.parseStringToNumber(values.amountB),
+                const amountBRaw = math.blockchain.computeRaw(
+                    format.parseStringToNumber(values.amountB),
                     values.decimalsB
                 )
 
-                const priceABaseX96 = utils.math.computeMultiplyX96(
-                    utils.format.parseStringToNumber(values.priceABase)
+                const priceABaseX96 = math.blockchain.computeMultiplyX96(
+                    format.parseStringToNumber(values.priceABase)
                 )
-                const priceAMaxX96 = utils.math.computeMultiplyX96(
-                    utils.format.parseStringToNumber(values.priceAMax)
+                const priceAMaxX96 = math.blockchain.computeMultiplyX96(
+                    format.parseStringToNumber(values.priceAMax)
                 )
 
                 const allowanceA = await tokenAContract.allowance(account, factory)
@@ -155,7 +155,7 @@ const FormikProviders = (props: ContextProps) => {
                 const _amountA = values.zeroForOne ? amountARaw : amountBRaw
                 const _amountB = values.zeroForOne ? amountBRaw : amountARaw
                 console.log({
-                    fee: values.fee * utils.math.computeExponent(5),
+                    fee: values.fee * math.base.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,
@@ -166,7 +166,7 @@ const FormikProviders = (props: ContextProps) => {
                     },
                 })
                 const createPoolReceipt = await factoryContract.createPool({
-                    fee: values.fee * utils.math.computeExponent(5),
+                    fee: values.fee * math.base.computeExponent(5),
                     config: {
                         tokenA: _tokenA,
                         tokenB: _tokenB,

@@ -1,6 +1,6 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
 import React, { useContext, useEffect, useRef, useState } from "react"
-import utils from "@utils"
+import { math } from "@utils"
 import { SwapContext, FormikContext } from "../../../../_hooks"
 
 const PriceImpact = () => {
@@ -36,13 +36,13 @@ const PriceImpact = () => {
         const priceBefore = formik.values.price
         console.log("bf" + priceBefore)
 
-        const priceAfter = utils.math.computeBigIntDivideBigInt(
+        const priceAfter = math.base.computeBigIntDivideBigInt(
             formik.values.amountOutRaw,
             formik.values.amountInRaw
         )
         console.log("af" + priceAfter)
 
-        const priceImpact = utils.math.computePriceImpact(priceAfter, priceBefore)
+        const priceImpact =  math.blockchain.computePriceImpact(priceAfter, priceBefore)
         if (!priceImpact) return
         setPriceImpact(priceImpact.percentage)
 

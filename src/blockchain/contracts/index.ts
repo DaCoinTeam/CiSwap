@@ -8,7 +8,7 @@ import RouterContract from "./router"
 import QuoterContract from "./quoter"
 import AggregatorContract from "./aggregator"
 import MulticallContract from "./multicall"
-export * from "../providers/public-node.provider"
+export * from "../providers/public.provider"
 
 export {
     MulticallContract,

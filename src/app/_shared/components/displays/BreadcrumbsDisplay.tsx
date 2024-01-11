@@ -2,7 +2,7 @@
 import React from "react"
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs"
 import { useRouter } from "next/navigation"
-import utils from "@utils"
+import { format } from "@utils"
 
 interface BreadcrumbsDisplayProps {
   className?: string;
@@ -21,7 +21,7 @@ const BreadcrumbsDisplay = (props: BreadcrumbsDisplayProps) => {
         const url = item.url
         return {
             key: item.key,
-            text: item.isAddress ? utils.format.shortenAddress(item.text) : item.text,
+            text: item.isAddress ? format.shortenAddress(item.text) : item.text,
             onClick: url ? () => router.push(url) : undefined,
             isLast: props.items.length - 1 === index,
         }

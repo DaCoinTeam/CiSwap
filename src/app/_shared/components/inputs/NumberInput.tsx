@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
 import { Input } from "@nextui-org/react"
-import utils from "@utils"
+import { format } from "@utils"
 
 type TextPosition = "center" | "left" | "right";
 
@@ -29,7 +29,7 @@ const NumberInput = (props: NumberInputProps) => {
     textPositionToClassName[props.textPosition ?? "left"]
 
     const onChange = (value: string) => {
-        const sanitizeInput = utils.format.sanitizeNumericInput(value)
+        const sanitizeInput = format.sanitizeNumericInput(value)
         if (sanitizeInput != null) {
             props.onChange(sanitizeInput)
         }

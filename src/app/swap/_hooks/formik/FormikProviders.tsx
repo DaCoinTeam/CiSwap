@@ -17,10 +17,10 @@ import {
     TransactionType,
     setSignatureConfirmationModal,
 } from "@redux"
-import { SwapContext } from ".."
-import utils from "@utils"
+import { SwapContext } from "../swap"
+import { format, math } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
-import { ContextProps, notify } from "@app/_shared"
+import { ProvidersProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
 import { Step, next } from "@services"
 import { QuoteType } from "../../../../services/next/smart-router/modules/quote.module"
@@ -103,7 +103,7 @@ const FormikWrapper = (props: {
 
             const priceX96 = await quoterContract.quotePriceX96(path)
             if (priceX96 == null) return
-            const price = utils.math.computeDivideX96(priceX96)
+            const price = math.blockchain.computeDivideX96(priceX96)
 
             formik.setFieldValue("price", price)
         }
@@ -116,7 +116,7 @@ const FormikWrapper = (props: {
         </FormikContext.Provider>
     )
 }
-const FormikProviders = (props: ContextProps) => {
+const FormikProviders = (props: ProvidersProps) => {
     const { swapState } = useContext(SwapContext)!
     const { web3State } = useContext(MetamaskContext)!
     const { web3 } = web3State
@@ -169,7 +169,7 @@ const FormikProviders = (props: ContextProps) => {
                             type: TransactionType.Approve,
                             token: {
                                 address: swapState.infoIn.address,
-                                amount: utils.math.computeRedenomination(
+                                amount: math.blockchain.computeRedenomination(
                                     amountInToApprove,
                                     swapState.infoIn.decimals
                                 ),
@@ -199,20 +199,20 @@ const FormikProviders = (props: ContextProps) => {
                         type: TransactionType.Swap,
                         tokenIn: {
                             address: swapState.infoIn.address,
-                            amount: utils.format.parseStringToNumber(values.amountIn),
+                            amount: format.parseStringToNumber(values.amountIn),
                         },
                         tokenOut: {
                             address: swapState.infoIn.address,
-                            amount: utils.format.parseStringToNumber(values.amountIn),
+                            amount: format.parseStringToNumber(values.amountIn),
                         },
                     })
                 )
 
                 const swapScenario = next.smartRouter.getSwapScenario(
-                    utils.format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
+                    format.parseStringToNumber(values.slippage, SLIPPAGE_DEFAULT),
                     // temp me
                     account,
-                    utils.format.parseStringToNumber(values.txDeadline, DEADLINE_DEFAULT),
+                    format.parseStringToNumber(values.txDeadline, DEADLINE_DEFAULT),
                     values.amountInRaw,
                     values.amountOutRaw,
                     values.steps,

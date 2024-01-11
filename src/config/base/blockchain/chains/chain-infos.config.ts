@@ -1,4 +1,4 @@
-import Web3, { Address } from "web3"
+import { Address } from "web3"
 import {
     KLAYTN_MAINNET_HTTP_RPC_URL,
     KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
@@ -59,7 +59,7 @@ import {
     KLAYTN_TESTNET_CONTRACT_WETH10,
     KLAYTN_TESTNET_CONTRACT_QUOTER,
     KLAYTN_TESTNET_CONTRACT_AGGREGATOR,
-} from "./chains"
+} from "./chain-list"
 
 export enum ChainId {
   KlaytnMainnet = 8217,
@@ -92,7 +92,7 @@ export type ChainInfo = {
 
 export const defaultChainId = ChainId.KalytnTestnet
 
-export const chainInfos: Record<number, ChainInfo> = {
+const chainInfos: Record<number, ChainInfo> = {
     [ChainId.KlaytnMainnet]: {
         httpRpcUrl: KLAYTN_MAINNET_HTTP_RPC_URL,
         websocketRpcUrl: KLAYTN_MAINNET_WEBSOCKET_RPC_URL,
@@ -189,5 +189,4 @@ export const chainInfos: Record<number, ChainInfo> = {
     },
 }
 
-export const GAS_PRICE = Web3.utils.toWei(25, "gwei")
-export const GAS_LIMIT = "30000000"
+export default chainInfos

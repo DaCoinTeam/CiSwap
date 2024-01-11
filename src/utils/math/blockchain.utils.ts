@@ -5,7 +5,7 @@ import {
     computePercentage,
     computeRightShift,
     computeRound,
-} from "./base-math.util"
+} from "./base.util"
 
 export const computeRedenomination = (
     amount: bigint,
@@ -83,7 +83,7 @@ export const computePriceImpact = (
     }
 }
 
-export const computeSlippage = (
+export const computeAmountSlippaged = (
     amountRaw: bigint,
     slippage: number,
     exactInput: boolean = true,
@@ -96,3 +96,14 @@ export const computeSlippage = (
     )
     return exactInput ? amountRaw - amountSlippaged : amountRaw + amountSlippaged
 }
+
+const blockchain = {
+    computeRaw,
+    computeDivideX96,
+    computeMultiplyX96,
+    computeRedenomination,
+    computeAmountSlippaged,
+    computePriceImpact
+}
+
+export default blockchain

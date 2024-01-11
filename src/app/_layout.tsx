@@ -13,11 +13,11 @@ import { NextUIProvider } from "@nextui-org/react"
 import { ToastContainer } from "react-toastify"
 import "./_css/ReactToastify.css"
 import { IconContext } from "react-icons"
-import { ContextProps } from "./_shared"
+import { ProvidersProps } from "./_shared"
 
 export const font = Open_Sans({ weight: "400", subsets: ["latin"] })
 
-const WrappedRootLayout = (props: ContextProps) => {
+const WrappedRootLayout = (props: ProvidersProps) => {
     const darkMode = useSelector(
         (state: RootState) => state.configuration.darkMode
     )

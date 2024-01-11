@@ -1,7 +1,7 @@
 import { LabelWithTooltipDisplay } from "@app/_shared"
 import React, { useContext, useEffect, useRef, useState } from "react"
-import utils from "@utils"
 import { SwapContext, FormikContext, SLIPPAGE_DEFAULT } from "../../../../_hooks"
+import { format, math } from "@utils"
 
 const LimitAmountCalculated = () => {
     const { swapState } = useContext(SwapContext)!
@@ -33,15 +33,15 @@ const LimitAmountCalculated = () => {
         
         const amount = formik.values.exactInput ?  formik.values.amountOutRaw : formik.values.amountInRaw
 
-        const limitAmountCalculated = utils.math.computeSlippage(
+        const limitAmountCalculated = math.blockchain.computeAmountSlippaged(
             amount,
-            utils.format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
+            format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
             formik.values.exactInput
         )
 
 
         setLimitAmountCalculated(
-            utils.math.computeRedenomination(
+            math.blockchain.computeRedenomination(
                 limitAmountCalculated,
                 swapState.infoOut.decimals
             )

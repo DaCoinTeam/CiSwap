@@ -12,7 +12,7 @@ import { RootState } from "@redux"
 import { FormikContext } from "../../../_hooks"
 import { useSelector } from "react-redux"
 import { ERC20Contract } from "@blockchain"
-import utils from "@utils"
+import { math } from "@utils"
 
 interface AddTokensProps {
   className?: string;
@@ -73,7 +73,7 @@ const DepositTokens = (props: AddTokensProps) => {
 
             formik.setFieldValue(
                 "balanceA",
-                utils.math.computeRedenomination(balanceA, decimalsA)
+                math.blockchain.computeRedenomination(balanceA, decimalsA)
             )
 
             const tokenBContract = new ERC20Contract(chainId, formik.values.tokenB)
@@ -86,7 +86,7 @@ const DepositTokens = (props: AddTokensProps) => {
             if (balanceB === null) return
             formik.setFieldValue(
                 "balanceB",
-                utils.math.computeRedenomination(balanceB, decimalsB)
+                math.blockchain.computeRedenomination(balanceB, decimalsB)
             )
         }
         handleEffect()

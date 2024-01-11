@@ -1,9 +1,9 @@
 "use client"
 import React from "react"
 import { SwapProviders, FormikProviders } from "./_hooks"
-import { ContextProps } from "@app/_shared"
+import { ProvidersProps } from "@app/_shared"
 
-const RootLayout = (props: ContextProps) => {
+const RootLayout = (props: ProvidersProps) => {
     return (
         <SwapProviders>
             <FormikProviders>{props.children}</FormikProviders>

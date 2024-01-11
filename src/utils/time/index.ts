@@ -1,7 +1,7 @@
 import utc from "dayjs/plugin/utc"
 import LocalizedFormat from "dayjs/plugin/localizedFormat"
 import dayjs from "dayjs"
-import { computeRound } from "../math/base-math.util"
+import { computeRound } from "../math/base.util"
 import { UTCTimestamp } from "lightweight-charts"
 dayjs.extend(utc)
 dayjs.extend(LocalizedFormat)
@@ -23,11 +23,11 @@ const formatDate = (seconds: number) : string => {
     return dayjs(seconds * 1000).utc(false).format("LLL")
 }
 
-const timeUtils = {
-    currentSeconds: currentSeconds,
-    getHoursFromUtcSeconds: getHoursFromUtcSeconds,
-    secondsToUtc: secondsToUtc,
-    formatDate: formatDate
+const time = {
+    currentSeconds,
+    getHoursFromUtcSeconds,
+    secondsToUtc,
+    formatDate
 }
 
-export default timeUtils
+export default time

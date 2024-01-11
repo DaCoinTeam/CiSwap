@@ -4,7 +4,7 @@ import { RootState } from "@redux"
 import { FormikContext } from "../../../../../_hooks"
 import React, { useContext } from "react"
 import { useSelector } from "react-redux"
-import utils from "@utils"
+import { format } from "@utils"
 
 interface Item {
   key: number;
@@ -57,7 +57,7 @@ const SlippageTolerance = () => {
     const onChange = (valueMul100: string) => {
         formik.setFieldValue(
             "slippage",
-            utils.format.parseStringToNumberMultiply(valueMul100, 1 / 100)
+            format.parseStringToNumberMultiply(valueMul100, 1 / 100)
         )
     }
 
@@ -93,7 +93,7 @@ const SlippageTolerance = () => {
                     return (
                         <NumberInput
                             key={item.key}
-                            value={utils.format.parseStringToNumberMultiply(
+                            value={format.parseStringToNumberMultiply(
                                 formik.values.slippage,
                                 100
                             )}

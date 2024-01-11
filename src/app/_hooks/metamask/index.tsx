@@ -10,7 +10,7 @@ import React, {
 } from "react"
 import Web3, { utils } from "web3"
 import { RegisteredSubscription } from "web3-eth"
-import { ContextProps } from "@app/_shared"
+import { ProvidersProps } from "@app/_shared"
 import { chainInfos, defaultChainId } from "@config"
 import {
     AppDispatch,
@@ -21,7 +21,7 @@ import {
 import { useDispatch } from "react-redux"
 import { MetamaskManager } from "@blockchain"
 
-export interface MetamaskContextProps {
+export interface MetamaskProvidersProps {
   ethereumState: {
     ethereum: SDKProvider | null;
     setEthereum: Dispatch<SetStateAction<SDKProvider | null>>;
@@ -32,9 +32,9 @@ export interface MetamaskContextProps {
   };
 }
 
-export const MetamaskContext = createContext<MetamaskContextProps | null>(null)
+export const MetamaskContext = createContext<MetamaskProvidersProps | null>(null)
 
-const MetamaskProviders = (props: ContextProps) => {
+const MetamaskProviders = (props: ProvidersProps) => {
     const [ethereum, setEthereum] = useState<SDKProvider | null>(null)
     const [web3, setWeb3] = useState<Web3<RegisteredSubscription> | null>(null)
 

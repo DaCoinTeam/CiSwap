@@ -102,3 +102,17 @@ export const computeBigIntDivideBigInt = (
         return 0
     }
 }
+
+const base = {
+    computeExponent,
+    computeInverse,
+    computeLeftShift,
+    computeRightShift,
+    computeRound,
+    computeBigIntMultiplyNumber,
+    computeBigIntDivideNumber,
+    computeBigIntDivideBigInt,
+    computePercentage
+}
+
+export default base

@@ -1,6 +1,6 @@
 import { Skeleton, Spacer } from "@nextui-org/react"
 import React, { useContext } from "react"
-import utils from "@utils"
+import { math, time } from "@utils"
 import { PriceChartContext } from "../index"
 import { SwapContext } from "../../../../swap/_hooks"
 
@@ -16,7 +16,7 @@ const TickInfo = (props: TickInfoProps) => {
     const { swapState } = useContext(SwapContext)!
 
     const renderTrend = (): JSX.Element | null => {
-        const priceImpact = utils.math.computePriceImpact(
+        const priceImpact = math.blockchain.computePriceImpact(
             tickAtCrosshairState.tickAtCrosshair.value,
             tickAtFirst.value
         )
@@ -35,7 +35,7 @@ const TickInfo = (props: TickInfoProps) => {
     }
 
     const formatedDate = () =>
-        utils.time.formatDate(tickAtCrosshair.time as number)
+        time.formatDate(tickAtCrosshair.time as number)
 
     return (
         <div className={`${props.className}`}>

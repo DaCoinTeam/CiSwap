@@ -1,5 +1,5 @@
 "use client"
-import { ContextProps } from "@app/_shared"
+import { ProvidersProps } from "@app/_shared"
 import { RootState } from "@redux"
 import React, {
     createContext,
@@ -13,7 +13,7 @@ import { useSelector } from "react-redux"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import { chainInfos } from "@config"
 import { ERC20Contract } from "@blockchain"
-import utils from "@utils"
+import { math } from "@utils"
 import { getTokenApi } from "@services"
 
 interface SwapContext {
@@ -31,7 +31,7 @@ interface SwapContext {
 
 export const SwapContext = createContext<SwapContext | null>(null)
 
-const SwapProviders = (props: ContextProps) => {
+const SwapProviders = (props: ProvidersProps) => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
     const account = useSelector((state: RootState) => state.blockchain.account)
 
@@ -226,7 +226,7 @@ const SwapProviders = (props: ContextProps) => {
             if (balanceIn === null) return
             swapDispatch({
                 type: "SET_BALANCE_IN",
-                payload: utils.math.computeRedenomination(
+                payload: math.blockchain.computeRedenomination(
                     balanceIn,
                     swapState.infoIn.decimals,
                     3
@@ -240,7 +240,7 @@ const SwapProviders = (props: ContextProps) => {
             if (balanceOut === null) return
             swapDispatch({
                 type: "SET_BALANCE_OUT",
-                payload: utils.math.computeRedenomination(
+                payload: math.blockchain.computeRedenomination(
                     balanceOut,
                     swapState.infoOut.decimals,
                     3

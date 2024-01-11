@@ -10,9 +10,9 @@ import {
 } from "@nextui-org/react"
 import { RootState } from "@redux"
 import { useSelector } from "react-redux"
-import utils from "@utils"
 import { useRouter } from "next/navigation"
 import { MetamaskContext } from "@app/_hooks"
+import { format } from "@utils"
 
 const ConnectedWalletSelect = () => {
     const account = useSelector((state: RootState) => state.blockchain.account)
@@ -39,7 +39,7 @@ const ConnectedWalletSelect = () => {
     return (
         <Dropdown>
             <DropdownTrigger>
-                <Button variant="bordered">{utils.format.shortenAddress(account)}</Button>
+                <Button variant="bordered">{format.shortenAddress(account)}</Button>
             </DropdownTrigger>
             <DropdownMenu aria-label="Static Actions">
                 {menu.map((item) => (

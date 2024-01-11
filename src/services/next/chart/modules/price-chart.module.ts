@@ -16,7 +16,7 @@ import {
 import { AggregatorContract } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
 import { Bytes } from "web3"
-import utils from "@utils"
+import { math, time } from "@utils"
 import { Period } from "./common"
 
 const TOP_LINE_COLOR = "rgba(20, 184, 166, 1)"
@@ -84,13 +84,13 @@ class PriceChart {
     }
 
     applyOptionsToChart() {
-        const formatTickMark: TickMarkFormatter = (time): string => {
-            const timeInNumber = Number(time.toString())
+        const formatTickMark: TickMarkFormatter = (timeTick): string => {
+            const timeInNumber = Number(timeTick.toString())
             const periodToReturn: Record<Period, string> = {
-                [Period._24H]: utils.time.getHoursFromUtcSeconds(timeInNumber),
-                [Period._1W]: utils.time.getHoursFromUtcSeconds(timeInNumber),
-                [Period._1M]: utils.time.getHoursFromUtcSeconds(timeInNumber),
-                [Period._1Y]: utils.time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._24H]: time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1W]: time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1M]: time.getHoursFromUtcSeconds(timeInNumber),
+                [Period._1Y]: time.getHoursFromUtcSeconds(timeInNumber),
             }
             return periodToReturn[this.period]
         }
@@ -166,7 +166,7 @@ class PriceChart {
 
         const targets: number[] = []
         for (let i = 0; i < numberOfSnapshots; i++) {
-            targets.push(utils.time.currentSeconds() - secondOffset * i)
+            targets.push(time.currentSeconds() - secondOffset * i)
         }
 
         const priceX96s = await this.aggregatorContract.aggregatePriceX96(
@@ -178,13 +178,13 @@ class PriceChart {
         if (priceX96s === null) return null
 
         const prices = priceX96s.map((priceX96) =>
-            utils.math.computeDivideX96(priceX96)
+            math.blockchain.computeDivideX96(priceX96)
         )
         const data: BaselineData<Time>[] = []
 
         for (let i = 0; i < numberOfSnapshots; i++) {
             data.push({
-                time: utils.time.secondsToUtc(targets[i]),
+                time: time.secondsToUtc(targets[i]),
                 value: prices[i],
             })
         }

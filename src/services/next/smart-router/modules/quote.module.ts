@@ -1,6 +1,6 @@
 import { Address } from "web3"
 import Path from "./path.module"
-import utils from "@utils"
+import { math, time } from "@utils"
 import {
     ExactInputParams,
     ExactInputSingleParams,
@@ -44,14 +44,14 @@ class Quote {
     ): ParamsScenario {
         const quoteType = this.getQuoteType()
         
-        const deadline = utils.time.currentSeconds() + txDeadline * 60
+        const deadline = time.currentSeconds() + txDeadline * 60
         
         const quoteTypeToScenario: Record<QuoteType, ParamsScenario> = {
             [QuoteType.ExactInputSingle]: {
                 quoteType: QuoteType.ExactInputSingle,
                 params: {
                     amountIn: this.amountInRaw,
-                    amountOutMin: utils.math.computeSlippage(
+                    amountOutMin: math.blockchain.computeAmountSlippaged(
                         this.amountOutRaw,
                         slippage
                     ),
@@ -66,7 +66,7 @@ class Quote {
                 quoteType: QuoteType.ExactInput,
                 params: {
                     amountIn: this.amountInRaw,
-                    amountOutMin: utils.math.computeSlippage(
+                    amountOutMin: math.blockchain.computeAmountSlippaged(
                         this.amountOutRaw,
                         slippage
                     ),
@@ -79,7 +79,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutputSingle,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage, false),
+                    amountInMax: math.blockchain.computeAmountSlippaged(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
@@ -91,7 +91,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutput,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: utils.math.computeSlippage(this.amountInRaw, slippage, false),
+                    amountInMax: math.blockchain.computeAmountSlippaged(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     path: this.path.reverse().encodePacked(),
                     deadline: deadline,

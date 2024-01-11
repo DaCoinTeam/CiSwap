@@ -9,7 +9,7 @@ import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
 import Quote, { QuoteType } from "./quote.module"
-import utils from "@utils"
+import { array, format } from "@utils"
 
 const MAX_HOPS = 2
 
@@ -61,13 +61,13 @@ class SmartRouter {
                     .getInstance()
                     .methods.indexPool()
                     .encodeABI()
-                const bytes = await multicallContract
+                const callResult = await multicallContract
                     .multicall([encodedToken0, encodedToken1, encodedIndexPool])
                     .call()
-                if (bytes === null) return
-                const token0 = utils.web3.bytesToAddress(bytes[0])
-                const token1 = utils.web3.bytesToAddress(bytes[1])
-                const indexPool = utils.web3.bytesToNumber(bytes[2])
+                if (callResult === null) return
+                const token0 = format.bytesToAddress(callResult[0])
+                const token1 = format.bytesToAddress(callResult[1])
+                const indexPool = format.bytesToNumber(callResult[2])
                 pools.push(new Pool(token0, token1, indexPool))
             }
             promises.push(promise())
@@ -185,16 +185,16 @@ class SmartRouter {
             data.push(encodedFunction)
         }
 
-        const bytes = await this.multicallContract.multicall(data).call()
-        if (bytes === null || bytes.length !== paths.length) {
+        const callResult = await this.multicallContract.multicall(data).call()
+        if (callResult === null || callResult.length !== paths.length) {
             throw new Error("Error fetching quotes via multicall.")
         }
 
-        const amountsQuoted = bytes.map((byte) => utils.web3.bytesToBigInt(byte))
+        const amountsQuoted = callResult.map((bytes) => format.bytesToBigInt(bytes))
 
         const { index, value } = exactInput
-            ? utils.array.findMaxBigIntIndexAndValue(amountsQuoted)
-            : utils.array.findMinBigIntIndexAndValueExceptZero(amountsQuoted)
+            ? array.findMaxBigIntIndexAndValue(amountsQuoted)
+            : array.findMinBigIntIndexAndValueExceptZero(amountsQuoted)
 
         const amountIn = exactInput ? amount : value
         const amountOut = exactInput ? value : amount

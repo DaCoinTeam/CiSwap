@@ -1,4 +1,4 @@
-import web3, { Address, Bytes, Sha3Input } from "web3"
+import { Address, Bytes, Sha3Input, utils } from "web3"
 import Pair from "./pair.module"
 import Pool from "./pool.module"
 
@@ -15,7 +15,7 @@ class Path {
             }
             return { type: "address", value: step }
         })
-        return web3.utils.encodePacked(...inputs)
+        return utils.encodePacked(...inputs)
     }
 
     getFirstPool(): {

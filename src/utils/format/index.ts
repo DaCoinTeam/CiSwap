@@ -1,4 +1,4 @@
-import { Address } from "web3"
+import { Address, Bytes, utils } from "web3"
 
 const sanitizeNumericInput = (input: string): string | null => {
     const regex = new RegExp(/^\d*[.,]?\d*$/)
@@ -20,7 +20,8 @@ const parseStringToNumber = (string: string, defaultValue?: number): number => {
     return parseValue
 }
 
-const parseNumberToString = (number: number): string => number !== 0 ? number.toString() : ""
+const parseNumberToString = (number: number): string =>
+    number !== 0 ? number.toString() : ""
 
 const parseStringToNumberMultiply = (
     string: string,
@@ -32,12 +33,26 @@ const parseStringToNumberMultiply = (
     return parseNumberToString(parsedNumber)
 }
 
-const formatUtils = {
-    sanitizeNumericInput: sanitizeNumericInput,
-    shortenAddress: shortenAddress,
-    parseStringToNumber: parseStringToNumber,
-    parseNumberToString: parseNumberToString,
-    parseStringToNumberMultiply: parseStringToNumberMultiply
+const bytesToAddress = (bytes: Bytes): Address => {
+    const hexString = utils.bytesToHex(bytes)
+    return utils.toChecksumAddress(`0x${hexString.slice(26)}`)
 }
 
-export default formatUtils
+const bytesToBigInt = (bytes: Bytes): bigint =>
+    BigInt(utils.hexToNumber(utils.bytesToHex(bytes)))
+
+const bytesToNumber = (bytes: Bytes): number =>
+    Number(utils.hexToNumber(utils.bytesToHex(bytes)))
+
+const format = {
+    sanitizeNumericInput,
+    shortenAddress,
+    parseStringToNumber,
+    parseNumberToString,
+    parseStringToNumberMultiply,
+    bytesToBigInt,
+    bytesToAddress,
+    bytesToNumber,
+}
+
+export default format

@@ -33,7 +33,7 @@ const LimitAmountCalculated = () => {
         
         const amount = formik.values.exactInput ?  formik.values.amountOutRaw : formik.values.amountInRaw
 
-        const limitAmountCalculated = math.blockchain.computeAmountSlippaged(
+        const limitAmountCalculated = math.blockchain.computeSlippaged(
             amount,
             format.parseStringToNumber(formik.values.slippage, SLIPPAGE_DEFAULT),
             formik.values.exactInput

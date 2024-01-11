@@ -74,7 +74,7 @@ const PoolsProviders = (props: ProvidersProps) => {
                     if (decimals0 === null || decimals1 === null) return 
 
                     const liquidityRaw = format.bytesToBigInt(callResult[3])
-                    const liquidity = math.blockchain.computeRedenomination(liquidityRaw, (decimals0 + decimals1) / 2)
+                    const liquidity = math.blockchain.computeLiquidity(liquidityRaw, decimals0,  decimals1)
 
                     const price0X96 = format.bytesToBigInt(callResult[4])
                     const price1X96 = format.bytesToBigInt(callResult[5])

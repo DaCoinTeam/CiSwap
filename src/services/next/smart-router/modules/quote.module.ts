@@ -51,7 +51,7 @@ class Quote {
                 quoteType: QuoteType.ExactInputSingle,
                 params: {
                     amountIn: this.amountInRaw,
-                    amountOutMin: math.blockchain.computeAmountSlippaged(
+                    amountOutMin: math.blockchain.computeSlippaged(
                         this.amountOutRaw,
                         slippage
                     ),
@@ -66,7 +66,7 @@ class Quote {
                 quoteType: QuoteType.ExactInput,
                 params: {
                     amountIn: this.amountInRaw,
-                    amountOutMin: math.blockchain.computeAmountSlippaged(
+                    amountOutMin: math.blockchain.computeSlippaged(
                         this.amountOutRaw,
                         slippage
                     ),
@@ -79,7 +79,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutputSingle,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: math.blockchain.computeAmountSlippaged(this.amountInRaw, slippage, false),
+                    amountInMax: math.blockchain.computeSlippaged(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     tokenIn: this.path.steps[0] as Address,
                     tokenOut: this.path.steps[2] as Address,
@@ -91,7 +91,7 @@ class Quote {
                 quoteType: QuoteType.ExactOutput,
                 params: {
                     amountOut: this.amountOutRaw,
-                    amountInMax: math.blockchain.computeAmountSlippaged(this.amountInRaw, slippage, false),
+                    amountInMax: math.blockchain.computeSlippaged(this.amountInRaw, slippage, false),
                     recipient: recipient,
                     path: this.path.reverse().encodePacked(),
                     deadline: deadline,

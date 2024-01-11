@@ -26,6 +26,27 @@ export const computeRedenomination = (
     }
 }
 
+export const computeLiquidity = (
+    liquidityRaw: bigint,
+    decimals0: number,
+    decimals1: number,
+    round?: number
+): number => {
+    round = round ?? 5
+    try {
+        const average = computeRound((decimals0 + decimals1) / 2)
+        const divisor = computeExponent(average)
+        const result =
+      Number((liquidityRaw * BigInt(computeExponent(round))) / BigInt(divisor)) /
+      computeExponent(round)
+
+        return result
+    } catch (error) {
+        console.error(error)
+        return 0
+    }
+}
+
 export const computeRaw = (
     amount: number,
     decimals: number,
@@ -83,7 +104,7 @@ export const computePriceImpact = (
     }
 }
 
-export const computeAmountSlippaged = (
+export const computeSlippaged = (
     amountRaw: bigint,
     slippage: number,
     exactInput: boolean = true,
@@ -102,8 +123,9 @@ const blockchain = {
     computeDivideX96,
     computeMultiplyX96,
     computeRedenomination,
-    computeAmountSlippaged,
-    computePriceImpact
+    computeSlippaged,
+    computePriceImpact,
+    computeLiquidity
 }
 
 export default blockchain

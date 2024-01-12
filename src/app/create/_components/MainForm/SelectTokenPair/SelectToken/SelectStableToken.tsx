@@ -90,7 +90,7 @@ const SelectStableToken = (props: SelectStableTokenProps) => {
               {finishLoad
                   ? renderCards(presentableTokens)
                   : [0, 1].map((key) => (
-                      <Card key={key} className="col-span-1">
+                      <Card shadow="sm"key={key} className="col-span-1">
                           <CardBody className="p-4">
                               <Skeleton className="w-12 h-12 rounded-full" />
                               <Spacer y={4} />

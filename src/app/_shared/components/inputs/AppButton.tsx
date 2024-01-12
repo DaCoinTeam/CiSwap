@@ -1,7 +1,6 @@
 import React from "react"
 import { Button } from "@nextui-org/react"
-import { useSelector } from "react-redux"
-import { RootState } from "@redux"
+import useDarkMode from "use-dark-mode"
 
 interface AppButtonProps {
   className?: string;
@@ -13,20 +12,17 @@ interface AppButtonProps {
 }
 
 const AppButton = (props: AppButtonProps) => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-    const textColor = darkMode ? "text-black" : "text-white"
-    const className = props.bordered
-        ? "border-teal-500 text-teal-500"
-        : "bg-teal-500"
+    const darkMode = useDarkMode()
+
+    const textColor = darkMode.value ? "text-black" : "text-white"
     return (
         <Button
+            color="primary"
             size={props.size}
             type={props.submit ? "submit" : undefined}
             variant={props.bordered ? "bordered" : undefined}
-            className={`${className}
-            ${props.className} ${textColor} font-bold`}
+            className={`${props.className}  ${textColor}
+           font-bold`}
             onPress={props.onClick}
         >
             {" "}

@@ -1,10 +1,9 @@
 import { NumberInput, TitleDisplay } from "@app/_shared"
 import { Button } from "@nextui-org/react"
-import { RootState } from "@redux"
 import { FormikContext } from "../../../../../_hooks"
 import React, { useContext } from "react"
-import { useSelector } from "react-redux"
 import { format } from "@utils"
+import useDarkMode from "use-dark-mode"
 
 interface Item {
   key: number;
@@ -15,9 +14,7 @@ interface Item {
 
 const SlippageTolerance = () => {
     const formik = useContext(FormikContext)!
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
+    const darkMode = useDarkMode()
 
     const items: Item[] = [
         {
@@ -42,7 +39,7 @@ const SlippageTolerance = () => {
 
     const renderSelected = (key: number) =>
     {   
-        const textColor = darkMode ? "text-black" : "text-white"
+        const textColor = darkMode.value ? "text-black" : "text-white"
         return formik.values.slippageKey === key
             ? `bg-teal-500 ${textColor}`
             : null
@@ -61,7 +58,7 @@ const SlippageTolerance = () => {
         )
     }
 
-    const textColor = darkMode ? "text-black" : "text-white"
+    const textColor = darkMode.value ? "text-black" : "text-white"
 
     return (
         <div className="flex flex-col gap-6">

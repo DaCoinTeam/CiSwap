@@ -19,6 +19,7 @@ interface MetamaskWrongChainModalProps {
 }
 
 const MetamaskWrongChainModal = (props: MetamaskWrongChainModalProps) => {
+
     const metamaskWrongChainModal = useSelector(
         (state: RootState) => state.modal.metamaskWrongChainModal
     )

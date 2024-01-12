@@ -74,7 +74,7 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
     ])
 
     return (
-        <Card className={`${props.className}`}>
+        <Card shadow="sm"className={`${props.className}`}>
             <CardBody className="p-5">
                 <PriceChartContext.Provider value={priceChartContext}>
                     <div className="grid md:flex justify-between gap-4">

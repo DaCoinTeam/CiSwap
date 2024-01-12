@@ -19,7 +19,7 @@ interface SwapSectionProps {
 
 const SwapSection = (props: SwapSectionProps) => {
     return (
-        <Card className={`${props.className}`} >
+        <Card shadow="sm"className={`${props.className}`} >
             <CardHeader className="p-5">
                 <div className="flex flex-col gap-6">
                     <div className="font-bold text-lg">Swap</div>

@@ -17,6 +17,7 @@ import ConnectWalletButton from "./ConnectWalletButton"
 import ConnectedWalletSelect from "./ConnectedWalletSelect"
 import { useRouter } from "next/navigation"
 import ConnectedChain from "./ConnectedChain"
+import useDarkMode from "use-dark-mode"
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,6 +25,8 @@ const Navbar = () => {
     const defaultPool = useSelector(
         (state: RootState) => state.blockchain.defaultPool
     )
+
+    const darkMode = useDarkMode()
 
     const router = useRouter()
 
@@ -36,6 +39,7 @@ const Navbar = () => {
 
     return (
         <NextUINavbar
+            isBlurred={false}
             shouldHideOnScroll
             isBordered
             onMenuOpenChange={setIsMenuOpen}
@@ -45,7 +49,7 @@ const Navbar = () => {
                     wrapper: "max-w-[1280px]"
                 }
             }
-
+            className={darkMode.value ? "bg-[#18181B]" : "bg-white"}
         >
             <NavbarContent className="gap-12">
                 <div>

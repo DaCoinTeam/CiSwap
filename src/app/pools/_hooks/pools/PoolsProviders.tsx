@@ -1,5 +1,5 @@
 import { ERC20Contract, FactoryContract, MulticallContract, PoolContract } from "@blockchain"
-import React, { createContext, useEffect } from "react"
+import React, { createContext, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "@redux"
 import { chainInfos } from "@config"
@@ -7,12 +7,16 @@ import { ProvidersProps } from "@app/_shared"
 import { Address } from "web3"
 import { format, math } from "@utils"
 
-interface PoolsContext {}
+interface PoolsContext {
+    poolSummaries: PoolSummary[]
+}
 
 export const PoolsContext = createContext<PoolsContext | null>(null)
 
 const PoolsProviders = (props: ProvidersProps) => {
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
+
+    const [poolSummaries, setPoolSummaries] = useState<PoolSummary[]>([])
 
     useEffect(() => {
         const handleEffect = async () => {
@@ -23,7 +27,7 @@ const PoolsProviders = (props: ProvidersProps) => {
             const pools = await factoryContract.allPools()
             if (pools === null) return 
 
-            const poolOverviews: PoolOverview[] = []
+            const _poolSummaries: PoolSummary[] = []
             const promises: Promise<void>[] = []
 
             for (const pool of pools) {
@@ -82,7 +86,7 @@ const PoolsProviders = (props: ProvidersProps) => {
                     const price0 = math.blockchain.computeDivideX96(price0X96)
                     const price1 = math.blockchain.computeDivideX96(price1X96)
 
-                    const poolOverview : PoolOverview = {
+                    const poolSummary : PoolSummary = {
                         address: pool,
                         token0,
                         token1,
@@ -92,25 +96,25 @@ const PoolsProviders = (props: ProvidersProps) => {
                         price1
                     }
 
-                    poolOverviews.push(poolOverview)
+                    _poolSummaries.push(poolSummary)
                 }
                 promises.push(promise())
             }
 
             await Promise.all(promises)
-            console.log(poolOverviews)
+            setPoolSummaries(_poolSummaries)
         }
         handleEffect()
     }, [])
 
     return (
-        <PoolsContext.Provider value={{}}>{props.children}</PoolsContext.Provider>
+        <PoolsContext.Provider value={{poolSummaries}}>{props.children}</PoolsContext.Provider>
     )
 }
 
 export default PoolsProviders
 
-interface PoolOverview {
+export interface PoolSummary {
   address: Address;
   token0: Address;
   token1: Address;

@@ -1,25 +1,22 @@
+"use client"
 import React from "react"
 import { Switch } from "@nextui-org/react"
 import MoonIcon from "./MoonIcon"
 import SunIcon from "./SunIcon"
-import { useDispatch, useSelector } from "react-redux"
-import { AppDispatch, RootState, setDarkMode } from "@redux"
+import useDarkMode from "use-dark-mode"
 
 const SwitchModeButton = () => {
-    const darkMode = useSelector(
-        (state: RootState) => state.configuration.darkMode
-    )
-    const dispatch: AppDispatch = useDispatch()
+    const darkMode = useDarkMode()
 
-    const _setDarkMode = (value: boolean) => dispatch(setDarkMode(value))
+    const onChangeToggle = darkMode.toggle
 
     return (
         <Switch
             size="lg"
-            onValueChange={_setDarkMode}
-            isSelected={darkMode}
+            onValueChange={onChangeToggle}
+            isSelected={darkMode.value}
             color="default"
-            thumbIcon={darkMode ? <MoonIcon /> : <SunIcon />}
+            thumbIcon={darkMode.value ? <MoonIcon /> : <SunIcon />}
         />
     )
 }

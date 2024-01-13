@@ -12,20 +12,21 @@ import { ToastContainer } from "react-toastify"
 import "./_css/ReactToastify.css"
 import { IconContext } from "react-icons"
 import { ProvidersProps } from "./_shared"
-import useDarkMode from "use-dark-mode"
-import { storage } from "@utils"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
 
 export const font = Open_Sans({ weight: "400", subsets: ["latin"] })
 
 const WrappedRootLayout = (props: ProvidersProps) => {
-    const darkMode = useDarkMode(storage.getDarkMode())
 
     const iconContext = useMemo(() => {
         return { className: "w-5 h-5" }
     }, [])
 
+    const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
+
     return (
-        <html lang="en" className={darkMode.value ? "dark" : "light"}>
+        <html lang="en" className={darkMode ? "dark" : "light"}>
             <body className={font.className}>
                 <NextUIProvider>
                     <IconContext.Provider value={iconContext}>

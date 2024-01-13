@@ -1,7 +1,8 @@
 import React from "react"
 import { Tab, Tabs } from "@nextui-org/react"
 import { Period } from "@services"
-import useDarkMode from "use-dark-mode"
+import { useSelector } from "react-redux"
+import { RootState } from "@redux"
 
 interface PeriodTabsProps {
   className?: string;
@@ -30,9 +31,9 @@ const periods = [
 ]
 
 const PeriodTabs = (props: PeriodTabsProps) => {
-    const darkMode = useDarkMode()
+    const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
 
-    const selected = darkMode.value
+    const selected = darkMode
         ? "group-data-[selected=true]:text-black"
         : "group-data-[selected=true]:text-white"
     

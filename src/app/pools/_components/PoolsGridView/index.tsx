@@ -1,6 +1,7 @@
 import { PoolsContext } from "../../_hooks"
 import React, { useContext } from "react"
 import PoolCard from "./PoolCard"
+import CreatePoolCard from "./CreatePoolCard"
 const PoolsGridView = () => {
     const { poolSummaries } = useContext(PoolsContext)!
 
@@ -15,6 +16,7 @@ const PoolsGridView = () => {
     }
     return (
         <div className="grid md:grid-cols-4 gap-6">
+            <CreatePoolCard/>
             {renderGridView()}
         </div>
     )

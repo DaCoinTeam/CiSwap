@@ -9,7 +9,7 @@ import {
 import { Select, SelectItem, Spacer } from "@nextui-org/react"
 import { FinishSelectedPairContext } from "../index"
 import { RootState } from "@redux"
-import { FormikContext } from "../../../_hooks"
+import { FormikContext } from "../../../hooks"
 import { useSelector } from "react-redux"
 import { ERC20Contract } from "@blockchain"
 import { math } from "@utils"

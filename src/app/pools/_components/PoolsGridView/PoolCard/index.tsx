@@ -8,7 +8,7 @@ interface PoolCardProps {
 
 const PoolCard = (props: PoolCardProps) => {
     return (
-        <Card shadow="sm">
+        <Card isPressable shadow="sm">
             <CardBody> {JSON.stringify(props)}</CardBody>
         </Card>
     )

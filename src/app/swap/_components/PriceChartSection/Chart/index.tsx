@@ -8,7 +8,6 @@ import { FormikContext } from "../../../_hooks"
 import { BaselineData, MouseEventParams, Time } from "lightweight-charts"
 import { CircularProgress } from "@nextui-org/react"
 import { TicksBoundary, PriceChart, next } from "@services"
-import useDarkMode from "use-dark-mode"
 
 const Chart = () => {
     const { periodState, tickAtCrosshairState, tickAtFirstState } =
@@ -19,8 +18,7 @@ const Chart = () => {
     const { period } = periodState
 
     const formik = useContext(FormikContext)!
-
-    const darkMode = useDarkMode()
+    const darkMode = useSelector((state: RootState) => state.configuration.darkMode)
 
     const chainId = useSelector((state: RootState) => state.blockchain.chainId)
 
@@ -66,7 +64,7 @@ const Chart = () => {
             priceChart = next.chart.createPriceChart(
                 chainId,
                 chartContainerRef.current,
-                darkMode.value,
+                darkMode,
                 period,
                 onCrosshairMove
             )
@@ -121,8 +119,8 @@ const Chart = () => {
         const priceChart = priceChartRef.current
         if (!priceChart) return
 
-        priceChart.updateDarkMode(darkMode.value)
-    }, [darkMode.value])
+        priceChart.updateDarkMode(darkMode)
+    }, [darkMode])
 
     return (
         <>

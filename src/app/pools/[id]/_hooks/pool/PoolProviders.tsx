@@ -24,8 +24,8 @@ interface PoolContext {
   poolState: PoolState;
   poolDispatch: React.Dispatch<PoolAction>;
   actions: {
-    doSomething: () => void
-  }
+    doSomething: () => void;
+  };
   updaters: {
     initialize: () => void;
     loadBeforeConnectWallet: () => Promise<void>;
@@ -41,8 +41,10 @@ const PoolProviders = (props: ProvidersProps) => {
 
     const [poolState, poolDispatch] = usePoolReducer()
     const { id } = useParams<IdentifierParams>()
-
-    const doSomething = () => {console.log("X")}
+    console.log(poolState)
+    const doSomething = () => {
+        console.log("X")
+    }
 
     const actions = useMemo(() => ({ doSomething }), [])
 
@@ -66,12 +68,9 @@ const PoolProviders = (props: ProvidersProps) => {
         const updateInfo0 = async () => {
             const token0 = await poolContract.token0()
             if (token0 === null) return
-            poolDispatch({ type: "SET_TOKEN_0", payload: token0})
+            poolDispatch({ type: "SET_TOKEN_0", payload: token0 })
 
-            const token0Contract = new ERC20Contract(
-                chainId,
-                token0
-            )
+            const token0Contract = new ERC20Contract(chainId, token0)
 
             const decimals0 = await token0Contract.decimals()
             if (decimals0 === null) return
@@ -80,10 +79,7 @@ const PoolProviders = (props: ProvidersProps) => {
             const promises: Promise<void>[] = []
 
             const additional0Promise = async () => {
-                const additional0 = await getTokenApi(
-                    poolState.info0.address,
-                    chainId
-                )
+                const additional0 = await getTokenApi(poolState.info0.address, chainId)
                 if (additional0 === null) return
             }
             promises.push(additional0Promise())
@@ -99,10 +95,11 @@ const PoolProviders = (props: ProvidersProps) => {
         }
 
         const updateInfo1 = async () => {
-            const token1Contract = new ERC20Contract(
-                chainId,
-                poolState.info1.address
-            )
+            const token1 = await poolContract.token1()
+            if (token1 === null) return
+            poolDispatch({ type: "SET_TOKEN_1", payload: token1 })
+
+            const token1Contract = new ERC20Contract(chainId, token1)
 
             const decimals1 = await token1Contract.decimals()
             if (decimals1 === null) return
@@ -114,10 +111,7 @@ const PoolProviders = (props: ProvidersProps) => {
             const promises: Promise<void>[] = []
 
             const additional1Promise = async () => {
-                const additional1 = await getTokenApi(
-                    poolState.info0.address,
-                    chainId
-                )
+                const additional1 = await getTokenApi(poolState.info0.address, chainId)
                 if (additional1 === null) return
             }
             promises.push(additional1Promise())

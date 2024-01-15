@@ -3,7 +3,7 @@ import { ArrowsRightLeftIcon } from "@heroicons/react/24/solid"
 import { Avatar, AvatarGroup, Button, Skeleton } from "@nextui-org/react"
 import React from "react"
 
-interface TokenPairDisplayProps {
+interface TokenPairProps {
   className?: string;
   imageUrlA?: string;
   imageUrlB?: string;
@@ -14,7 +14,7 @@ interface TokenPairDisplayProps {
   onClick?: () => void;
 }
 
-const TokenPairDisplay = (props: TokenPairDisplayProps) => {
+const TokenPair = (props: TokenPairProps) => {
     const type : Type = props.type ?? 0
 
     const typeToClassNames: Record<Type, ClassNames> = {
@@ -91,7 +91,7 @@ const TokenPairDisplay = (props: TokenPairDisplayProps) => {
     )
 }
 
-export default TokenPairDisplay
+export default TokenPair
 
 type Type = 0 | 1;
 

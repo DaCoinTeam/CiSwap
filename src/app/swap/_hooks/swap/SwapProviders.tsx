@@ -77,9 +77,9 @@ const SwapProviders = (props: ProvidersProps) => {
         setPreventBefore(true)
     }
 
-    const actions = useMemo(() => {
-        return { handleReverse }
-    }, [handleReverse])
+    const actions = useMemo(() => (
+        { handleReverse }
+    ), [handleReverse])
 
     const initialize = () => {
         const tokenIn =

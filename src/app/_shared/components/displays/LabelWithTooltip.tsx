@@ -1,13 +1,13 @@
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import React from "react"
 import { Tooltip } from "@nextui-org/react"
-interface LabelWithTooltipDisplayProps {
+interface LabelWithTooltipProps {
   className?: string;
   text: string;
   tooltipContent: string;
 }
 
-const LabelWithTooltipDisplay = (props: LabelWithTooltipDisplayProps) => {
+const LabelWithTooltip = (props: LabelWithTooltipProps) => {
     return (
         <div className={`${props.className} gap-1 flex items-center`}>
             <div className="text-sm">{props.text} </div>
@@ -17,4 +17,4 @@ const LabelWithTooltipDisplay = (props: LabelWithTooltipDisplayProps) => {
         </div>
     )
 }
-export default LabelWithTooltipDisplay
+export default LabelWithTooltip

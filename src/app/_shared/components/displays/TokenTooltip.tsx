@@ -2,7 +2,7 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline"
 import { Skeleton, Tooltip } from "@nextui-org/react"
 import React from "react"
 
-interface TokenTooltipDisplayProps {
+interface TokenTooltipProps {
     className?: string,
     value: number,
     prefix: string,
@@ -10,7 +10,7 @@ interface TokenTooltipDisplayProps {
     finishLoad?: boolean
 }
 
-const TokenTooltipDisplay = (props : TokenTooltipDisplayProps) => 
+const TokenTooltip = (props : TokenTooltipProps) => 
     <div className={`${props.className}`}>
         {props.finishLoad ?
             <div className="flex items-end gap-1">
@@ -28,4 +28,4 @@ const TokenTooltipDisplay = (props : TokenTooltipDisplayProps) =>
                 </div>
             </div> : <Skeleton className="h-10 w-48 rounded"/>}
     </div>
-export default TokenTooltipDisplay
+export default TokenTooltip

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useMemo, useState } from "react"
 import { Card, CardBody, Spacer } from "@nextui-org/react"
 
 import Chart from "./Chart"
-import { PeriodTabs, TokenPairDisplay } from "@app/_shared"
+import { PeriodTabs, TokenPair } from "@app/_shared"
 import TickInfo from "./TickInfo"
 
 import { Period } from "@services"
@@ -79,7 +79,7 @@ const PriceChartSection = (props: PriceChartSectionProps) => {
                 <PriceChartContext.Provider value={priceChartContext}>
                     <div className="grid md:flex justify-between gap-4">
                         <div>
-                            <TokenPairDisplay
+                            <TokenPair
                                 symbolA={swapState.infoIn.symbol}
                                 symbolB={swapState.infoOut.symbol}
                                 onClick={actions.handleReverse}

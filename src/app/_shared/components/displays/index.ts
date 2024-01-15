@@ -4,20 +4,22 @@ import TokenDisplay from "./TokenDisplay"
 import TitleDisplay from "./TitleDisplay"
 import DataWidgetDisplay from "./DataDisplay"
 import ErrorDisplay from "./ErrorDisplay"
-import TokenTooltipDisplay from "./TokenTooltipDisplay"
+import TokenTooltip from "./TokenTooltip"
 import BreadcrumbsDisplay from "./BreadcrumbsDisplay"
-import TokenPairDisplay from "./TokenPairDisplay"
-import LabelWithTooltipDisplay from "./LabelWithTooltipDisplay"
+import TokenPair from "./TokenPair"
+import LabelWithTooltip from "./LabelWithTooltip"
+import ViewOnExplorer from "./ViewOnExplorer"
 
 export {
     BalanceDisplay,
-    TokenTooltipDisplay,
+    TokenTooltip,
     LoadingDisplay,
     TokenDisplay,
     TitleDisplay,
     DataWidgetDisplay,
     ErrorDisplay,
     BreadcrumbsDisplay,
-    TokenPairDisplay,
-    LabelWithTooltipDisplay
+    TokenPair,
+    LabelWithTooltip,
+    ViewOnExplorer
 }

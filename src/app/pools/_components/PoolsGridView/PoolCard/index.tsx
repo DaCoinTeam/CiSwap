@@ -1,16 +1,32 @@
+"use client"
 import { PoolSummary } from "../../../_hooks"
-import { Card, CardBody } from "@nextui-org/react"
-import React from "react"
+import {
+    Card,
+} from "@nextui-org/react"
+import React, { createContext } from "react"
+import Header from "./Header"
+import Body from "./Body"
+import { useRouter, usePathname } from "next/navigation"
 
 interface PoolCardProps {
-    summary: PoolSummary
+  summary: PoolSummary;
 }
 
+export const PoolCardContext = createContext<PoolSummary|null>(null)
+
 const PoolCard = (props: PoolCardProps) => {
+    const router = useRouter()
+    const pathname = usePathname()
+    
+    const onClick = () => router.push(`${pathname}/${props.summary.address}`)
+
     return (
-        <Card isPressable shadow="sm">
-            <CardBody> {JSON.stringify(props)}</CardBody>
-        </Card>
+        <PoolCardContext.Provider value={props.summary}>
+            <Card isPressable onClick={onClick} shadow="sm">
+                <Header />
+                <Body />
+            </Card>
+        </PoolCardContext.Provider>
     )
 }
 

@@ -1,4 +1,4 @@
-import { LabelWithTooltipDisplay } from "@app/_shared"
+import { LabelWithTooltip } from "@app/_shared"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { math } from "@utils"
 import { SwapContext, FormikContext } from "../../../../_hooks"
@@ -57,7 +57,7 @@ const PriceImpact = () => {
 
     return (
         <div className="flex justify-between items-center">
-            <LabelWithTooltipDisplay text="Price impact" tooltipContent="AAA" />
+            <LabelWithTooltip text="Price impact" tooltipContent="AAA" />
             <div className="text-sm text-danger"> {priceImpact}% </div>
         </div>
     )

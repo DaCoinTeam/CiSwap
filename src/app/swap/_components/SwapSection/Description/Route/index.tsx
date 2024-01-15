@@ -1,5 +1,5 @@
 "use client"
-import { LabelWithTooltipDisplay } from "@app/_shared"
+import { LabelWithTooltip } from "@app/_shared"
 import React, { useContext, useEffect, useState } from "react"
 import { FormikContext } from "../../../../_hooks"
 import { ERC20Contract } from "@blockchain"
@@ -57,7 +57,7 @@ const Route = () => {
 
     return (
         <div className="flex justify-between items-center">
-            <LabelWithTooltipDisplay text="Route" tooltipContent="AAA" />
+            <LabelWithTooltip text="Route" tooltipContent="AAA" />
             {finishLoad ? (
                 <div className="flex gap-1">
                     <div className="flex items-center gap-0.5">{elements}</div>

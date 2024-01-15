@@ -1,4 +1,4 @@
-import { LabelWithTooltipDisplay } from "@app/_shared"
+import { LabelWithTooltip } from "@app/_shared"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { SwapContext, FormikContext, SLIPPAGE_DEFAULT } from "../../../../_hooks"
 import { format, math } from "@utils"
@@ -59,8 +59,8 @@ const LimitAmountCalculated = () => {
         <div className="flex justify-between items-center">
             { formik.values.exactInput 
                 ?
-                <LabelWithTooltipDisplay text="Minimun received" tooltipContent="AAA" />
-                :    <LabelWithTooltipDisplay text="Maximun spend" tooltipContent="AAA" />
+                <LabelWithTooltip text="Minimun received" tooltipContent="AAA" />
+                :    <LabelWithTooltip text="Maximun spend" tooltipContent="AAA" />
             }
          
             <div className="text-sm"> {limitAmountCalculated} </div>

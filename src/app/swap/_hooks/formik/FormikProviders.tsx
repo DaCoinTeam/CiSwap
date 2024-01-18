@@ -22,8 +22,7 @@ import { format, math } from "@utils"
 import { MetamaskContext } from "@app/_hooks"
 import { ProvidersProps, notify } from "@app/_shared"
 import { chainInfos } from "@config"
-import { Step, next } from "@services"
-import { QuoteType } from "../../../../services/next/smart-router/modules/quote.module"
+import { Step, next, QuoteType } from "@services"
 import { TransactionReceipt } from "web3"
 
 interface FormikValues {

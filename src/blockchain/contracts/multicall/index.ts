@@ -6,7 +6,7 @@ import { getHttpWeb3 } from "../../providers"
 const getMulticallContract = (web3: Web3, address: Address) =>
     new web3.eth.Contract(abi, address, web3)
 
-class MulticallContract {
+export default class MulticallContract {
     private chainId: ChainId
     private address: Address
     private sender?: Address
@@ -76,4 +76,3 @@ class MulticallContract {
         }
     }
 }
-export default MulticallContract

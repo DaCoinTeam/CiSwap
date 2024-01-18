@@ -6,7 +6,7 @@ import { getHttpWeb3 } from "../../providers"
 const getAggregatorContract = (web3: Web3, address: Address) =>
     new web3.eth.Contract(abi, address)
 
-class AggregatorContract {
+export default class AggregatorContract {
     private chainId: ChainId
     private address: Address
 
@@ -57,4 +57,3 @@ class AggregatorContract {
         }
     }
 }
-export default AggregatorContract

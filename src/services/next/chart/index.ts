@@ -1,7 +1,9 @@
 export * from "./modules"
+export * from "./shared"
 
 import { ChainId } from "@config"
-import { Period, PriceChart } from "./modules"
+import { PriceChart } from "./modules"
+import { Period } from "./shared"
 import { MouseEventHandler, Time } from "lightweight-charts"
 
 const chart = {

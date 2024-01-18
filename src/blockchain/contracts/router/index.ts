@@ -5,7 +5,7 @@ import abi from "./abi"
 const getRouterContract = (web3: Web3, address: Address) =>
     new web3.eth.Contract(abi, address)
 
-class RouterContract {
+export default class RouterContract {
     private chainId: ChainId
     private address: Address
     private sender?: Address
@@ -87,8 +87,6 @@ class RouterContract {
         }
     }
 }
-
-export default RouterContract
 
 export interface ExactInputSingleParams {
   amountIn: bigint;

@@ -1,6 +1,6 @@
 import { Address } from "web3"
 
-class Pair {
+export default class Pair {
     tokenStart: Address
     tokenEnd: Address
 
@@ -16,4 +16,4 @@ class Pair {
         )
     }
 }
-export default Pair
+

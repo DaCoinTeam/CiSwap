@@ -1,14 +1,9 @@
 import { Address } from "web3"
 import Path from "./path.module"
 import { math, time } from "@utils"
-import {
-    ExactInputParams,
-    ExactInputSingleParams,
-    ExactOutputParams,
-    ExactOutputSingleParams,
-} from "@blockchain"
+import { ParamsScenario, QuoteType } from "../shared"
 
-class Quote {
+export default class Quote {
     amountInRaw: bigint
     amountOutRaw: bigint
     path: Path
@@ -102,37 +97,3 @@ class Quote {
     }
 }
 
-export default Quote
-
-export enum QuoteType {
-  ExactInputSingle,
-  ExactInput,
-  ExactOutputSingle,
-  ExactOutput,
-}
-
-interface ExactInputSingleScenario {
-  quoteType: QuoteType.ExactInputSingle;
-  params: ExactInputSingleParams;
-}
-
-interface ExactInputScenario {
-  quoteType: QuoteType.ExactInput;
-  params: ExactInputParams;
-}
-
-interface ExactOutputSingleScenario {
-  quoteType: QuoteType.ExactOutputSingle;
-  params: ExactOutputSingleParams;
-}
-
-interface ExactOutputScenario {
-  quoteType: QuoteType.ExactOutput;
-  params: ExactOutputParams;
-}
-
-export type ParamsScenario =
-  | ExactInputSingleScenario
-  | ExactInputScenario
-  | ExactOutputSingleScenario
-  | ExactOutputScenario;

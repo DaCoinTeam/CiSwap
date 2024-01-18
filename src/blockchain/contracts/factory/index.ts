@@ -9,7 +9,7 @@ const getFactoryContract = (web3: Web3, address: Address) => {
     return new web3.eth.Contract(abi, address, web3)
 }
 
-class FactoryCountract {
+export default class FactoryCountract {
     private chainId: ChainId
     private address: Address
     private web3?: Web3
@@ -63,5 +63,3 @@ class FactoryCountract {
         }
     }
 }
-
-export default FactoryCountract

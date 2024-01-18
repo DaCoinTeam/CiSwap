@@ -1,8 +1,9 @@
 import { Address, Bytes, Sha3Input, utils } from "web3"
 import Pair from "./pair.module"
 import Pool from "./pool.module"
+import { Step } from "../shared"
 
-class Path {
+export default class Path {
     steps: Step[]
     constructor(steps?: Step[]) {
         this.steps = steps ?? []
@@ -103,6 +104,3 @@ class Path {
     }
 }
 
-export type Step = Address | number;
-
-export default Path

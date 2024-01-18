@@ -6,7 +6,7 @@ import abi from "./abi"
 const getERC720Contract = (web3: Web3, ERC721Address: Address) =>
     new web3.eth.Contract(abi, ERC721Address, web3)
 
-class ERC721Contract {
+export default class ERC721Contract {
     private chainId: ChainId
     private ERC721Address: Address
     private web3?: Web3
@@ -123,5 +123,3 @@ class ERC721Contract {
         }
     }
 }
-
-export default ERC721Contract

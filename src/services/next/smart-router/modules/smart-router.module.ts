@@ -8,12 +8,13 @@ import { ChainId, chainInfos } from "@config"
 import { Address, Bytes } from "web3"
 import Path from "./path.module"
 import Pool from "./pool.module"
-import Quote, { QuoteType } from "./quote.module"
+import Quote from "./quote.module"
 import { array, format } from "@utils"
+import { QuoteType } from "../shared"
 
 const MAX_HOPS = 2
 
-class SmartRouter {
+export default class SmartRouter {
     private chainId: ChainId
     private factoryContract: FactoryContract
     private quoterContract: QuoterContract
@@ -202,4 +203,3 @@ class SmartRouter {
         return new Quote(amountIn, amountOut, paths[index], exactInputs[index])
     }
 }
-export default SmartRouter

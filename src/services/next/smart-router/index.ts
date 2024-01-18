@@ -1,8 +1,10 @@
 export * from "./modules"
+export * from "./shared"
 
 import { ChainId } from "@config"
 import { Address, Bytes } from "web3"
-import { Path, Quote, Step, SmartRouter } from "./modules"
+import { Path, Quote, SmartRouter } from "./modules"
+import { Step } from "./shared"
 
 const smartRouter = {
     findBestQuote: async (

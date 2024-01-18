@@ -1,7 +1,7 @@
 import { Address } from "web3"
 import Pair from "./pair.module"
 
-class Pool {
+export default class Pool {
     token0: Address
     token1: Address
     indexPool: number
@@ -24,5 +24,3 @@ class Pool {
         )
     }
 }
-
-export default Pool

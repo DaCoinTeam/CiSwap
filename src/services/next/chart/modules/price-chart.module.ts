@@ -17,7 +17,7 @@ import { AggregatorContract } from "@blockchain"
 import { ChainId, chainInfos } from "@config"
 import { Bytes } from "web3"
 import { math, time } from "@utils"
-import { Period } from "./common"
+import { Period } from "../shared"
 
 const TOP_LINE_COLOR = "rgba(20, 184, 166, 1)"
 const TOP_FILL_COLOR1 = "rgba(20, 184, 166, 0.28)"
